@@ -146,18 +146,8 @@ STATICFILES_FINDERS = [
 MEDIA_ROOT = str(BASE_DIR / "media")
 MEDIA_URL = "/media/"
 
-# DJANGO-REST-FRAMEWORK
-# -------------------------------------------------------------------------------
-#django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
-# REST_FRAMEWORK = {
-#     "DEFAULT_AUTHENTICATION_CLASSES": (
-#         "rest_framework.authentication.SessionAuthentication",
-#         "rest_framework.authentication.TokenAuthentication",
-#     ),
-#     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-# }
-
 CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST=[
+
+CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000'
 ]
