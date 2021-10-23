@@ -8,16 +8,35 @@ from ..models import Stanovi
 class TestStanoviAppModels(TestCase):
     """Testing Stanovi Models __str__ and __repr__"""
 
+
     @classmethod
-    def setUpClass(cls):
-        super(TestStanoviAppModels, cls).setUpClass()
-        cls.stanovi = Stanovi.objects.create(lamela="dea", kvadratura=15)
+    def setUpClass(self):
+        super(TestStanoviAppModels, self).setUpClass()
+        self.number_of_stanova = 5
+        self.stanovi = []
+        for i in range(0, self.number_of_stanova):
+            self.stanovi.append(Stanovi.objects.create(id_stana=i, lamela="dea_"+str(i), kvadratura=15))
+    ##############################################################
+    # GOOOOOOOOOOOOOOOOOODDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+    ##############################################################
+
+
 
     def test_model_repr(self):
-        self.assertEqual(str(self.stanovi), '1, dea, 15')
-        self.assertEqual(str(self.stanovi.id_stana), '1')
-        self.assertEqual(str(self.stanovi.lamela), 'dea')
-        self.assertEqual(str(self.stanovi.kvadratura), '15')
+        for i in range(0, 5):
+            self.assertEqual(str(self.stanovi), str(i)+', dea_'+str(i)+',  15')
+            #self.assertEqual(str(self.stanovi.id_stana), '1')
+            #self.assertEqual(str(self.stanovi.lamela), 'dea')
+            #self.assertEqual(str(self.stanovi.kvadratura), '15')
+
+    def test_detalji_stana_API_end_point(self):
+        # response = self.stanovi.po.reverse('detalji-stana/', kwargs={'id_stana':1})
+        # self.assertEqual(response.status_code, status.HTTP_200_OK)
+        obj = Stanovi.objects.all().last()
+        print(obj.pk)
+        print(obj.lamela)
+        print('------------------')
+        print(self.stanovi.lamela)
 
 
 class URLTest(APITestCase, URLPatternsTestCase):

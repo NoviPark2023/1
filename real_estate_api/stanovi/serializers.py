@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
+from rest_framework.views import exception_handler
 
 from .views import Stanovi
 from .models import SlikaStana
@@ -63,3 +64,14 @@ class StanoviSerializer(serializers.ModelSerializer):
     def get_obrisi_stan_url(self, obj):
         """Prosledi u API putanju do obrisi stan"""
         return reverse("obrisi_stan", args=[obj.pk])
+
+    def custom_exception_handler(exc, context):
+        # Call REST framework's default exception handler first,
+        # to get the standard error response.
+        response = exception_handler(exc, context)
+
+        # Now add the HTTP status code to the response.
+        if response is not None:
+            response.data['status_code'] = response.status_code
+
+        return response
