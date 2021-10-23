@@ -8,9 +8,16 @@ from ..models import Stanovi
 class TestStanoviAppModels(TestCase):
     """Testing Stanovi Models __str__ and __repr__"""
 
+    @classmethod
+    def setUpClass(cls):
+        super(TestStanoviAppModels, cls).setUpClass()
+        cls.stanovi = Stanovi.objects.create(lamela="dea", kvadratura=15)
+
     def test_model_repr(self):
-        stan = Stanovi.objects.create(lamela="dea", kvadratura=15)
-        self.assertEqual(str(stan), '1, dea, 15')
+        self.assertEqual(str(self.stanovi), '1, dea, 15')
+        self.assertEqual(str(self.stanovi.id_stana), '1')
+        self.assertEqual(str(self.stanovi.lamela), 'dea')
+        self.assertEqual(str(self.stanovi.kvadratura), '15')
 
 
 class URLTest(APITestCase, URLPatternsTestCase):
