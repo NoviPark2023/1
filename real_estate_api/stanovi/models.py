@@ -23,8 +23,8 @@ class Stanovi(models.Model):
     orijentisanost = models.CharField(max_length=20,
                                       choices=OrijentacijaStana.choices,
                                       default=OrijentacijaStana.SEVER,
-                                      blank=False,
-                                      null=False)
+                                      blank=True,
+                                      null=True)
     broj_terasa = models.PositiveIntegerField('Broj terasa stana', default=0)
     cena_stana = models.PositiveIntegerField('Cena stana', default=0)
     cena_stana_za_kupca = models.PositiveIntegerField('Cena stana za kupca', default=0)
@@ -37,15 +37,12 @@ class Stanovi(models.Model):
             models.SET_NULL || Jer kada se obrise iz sistema Klijent svi stanovi ostaju.'''
     klijent_prodaje = models.ForeignKey(Korisnici, null=True, blank=True, on_delete=models.SET_NULL)
 
-    def __repr__(self):
-        return self.id_stana + ' je dodat.'
-
     def __str__(self):
-        # return f"{self.id_stana} {self.cena_stana} {Kupci.objects.get(pk=self.id_stana)}"
-        return f"{self.id_stana} {self.lamela} {self.kvadratura}  \
-               {self.sprat} {self.broj_soba} {self.cena_stana} \
-               {self.orijentisanost} {self.broj_terasa} {self.cena_stana} \
-               {self.status_prodaje}"
+        return f"{self.id_stana}, {self.lamela}, {self.kvadratura}"
+        # return f"{self.id_stana} {self.lamela} {self.kvadratura}  \
+        #        {self.sprat} {self.broj_soba} {self.cena_stana} \
+        #        {self.orijentisanost} {self.broj_terasa} {self.cena_stana} \
+        #        {self.status_prodaje}"
 
     class Meta:
         db_table = 'stanovi'
