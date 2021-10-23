@@ -1,7 +1,7 @@
 from rest_framework import generics
 
 from .models import Kupci
-from real_estate_api.kupci.serializers import KupciSerializer
+from real_estate_api.kupci.serializers import KupciSerializer, DetaljiKupcaSerializer
 
 lookup_field = 'id_kupca'
 
@@ -18,7 +18,7 @@ class KupciDetaljiAPIView(generics.RetrieveAPIView):
     # permission_classes = [IsAuthenticated]
     lookup_field = lookup_field
     queryset = Kupci.objects.all()
-    serializer_class = KupciSerializer
+    serializer_class = DetaljiKupcaSerializer
 
 
 class KreirajKupcaAPIView(generics.CreateAPIView):

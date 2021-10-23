@@ -5,7 +5,10 @@ from real_estate_api.kupci.views import Kupci
 
 
 class KupciSerializer(serializers.ModelSerializer):
-    absolute_url = serializers.SerializerMethodField()
+    """Detalji KUPCA sa redukovanim poljima koje poseduje"""
+    detalji_kupca_url = serializers.SerializerMethodField()
+    uredi_kupca_url = serializers.SerializerMethodField()
+    obrisi_kupca_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Kupci
@@ -17,15 +20,29 @@ class KupciSerializer(serializers.ModelSerializer):
             "broj_telefona",
             "Jmbg_Pib",
             "adresa",
-            "absolute_url"
+            'detalji_kupca_url',
+            'uredi_kupca_url',
+            'obrisi_kupca_url',
         )
 
-    def get_absolute_url(self, obj):
-        return reverse("lista_kupaca")
+    def get_detalji_kupca_url(self, obj):
+        """Prosledi u API putanju do detalji kupca"""
+        return reverse("detalji_kupca", args=[obj.pk])
+
+    def get_uredi_kupca_url(self, obj):
+        """Prosledi u API putanju do uredi kupca"""
+        return reverse("uredi_kupca", args=[obj.pk])
+
+    def get_obrisi_kupca_url(self, obj):
+        """Prosledi u API putanju do obrisi kupca"""
+        return reverse("obrisi_kupca", args=[obj.pk])
 
 
 class DetaljiKupcaSerializer(serializers.ModelSerializer):
-    absolute_url = serializers.SerializerMethodField()
+    """Detalji KUPCA sa svim poljima koje poseduje"""
+    lista_kupaca_url = serializers.SerializerMethodField()
+    uredi_kupca_url = serializers.SerializerMethodField()
+    obrisi_kupca_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Kupci
@@ -37,11 +54,19 @@ class DetaljiKupcaSerializer(serializers.ModelSerializer):
             "broj_telefona",
             "Jmbg_Pib",
             "adresa",
-            "update",
+            'uredi_kupca_url',
+            'obrisi_kupca_url',
+            'lista_kupaca_url',
         )
 
-    # def get_update(self, obj):
-    #     return reverse("uredi_kupca", args=obj.id_kupca, )
-    #
-    # def get_delete(self, obj):
-    #     return reverse("obrisi_kupca", args=obj.id_kupca, )
+    def get_lista_kupaca_url(self, obj):
+        """Prosledi u API putanju do liste kupaca"""
+        return reverse("lista_kupaca")
+
+    def get_uredi_kupca_url(self, obj):
+        """Prosledi u API putanju do uredi kupca"""
+        return reverse("uredi_kupca", args=[obj.pk])
+
+    def get_obrisi_kupca_url(self, obj):
+        """Prosledi u API putanju do obrisi kupca"""
+        return reverse("obrisi_kupca", args=[obj.pk])
