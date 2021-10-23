@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from real_estate_api.stanovi.views import Stanovi
+from .views import Stanovi
 from .models import SlikaStana
 
 

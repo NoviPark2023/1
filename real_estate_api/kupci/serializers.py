@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from real_estate_api.kupci.views import Kupci
+from .views import Kupci
 
 
 class KupciSerializer(serializers.ModelSerializer):
