@@ -1,0 +1,13 @@
+from django.apps import AppConfig
+
+
+class PonudeConfig(AppConfig):
+    name = "real_estate_api.ponude"
+    default_auto_field = 'django.db.models.BigAutoField'
+    verbose_name = "ponude"
+
+    def ready(self):
+        try:
+            import real_estate_api.ponude.signals
+        except ImportError:
+            pass

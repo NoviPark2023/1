@@ -1,0 +1,22 @@
+from django.urls import path
+
+from .views import (
+    ListaStanovaAPIView,
+    StanoviDetaljiAPIVIew,
+    KreirajStanAPIView,
+    UrediStanViewAPI,
+    ObrisiStanViewAPI
+)
+
+urlpatterns = [
+    # Lista svih Stanova
+    path('', ListaStanovaAPIView.as_view(), name='lista_stanova'),
+    # Detalji Stana
+    path('detalji-stana/<int:id_stana>', StanoviDetaljiAPIVIew.as_view(), name='detalji_stana'),
+    # Kreiranje Stana
+    path('kreiraj-stan', KreirajStanAPIView.as_view(), name='kreiraj_stan'),
+    # Uredjivanje Stana
+    path('uredi-stan/<int:id_stana>', UrediStanViewAPI.as_view(), name='uredi_stan'),
+    # Brisanje Stana
+    path('obrisi-stan/<int:id_stana>', ObrisiStanViewAPI.as_view(), name='obrisi_stan')
+]
