@@ -5,7 +5,14 @@ from real_estate_api.kupci.views import Kupci
 
 
 class KupciSerializer(serializers.ModelSerializer):
-    """Detalji KUPCA sa redukovanim poljima koje poseduje"""
+    """Detalji KUPCA sa redukovanim poljima koje poseduje za
+        prikaz u tabeli i u slucaju responiva u frontendu.
+        Ukljucene API putanje (API URLs) su:
+        ------------------------------------
+        * detalji kupca
+        * uredjivanje kupca
+        * brisanje kupca
+    """
     detalji_kupca_url = serializers.SerializerMethodField()
     uredi_kupca_url = serializers.SerializerMethodField()
     obrisi_kupca_url = serializers.SerializerMethodField()

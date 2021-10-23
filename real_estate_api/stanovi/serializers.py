@@ -6,13 +6,29 @@ from .models import SlikaStana
 
 
 class SlikaStanaSerializer(serializers.ModelSerializer):
+    """Serijalizers za Slike Stanova"""
+
     class Meta:
         model = SlikaStana
-        fields = ["slika_stana", "alt_text"]
+        fields = ["id_slike", "slika_stana", "alt_text"]
 
 
 class StanoviSerializer(serializers.ModelSerializer):
-    # absolute_url = serializers.SerializerMethodField()
+    """
+    Detalji STANA sa redukovanim poljima koje poseduje za prikaz u tabeli
+    i u slucaju responiva u frontendu.
+    Ukljucene API putanje (API URLs) su:
+    ------------------------------------
+    * detalji stana
+    * uredjivanje stana
+    * brisanje stana
+    """
+
+    detalji_stana_url = serializers.SerializerMethodField()
+    uredi_stan_url = serializers.SerializerMethodField()
+    obrisi_stan_url = serializers.SerializerMethodField()
+
+    # Inline slike stana
     slike_stana = SlikaStanaSerializer(many=True, read_only=True)
 
     class Meta:
@@ -31,8 +47,19 @@ class StanoviSerializer(serializers.ModelSerializer):
             "status_prodaje",
             "klijent_prodaje",
             "slike_stana",
+            'detalji_stana_url',
+            'uredi_stan_url',
+            'obrisi_stan_url',
         )
 
-        # TODO: Videti ovaj get_absolute_url
-        # def get_absolute_url(self, obj):
-        #     return reverse("lista_stanova")
+    def get_detalji_stana_url(self, obj):
+        """Prosledi u API putanju do detalji stana"""
+        return reverse("detalji_stana", args=[obj.pk])
+
+    def get_uredi_stan_url(self, obj):
+        """Prosledi u API putanju do uredi stan"""
+        return reverse("uredi_stan", args=[obj.pk])
+
+    def get_obrisi_stan_url(self, obj):
+        """Prosledi u API putanju do obrisi stan"""
+        return reverse("obrisi_stan", args=[obj.pk])

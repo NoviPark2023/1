@@ -53,7 +53,7 @@ class Stanovi(models.Model):
 # SLIKE ZA STANOVE MODEL
 class SlikaStana(models.Model):
     """TODO: NAPISATI DOC"""
-    stan = models.ForeignKey(Stanovi, on_delete=models.CASCADE, related_name='slike_stana')
+    id_slike = models.BigAutoField(primary_key=True)
     slika_stana = models.ImageField(
         verbose_name='Slika_Stana',
         help_text='Molimo da dodate sliku',
@@ -61,7 +61,7 @@ class SlikaStana(models.Model):
         default='images/default.png',
         null=True,
         blank=True
-        )
+    )
     alt_text = models.CharField(
         verbose_name='Alternativni Text',
         help_text='Molimo da dodate sliku',
@@ -71,6 +71,8 @@ class SlikaStana(models.Model):
     )
     kreirana = models.DateTimeField(auto_now_add=True, editable=False)
     ucitana = models.DateTimeField(auto_now=True)
+
+    stan = models.ForeignKey(Stanovi, on_delete=models.CASCADE, related_name='slike_stana')
 
     class Meta:
         db_table = 'slika_stana'
