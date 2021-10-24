@@ -19,7 +19,7 @@ urlpatterns = [
     # Detalji Kupca
     path('detalji-kupca/<int:id_kupca>/', KupciDetaljiAPIView.as_view(), name='detalji_kupca'),
     # Uredjivanje Kupaca
-    path('uredi-kupca/<int:id_kupca>/', UrediKupcaAPIView.as_view(), name='uredi_kupca'),
+    path('izmeni-kupca/<int:id_kupca>/', UrediKupcaAPIView.as_view(), name='izmeni_kupca'),
     # Brisanje Kupca
     path('obrisi-kupca/<int:id_kupca>/', ObrisiKupcaAPIView.as_view(), name='obrisi_kupca'),
     # Kreiranje Kupca

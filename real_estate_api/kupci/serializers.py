@@ -14,7 +14,7 @@ class KupciSerializer(serializers.ModelSerializer):
         * brisanje kupca
     """
     detalji_kupca_url = serializers.SerializerMethodField()
-    uredi_kupca_url = serializers.SerializerMethodField()
+    izmeni_kupca_url = serializers.SerializerMethodField()
     obrisi_kupca_url = serializers.SerializerMethodField()
 
     class Meta:
@@ -28,22 +28,22 @@ class KupciSerializer(serializers.ModelSerializer):
             "Jmbg_Pib",
             "adresa",
             'detalji_kupca_url',
-            'uredi_kupca_url',
+            'izmeni_kupca_url',
             'obrisi_kupca_url',
         )
 
 
     def get_detalji_kupca_url(self, obj):
         """Prosledi u API putanju do detalji kupca"""
-        return reverse("detalji_kupca", args=[obj.pk])
+        return reverse("kupci:detalji_kupca", args=[obj.pk])
 
-    def get_uredi_kupca_url(self, obj):
+    def get_izmeni_kupca_url(self, obj):
         """Prosledi u API putanju do uredi kupca"""
-        return reverse("uredi_kupca", args=[obj.pk])
+        return reverse("kupci:izmeni_kupca", args=[obj.pk])
 
     def get_obrisi_kupca_url(self, obj):
         """Prosledi u API putanju do obrisi kupca"""
-        return reverse("obrisi_kupca", args=[obj.pk])
+        return reverse("kupci:obrisi_kupca", args=[obj.pk])
 
 
 class DetaljiKupcaSerializer(KupciSerializer):
@@ -62,7 +62,7 @@ class DetaljiKupcaSerializer(KupciSerializer):
             "broj_telefona",
             "Jmbg_Pib",
             "adresa",
-            'uredi_kupca_url',
+            'izmeni_kupca_url',
             'obrisi_kupca_url',
             'lista_kupaca_url',
         )

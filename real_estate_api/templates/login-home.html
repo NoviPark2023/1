@@ -18,8 +18,8 @@
         <div class="container">
         <br />
         <a class="btn btn-xl btn-success" href='{% url "stanovi:lista_stanova" %}' role="button">STANOVI</a>
-        <a class="btn btn-xl btn-warning" href='#' role="button">KUPCI</a>
-        <a class="btn btn-xl btn-dark" href='#' role="button">KORISNICI</a>
+        <a class="btn btn-xl btn-warning" href='{% url "kupci:lista_kupaca" %}' role="button">KUPCI</a>
+        <a class="btn btn-xl btn-dark" href='{% url "korisnici:lista_korisnika" %}' role="button">KORISNICI</a>
         <a class="btn btn-xl btn-dark" href='/admin' role="button">ADMIN</a>
         </div>
 
