@@ -17,6 +17,7 @@ class KreirajKorisnikaSerializers(serializers.ModelSerializer):
     izmeni_korisnika_url = serializers.SerializerMethodField()
     obrisi_korisnika_url = serializers.SerializerMethodField()
     lista_korisnika_url = serializers.SerializerMethodField()
+    kreiraj_korisnika_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Korisnici
@@ -31,7 +32,8 @@ class KreirajKorisnikaSerializers(serializers.ModelSerializer):
             "detalji_korisnika_url",
             "izmeni_korisnika_url",
             "obrisi_korisnika_url",
-            "lista_korisnika_url"
+            "lista_korisnika_url",
+            "kreiraj_korisnika_url"
         )
 
     def get_detalji_korisnika_url(self, obj):
@@ -48,6 +50,9 @@ class KreirajKorisnikaSerializers(serializers.ModelSerializer):
     def get_obrisi_korisnika_url(self, obj):
         """Prosledi u API putanju do obrisi kupca"""
         return reverse("korisnici:obrisi_korisnika", args=[obj.pk])
+
+    def get_kreiraj_korisnika_url(self, obj):
+        return reverse("korisnici:kreiraj_korisnika")
 
 class DetaljiKorisnikaSerializers(serializers.ModelSerializer):
     absolute_url = serializers.SerializerMethodField()

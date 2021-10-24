@@ -16,6 +16,7 @@ class KupciSerializer(serializers.ModelSerializer):
     detalji_kupca_url = serializers.SerializerMethodField()
     izmeni_kupca_url = serializers.SerializerMethodField()
     obrisi_kupca_url = serializers.SerializerMethodField()
+    kreiraj_kupca_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Kupci
@@ -30,6 +31,7 @@ class KupciSerializer(serializers.ModelSerializer):
             'detalji_kupca_url',
             'izmeni_kupca_url',
             'obrisi_kupca_url',
+            'kreiraj_kupca_url',
         )
 
 
@@ -44,6 +46,9 @@ class KupciSerializer(serializers.ModelSerializer):
     def get_obrisi_kupca_url(self, obj):
         """Prosledi u API putanju do obrisi kupca"""
         return reverse("kupci:obrisi_kupca", args=[obj.pk])
+
+    def get_kreiraj_kupca_url(self, obj):
+        return reverse("kupci:kreiraj_kupca")
 
 
 class DetaljiKupcaSerializer(KupciSerializer):

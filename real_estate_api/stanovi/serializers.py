@@ -28,6 +28,7 @@ class StanoviSerializer(serializers.ModelSerializer):
     detalji_stana_url = serializers.SerializerMethodField()
     uredi_stan_url = serializers.SerializerMethodField()
     obrisi_stan_url = serializers.SerializerMethodField()
+    kreiraj_stan_url = serializers.SerializerMethodField()
 
     # Inline slike stana
     slike_stana = SlikaStanaSerializer(many=True, read_only=False)
@@ -51,6 +52,7 @@ class StanoviSerializer(serializers.ModelSerializer):
             'detalji_stana_url',
             'uredi_stan_url',
             'obrisi_stan_url',
+            'kreiraj_stan_url',
         )
 
     def get_detalji_stana_url(self, obj):
@@ -64,6 +66,9 @@ class StanoviSerializer(serializers.ModelSerializer):
     def get_obrisi_stan_url(self, obj):
         """Prosledi u API putanju do obrisi stan"""
         return reverse("stanovi:obrisi_stan", args=[obj.pk])
+
+    def get_kreiraj_stan_url(self, obj):
+        return reverse("stanovi:kreiraj_stan")
 
     # def custom_exception_handler(exc, context):
     #     # Call REST framework's default exception handler first,
