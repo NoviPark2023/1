@@ -36,6 +36,8 @@ THIRD_PARTY_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     "crispy_forms",
+    #'django.contrib.staticfiles',  # required for serving swagger ui's css/js files
+    'drf_yasg',
 ]
 
 LOCAL_APPS = [
@@ -170,3 +172,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000'
 ]
+
+# DOCS
+# ------------------------------------------------------------------------------
+REST_FRAMEWORK = {'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'}
