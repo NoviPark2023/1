@@ -32,7 +32,7 @@ urlpatterns = [
     path('korisnici/', include('real_estate_api.korisnici.urls', namespace='korisnici')),
     path('stanovi/', include('real_estate_api.stanovi.urls', namespace='stanovi')),
     path('ponude/', include('real_estate_api.ponude.urls', namespace='ponude')),
-    url(r'^docs/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    url(r'^docs/$', schema_view.with_ui('swagger', cache_timeout=0), name='docs'),
 ]
 
 # If we are in dev mode -- DEBUG=True, also use this urlpatterns form MEDIA
