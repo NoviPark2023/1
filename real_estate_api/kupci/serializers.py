@@ -74,7 +74,7 @@ class DetaljiKupcaSerializer(KupciSerializer):
 
     def get_lista_kupaca_url(self, obj):
         """Prosledi u API putanju do liste kupaca"""
-        return reverse("lista_kupaca")
+        return reverse("kupci:lista_kupaca")
     #
     # def get_uredi_kupca_url(self, obj):
     #     """Prosledi u API putanju do uredi kupca"""

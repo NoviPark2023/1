@@ -73,4 +73,4 @@ class DetaljiKorisnikaSerializers(serializers.ModelSerializer):
         )
 
     def get_absolute_url(self, obj):
-        return reverse("detalji_korisnika")
+        return reverse("korisnici:detalji_korisnika")
