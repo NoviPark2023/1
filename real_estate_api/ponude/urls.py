@@ -9,6 +9,8 @@ from .views import (
     UrediPonuduViewAPI
 )
 
+app_name = "ponude"
+
 urlpatterns = [
     # Lista svih Ponuda
     path('', ListaPonudaAPIView.as_view(), name='lista_ponuda'),

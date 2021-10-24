@@ -55,22 +55,22 @@ class StanoviSerializer(serializers.ModelSerializer):
 
     def get_detalji_stana_url(self, obj):
         """Prosledi u API putanju do detalji stana"""
-        return reverse("detalji_stana", args=[obj.pk])
+        return reverse("stanovi:detalji_stana", args=[obj.pk])
 
     def get_uredi_stan_url(self, obj):
         """Prosledi u API putanju do uredi stan"""
-        return reverse("uredi_stan", args=[obj.pk])
+        return reverse("stanovi:uredi_stan", args=[obj.pk])
 
     def get_obrisi_stan_url(self, obj):
         """Prosledi u API putanju do obrisi stan"""
-        return reverse("obrisi_stan", args=[obj.pk])
+        return reverse("stanovi:obrisi_stan", args=[obj.pk])
 
-    def custom_exception_handler(exc, context):
-        # Call REST framework's default exception handler first,
-        # to get the standard error response.
-        response = exception_handler(exc, context)
-
-        if response is not None:
-            response.data['status_code'] = response.status_code
-
-        return response
+    # def custom_exception_handler(exc, context):
+    #     # Call REST framework's default exception handler first,
+    #     # to get the standard error response.
+    #     response = exception_handler(exc, context)
+    #
+    #     if response is not None:
+    #         response.data['status_code'] = response.status_code
+    #
+    #     return response

@@ -9,6 +9,8 @@ from .views import (
     ObrisiKupcaAPIView
 )
 
+app_name = "kupci"
+
 urlpatterns = [
     # PREUZIM API TOKEN
     path('api/token/', obtain_auth_token, name='obtain-token'),

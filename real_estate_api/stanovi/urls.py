@@ -8,6 +8,8 @@ from .views import (
     ObrisiStanViewAPI
 )
 
+app_name = "stanovi"
+
 urlpatterns = [
     # Lista svih Stanova
     path('', ListaStanovaAPIView.as_view(), name='lista_stanova'),

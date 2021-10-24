@@ -35,6 +35,7 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    "crispy_forms",
 ]
 
 LOCAL_APPS = [
@@ -69,7 +70,11 @@ ROOT_URLCONF = 'config.urls'
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+LOGIN_REDIRECT_URL = '/'
 
+LOGOUT_REDIRECT_URL = '/'
+
+LOGIN_URL = "/"
 
 # TEMPLATES
 # ------------------------------------------------------------------------------

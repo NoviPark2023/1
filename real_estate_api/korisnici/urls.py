@@ -10,6 +10,8 @@ from .views import (
 
 )
 
+app_name = "korisnici"
+
 urlpatterns = [
     # Lista svih Korisnika
     path('', ListaKorisnikaAPIview.as_view(), name='lista_korisnika'),
