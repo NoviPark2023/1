@@ -72,7 +72,7 @@ ROOT_URLCONF = 'config.urls'
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'docs/'
 
 LOGOUT_REDIRECT_URL = '/'
 

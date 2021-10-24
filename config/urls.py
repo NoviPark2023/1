@@ -21,18 +21,18 @@ schema_view = get_schema_view(
       license=openapi.License(name="BSD License"),
    ),
    public=False,
-   permission_classes=(permissions.IsAuthenticated,),
+   permission_classes=(permissions.BasePermission,),
 )
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('', LoginView.as_view(template_name='./login-home.html'), name='login'),
+    path('', LoginView.as_view(template_name='./login-home.html'), name='login'),
     path('kupci/', include('real_estate_api.kupci.urls', namespace='kupci')),
     path('korisnici/', include('real_estate_api.korisnici.urls', namespace='korisnici')),
     path('stanovi/', include('real_estate_api.stanovi.urls', namespace='stanovi')),
     path('ponude/', include('real_estate_api.ponude.urls', namespace='ponude')),
-    url(r'', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    url(r'^docs/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
 
 # If we are in dev mode -- DEBUG=True, also use this urlpatterns form MEDIA
