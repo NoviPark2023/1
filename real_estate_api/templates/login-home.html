@@ -7,17 +7,20 @@
 {% block content %}
 {% if not request.user.is_authenticated %}
 
-<div class="container">
-    <div class="row">
-
-        <div class="col">
+<div class="container-fluid">
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <div class="row justify-content-md-center">
+        <div class="col-md-auto">
             <form method="post">
                 {% csrf_token %}
                 {{ form|crispy }}
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+                <br/>
+                <button class="btn btn-md btn-primary btn-block" type="submit">Login</button>
             </form>
         </div>
-
     </div>
 </div>
 {% else %}
@@ -26,19 +29,16 @@
     <br/>
     <br/>
     <br/>
-<div class="row justify-content-md-center">
-                <div class="col-md-auto">
-                <a class="btn btn-xl btn-success" href='{% url "stanovi:lista_stanova" %}' role="button">STANOVI</a>
-                <a class="btn btn-xl btn-warning" href='{% url "kupci:lista_kupaca" %}' role="button">KUPCI</a>
-                <a class="btn btn-xl btn-dark" href='{% url "korisnici:lista_korisnika" %}' role="button">KORISNICI</a>
-                <a class="btn btn-xl btn-danger" href='{% url "docs" %}' role="button">DOKUMENTACIJA</a>
-                <a class="btn btn-xl btn-primary" href='/admin' role="button">ADMIN</a>
-            </div>
-            </div>
-            </div>
-
-
-
+    <div class="row justify-content-md-center">
+        <div class="col-md-auto">
+            <a class="btn btn-xl btn-success" href='{% url "stanovi:lista_stanova" %}' role="button">STANOVI</a>
+            <a class="btn btn-xl btn-warning" href='{% url "kupci:lista_kupaca" %}' role="button">KUPCI</a>
+            <a class="btn btn-xl btn-dark" href='{% url "korisnici:lista_korisnika" %}' role="button">KORISNICI</a>
+            <a class="btn btn-xl btn-danger" href='{% url "docs" %}' role="button">DOKUMENTACIJA</a>
+            <a class="btn btn-xl btn-primary" href='/admin' role="button">ADMIN</a>
+        </div>
+    </div>
+</div>
 
 
 </div>
