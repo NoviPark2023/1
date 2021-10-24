@@ -38,4 +38,21 @@ if we want to see what is the placecs that we need to test run:
 SOME OTHER THINGS:
 Show Coverage Data (Ctrl+Alt+F6). PyCharm
 
+----
 
+
+# DATABASE :
+
+----
+
+CREATE DATABASE recrm_api;
+
+
+CREATE USER recrm_api WITH PASSWORD 'fwwrecrm';
+
+
+ALTER ROLE recrm_api SET client_encoding TO 'utf8';
+ALTER ROLE recrm_api SET default_transaction_isolation TO 'read committed';
+ALTER ROLE recrm_api SET timezone TO 'UTC';
+
+GRANT ALL PRIVILEGES ON DATABASE recrm_api TO recrm_api;
