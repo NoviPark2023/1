@@ -50,8 +50,9 @@ class StanoviTestCase(TestCase):
 
     def test_id_korisnika_in_stanovi(self):
         # QuerySet Obj Stanovi
+        korisnik_id = self.korisnik.id
         qs_obj_stanovi = Stanovi.objects.all().last()
         print(qs_obj_stanovi)
         print('-------------')
         print('Korisnik ID: ' + str(qs_obj_stanovi.klijent_prodaje_id))
-        self.assertEqual(qs_obj_stanovi.klijent_prodaje_id, 1)
+        self.assertEqual(qs_obj_stanovi.klijent_prodaje_id, korisnik_id)
