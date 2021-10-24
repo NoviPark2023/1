@@ -30,7 +30,7 @@ class StanoviSerializer(serializers.ModelSerializer):
     obrisi_stan_url = serializers.SerializerMethodField()
 
     # Inline slike stana
-    slike_stana = SlikaStanaSerializer(many=True, read_only=True)
+    slike_stana = SlikaStanaSerializer(many=True, read_only=False)
 
     class Meta:
         model = Stanovi
@@ -70,7 +70,6 @@ class StanoviSerializer(serializers.ModelSerializer):
         # to get the standard error response.
         response = exception_handler(exc, context)
 
-        # Now add the HTTP status code to the response.
         if response is not None:
             response.data['status_code'] = response.status_code
 

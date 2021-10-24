@@ -34,5 +34,8 @@ if we want to see what is the placecs that we need to test run:
 2. coverage report
 3. coverage html (to see what is to test)
 
+
 SOME OTHER THINGS:
 Show Coverage Data (Ctrl+Alt+F6). PyCharm
+
+
