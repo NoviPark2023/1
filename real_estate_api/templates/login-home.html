@@ -7,28 +7,26 @@
 {% block content %}
 {% if not request.user.is_authenticated %}
 
-<div class="container-fluid">
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <div class="row justify-content-md-center">
-        <div class="col-md-auto">
-            <form method="post">
-                {% csrf_token %}
-                {{ form|crispy }}
-                <br/>
-                <button class="btn btn-md btn-primary btn-block" type="submit">Login</button>
-            </form>
+<div class="text-center">
+    <img class="img-fluid" src="{% static 'images/fww-logo.jpg' %}" alt="">
+    <br/><br/><br/><br/>
+    <h1 class="h1 mb-1 font-weight-normal">Prijava na API managment system</h1>
+    <form method="post" class="form-signin">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" value="remember-me"> Zapamti me
+            </label>
         </div>
-    </div>
+        <br/>
+        <button class="btn btn-md btn-primary btn-block" type="submit">Prijava</button>
+        <p class="mt-5 mb-3 text-muted">&copy; Factory World Wide 2021</p>
+    </form>
 </div>
 {% else %}
 <div class="container-fluid">
-    <br/>
-    <br/>
-    <br/>
-    <br/>
+
     <div class="row justify-content-md-center">
         <div class="col-md-auto">
             <a class="btn btn-xl btn-success" href='{% url "stanovi:lista_stanova" %}' role="button">STANOVI</a>
@@ -39,9 +37,6 @@
             <a class="btn btn-xl btn-primary" href='/admin' role="button">ADMIN</a>
         </div>
     </div>
-</div>
-
-
 </div>
 
 
