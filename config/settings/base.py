@@ -57,10 +57,10 @@ AUTH_USER_MODEL = 'korisnici.Korisnici'
 # ------------------------------------------------------------------------------
 MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
-    # "corsheaders.middleware.CorsMiddleware",
+     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -181,7 +181,7 @@ MEDIA_URL = "/media/"
 CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = [
-    'http://api.dejan.pro'
+    'http://api.dejan.pro',
 ]
 
 # DOCS
