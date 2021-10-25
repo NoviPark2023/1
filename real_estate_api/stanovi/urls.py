@@ -18,7 +18,7 @@ urlpatterns = [
     # Kreiranje Stana
     path('kreiraj-stan', KreirajStanAPIView.as_view(), name='kreiraj_stan'),
     # Uredjivanje Stana
-    path('uredi-stan/<int:id_stana>', UrediStanViewAPI.as_view(), name='uredi_stan'),
+    path('izmeni-stan/<int:id_stana>', UrediStanViewAPI.as_view(), name='izmeni_stan'),
     # Brisanje Stana
     path('obrisi-stan/<int:id_stana>', ObrisiStanViewAPI.as_view(), name='obrisi_stan')
 ]

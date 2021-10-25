@@ -26,7 +26,7 @@ class StanoviSerializer(serializers.ModelSerializer):
     """
 
     detalji_stana_url = serializers.SerializerMethodField()
-    uredi_stan_url = serializers.SerializerMethodField()
+    izmeni_stan_url = serializers.SerializerMethodField()
     obrisi_stan_url = serializers.SerializerMethodField()
     kreiraj_stan_url = serializers.SerializerMethodField()
 
@@ -50,7 +50,7 @@ class StanoviSerializer(serializers.ModelSerializer):
             "klijent_prodaje",
             "slike_stana",
             'detalji_stana_url',
-            'uredi_stan_url',
+            'izmeni_stan_url',
             'obrisi_stan_url',
             'kreiraj_stan_url',
         )
@@ -59,9 +59,9 @@ class StanoviSerializer(serializers.ModelSerializer):
         """Prosledi u API putanju do detalji stana"""
         return reverse("stanovi:detalji_stana", args=[obj.pk])
 
-    def get_uredi_stan_url(self, obj):
+    def get_izmeni_stan_url(self, obj):
         """Prosledi u API putanju do uredi stan"""
-        return reverse("stanovi:uredi_stan", args=[obj.pk])
+        return reverse("stanovi:izmeni_stan", args=[obj.pk])
 
     def get_obrisi_stan_url(self, obj):
         """Prosledi u API putanju do obrisi stan"""

@@ -5,18 +5,21 @@ from .views import Kupci
 
 
 class KupciSerializer(serializers.ModelSerializer):
-    """Detalji KUPCA sa redukovanim poljima koje poseduje za
+    """KUPCI sa redukovanim poljima koje poseduje za
         prikaz u tabeli i u slucaju responiva u frontendu.
         Ukljucene API putanje (API URLs) su:
         ------------------------------------
         * detalji kupca
-        * uredjivanje kupca
-        * brisanje kupca
+        * izmeni_kupca
+        * obrisi kupca
+        * kreiranje kupca
+        * lista svih kupca
     """
     detalji_kupca_url = serializers.SerializerMethodField()
     izmeni_kupca_url = serializers.SerializerMethodField()
     obrisi_kupca_url = serializers.SerializerMethodField()
     kreiraj_kupca_url = serializers.SerializerMethodField()
+    lista_kupaca_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Kupci
@@ -32,30 +35,38 @@ class KupciSerializer(serializers.ModelSerializer):
             'izmeni_kupca_url',
             'obrisi_kupca_url',
             'kreiraj_kupca_url',
+            'lista_kupaca_url',
+
         )
 
-
     def get_detalji_kupca_url(self, obj):
-        """Prosledi u API putanju do detalji kupca"""
+        """Prosledi API putanju do detalji kupca"""
         return reverse("kupci:detalji_kupca", args=[obj.pk])
 
     def get_izmeni_kupca_url(self, obj):
-        """Prosledi u API putanju do uredi kupca"""
+        """Prosledi API putanju do uredi kupca"""
         return reverse("kupci:izmeni_kupca", args=[obj.pk])
 
     def get_obrisi_kupca_url(self, obj):
-        """Prosledi u API putanju do obrisi kupca"""
+        """Prosledi API putanju do obrisi kupca"""
         return reverse("kupci:obrisi_kupca", args=[obj.pk])
 
     def get_kreiraj_kupca_url(self, obj):
         return reverse("kupci:kreiraj_kupca")
 
+    def get_lista_kupaca_url(self, obj):
+        """Prosledi API putanju do liste kupaca"""
+        return reverse("kupci:lista_kupaca")
+
 
 class DetaljiKupcaSerializer(KupciSerializer):
-    """Detalji KUPCA sa svim poljima koje poseduje"""
-    lista_kupaca_url = serializers.SerializerMethodField()
-    # uredi_kupca_url = serializers.SerializerMethodField()
-    # obrisi_kupca_url = serializers.SerializerMethodField()
+    """Detalji KUPCA sa svim poljima koje poseduje.
+       Ukljucene API putanje (API URLs) su:
+       ------------------------------------
+        * izmeni_kupca
+        * obrisi kupca
+        * lista svih kupca
+    """
 
     class Meta:
         model = Kupci
@@ -71,15 +82,3 @@ class DetaljiKupcaSerializer(KupciSerializer):
             'obrisi_kupca_url',
             'lista_kupaca_url',
         )
-
-    def get_lista_kupaca_url(self, obj):
-        """Prosledi u API putanju do liste kupaca"""
-        return reverse("kupci:lista_kupaca")
-    #
-    # def get_uredi_kupca_url(self, obj):
-    #     """Prosledi u API putanju do uredi kupca"""
-    #     return reverse("uredi_kupca", args=[obj.pk])
-    #
-    # def get_obrisi_kupca_url(self, obj):
-    #     """Prosledi u API putanju do obrisi kupca"""
-    #     return reverse("obrisi_kupca", args=[obj.pk])

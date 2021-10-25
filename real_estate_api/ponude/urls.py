@@ -17,7 +17,7 @@ urlpatterns = [
     # Detalji Ponude
     path('detalji-ponude/<int:id_ponude>/', PonudeDetaljiAPIView.as_view(), name='detalji_ponude'),
     # Uredi Ponudu
-    path('uredi-ponudu/<int:id_ponude>/', UrediPonuduViewAPI.as_view(), name='uredi_ponudu'),
+    path('uredi-ponudu/<int:id_ponude>/', UrediPonuduViewAPI.as_view(), name='izmeni_ponudu'),
     # Obrisi Ponudu
     path('obrisi-ponudu/<int:id_ponude>/', ObrisiPonuduAPIView.as_view(), name='obrisi_ponudu'),
     # Kreiraj Ponudu
