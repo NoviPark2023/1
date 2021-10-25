@@ -57,7 +57,7 @@ AUTH_USER_MODEL = 'korisnici.Korisnici'
 # ------------------------------------------------------------------------------
 MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
-    #"corsheaders.middleware.CorsMiddleware",
+    # "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
@@ -98,21 +98,21 @@ TEMPLATES = [
 
 # SECURITY
 # ------------------------------------------------------------------------------
-#SESSION_COOKIE_HTTPONLY = True
-#CSRF_COOKIE_HTTPONLY = True
-#SECURE_BROWSER_XSS_FILTER = True
-#X_FRAME_OPTIONS = "DENY"
+# SESSION_COOKIE_HTTPONLY = True
+# CSRF_COOKIE_HTTPONLY = True
+# SECURE_BROWSER_XSS_FILTER = True
+# X_FRAME_OPTIONS = "DENY"
 
-#USE_X_FORWARDED_HOST = True
-#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-#SESSION_COOKIE_SECURE = True
-#CSRF_COOKIE_SECURE = True
+# USE_X_FORWARDED_HOST = True
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 
 # Security Headers
-#SECURE_CONTENT_TYPE_NOSNIFF = True
-#SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-#SECURE_HSTS_PRELOAD = True
-#SECURE_HSTS_SECONDS = 3600
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
+# SECURE_HSTS_SECONDS = 3600
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -180,9 +180,9 @@ MEDIA_URL = "/media/"
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-# CORS_ORIGIN_WHITELIST = [
-#     'http://localhost:3000'
-# ]
+CORS_ORIGIN_WHITELIST = [
+    'http://api.dejan.pro'
+]
 
 # DOCS
 # ------------------------------------------------------------------------------
