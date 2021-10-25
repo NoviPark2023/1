@@ -1,66 +1,33 @@
 {% extends "base.html" %}
 {% load static %}
 {% load crispy_forms_tags %}
-
 {% block title %}FWW Real Estate CRM{% endblock %}
-
 {% block content %}
 {% if not request.user.is_authenticated %}
-
-<!--<div class="text-center">-->
-<!--    <img class="img-fluid" src="{% static 'images/fww-logo.jpg' %}" alt="">-->
-<!--    <br/><br/><br/><br/>-->
-<!--    <h1 class="h1 mb-1 font-weight-normal">Prijava na API managment system</h1>-->
-<!--    <form method="post" class="form-signin">-->
-<!--        {% csrf_token %}-->
-<!--        {{ form|crispy }}-->
-<!--        <div class="checkbox mb-3">-->
-<!--            <label>-->
-<!--                <input type="checkbox" value="remember-me"> Zapamti me-->
-<!--            </label>-->
-<!--        </div>-->
-<!--        <br/>-->
-<!--        <button class="btn btn-md btn-primary btn-block" type="submit">Prijava</button>-->
-<!--        <p class="mt-5 mb-3 text-muted">&copy; Factory World Wide 2021</p>-->
-<!--    </form>-->
-<!--</div>-->
-
 <div class="text-center">
     <div class="text-center">
         <div class="row">
         </div>
     </div>
-
     <div id="loginbox" class="mainbox col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3">
-
-        <img class="img-fluid" src="{% static 'images/fww-logo-2.jpg' %}" alt="">
-
-
-
-
-            <div class="panel-body">
-
-                <form name="form" id="form" class="form-horizontal" enctype="multipart/form-data" method="POST">
-
-                    {% csrf_token %}
-                    {{ form|crispy }}
-                    <div class="checkbox mb-3">
-                        <label>
-                            <input type="checkbox" value="remember-me"> Zapamti me
-                        </label>
-                    </div>
-                    <br/>
-                    <button class="btn btn-lg btn-primary" type="submit">Prijava</button>
-                    <p class="mt-5 mb-3 text-muted">&copy; Factory World Wide 2021</p>
-
-                </form>
-
+        <img class="img-fluid" src="{% static 'images/fww-logo.png' %}" alt="">
+        <div class="panel-body">
+            <form name="form" id="form" class="form-horizontal" enctype="multipart/form-data" method="POST">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" value="remember-me"> Zapamti me
+                    </label>
+                </div>
+                <br/>
+                <button class="btn btn-lg btn-primary" type="submit">Prijava</button>
+                <p class="mt-5 mb-3 text-muted">&copy; Factory World Wide 2021</p>
+            </form>
         </div>
     </div>
 </div>
-
 <div id="particles"></div>
-
 <svg id="svg-source" height="0" version="1.1"
      xmlns="http://www.w3.org/2000/svg" style="position:absolute; margin-left: -100%"
      xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -327,7 +294,5 @@
         </div>
     </div>
 </div>
-
-
 {% endif %}
 {% endblock content %}
