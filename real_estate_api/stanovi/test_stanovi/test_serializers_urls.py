@@ -4,6 +4,7 @@ from django.urls import include, path, reverse
 from rest_framework import status
 from rest_framework.test import APITestCase, URLPatternsTestCase
 
+from real_estate_api.korisnici.models import Korisnici
 from real_estate_api.stanovi.models import Stanovi
 
 
@@ -13,19 +14,47 @@ class TestStanoviSerializersAppModels(TestCase):
         * get_uredi_stan_url
         * get_obrisi_stan_url
     """
+
     @classmethod
     def setUp(self) -> None:
-        pass
+        self.korisnik = Korisnici.objects.create(
+            ime="string",
+            prezime='string',
+            email="user@example.com",
+            username="string",
+            password="string",
+            role="Prodavac"
+
+        )
+        self.stan_atributi = {
+            "lamela": "1",
+            "kvadratura": 1,
+            "sprat": 1,
+            "broj_soba": 1,
+            "orijentisanost": "Sever",
+            "broj_terasa": 1,
+            "cena_stana": 1,
+            "napomena": "1",
+            "status_prodaje": "dostupan",
+            "klijent_prodaje": self.korisnik,
+
+        }
+        self.stan_atributi = Stanovi.objects.create(**self.stan_atributi)
+
     @classmethod
     def setUpClass(cls):
         super(TestStanoviSerializersAppModels, cls).setUpClass()
-        cls.stanovi = Stanovi.objects.create(lamela="dea", kvadratura=15)
-        
-    def test_model_repr(self):
-        self.assertEqual(str(self.stanovi), '1, dea, 15')
+        from ..serializers import StanoviSerializer
 
-    # def test_get_detalji_stana_API_end_point(self):
-    #     """Test lista stanova API end point"""
-    #     url = reverse('detalji_stana')
-    #     response = self.client.get(url)
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+        cls.stanovi = Stanovi.objects.create(lamela="dea", kvadratura=15)
+        cls.ponude = StanoviSerializer(instance=self.stan_atributi)
+
+    def test_get_detalji_stana_url(self):
+        self.fail()
+
+    def get_detalji_ponude_url(self, obj):
+        """Prosledi API putanju do detalja Ponuda"""
+        return reverse('ponude:detalji_ponude', args=[obj.pk])
+
+    def test_model_repr(self):
+        pass

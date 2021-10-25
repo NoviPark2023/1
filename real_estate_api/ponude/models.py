@@ -33,13 +33,9 @@ class Ponude(models.Model):
                                       null=False, blank=False,
                                       default=NacinPlacanja.U_CELOSTI)
 
-
     def __str__(self):
         return f"{self.kupac.id_kupca} {self.cena_stana_za_kupca} \
                   {self.broj_ugovora}"
-
-    # def get_absolute_url(self):
-    #     return reverse('ponude', kwargs={'pk': self.pk})
 
     class Meta:
         db_table = 'ponude'

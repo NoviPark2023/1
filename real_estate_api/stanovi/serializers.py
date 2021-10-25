@@ -1,8 +1,7 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
-from rest_framework.views import exception_handler
 
-from .views import Stanovi
+
 from .models import SlikaStana
 
 
@@ -34,6 +33,7 @@ class StanoviSerializer(serializers.ModelSerializer):
     slike_stana = SlikaStanaSerializer(many=True, read_only=False)
 
     class Meta:
+        from .views import Stanovi
         model = Stanovi
         fields = (
             "id_stana",
@@ -70,12 +70,3 @@ class StanoviSerializer(serializers.ModelSerializer):
     def get_kreiraj_stan_url(self, obj):
         return reverse("stanovi:kreiraj_stan")
 
-    # def custom_exception_handler(exc, context):
-    #     # Call REST framework's default exception handler first,
-    #     # to get the standard error response.
-    #     response = exception_handler(exc, context)
-    #
-    #     if response is not None:
-    #         response.data['status_code'] = response.status_code
-    #
-    #     return response
