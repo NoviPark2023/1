@@ -3,7 +3,14 @@ from django.db import models
 
 
 class Korisnici(AbstractUser):
+    """
+    Model Entiteta Korisnik
+    """
+
     class PrivilegijeKorisnika(models.TextChoices):
+        """
+        Privilegije korisnika po PDDu u kontekstu ogranicenja pristupa.
+        """
         PRODAVAC = 'Prodavac', 'Prodavac'
         FINANSIJE = 'Finansije', 'Finansije'
         ADMINISTRATOR = 'Administrator', 'Administrator'
@@ -20,13 +27,12 @@ class Korisnici(AbstractUser):
         return self.ime + 'ime' + self.prezime + 'prezime' + 'je dodat.'
 
     def __str__(self):
-        return f"{self.ime} {self.prezime}"
-
-    # def __str__(self):
-    #     return f" {self.ime} {self.prezime} {self.korisnicko_ime} {self.lozinka} {self.potvrda_lozinka}  \
-    #               {self.is_admin} {self.is_finansije} {self.is_prodavac}"
+        return f"{self.username} {self.ime} {self.prezime}"
 
     class Meta:
+        """
+        Bolji naziv tabele u Bazi Podataka.
+        """
         db_table = 'korisnici'
         verbose_name = "Korisnik"
         verbose_name_plural = "Korisnici"
