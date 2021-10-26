@@ -31,7 +31,7 @@ class Korisnici(AbstractUser):
 
     class Meta:
         """
-        Bolji naziv tabele u Bazi Podataka.
+        Prilagodjeni naziv tabele 'Korisnici' u Bazi Podataka.
         """
         db_table = 'korisnici'
         verbose_name = "Korisnik"

@@ -16,10 +16,6 @@ class Kupci(models.Model):
         FIZICKO = 'Fizicko', 'Fizicko Lice'
         PRAVNO = 'Pravno', 'Pravno Lice'
 
-    # STATUS_LICA: tuple[tuple[str, str], tuple[str, str]] = (
-    #     ('Fizicko', 'Fizicko Lice'),
-    #     ('Pravno', 'Pravno Lice'),
-    # )
     id_kupca: Union[BigAutoField, Any] = models.BigAutoField(primary_key=True)
     lice: str = models.CharField(max_length=20,
                                  choices=StatusLicaKupaca.choices,
@@ -40,6 +36,9 @@ class Kupci(models.Model):
         return f"{self.ime_prezime}"
 
     class Meta:
+        """
+        Prilagodjeni naziv tabele 'Kupci 'u Bazi Podataka.
+        """
         db_table: str = 'kupci'
         verbose_name: str = "Kupac"
         verbose_name_plural: str = "Kupci"

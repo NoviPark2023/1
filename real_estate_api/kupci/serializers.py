@@ -5,8 +5,9 @@ from .views import Kupci
 
 
 class KupciSerializer(serializers.ModelSerializer):
-    """KUPCI sa redukovanim poljima koje poseduje za
-        prikaz u tabeli i u slucaju responiva u frontendu.
+    """
+    KUPCI sa redukovanim poljima koje poseduje za
+    prikaz u tabeli i u slucaju responiva u frontendu.
         Ukljucene API putanje (API URLs) su:
         ------------------------------------
         * detalji kupca
@@ -60,12 +61,13 @@ class KupciSerializer(serializers.ModelSerializer):
 
 
 class DetaljiKupcaSerializer(KupciSerializer):
-    """Detalji KUPCA sa svim poljima koje poseduje.
-       Ukljucene API putanje (API URLs) su:
-       ------------------------------------
-        * izmeni_kupca
-        * obrisi kupca
-        * lista svih kupca
+    """
+    Detalji KUPCA sa svim poljima koje poseduje.
+        Ukljucene API putanje (API URLs) su:
+        ------------------------------------
+         * izmeni_kupca
+         * obrisi kupca
+         * lista svih kupca
     """
 
     class Meta:

@@ -5,15 +5,16 @@ from real_estate_api.korisnici.views import Korisnici
 
 
 class KorisniciSerializers(serializers.ModelSerializer):
-    """Detalji KORISNIKA sa redukovanim poljima koje poseduje za
-          prikaz u tabeli i u slucaju responiva u frontendu.
-          * Ukljucene API putanje (API URLs) su:
-          ------------------------------------
-          - detalji korisnika
-          - uredjivanje korisnika
-          - brisanje korisnika
-          - lista_korisnika
-          - kreiraj_korisnika
+    """
+    Detalji KORISNIKA sa redukovanim poljima koje poseduje za
+    prikaz u tabeli i u slucaju responiva u frontendu.
+        * Ukljucene API putanje (API URLs) su:
+        ------------------------------------
+        - detalji korisnika
+        - uredjivanje korisnika
+        - brisanje korisnika
+        - lista_korisnika
+        - kreiraj_korisnika
       """
     detalji_korisnika_url = serializers.SerializerMethodField()
     izmeni_korisnika_url = serializers.SerializerMethodField()
@@ -68,15 +69,16 @@ class KorisniciSerializers(serializers.ModelSerializer):
 
 
 class DetaljiKorisnikaSerializers(serializers.ModelSerializer):
-    """Detalji KORISNIKA sa redukovanim poljima koje poseduje za
-          prikaz u tabeli i u slucaju responiva u frontendu.
-          * Ukljucene API putanje (API URLs) su:
-          ------------------------------------
-          - detalji korisnika
-          - uredjivanje korisnika
-          - brisanje korisnika
-          - lista_korisnika
-          - kreiraj_korisnika
+    """
+    Detalji KORISNIKA sa redukovanim poljima koje poseduje za
+    prikaz u tabeli i u slucaju responiva u frontendu.
+        * Ukljucene API putanje (API URLs) su:
+        ------------------------------------
+        - detalji korisnika
+        - uredjivanje korisnika
+        - brisanje korisnika
+        - lista_korisnika
+        - kreiraj_korisnika
       """
 
     # Putanja do detalja Korisnika
