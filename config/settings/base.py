@@ -36,7 +36,6 @@ THIRD_PARTY_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     "crispy_forms",
-    # 'django.contrib.staticfiles',  # required for serving swagger ui's css/js files
     'drf_yasg',
 ]
 
@@ -57,10 +56,10 @@ AUTH_USER_MODEL = 'korisnici.Korisnici'
 # ------------------------------------------------------------------------------
 MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
-     "corsheaders.middleware.CorsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -210,7 +209,8 @@ SWAGGER_SETTINGS = {
     # set to None to disable the schema validation badge in the UI
     'VALIDATOR_URL': '',
 
-    # swagger-ui configuration settings, see https://github.com/swagger-api/swagger-ui/blob/112bca906553a937ac67adc2e500bdeed96d067b/docs/usage/configuration.md#parameters
+    # swagger-ui configuration settings,
+    # see https://github.com/swagger-api/swagger-ui/blob/112bca906553a937ac67adc2e500bdeed96d067b/docs/usage/configuration.md#parameters
     'OPERATIONS_SORTER': None,
     'TAGS_SORTER': None,
     'DOC_EXPANSION': 'list',
