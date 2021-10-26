@@ -1,22 +1,36 @@
+from typing import Tuple, Union, Any
+
 from django.db import models
+from django.db.models import BigAutoField
 
 
 class Kupci(models.Model):
-    STATUS_LICA = (
-        ('Fizicko', 'Fizicko Lice'),
-        ('Pravno', 'Pravno Lice'),
-    )
-    id_kupca = models.BigAutoField(primary_key=True)
-    lice = models.CharField(max_length=20,
-                            choices=STATUS_LICA,
-                            default='Fizicko Lice',)
-    ime_prezime = models.CharField('Ime i prezime Kupca', max_length=50)
-    email = models.EmailField('Email Kupca')
-    broj_telefona = models.CharField('Broj telefona', max_length=20)
-    Jmbg_Pib = models.IntegerField('JMBG ili PIB')
-    adresa = models.CharField('Adresa', max_length=50)
+    """
+    Model Entiteta Kupci
+    """
 
-    def get_id_kupca(self):
+    class StatusLicaKupaca(models.TextChoices):
+        """
+        Status Lica Kupaca po PDDu u kontekstu prodaje (Pravno Lice, Fizicko Lice).
+        """
+        FIZICKO = 'Fizicko', 'Fizicko Lice'
+        PRAVNO = 'Pravno', 'Pravno Lice'
+
+    # STATUS_LICA: tuple[tuple[str, str], tuple[str, str]] = (
+    #     ('Fizicko', 'Fizicko Lice'),
+    #     ('Pravno', 'Pravno Lice'),
+    # )
+    id_kupca: Union[BigAutoField, Any] = models.BigAutoField(primary_key=True)
+    lice: str = models.CharField(max_length=20,
+                                 choices=StatusLicaKupaca.choices,
+                                 default=StatusLicaKupaca.FIZICKO, )
+    ime_prezime: str = models.CharField('Ime i prezime Kupca', max_length=50)
+    email: str = models.EmailField('Email Kupca')
+    broj_telefona: str = models.CharField('Broj telefona', max_length=20)
+    Jmbg_Pib: str = models.CharField('JMBG ili PIB', max_length=30)
+    adresa: str = models.CharField('Adresa', max_length=50)
+
+    def get_id_kupca(self) -> object:
         return self.id_kupca + ' id_kupca ' + self.id_kupca + ' id_kupca.'
 
     def __repr__(self):
@@ -26,8 +40,6 @@ class Kupci(models.Model):
         return f"{self.ime_prezime}"
 
     class Meta:
-        db_table = 'kupci'
-        verbose_name = "Kupac"
-        verbose_name_plural = "Kupci"
-
-
+        db_table: str = 'kupci'
+        verbose_name: str = "Kupac"
+        verbose_name_plural: str = "Kupci"

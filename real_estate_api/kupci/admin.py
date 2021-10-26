@@ -2,5 +2,5 @@ from django.contrib import admin
 
 from .models import Kupci
 
-# Registruj Admin modul u backendu za Kupce
+# Registrovan model Kupci u backend Admin modulu
 admin.site.register(Kupci)
