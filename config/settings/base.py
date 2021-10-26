@@ -181,6 +181,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = [
     'http://api.dejan.pro',
+    'http://localhost:3000',
 ]
 
 # DOCS
