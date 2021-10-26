@@ -4,14 +4,16 @@ from rest_framework.reverse import reverse
 from real_estate_api.korisnici.views import Korisnici
 
 
-class KreirajKorisnikaSerializers(serializers.ModelSerializer):
+class KorisniciSerializers(serializers.ModelSerializer):
     """Detalji KORISNIKA sa redukovanim poljima koje poseduje za
           prikaz u tabeli i u slucaju responiva u frontendu.
-          Ukljucene API putanje (API URLs) su:
+          * Ukljucene API putanje (API URLs) su:
           ------------------------------------
-          * detalji korisnika
-          * uredjivanje korisnika
-          * brisanje korisnika
+          - detalji korisnika
+          - uredjivanje korisnika
+          - brisanje korisnika
+          - lista_korisnika
+          - kreiraj_korisnika
       """
     detalji_korisnika_url = serializers.SerializerMethodField()
     izmeni_korisnika_url = serializers.SerializerMethodField()
@@ -20,6 +22,16 @@ class KreirajKorisnikaSerializers(serializers.ModelSerializer):
     kreiraj_korisnika_url = serializers.SerializerMethodField()
 
     class Meta:
+        """
+        Opisni model entiteta Korisnici sa ukljucenim poljim a ka opeacijama sa istim.
+        * Ukljucena dodatna polja modela entiteta *(Lakse u Frontendu):
+        -----------------------------------------
+        - detalji_korisnika_url
+        - izmeni_korisnika_url
+        - obrisi_korisnika_url
+        - lista_korisnika_url
+        - kreiraj_korisnika_url
+        """
         model = Korisnici
         fields = (
             "id",
@@ -54,7 +66,20 @@ class KreirajKorisnikaSerializers(serializers.ModelSerializer):
     def get_kreiraj_korisnika_url(self, obj):
         return reverse("korisnici:kreiraj_korisnika")
 
+
 class DetaljiKorisnikaSerializers(serializers.ModelSerializer):
+    """Detalji KORISNIKA sa redukovanim poljima koje poseduje za
+          prikaz u tabeli i u slucaju responiva u frontendu.
+          * Ukljucene API putanje (API URLs) su:
+          ------------------------------------
+          - detalji korisnika
+          - uredjivanje korisnika
+          - brisanje korisnika
+          - lista_korisnika
+          - kreiraj_korisnika
+      """
+
+    # Putanja do detalja Korisnika
     absolute_url = serializers.SerializerMethodField()
 
     class Meta:
