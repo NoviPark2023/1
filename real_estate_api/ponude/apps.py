@@ -3,7 +3,7 @@ from django.apps import AppConfig
 
 class PonudeConfig(AppConfig):
     """
-    Entry point form @PonudeAPP
+    Entry point form @Ponude APP
     """
     name = "real_estate_api.ponude"
     default_auto_field = 'django.db.models.BigAutoField'

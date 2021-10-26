@@ -63,11 +63,11 @@ class KupciSerializer(serializers.ModelSerializer):
 class DetaljiKupcaSerializer(KupciSerializer):
     """
     Detalji KUPCA sa svim poljima koje poseduje.
-        Ukljucene API putanje (API URLs) su:
-        ------------------------------------
-         * izmeni_kupca
-         * obrisi kupca
-         * lista svih kupca
+    Ukljucene API putanje (API URLs) su:
+    ------------------------------------
+     * izmeni_kupca
+     * obrisi kupca
+     * lista svih kupca
     """
 
     class Meta:

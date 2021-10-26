@@ -6,12 +6,21 @@ from real_estate_api.stanovi.models import Stanovi
 
 
 class Ponude(models.Model):
+    """
+    Model Entiteta Ponude
+    """
     class StatusPonude(models.TextChoices):
+        """
+        Status Ponuda Stana po PDDu u kontekstu prodaje Stana (Potencijalan, Rezervisan, Kupljen).
+        """
         POTENCIJALAN = 'potencijalan', "Potencijalan"
         REZERVISAN = 'rezervisan', "Rezervisan"
         KUPLJEN = 'kupljen', "Kupljen"
 
     class NacinPlacanja(models.TextChoices):
+        """
+        Nacin placanja Stana po PDDu u kontekstu prodaje Stana (Kredit, U celosti, Na rate, Ucesce).
+        """
         U_CELOSTI = 'ceo_iznos', "Placanje u celosti"
         KREDIT = 'kredit', "Kreditom"
         RATE = 'na_rate', "Na rate"
@@ -38,6 +47,9 @@ class Ponude(models.Model):
                   {self.broj_ugovora}"
 
     class Meta:
+        """
+        Prilagodjeni naziv tabele 'Ponude 'u Bazi Podataka.
+        """
         db_table = 'ponude'
         verbose_name = "Ponuda Kupcima"
         verbose_name_plural = "Ponude Kupcima"

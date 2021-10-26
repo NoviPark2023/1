@@ -5,16 +5,24 @@ from .views import Ponude
 
 
 class PonudeSerializer(serializers.ModelSerializer):
-    """Detalji Ponuda sa redukovanim poljima koje poseduje za
-           prikaz u tabeli i u slucaju responiva u frontendu.
-           Ukljucene API putanje (API URLs) su:
-           ------------------------------------
-            * Detalji ponude
-            * Izmeni ponudu
-            * Brisanje ponude
-            * Kreiranje ponude
-            * Lista ponuda
-       """
+    """
+    Ponude sa redukovanim poljima koje poseduje za prikaz u tabeli i u slucaju responiva u frontendu.
+        Ukljucene API putanje (API URLs) su:
+        ------------------------------------
+        * kupac
+        * stan
+        * cena_stana_za_kupca
+        * napomena
+        * broj_ugovora
+        * datum_ugovora
+        * status_ponude
+        * nacin_placanja
+        * detalji_ponude_url
+        * izmeni_ponudu_url
+        * obrisi_ponudu_url
+        * kreiraj_ponudu_url
+        * lista_ponuda_url
+    """
 
     detalji_ponude_url = serializers.SerializerMethodField()
     izmeni_ponudu_url = serializers.SerializerMethodField()
@@ -65,13 +73,21 @@ class PonudeSerializer(serializers.ModelSerializer):
 class DetaljiPonudeSerializer(PonudeSerializer):
     """
     Detalji Ponude sa ukljucenim svim poljima.
-    Ukljucene API putanje (API URLs) su:
-    -------------------------------------
-    * Detalji ponude
-    * Izmeni ponudu
-    * Brisanje ponude
-    * Kreiranje ponude
-    * Lista ponuda
+        Ukljucene API putanje (API URLs) su:
+        ------------------------------------
+        * kupac
+        * stan
+        * cena_stana_za_kupca
+        * napomena
+        * broj_ugovora
+        * datum_ugovora
+        * status_ponude
+        * nacin_placanja
+        * detalji_ponude_url
+        * izmeni_ponudu_url
+        * obrisi_ponudu_url
+        * kreiraj_ponudu_url
+        * lista_ponuda_url
     """
 
     class Meta:

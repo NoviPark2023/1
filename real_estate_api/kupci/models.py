@@ -8,7 +8,6 @@ class Kupci(models.Model):
     """
     Model Entiteta Kupci
     """
-
     class StatusLicaKupaca(models.TextChoices):
         """
         Status Lica Kupaca po PDDu u kontekstu prodaje (Pravno Lice, Fizicko Lice).
