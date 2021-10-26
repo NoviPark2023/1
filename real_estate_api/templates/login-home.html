@@ -283,16 +283,94 @@
 {% else %}
 <div class="container-fluid">
     <br/><br/><br/><br/><br/>
+
     <div class="row justify-content-md-center">
-        <div class="col-md-auto">
-            <a class="btn btn-xl btn-success" href='{% url "stanovi:lista_stanova" %}' role="button">STANOVI</a>
-            <a class="btn btn-xl btn-info" href='{% url "ponude:lista_ponuda" %}' role="button">PONUDE</a>
-            <a class="btn btn-xl btn-warning" href='{% url "kupci:lista_kupaca" %}' role="button">KUPCI</a>
-            <a class="btn btn-xl btn-dark" href='{% url "korisnici:lista_korisnika" %}' role="button">KORISNICI</a>
-            <a class="btn btn-xl btn-danger" href='{% url "docs" %}' role="button">DOKUMENTACIJA</a>
-            <a class="btn btn-xl btn-primary" href='/admin' role="button">ADMIN</a>
+         <!-- ###########  STANOVI CARD   ########### -->
+
+        <div class="card text-white bg-secondary  mb-3" style="max-width: 25rem;">
+            <img src="{% static 'images/stanovi.png'  %}" class="card-img-top" alt="...">
+            <div class="card-header"><b>API STANOVI</b></div>
+            <div class="card-body">
+
+                <a href='{% url "stanovi:lista_stanova" %}' class="btn btn-lg btn-dark btn-block"><b>STANOVI</b></a>
+            </div>
         </div>
+        <!-- ########### END STANOVI CARD   ########### -->
+        <!-- ############################################ -->
+        <!-- ############################################ -->
+        <!-- ###########   PONUDE CARD   ########### -->
+        <div class="card text-white bg-primary mb-3" style="max-width: 25rem;">
+            <img src="{% static 'images/ponude.png'  %}" class="card-img-top" alt="...">
+            <div class="card-header"><b>API PONUDE</b></div>
+            <div class="card-body">
+
+                <a href='{% url "ponude:lista_ponuda" %}' class="btn btn-lg btn-dark btn-block"><b>PONUDE</b></a>
+            </div>
+        </div>
+        <!-- ###########  END  PONUDE CARD   ########### -->
+        <!-- ############################################ -->
+        <!-- ############################################ -->
+        <!-- ###########   KUPCI CARD   ########### -->
+        <div class="card text-white bg-warning mb-3" style="max-width: 25rem;">
+            <img src="{% static 'images/kupci.png'  %}" class="card-img-top" alt="...">
+            <div class="card-header"><b>API KUPCI</b></div>
+            <div class="card-body">
+
+                <a href='{% url "kupci:lista_kupaca" %}' class="btn btn-lg btn-dark btn-block"><b>KUPCI</b></a>
+            </div>
+        </div>
+        <!-- ###########  END  KUPCI CARD   ########### -->
+        <!-- ############################################ -->
+        <!-- ############################################ -->
+        <!-- ###########   KORISNICI CARD   ########### -->
+        <div class="card text-white bg-success mb-3" style="max-width: 25rem;">
+            <img src="{% static 'images/korisnici.png'  %}" class="card-img-top" alt="...">
+            <div class="card-header"><b>API KORISNICI</b></div>
+            <div class="card-body">
+
+                <a href='{% url "korisnici:lista_korisnika" %}' class="btn btn-lg btn-dark btn-block"><b>KORISNICI</b></a>
+            </div>
+        </div>
+        <!-- ###########  END  KORISNICI CARD   ########### -->
+        <!-- ############################################ -->
+        <!-- ############################################ -->
+        <!-- ###########   DOKUMENTACIJA CARD   ########### -->
+        <div class="card text-white bg-secondary mb-3" style="max-width: 25rem;">
+            <img src="{% static 'images/dokumentacija.png'  %}" class="card-img-top" alt="...">
+            <div class="card-header"><b>DOKUMENTACIJA</b></div>
+            <div class="card-body">
+
+                <a href='{% url "docs" %}' class="btn btn-lg btn-success btn-block"><b>DOKUMENTACIJA</b></a>
+            </div>
+        </div>
+        <!-- ###########  END  KORISNICI CARD   ########### -->
+        <!-- ############################################ -->
+        <!-- ############################################ -->
+         <!-- ###########   DOKUMENTACIJA CARD   ########### -->
+        <div class="card text-white bg-dark  mb-3" style="max-width: 25rem;">
+            <img src="{% static 'images/admin.png'  %}" class="card-img-top" alt="...">
+            <div class="card-header"><b>ADMIN</b></div>
+            <div class="card-body">
+
+                <a href='/admin' class="btn btn-lg btn-danger btn-block"><b>ADMIN</b></a>
+            </div>
+        </div>
+        <!-- ###########  END  KORISNICI CARD   ########### -->
+        <!-- ############################################ -->
+        <!-- ############################################ -->
+
     </div>
+   <!-- <div class="col-md-auto">
+
+
+        <a class="btn btn-xl btn-success" href='{% url "stanovi:lista_stanova" %}' role="button">STANOVI</a>
+        <a class="btn btn-xl btn-info" href='{% url "ponude:lista_ponuda" %}' role="button">PONUDE</a>
+        <a class="btn btn-xl btn-warning" href='{% url "kupci:lista_kupaca" %}' role="button">KUPCI</a>
+        <a class="btn btn-xl btn-dark" href='{% url "korisnici:lista_korisnika" %}' role="button">KORISNICI</a>
+        <a class="btn btn-xl btn-danger" href='{% url "docs" %}' role="button">DOKUMENTACIJA</a>
+        <a class="btn btn-xl btn-primary" href='/admin' role="button">ADMIN</a>
+    </div>-->
+</div>
 </div>
 {% endif %}
 {% endblock content %}
