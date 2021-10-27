@@ -1,0 +1,24 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container-fluid">
+
+        <div class="mx-auto order-0">
+            <a class="navbar-brand mx-auto" href="/">FWW Real Estate CRM</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".dual-collapse2">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <ul class="navbar-nav ms-auto">
+            {% if request.user.is_authenticated %}
+            <li class="nav-item">
+                <a class="btn btn-primary btn-sm " href='{% url "logout" %}' role="button"><b>&nbsp;&nbsp;&nbsp;Odjavi se&nbsp;&nbsp;&nbsp;</b></a>&nbsp;&nbsp;&nbsp;
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-danger btn-sm" href="{% url 'admin:index' %}" role="button"><b>&nbsp;&nbsp;&nbsp;Super Admin&nbsp;&nbsp;&nbsp;</b></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Prijavljen kao: <b>{{ request.user.username }}</b></a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>

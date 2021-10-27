@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path, include
 
 from django.conf import settings
@@ -27,6 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Root LogIn home path
     path('', LoginView.as_view(template_name='./login-home.html'), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
     # Root Putanja do Kupaca
     path('kupci/', include('real_estate_api.kupci.urls', namespace='kupci')),
     # Root Putanja do Korisnika
