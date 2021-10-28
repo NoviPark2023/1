@@ -1,4 +1,5 @@
 from django.urls import path
+from rest_framework.authtoken.views import obtain_auth_token
 
 from .views import (
     ListaKorisnikaAPIview,
@@ -13,6 +14,8 @@ from .views import (
 app_name = "korisnici"
 
 urlpatterns = [
+    # PREUZIM API TOKEN
+    path('api/token/', obtain_auth_token, name='obtain-token'),
     # Lista svih Korisnika
     path('', ListaKorisnikaAPIview.as_view(), name='lista_korisnika'),
     # Kreiranje Korisnika

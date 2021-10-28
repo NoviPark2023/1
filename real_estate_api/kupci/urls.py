@@ -1,5 +1,4 @@
 from django.urls import path
-from rest_framework.authtoken.views import obtain_auth_token
 
 from .views import (
     ListaKupacaAPIView,
@@ -12,8 +11,7 @@ from .views import (
 app_name = "kupci"
 
 urlpatterns = [
-    # PREUZIM API TOKEN
-    path('api/token/', obtain_auth_token, name='obtain-token'),
+
     # Lista svih Kupaca
     path('', ListaKupacaAPIView.as_view(), name='lista_kupaca'),
     # Detalji Kupca
