@@ -2,15 +2,15 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 
-from .models import SlikaStana
+#from .models import SlikaStana
 
 
-class SlikaStanaSerializer(serializers.ModelSerializer):
-    """Serijalizers za Slike Stanova"""
-
-    class Meta:
-        model = SlikaStana
-        fields = ["id_slike", "slika_stana", "alt_text"]
+# class SlikaStanaSerializer(serializers.ModelSerializer):
+#     """Serijalizers za Slike Stanova"""
+#
+#     class Meta:
+#         model = SlikaStana
+#         fields = ["id_slike", "slika_stana", "alt_text"]
 
 
 class StanoviSerializer(serializers.ModelSerializer):
@@ -30,7 +30,7 @@ class StanoviSerializer(serializers.ModelSerializer):
     kreiraj_stan_url = serializers.SerializerMethodField()
 
     # Inline slike stana
-    slike_stana = SlikaStanaSerializer(many=True, read_only=False)
+    #slike_stana = SlikaStanaSerializer(many=True, read_only=False)
 
     class Meta:
         from .views import Stanovi
@@ -49,7 +49,7 @@ class StanoviSerializer(serializers.ModelSerializer):
             "napomena",
             "status_prodaje",
             "klijent_prodaje",
-            "slike_stana",
+            #"slike_stana",
             'detalji_stana_url',
             'izmeni_stan_url',
             'obrisi_stan_url',

@@ -52,30 +52,30 @@ class Stanovi(models.Model):
 
 
 # SLIKE ZA STANOVE MODEL
-class SlikaStana(models.Model):
-    """TODO: NAPISATI DOC"""
-    id_slike = models.BigAutoField(primary_key=True)
-    slika_stana = models.ImageField(
-        verbose_name='Slika_Stana',
-        help_text='Molimo da dodate sliku',
-        upload_to='images/',
-        default='images/default.png',
-        null=True,
-        blank=True
-    )
-    alt_text = models.CharField(
-        verbose_name='Alternativni Text',
-        help_text='Molimo da dodate sliku',
-        max_length=255,
-        null=True,
-        blank=True
-    )
-    kreirana = models.DateTimeField(auto_now_add=True, editable=False)
-    ucitana = models.DateTimeField(auto_now=True)
-
-    stan = models.ForeignKey(Stanovi, on_delete=models.CASCADE, related_name='slike_stana')
-
-    class Meta:
-        db_table = 'slika_stana'
-        verbose_name = "slika_stana"
-        verbose_name_plural = "slike_stanova"
+# class SlikaStana(models.Model):
+#     """TODO: CEKA SE FRONT"""
+#     id_slike = models.BigAutoField(primary_key=True)
+#     slika_stana = models.ImageField(
+#         verbose_name='Slika_Stana',
+#         help_text='Molimo da dodate sliku',
+#         upload_to='images/',
+#         default='images/default.png',
+#         null=True,
+#         blank=True
+#     )
+#     alt_text = models.CharField(
+#         verbose_name='Alternativni Text',
+#         help_text='Molimo da dodate sliku',
+#         max_length=255,
+#         null=True,
+#         blank=True
+#     )
+#     kreirana = models.DateTimeField(auto_now_add=True, editable=False)
+#     ucitana = models.DateTimeField(auto_now=True)
+#
+#     stan = models.ForeignKey(Stanovi, on_delete=models.CASCADE, related_name='slike_stana')
+#
+#     class Meta:
+#         db_table = 'slika_stana'
+#         verbose_name = "slika_stana"
+#         verbose_name_plural = "slike_stanova"
