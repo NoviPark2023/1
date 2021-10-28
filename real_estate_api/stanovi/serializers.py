@@ -38,6 +38,7 @@ class StanoviSerializer(serializers.ModelSerializer):
         fields = (
             "id_stana",
             "lamela",
+            "adresa_stana",
             "kvadratura",
             "sprat",
             "broj_soba",

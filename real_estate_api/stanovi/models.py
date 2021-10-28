@@ -17,6 +17,7 @@ class Stanovi(models.Model):
 
     id_stana = models.BigAutoField(primary_key=True)
     lamela = models.CharField('Lamela', max_length=50, default=0)
+    adresa_stana = models.CharField('Adresa stana', max_length=254, default='', blank=False, null=False)
     kvadratura = models.PositiveIntegerField('Kvadratura stana', default=0)
     sprat = models.PositiveIntegerField('Sprat stana', default=1)
     broj_soba = models.PositiveIntegerField('Broj soba stana', default=1)
