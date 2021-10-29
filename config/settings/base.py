@@ -1,7 +1,6 @@
 from pathlib import Path
 from django.conf import settings
 import environ
-from datetime import timedelta
 
 env = environ.Env()
 
@@ -158,15 +157,8 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
     'django.contrib.auth.hashers.Argon2PasswordHasher',
     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
-    # 'accounts.hashers.PBKDF2WrappedSHA1PasswordHasher',
+    #'accounts.hashers.PBKDF2WrappedSHA1PasswordHasher',
 ]
-
-# SIMPLE_JWT = {
-#     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
-#     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-#     'ROTATE_REFRESH_TOKENS': True,
-#     'BLACKLIST_AFTER_ROTATION': True,
-# }
 
 # INTERNATIONALIZATION
 # ------------------------------------------------------------------------------
@@ -203,47 +195,37 @@ CORS_ORIGIN_WHITELIST = [
 
 # DOCS
 # ------------------------------------------------------------------------------
-REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        #'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    ),
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # )
-}
+REST_FRAMEWORK = {'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'}
 
 SWAGGER_SETTINGS = {
-'USE_SESSION_AUTH': True,  # add Django Login and Django Logout buttons, CSRF token to swagger UI page
-'LOGIN_URL': getattr(settings, 'LOGIN_URL', None),  # URL for the login button
-'LOGOUT_URL': getattr(settings, 'LOGOUT_URL', None),  # URL for the logout button
+    'USE_SESSION_AUTH': True,  # add Django Login and Django Logout buttons, CSRF token to swagger UI page
+    'LOGIN_URL': getattr(settings, 'LOGIN_URL', None),  # URL for the login button
+    'LOGOUT_URL': getattr(settings, 'LOGOUT_URL', None),  # URL for the logout button
 
-# Swagger security definitions to include in the schema;
-# see https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#security-definitions-object
-'SECURITY_DEFINITIONS': {
-    'basic': {
-        'type': 'basic'
+    # Swagger security definitions to include in the schema;
+    # see https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#security-definitions-object
+    'SECURITY_DEFINITIONS': {
+        'basic': {
+            'type': 'basic'
+        },
+        "api_key": {
+            "type": "apiKey",
+            "name": "api_key",
+            "in": "header"
+        },
     },
-    "api_key": {
-        "type": "apiKey",
-        "name": "api_key",
-        "in": "header"
-    },
-},
 
-# url to an external Swagger validation service; defaults to 'http://online.swagger.io/validator/'
-# set to None to disable the schema validation badge in the UI
-'VALIDATOR_URL': '',
+    # url to an external Swagger validation service; defaults to 'http://online.swagger.io/validator/'
+    # set to None to disable the schema validation badge in the UI
+    'VALIDATOR_URL': '',
 
-# swagger-ui configuration settings,
-# see https://github.com/swagger-api/swagger-ui/blob/112bca906553a937ac67adc2e500bdeed96d067b/docs/usage/configuration.md#parameters
-'OPERATIONS_SORTER': None,
-'TAGS_SORTER': None,
-'DOC_EXPANSION': 'list',
-'DEEP_LINKING': False,
-'SHOW_EXTENSIONS': True,
-'DEFAULT_MODEL_RENDERING': 'model',
-'DEFAULT_MODEL_DEPTH': 2,
+    # swagger-ui configuration settings,
+    # see https://github.com/swagger-api/swagger-ui/blob/112bca906553a937ac67adc2e500bdeed96d067b/docs/usage/configuration.md#parameters
+    'OPERATIONS_SORTER': None,
+    'TAGS_SORTER': None,
+    'DOC_EXPANSION': 'list',
+    'DEEP_LINKING': False,
+    'SHOW_EXTENSIONS': True,
+    'DEFAULT_MODEL_RENDERING': 'model',
+    'DEFAULT_MODEL_DEPTH': 2,
 }
