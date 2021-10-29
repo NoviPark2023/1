@@ -19,6 +19,8 @@ ALLOWED_HOSTS = ['*']
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+DATE_INPUT_FORMATS = ['%d-%m-%Y']
+
 # APPS
 # ------------------------------------------------------------------------------
 DJANGO_APPS = [

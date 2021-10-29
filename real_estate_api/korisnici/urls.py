@@ -21,7 +21,7 @@ urlpatterns = [
     # Kreiranje Korisnika
     path('kreiraj-korisnika/', KreirajKorisnika.as_view(), name='kreiraj_korisnika'),
     # Detalji Korisnika
-    path('detalji-korisinka/<int:id>/', KorisniciDetaljiAPIView.as_view(), name='detalji_korisnika'),
+    path('detalji-korisnika/<int:id>/', KorisniciDetaljiAPIView.as_view(), name='detalji_korisnika'),
     # Uredjivanje Korisnika
     path('izmeni-korisnika/<int:id>/', UrediKorisnika.as_view(), name='izmeni_korisnika'),
     # Brisanje Korisnika
