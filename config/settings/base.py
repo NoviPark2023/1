@@ -157,7 +157,7 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
     'django.contrib.auth.hashers.Argon2PasswordHasher',
     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
-    #'accounts.hashers.PBKDF2WrappedSHA1PasswordHasher',
+    # 'accounts.hashers.PBKDF2WrappedSHA1PasswordHasher',
 ]
 
 # INTERNATIONALIZATION
@@ -195,7 +195,10 @@ CORS_ORIGIN_WHITELIST = [
 
 # DOCS
 # ------------------------------------------------------------------------------
-REST_FRAMEWORK = {'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'}
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+}
 
 SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': True,  # add Django Login and Django Logout buttons, CSRF token to swagger UI page

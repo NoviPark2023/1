@@ -1,7 +1,9 @@
 from django.db.models import OuterRef
 from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Ponude
+from .ponude_pagination import StandardPaginationPonude
 from .serializers import PonudeSerializer
 
 lookup_field = 'id_ponudea'
@@ -13,7 +15,12 @@ class ListaPonudaAPIView(generics.ListAPIView):
     queryset = Ponude.objects.all()
     serializer_class = PonudeSerializer
 
-class ListaPonudaZaStanAPIView(generics.ListAPIView):
+
+class ListaPonudaPaginationAPIView(ListaPonudaAPIView):
+    pagination_class = StandardPaginationPonude
+
+
+class ListaPonudaZaStanAPIView(ListaPonudaAPIView):
     """Lista svih Ponuda"""
     lookup_field_stan = lookup_field_stan
     queryset = Ponude.objects.all()

@@ -7,7 +7,9 @@ from .views import (
     KreirajPonudeuAPIView,
     ObrisiPonuduAPIView,
     PonudeDetaljiAPIView,
-    UrediPonuduViewAPI
+    UrediPonuduViewAPI,
+    ListaPonudaPaginationAPIView
+
 )
 
 app_name = "ponude"
@@ -15,6 +17,8 @@ app_name = "ponude"
 urlpatterns = [
     # Lista svih Ponuda
     path('', ListaPonudaAPIView.as_view(), name='lista_ponuda'),
+    # Lista svih Ponuda sa Paginacijom
+    path('pagination-ponude/', ListaPonudaPaginationAPIView.as_view(), name='lista_ponuda_paginacija'),
     # Lista Ponuda filtriranih po 'ID STANA'
     path('lista-ponuda-stana/<int:id_stana>/', ListaPonudaZaStanAPIView.as_view(), name='lista_ponuda_za_stan'),
     # Detalji Ponude
