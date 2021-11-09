@@ -5,7 +5,7 @@ from .models import Ponude
 from .serializers import PonudeSerializer
 
 lookup_field = 'id_ponudea'
-lookup_field_stan = 'stan'
+lookup_field_stan = 'id_stana'
 
 
 class ListaPonudaAPIView(generics.ListAPIView):
@@ -24,8 +24,8 @@ class ListaPonudaZaStanAPIView(generics.ListAPIView):
         This view should return a list of all the purchases for
         the user as determined by the username portion of the URL.
         """
-        id_stana = self.kwargs['stan']
-        return Ponude.objects.all().filter(stan__ponude__id_ponude=id_stana)
+        id_stana = self.kwargs['id_stana']
+        return Ponude.objects.all().filter(stan=id_stana)
 
 
 class PonudeDetaljiAPIView(generics.RetrieveAPIView):
