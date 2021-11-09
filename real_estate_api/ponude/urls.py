@@ -16,7 +16,7 @@ urlpatterns = [
     # Lista svih Ponuda
     path('', ListaPonudaAPIView.as_view(), name='lista_ponuda'),
     # Lista Ponuda filtriranih po 'ID STANA'
-    path('lista-ponuda-stana/<int:id_stan>/', ListaPonudaZaStanAPIView.as_view(), name='lista_ponuda_za_stan'),
+    path('lista-ponuda-stana/<int:id_stana>/', ListaPonudaZaStanAPIView.as_view(), name='lista_ponuda_za_stan'),
     # Detalji Ponude
     path('detalji-ponude/<int:id_ponude>/', PonudeDetaljiAPIView.as_view(), name='detalji_ponude'),
     # Uredi Ponudu
