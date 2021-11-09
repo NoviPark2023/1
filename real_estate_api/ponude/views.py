@@ -25,7 +25,7 @@ class ListaPonudaZaStanAPIView(generics.ListAPIView):
         the user as determined by the username portion of the URL.
         """
         id_stana = self.kwargs['stan']
-        return Ponude.objects.filter(stan__ponude__id_ponude=id_stana)
+        return Ponude.objects.all().filter(stan__ponude__id_ponude=id_stana)
 
 
 class PonudeDetaljiAPIView(generics.RetrieveAPIView):
