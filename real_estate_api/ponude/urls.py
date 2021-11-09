@@ -3,6 +3,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 from .views import (
     ListaPonudaAPIView,
+    ListaPonudaZaStanAPIView,
     KreirajPonudeuAPIView,
     ObrisiPonuduAPIView,
     PonudeDetaljiAPIView,
@@ -14,6 +15,8 @@ app_name = "ponude"
 urlpatterns = [
     # Lista svih Ponuda
     path('', ListaPonudaAPIView.as_view(), name='lista_ponuda'),
+    # Lista Ponuda filtriranih po 'ID STANA'
+    path('lista-ponuda-stana/<int:stan>', ListaPonudaZaStanAPIView.as_view(), name='lista_ponuda_za_stan'),
     # Detalji Ponude
     path('detalji-ponude/<int:id_ponude>/', PonudeDetaljiAPIView.as_view(), name='detalji_ponude'),
     # Uredi Ponudu

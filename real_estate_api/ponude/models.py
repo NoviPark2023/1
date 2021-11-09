@@ -44,7 +44,7 @@ class Ponude(models.Model):
 
     def __str__(self):
         return f"{self.kupac.id_kupca} {self.cena_stana_za_kupca} \
-                  {self.broj_ugovora}"
+                  {self.broj_ugovora} {self.kupac.ime_prezime}"
 
     class Meta:
         """

@@ -35,6 +35,7 @@ class PonudeSerializer(serializers.ModelSerializer):
         fields = (
             'id_ponude',
             'kupac',
+            'kupac',
             'stan',
             'cena_stana_za_kupca',
             'napomena',
