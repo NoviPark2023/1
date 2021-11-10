@@ -4,7 +4,7 @@ from .models import Ponude
 from .ponude_pagination import StandardPaginationPonude
 from .serializers import PonudeSerializer
 
-lookup_field = 'id_ponudea'
+lookup_field = 'id_ponude'
 lookup_field_stan = 'id_stana'
 
 
@@ -31,6 +31,7 @@ class ListaPonudaZaStanAPIView(ListaPonudaAPIView):
         the Stan as determined by the Stan ID portion of the URL.
         """
         id_stana = self.kwargs['id_stana']
+
         return Ponude.objects.all().filter(stan=id_stana)
 
 

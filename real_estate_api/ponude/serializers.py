@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from .views import Ponude
+from ..stanovi.serializers import StanoviSerializer
 
 
 class PonudeSerializer(serializers.ModelSerializer):
@@ -31,12 +32,13 @@ class PonudeSerializer(serializers.ModelSerializer):
     lista_ponuda_url = serializers.SerializerMethodField()
 
     class Meta:
+        stanovi = StanoviSerializer(many=True, read_only=True)
         model = Ponude
         fields = (
             'id_ponude',
             'kupac',
-            'kupac',
             'stan',
+            'stanovi',
             'cena_stana_za_kupca',
             'napomena',
             'broj_ugovora',
