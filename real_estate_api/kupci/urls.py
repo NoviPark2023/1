@@ -7,6 +7,7 @@ from .views import (
     UrediKupcaAPIView,
     ObrisiKupcaAPIView,
     ListaKupacaPaginationAPIView,
+    ListaKupacaPoImenuAPIView,
 )
 
 app_name = "kupci"
@@ -15,6 +16,10 @@ urlpatterns = [
 
     # Lista svih Kupaca
     path('', ListaKupacaAPIView.as_view(), name='lista_kupaca'),
+
+    # Lista kupaca autocomplete po imenu
+    path('kupci-autocomplete/<str:ime_prezime>/', ListaKupacaPoImenuAPIView.as_view(), name='lista_kupaca_po_imenu_autocomplete'),
+
     # Lista svih Kupaca sa paginacijom
     path('pagination-kupci/', ListaKupacaPaginationAPIView.as_view(), name='lista_kupaca_paginacija'),
     # Detalji Kupca

@@ -39,6 +39,8 @@ THIRD_PARTY_APPS = [
     'corsheaders',
     "crispy_forms",
     'drf_yasg',
+    'dal',
+    'dal_select2',
 ]
 
 LOCAL_APPS = [
