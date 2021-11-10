@@ -2,6 +2,7 @@ from rest_framework import generics
 
 from .models import Kupci
 from real_estate_api.kupci.serializers import KupciSerializer, DetaljiKupcaSerializer
+from .kupci_pagination import StandardPaginationKupci
 
 lookup_field = 'id_kupca'
 
@@ -11,6 +12,11 @@ class ListaKupacaAPIView(generics.ListAPIView):
     # permission_classes = [IsAuthenticated]
     queryset = Kupci.objects.all()
     serializer_class = KupciSerializer
+
+
+class ListaKupacaPaginationAPIView(ListaKupacaAPIView):
+    """Lista svih Kupaca sa paginacijom"""
+    pagination_class = StandardPaginationKupci
 
 
 class KupciDetaljiAPIView(generics.RetrieveAPIView):

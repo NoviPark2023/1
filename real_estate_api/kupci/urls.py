@@ -5,7 +5,8 @@ from .views import (
     KupciDetaljiAPIView,
     KreirajKupcaAPIView,
     UrediKupcaAPIView,
-    ObrisiKupcaAPIView
+    ObrisiKupcaAPIView,
+    ListaKupacaPaginationAPIView,
 )
 
 app_name = "kupci"
@@ -14,6 +15,8 @@ urlpatterns = [
 
     # Lista svih Kupaca
     path('', ListaKupacaAPIView.as_view(), name='lista_kupaca'),
+    # Lista svih Kupaca sa paginacijom
+    path('pagination-kupci/', ListaKupacaPaginationAPIView.as_view(), name='lista_kupaca_paginacija'),
     # Detalji Kupca
     path('detalji-kupca/<int:id_kupca>/', KupciDetaljiAPIView.as_view(), name='detalji_kupca'),
     # Uredjivanje Kupaca

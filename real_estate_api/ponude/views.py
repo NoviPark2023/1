@@ -17,6 +17,7 @@ class ListaPonudaAPIView(generics.ListAPIView):
 
 
 class ListaPonudaPaginationAPIView(ListaPonudaAPIView):
+    """Lista svih Ponuda sa paginacijom"""
     pagination_class = StandardPaginationPonude
 
 
@@ -28,8 +29,8 @@ class ListaPonudaZaStanAPIView(ListaPonudaAPIView):
 
     def get_queryset(self):
         """
-        This view should return a list of all the purchases for
-        the user as determined by the username portion of the URL.
+        This view should return a list of all the Ponuda for
+        the Stan as determined by the Stan ID portion of the URL.
         """
         id_stana = self.kwargs['id_stana']
         return Ponude.objects.all().filter(stan=id_stana)

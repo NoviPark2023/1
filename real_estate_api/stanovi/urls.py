@@ -5,7 +5,8 @@ from .views import (
     StanoviDetaljiAPIVIew,
     KreirajStanAPIView,
     UrediStanViewAPI,
-    ObrisiStanViewAPI
+    ObrisiStanViewAPI,
+    ListaStanovaPaginationAPIView
 )
 
 app_name = "stanovi"
@@ -13,6 +14,8 @@ app_name = "stanovi"
 urlpatterns = [
     # Lista svih Stanova
     path('', ListaStanovaAPIView.as_view(), name='lista_stanova'),
+    # Lista svih Stanova sa paginacijom
+    path('pagination-stanovi/', ListaStanovaPaginationAPIView.as_view(), name='lista_stanova_paginacija'),
     # Detalji Stana
     path('detalji-stana/<int:id_stana>', StanoviDetaljiAPIVIew.as_view(), name='detalji_stana'),
     # Kreiranje Stana
