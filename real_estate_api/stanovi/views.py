@@ -9,7 +9,7 @@ lookup_field = 'id_stana'
 
 class ListaStanovaAPIView(generics.ListAPIView):
     """Lista svih Stanova"""
-    queryset = Stanovi.objects.all()
+    queryset = Stanovi.objects.all().order_by('id_stana')
     serializer_class = StanoviSerializer
 
 
