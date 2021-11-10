@@ -6,7 +6,8 @@ from .views import (
     KreirajKorisnika,
     KorisniciDetaljiAPIView,
     UrediKorisnika,
-    ObrisiKoriniska
+    ObrisiKoriniska,
+    ListaKorisnikaPaginationAPIView
 
 )
 
@@ -18,6 +19,8 @@ urlpatterns = [
     path('api/token/', obtain_auth_token, name='obtain-token'),
     # Lista svih Korisnika
     path('', ListaKorisnikaAPIview.as_view(), name='lista_korisnika'),
+    # Lista svih Korisnika sa paginacijom
+    path('pagination-korisnici', ListaKorisnikaPaginationAPIView.as_view(), name='lista_korisnika_paginacija'),
     # Kreiranje Korisnika
     path('kreiraj-korisnika/', KreirajKorisnika.as_view(), name='kreiraj_korisnika'),
     # Detalji Korisnika

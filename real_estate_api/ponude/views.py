@@ -1,6 +1,4 @@
-from django.db.models import OuterRef
 from rest_framework import generics
-from rest_framework.pagination import PageNumberPagination
 
 from .models import Ponude
 from .ponude_pagination import StandardPaginationPonude
