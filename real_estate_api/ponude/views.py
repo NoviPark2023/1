@@ -10,7 +10,7 @@ lookup_field_stan = 'id_stana'
 
 class ListaPonudaAPIView(generics.ListAPIView):
     """Lista svih Ponuda"""
-    queryset = Ponude.objects.all().order_by('id_ponude')
+    queryset = Ponude.objects.all().order_by(lookup_field)
     serializer_class = PonudeSerializer
 
 

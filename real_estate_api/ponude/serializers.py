@@ -38,7 +38,6 @@ class PonudeSerializer(serializers.ModelSerializer):
             'id_ponude',
             'kupac',
             'stan',
-            'stanovi',
             'cena_stana_za_kupca',
             'napomena',
             'broj_ugovora',
