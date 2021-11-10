@@ -7,7 +7,7 @@ from real_estate_api.korisnici.serializers import KorisniciSerializers
 
 class ListaKorisnikaAPIview(generics.ListAPIView):
     """Lista svih korisnika"""
-    queryset = Korisnici.objects.all()
+    queryset = Korisnici.objects.all().order_by('id')
     serializer_class = KorisniciSerializers
 
 

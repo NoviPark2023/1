@@ -10,7 +10,7 @@ lookup_field = 'id_kupca'
 class ListaKupacaAPIView(generics.ListAPIView):
     """Lista svih Kupaca"""
     # permission_classes = [IsAuthenticated]
-    queryset = Kupci.objects.all()
+    queryset = Kupci.objects.all().order_by('id_kupca')
     serializer_class = KupciSerializer
 
 
