@@ -3,7 +3,6 @@ from rest_framework import generics
 from .models import Kupci
 from real_estate_api.kupci.serializers import KupciSerializer, DetaljiKupcaSerializer
 from .kupci_pagination import StandardPaginationKupci
-from dal import autocomplete
 
 lookup_field = 'id_kupca'
 
