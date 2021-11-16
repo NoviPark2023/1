@@ -5,6 +5,8 @@ from ..models import Stanovi
 
 
 class StanoviTestCase(TestCase):
+
+    @classmethod
     def setUp(self):
         # Kreiraj TEST Korisnika
         self.korisnik = Korisnici.objects.create_user(

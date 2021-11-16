@@ -47,7 +47,7 @@ class TestStanoviSerializersAppModels(TestCase):
         from ..serializers import StanoviSerializer
 
         cls.stanovi = Stanovi.objects.create(lamela="dea", kvadratura=15)
-        cls.ponude = StanoviSerializer(instance=self.stan_atributi)
+        cls.ponude = StanoviSerializer(instance=cls.stan_atributi)
 
     def test_get_detalji_stana_url(self):
         self.fail()

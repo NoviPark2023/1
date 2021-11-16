@@ -23,7 +23,7 @@ class TestStanoviAppModels(TestCase):
 
 
     def test_model_repr(self):
-        for i in range(0, 5):
+        for i in range(1, 5):
             self.assertEqual(str(self.stanovi), str(i)+', dea_'+str(i)+',  15')
             #self.assertEqual(str(self.stanovi.id_stana), '1')
             #self.assertEqual(str(self.stanovi.lamela), 'dea')
@@ -36,7 +36,7 @@ class TestStanoviAppModels(TestCase):
         print(obj.pk)
         print(obj.lamela)
         print('------------------')
-        print(self.stanovi.lamela)
+        #print(self.stanovi.lamela)
 
 
 class URLTest(APITestCase, URLPatternsTestCase):
@@ -48,6 +48,6 @@ class URLTest(APITestCase, URLPatternsTestCase):
 
     def test_lista_stanova_API_end_point(self):
         """Test lista stanova API end point"""
-        url = reverse('lista_stanova')
+        url = reverse('')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
