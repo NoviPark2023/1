@@ -3,7 +3,7 @@ from django.test import TestCase
 from real_estate_api.korisnici.models import Korisnici
 
 
-class TestKorisniciSerializersAppModels(TestCase):
+class TestModelaKorisnici(TestCase):
 
     @classmethod
     def setUp(self):

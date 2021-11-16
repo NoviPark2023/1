@@ -7,7 +7,7 @@ from ..models import Stanovi
 class StanoviTestCase(TestCase):
 
     @classmethod
-    def setUp(self):
+    def setUpStanova(self):
         # Kreiraj TEST Korisnika
         self.korisnik = Korisnici.objects.create_user(
             ime='Test_Prodavac',
