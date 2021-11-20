@@ -194,6 +194,7 @@ CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1',
     '164.92.253.160',
     'https://stanovi.dejan.pro',
+    'http://stanovi.dejan.pro',
 ]
 CORS_ALLOW_METHODS = [
     'DELETE',
