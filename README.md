@@ -59,9 +59,13 @@ GRANT ALL PRIVILEGES ON DATABASE recrm_api TO recrm_api;
 
 # USEFUL COMMANDS:
 
-```ruby
-require 'redcarpet'
-markdown = Redcarpet.new("Hello World!")
-puts markdown.to_html
+```bash
+py manage.py makemigrations --dry-run --verbosity 3
+py manage.py runserver
+py manage.py createsuperuser 
+pip install coverage
+coverage run --omit='*/venv/*' manage.py test
+coverage html
+pip install djangorestframework
 ```
 
