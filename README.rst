@@ -59,7 +59,7 @@ GRANT ALL PRIVILEGES ON DATABASE recrm_api TO recrm_api;
 
 # USEFUL COMMANDS:
 
-``` javascript
+```
 var = 1
 ```
 
