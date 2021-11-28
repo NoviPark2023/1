@@ -1,5 +1,4 @@
 from django.urls import path
-from rest_framework.authtoken.views import obtain_auth_token
 
 from .views import (
     ListaKorisnikaAPIview,
@@ -8,15 +7,12 @@ from .views import (
     UrediKorisnika,
     ObrisiKoriniska,
     ListaKorisnikaPaginationAPIView
-
 )
 
 ## Registrovan AUTH_USER_MODEL = 'korisnici.Korisnici' u Django Config
 app_name = "korisnici"
 
 urlpatterns = [
-    # PREUZIM API TOKEN
-    path('api/token/', obtain_auth_token, name='obtain-token'),
     # Lista svih Korisnika
     path('', ListaKorisnikaAPIview.as_view(), name='lista_korisnika'),
     # Lista svih Korisnika sa paginacijom

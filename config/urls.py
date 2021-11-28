@@ -8,6 +8,10 @@ from django.conf import settings
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 # Dokumentacija inicijalna podesavanja polje u zaglavlju
 schema_view = get_schema_view(
@@ -27,7 +31,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Root LogIn home path
     path('', LoginView.as_view(template_name='./login-home.html'), name='login'),
+
     path('logout/', LogoutView.as_view(), name='logout'),
+
+    # PREUZIM API TOKEN
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
     # Root Putanja do Kupaca
     path('kupci/', include('real_estate_api.kupci.urls', namespace='kupci')),
     # Root Putanja do Korisnika
