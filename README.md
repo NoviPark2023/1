@@ -59,6 +59,8 @@ GRANT ALL PRIVILEGES ON DATABASE recrm_api TO recrm_api;
 
 # USEFUL COMMANDS:
 
-
->[!TIP]
+<ul>
+<li>`one</li>
+<li>two`</li>
+</ul>
 
