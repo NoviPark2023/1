@@ -60,6 +60,8 @@ GRANT ALL PRIVILEGES ON DATABASE recrm_api TO recrm_api;
 ---
 USEFUL COMMANDS:
 
-```ruby
-test
+``` cpp
+bool getBit(int num, int i) {
+	return ((num & (1<<i)) != 0);
+}
 ```
