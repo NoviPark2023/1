@@ -57,11 +57,10 @@ ALTER ROLE recrm_api SET timezone TO 'UTC';
 
 GRANT ALL PRIVILEGES ON DATABASE recrm_api TO recrm_api;
 
----
-USEFUL COMMANDS:
+# USEFUL COMMANDS:
 
-``` cpp
-bool getBit(int num, int i) {
-	return ((num & (1<<i)) != 0);
-}
+``` javascript
+var = 1
 ```
+
+----
