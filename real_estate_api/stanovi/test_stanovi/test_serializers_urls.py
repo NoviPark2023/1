@@ -16,8 +16,8 @@ class TestStanoviSerializersAppModels(TestCase):
     """
 
     @classmethod
-    def setUp(self) -> None:
-        self.korisnik = Korisnici.objects.create(
+    def setUp(cls) -> None:
+        cls.korisnik = Korisnici.objects.create(
             ime="string",
             prezime='string',
             email="user@example.com",
@@ -26,7 +26,7 @@ class TestStanoviSerializersAppModels(TestCase):
             role="Prodavac"
 
         )
-        self.stan_atributi = {
+        cls.stan_atributi = {
             "lamela": "1",
             "kvadratura": 1,
             "sprat": 1,
@@ -36,10 +36,10 @@ class TestStanoviSerializersAppModels(TestCase):
             "cena_stana": 1,
             "napomena": "1",
             "status_prodaje": "dostupan",
-            "klijent_prodaje": self.korisnik,
+            "klijent_prodaje": cls.korisnik,
 
         }
-        self.stan_atributi = Stanovi.objects.create(**self.stan_atributi)
+        cls.stan_atributi = Stanovi.objects.create(**cls.stan_atributi)
 
     @classmethod
     def setUpClass(cls):
@@ -55,6 +55,3 @@ class TestStanoviSerializersAppModels(TestCase):
     def get_detalji_ponude_url(self, obj):
         """Prosledi API putanju do detalja Ponuda"""
         return reverse('ponude:detalji_ponude', args=[obj.pk])
-
-    def test_model_repr(self):
-        pass
