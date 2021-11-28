@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework.permissions import AllowAny
 
 from .models import Korisnici
 from .korisnici_pagination import StandardPaginationKorisnici
@@ -25,6 +26,7 @@ class KorisniciDetaljiAPIView(generics.RetrieveAPIView):
 
 class KreirajKorisnika(generics.CreateAPIView):
     """Kreiranje novog Korisnika"""
+    permission_classes = [AllowAny]
     queryset = Korisnici.objects.all()
     serializer_class = KorisniciSerializers
 

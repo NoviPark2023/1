@@ -56,3 +56,16 @@ ALTER ROLE recrm_api SET default_transaction_isolation TO 'read committed';
 ALTER ROLE recrm_api SET timezone TO 'UTC';
 
 GRANT ALL PRIVILEGES ON DATABASE recrm_api TO recrm_api;
+
+# USEFUL COMMANDS:
+
+```bash
+py manage.py makemigrations --dry-run --verbosity 3
+py manage.py runserver
+py manage.py createsuperuser 
+pip install coverage
+coverage run --omit='*/venv/*' manage.py test
+coverage html
+pip install djangorestframework
+```
+

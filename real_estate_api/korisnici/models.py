@@ -1,8 +1,42 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
 from django.db import models
+from django.utils import timezone
+from django.contrib.auth.hashers import make_password
 
 
-class Korisnici(AbstractUser):
+class CustomAccountManager(BaseUserManager):
+
+    def create_superuser(self, email, username, ime, password, **druga_polja):
+
+        druga_polja.setdefault('is_staff', True)
+        druga_polja.setdefault('is_superuser', True)
+        druga_polja.setdefault('is_active', True)
+
+        if druga_polja.get('is_staff') is not True:
+            raise ValueError(
+                'Superuser must be assigned to is_staff=True.')
+        if druga_polja.get('is_superuser') is not True:
+            raise ValueError(
+                'Superuser must be assigned to is_superuser=True.')
+
+        return self.create_user(email, username, ime, password, **druga_polja)
+
+    def create_user(self, username, password, email, ime, **druga_polja):
+
+        if not email:
+            raise ValueError('You must provide an email address')
+
+        username = self.username(username)
+        password = self.password(make_password(password))
+        email = self.normalize_email(email)
+        user = self.model(user_name=username, password=password, email=email,  ime=ime, **druga_polja)
+        user.set_password(password)
+        user.save()
+        return user
+
+
+class Korisnici(AbstractBaseUser, PermissionsMixin):
     """
     Model Entiteta Korisnik
     """
@@ -15,6 +49,10 @@ class Korisnici(AbstractUser):
         FINANSIJE = 'Finansije', 'Finansije'
         ADMINISTRATOR = 'Administrator', 'Administrator'
 
+    email = models.EmailField('email address', unique=True)
+    username = models.CharField(max_length=150, unique=True)
+    start_date = models.DateTimeField(default=timezone.now)
+
     ime = models.CharField('Ime Korisnika', max_length=50, default="")
     prezime = models.CharField('Prezime Korisnika', max_length=50, default="")
     role = models.CharField(max_length=40,
@@ -22,6 +60,15 @@ class Korisnici(AbstractUser):
                             default=PrivilegijeKorisnika.ADMINISTRATOR,
                             blank=False,
                             null=False)
+
+    about = models.TextField('about', max_length=500, blank=True)
+    is_staff = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
+
+    objects = CustomAccountManager()
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['ime', 'email']
 
     def __repr__(self):
         return self.ime + 'ime' + self.prezime + 'prezime' + 'je dodat.'

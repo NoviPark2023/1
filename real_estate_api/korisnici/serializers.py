@@ -42,18 +42,41 @@ class KorisniciSerializers(serializers.ModelSerializer):
             "username",
             "password",
             "role",
+            "last_login",
+            "is_superuser",
+            "is_staff",
+            "start_date",
+            "about",
             "detalji_korisnika_url",
             "izmeni_korisnika_url",
             "obrisi_korisnika_url",
             "lista_korisnika_url",
             "kreiraj_korisnika_url"
         )
+        extra_kwargs = {'password': {'write_only': True}}
 
-    def get_detalji_korisnika_url(self, obj):
+    def create(self, validated_data):
+        """
+        Prilikom kreiranja novok Korisnika mora da se lozinka hesuje, jer je potrebno za prijavu.
+
+        :param validated_data:
+        :return: Meta.model(**validated_data)
+        """
+        password = validated_data.pop('password', None)
+        # as long as the fields are the same, we can just use this
+        instance = self.Meta.model(**validated_data)
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+        return instance
+
+    @staticmethod
+    def get_detalji_korisnika_url(obj):
         """Prosledi u API putanju do detalji kupca"""
         return reverse("korisnici:detalji_korisnika", args=[obj.pk])
 
-    def get_izmeni_korisnika_url(self, obj):
+    @staticmethod
+    def get_izmeni_korisnika_url(obj):
         """Prosledi u API putanju do uredi kupca"""
         return reverse("korisnici:izmeni_korisnika", args=[obj.pk])
 
