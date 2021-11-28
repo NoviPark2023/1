@@ -61,11 +61,6 @@ GRANT ALL PRIVILEGES ON DATABASE recrm_api TO recrm_api;
 USEFUL COMMANDS:
 
 ```ruby
-
-require 'redcarpet'
-
-markdown = Redcarpet.new("Hello World!")
-
-puts markdown.to_html
+test
 
 ```
