@@ -28,7 +28,7 @@ class Stanovi(models.Model):
                                       null=True)
     broj_terasa = models.PositiveIntegerField('Broj terasa stana', default=0)
     cena_stana = models.PositiveIntegerField('Cena stana', default=0)
-    cena_stana_za_kupca = models.PositiveIntegerField('Cena stana za kupca', default=0)
+    #cena_stana_za_kupca = models.PositiveIntegerField('Cena stana za kupca', default=0)
     napomena = models.CharField('Napomena', null=True, blank=True, max_length=250, default='')
     status_prodaje = models.CharField(max_length=20,
                                       choices=StatusProdaje.choices,

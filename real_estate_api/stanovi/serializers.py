@@ -45,7 +45,7 @@ class StanoviSerializer(serializers.ModelSerializer):
             "orijentisanost",
             "broj_terasa",
             "cena_stana",
-            "cena_stana_za_kupca",
+            # "cena_stana_za_kupca",
             "napomena",
             "status_prodaje",
             "klijent_prodaje",

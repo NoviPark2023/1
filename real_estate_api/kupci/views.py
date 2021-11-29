@@ -1,10 +1,18 @@
+from django.db.models import QuerySet
 from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Kupci
 from real_estate_api.kupci.serializers import KupciSerializer, DetaljiKupcaSerializer
-from .kupci_pagination import StandardPaginationKupci
 
 lookup_field = 'id_kupca'
+
+
+class StandardPaginationKupci(PageNumberPagination):
+    """Standart paginacija sa 5 prikaza po stranici za Kupce"""
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 5
 
 
 class ListaKupacaAPIView(generics.ListAPIView):
@@ -12,22 +20,19 @@ class ListaKupacaAPIView(generics.ListAPIView):
     # permission_classes = [IsAuthenticated]
     queryset = Kupci.objects.all().order_by('id_kupca')
     serializer_class = KupciSerializer
+    pagination_class = StandardPaginationKupci
 
 
 class ListaKupacaPoImenuAPIView(generics.ListAPIView):
+    """Autocomplete sitem za pretragu Kupaca"""
     serializer_class = KupciSerializer
 
-    def get_queryset(self):
-        queryset = Kupci.objects.all()
-        ime_prezime = self.kwargs['ime_prezime']
+    def get_queryset(self) -> QuerySet:
+        queryset: QuerySet = Kupci.objects.all()
+        ime_prezime: str = self.kwargs['ime_prezime']
         if self.kwargs:
-            queryset = queryset.filter(ime_prezime__icontains=ime_prezime) # 'icontains' case-insensitive
+            queryset = queryset.filter(ime_prezime__icontains=ime_prezime)  # 'icontains' case-insensitive
         return queryset
-
-
-class ListaKupacaPaginationAPIView(ListaKupacaAPIView):
-    """Lista svih Kupaca sa paginacijom"""
-    pagination_class = StandardPaginationKupci
 
 
 class KupciDetaljiAPIView(generics.RetrieveAPIView):

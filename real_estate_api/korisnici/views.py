@@ -1,19 +1,22 @@
 from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny
 
 from .models import Korisnici
-from .korisnici_pagination import StandardPaginationKorisnici
 from real_estate_api.korisnici.serializers import KorisniciSerializers
+
+
+class StandardPaginationKorisnici(PageNumberPagination):
+    """Standardna paginacija sa 5 prikaza po stranici za Korisnike"""
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 5
 
 
 class ListaKorisnikaAPIview(generics.ListAPIView):
     """Lista svih korisnika"""
     queryset = Korisnici.objects.all().order_by('id')
     serializer_class = KorisniciSerializers
-
-
-class ListaKorisnikaPaginationAPIView(ListaKorisnikaAPIview):
-    """Lista svih Stanova sa paginacijom"""
     pagination_class = StandardPaginationKorisnici
 
 

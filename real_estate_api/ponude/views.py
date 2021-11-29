@@ -1,21 +1,24 @@
 from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Ponude
-from .ponude_pagination import StandardPaginationPonude
 from .serializers import PonudeSerializer
 
 lookup_field = 'id_ponude'
 lookup_field_stan = 'id_stana'
 
 
+class StandardPaginationPonude(PageNumberPagination):
+    """Standardna paginacija sa 5 prikaza po stranici za Ponude"""
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 5
+
+
 class ListaPonudaAPIView(generics.ListAPIView):
     """Lista svih Ponuda"""
     queryset = Ponude.objects.all().order_by(lookup_field)
     serializer_class = PonudeSerializer
-
-
-class ListaPonudaPaginationAPIView(ListaPonudaAPIView):
-    """Lista svih Ponuda sa paginacijom"""
     pagination_class = StandardPaginationPonude
 
 
@@ -44,8 +47,17 @@ class PonudeDetaljiAPIView(generics.RetrieveAPIView):
 
 class KreirajPonudeuAPIView(generics.CreateAPIView):
     """Kreiranje nove Ponude"""
+    lookup_field_stan = lookup_field_stan
     queryset = Ponude.objects.all()
     serializer_class = PonudeSerializer
+
+    def get_queryset(self):
+
+        id_stana = self.kwargs['id_stana']
+        cena_stana = self.kwargs['cena_stana']
+        print(f'CENA STANA: {cena_stana}')
+
+        return Ponude.objects.all().filter(stan=id_stana)
 
 
 class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):

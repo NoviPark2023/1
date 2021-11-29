@@ -1,20 +1,23 @@
 from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Stanovi
 from .serializers import StanoviSerializer
-from .stanovi_paginacija import StandardPaginationStanovi
 
 lookup_field = 'id_stana'
+
+
+class StandardPaginationStanovi(PageNumberPagination):
+    """Standardna paginacija sa 5 prikaza po srtanici za Stanove"""
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 5
 
 
 class ListaStanovaAPIView(generics.ListAPIView):
     """Lista svih Stanova"""
     queryset = Stanovi.objects.all().order_by('id_stana')
     serializer_class = StanoviSerializer
-
-
-class ListaStanovaPaginationAPIView(ListaStanovaAPIView):
-    """Lista svih Stanova sa paginacijom"""
     pagination_class = StandardPaginationStanovi
 
 
