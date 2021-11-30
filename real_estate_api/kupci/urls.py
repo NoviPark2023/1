@@ -7,7 +7,6 @@ from .views import (
     UrediKupcaAPIView,
     ObrisiKupcaAPIView,
     ListaKupacaPoImenuAPIView,
-    ListaPonudaKupcaAPIView,
 )
 
 app_name = "kupci"
@@ -27,6 +26,4 @@ urlpatterns = [
     path('obrisi-kupca/<int:id_kupca>/', ObrisiKupcaAPIView.as_view(), name='obrisi_kupca'),
     # Kreiranje Kupca
     path('kreiraj-kupca/', KreirajKupcaAPIView.as_view(), name='kreiraj_kupca'),
-    # Lista Ponuda Kupca
-    path('lista-ponuda-kupca/<int:id_kupca>/', ListaPonudaKupcaAPIView.as_view(), name='lista_ponuda_kupca'),
 ]

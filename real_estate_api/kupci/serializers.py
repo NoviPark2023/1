@@ -62,6 +62,22 @@ class KupciSerializer(serializers.ModelSerializer):
         return reverse("kupci:lista_kupaca")
 
 
+class ListaPonudaKupcaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ponude
+        fields = (
+            "kupac",
+            "stan_id",
+            "id_ponude",
+            "cena_stana_za_kupca",
+            "napomena",
+            "broj_ugovora",
+            "datum_ugovora",
+            "status_ponude",
+            "nacin_placanja",
+        )
+
+
 class DetaljiKupcaSerializer(KupciSerializer):
     """
     Detalji KUPCA sa svim poljima koje poseduje.
@@ -71,6 +87,9 @@ class DetaljiKupcaSerializer(KupciSerializer):
      * obrisi kupca
      * lista svih kupca
     """
+
+    # Inline lista pona kupca
+    lista_ponuda_kupca = ListaPonudaKupcaSerializer(many=True, read_only=True)
 
     class Meta:
         model = Kupci
@@ -82,23 +101,8 @@ class DetaljiKupcaSerializer(KupciSerializer):
             "broj_telefona",
             "Jmbg_Pib",
             "adresa",
+            "lista_ponuda_kupca",
             'izmeni_kupca_url',
             'obrisi_kupca_url',
             'lista_kupaca_url',
-        )
-
-
-class ListaPonudaKupcaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ponude
-        fields = (
-            "id_ponude",
-            "cena_stana_za_kupca",
-            "napomena",
-            "broj_ugovora",
-            "datum_ugovora",
-            "status_ponude",
-            "nacin_placanja",
-            "id_kupca",
-            "stan_id",
         )

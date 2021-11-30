@@ -52,11 +52,7 @@ class KreirajPonudeuAPIView(generics.CreateAPIView):
     serializer_class = PonudeSerializer
 
     def get_queryset(self):
-
         id_stana = self.kwargs['id_stana']
-        cena_stana = self.kwargs['cena_stana']
-        print(f'CENA STANA: {cena_stana}')
-
         return Ponude.objects.all().filter(stan=id_stana)
 
 

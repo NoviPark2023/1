@@ -79,4 +79,4 @@ class ListaPonudaKupcaAPIView(generics.RetrieveAPIView):
 
     def get_queryset(self):
         id_kupca = self.kwargs['id_kupca']
-        return Ponude.objects.all().filter(id_kupca__exact=id_kupca)
+        return Ponude.objects.all().filter(kupac=id_kupca)

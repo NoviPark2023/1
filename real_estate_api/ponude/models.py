@@ -27,7 +27,7 @@ class Ponude(models.Model):
         UCESCE = 'ucesce', "Učešće"
 
     id_ponude = models.BigAutoField(primary_key=True)
-    id_kupca = models.ForeignKey(Kupci, on_delete=models.CASCADE, db_column='id_kupca')
+    kupac = models.ForeignKey(Kupci, on_delete=models.CASCADE, db_column='id_kupca', related_name='lista_ponuda_kupca')
     stan = models.ForeignKey(Stanovi, on_delete=models.CASCADE, db_column='id_stana')
     cena_stana_za_kupca = models.PositiveIntegerField('Cena stana za kupca', default=0)
     napomena = models.CharField(max_length=252, default="", blank=True)
