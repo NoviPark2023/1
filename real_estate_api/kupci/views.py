@@ -3,7 +3,8 @@ from rest_framework import generics
 from rest_framework.pagination import PageNumberPagination
 
 from .models import Kupci
-from real_estate_api.kupci.serializers import KupciSerializer, DetaljiKupcaSerializer
+from real_estate_api.kupci.serializers import KupciSerializer, DetaljiKupcaSerializer, ListaPonudaKupcaSerializer
+from ..ponude.models import Ponude
 
 lookup_field = 'id_kupca'
 
@@ -37,7 +38,9 @@ class ListaKupacaPoImenuAPIView(generics.ListAPIView):
 
 class KupciDetaljiAPIView(generics.RetrieveAPIView):
     """Get Kupci po ID-ju, || Detalji Kupca"""
+
     # permission_classes = [IsAuthenticated]
+
     lookup_field = lookup_field
     queryset = Kupci.objects.all()
     serializer_class = DetaljiKupcaSerializer
@@ -64,3 +67,16 @@ class ObrisiKupcaAPIView(generics.RetrieveDestroyAPIView):
     lookup_field = lookup_field
     queryset = Kupci.objects.all()
     serializer_class = KupciSerializer
+
+
+class ListaPonudaKupcaAPIView(generics.RetrieveAPIView):
+    """Lista svih Ponuda Kupca"""
+    # permission_classes = [IsAuthenticated]
+    lookup_field = lookup_field
+    queryset = Kupci.objects.all().order_by('id_kupca')
+    serializer_class = ListaPonudaKupcaSerializer
+    pagination_class = StandardPaginationKupci
+
+    def get_queryset(self):
+        id_kupca = self.kwargs['id_kupca']
+        return Ponude.objects.all().filter(id_kupca__exact=id_kupca)

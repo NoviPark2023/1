@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from .views import Kupci
+from ..ponude.models import Ponude
 
 
 class KupciSerializer(serializers.ModelSerializer):
@@ -16,6 +17,7 @@ class KupciSerializer(serializers.ModelSerializer):
         * kreiranje kupca
         * lista svih kupca
     """
+
     detalji_kupca_url = serializers.SerializerMethodField()
     izmeni_kupca_url = serializers.SerializerMethodField()
     obrisi_kupca_url = serializers.SerializerMethodField()
@@ -37,7 +39,6 @@ class KupciSerializer(serializers.ModelSerializer):
             'obrisi_kupca_url',
             'kreiraj_kupca_url',
             'lista_kupaca_url',
-
         )
 
     def get_detalji_kupca_url(self, obj):
@@ -57,6 +58,7 @@ class KupciSerializer(serializers.ModelSerializer):
 
     def get_lista_kupaca_url(self, obj):
         """Prosledi API putanju do liste kupaca"""
+
         return reverse("kupci:lista_kupaca")
 
 
@@ -83,4 +85,20 @@ class DetaljiKupcaSerializer(KupciSerializer):
             'izmeni_kupca_url',
             'obrisi_kupca_url',
             'lista_kupaca_url',
+        )
+
+
+class ListaPonudaKupcaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ponude
+        fields = (
+            "id_ponude",
+            "cena_stana_za_kupca",
+            "napomena",
+            "broj_ugovora",
+            "datum_ugovora",
+            "status_ponude",
+            "nacin_placanja",
+            "id_kupca",
+            "stan_id",
         )
