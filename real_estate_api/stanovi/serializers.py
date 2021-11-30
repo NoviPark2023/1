@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
+from real_estate_api.ponude.models import Ponude
+
 
 #from .models import SlikaStana
 
@@ -12,6 +14,24 @@ from rest_framework.reverse import reverse
 #         model = SlikaStana
 #         fields = ["id_slike", "slika_stana", "alt_text"]
 
+
+class ListaPonudaStanaSerializer(serializers.ModelSerializer):
+    """
+    TODO: Komentar za ovaj nested serialilzers
+    """
+    class Meta:
+        model = Ponude
+        fields = (
+            "kupac",
+            "stan_id",
+            "id_ponude",
+            "cena_stana_za_kupca",
+            "napomena",
+            "broj_ugovora",
+            "datum_ugovora",
+            "status_ponude",
+            "nacin_placanja",
+        )
 
 class StanoviSerializer(serializers.ModelSerializer):
     """
@@ -32,6 +52,9 @@ class StanoviSerializer(serializers.ModelSerializer):
     # Inline slike stana
     #slike_stana = SlikaStanaSerializer(many=True, read_only=False)
 
+    # Inline lista ponuda stana
+    lista_ponuda_stana= ListaPonudaStanaSerializer(many=True, read_only=True)
+
     class Meta:
         from .views import Stanovi
         model = Stanovi
@@ -50,6 +73,8 @@ class StanoviSerializer(serializers.ModelSerializer):
             "status_prodaje",
             "klijent_prodaje",
             #"slike_stana",
+            #"slike_stana",
+            'lista_ponuda_stana',
             'detalji_stana_url',
             'izmeni_stan_url',
             'obrisi_stan_url',

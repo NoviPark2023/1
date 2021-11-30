@@ -5,6 +5,25 @@ from .views import Kupci
 from ..ponude.models import Ponude
 
 
+class ListaPonudaKupcaSerializer(serializers.ModelSerializer):
+    """
+    TODO: Komentar za ovaj nested serialilzers
+    """
+    class Meta:
+        model = Ponude
+        fields = (
+            "kupac",
+            "stan_id",
+            "id_ponude",
+            "cena_stana_za_kupca",
+            "napomena",
+            "broj_ugovora",
+            "datum_ugovora",
+            "status_ponude",
+            "nacin_placanja",
+        )
+
+
 class KupciSerializer(serializers.ModelSerializer):
     """
     KUPCI sa redukovanim poljima koje poseduje za
@@ -24,6 +43,9 @@ class KupciSerializer(serializers.ModelSerializer):
     kreiraj_kupca_url = serializers.SerializerMethodField()
     lista_kupaca_url = serializers.SerializerMethodField()
 
+    # Inline lista ponuda kupca
+    lista_ponuda_kupca = ListaPonudaKupcaSerializer(many=True, read_only=True)
+
     class Meta:
         model = Kupci
         fields = (
@@ -34,6 +56,7 @@ class KupciSerializer(serializers.ModelSerializer):
             "broj_telefona",
             "Jmbg_Pib",
             "adresa",
+            "lista_ponuda_kupca",
             'detalji_kupca_url',
             'izmeni_kupca_url',
             'obrisi_kupca_url',
@@ -62,23 +85,6 @@ class KupciSerializer(serializers.ModelSerializer):
         return reverse("kupci:lista_kupaca")
 
 
-class ListaPonudaKupcaSerializer(serializers.ModelSerializer):
-    """
-    TODO: Komentar za ovaj nested serialilzers
-    """
-    class Meta:
-        model = Ponude
-        fields = (
-            "kupac",
-            "stan_id",
-            "id_ponude",
-            "cena_stana_za_kupca",
-            "napomena",
-            "broj_ugovora",
-            "datum_ugovora",
-            "status_ponude",
-            "nacin_placanja",
-        )
 
 
 class DetaljiKupcaSerializer(KupciSerializer):

@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.pagination import PageNumberPagination
 
 from .models import Stanovi
-from .serializers import StanoviSerializer
+from .serializers import StanoviSerializer, ListaPonudaStanaSerializer
 
 lookup_field = 'id_stana'
 
@@ -46,3 +46,16 @@ class ObrisiStanViewAPI(generics.RetrieveDestroyAPIView):
     lookup_field = lookup_field
     queryset = Stanovi.objects.all()
     serializer_class = StanoviSerializer
+
+
+class ListaPonudaStanaAPIView(generics.RetrieveAPIView):
+    """Lista svih Ponuda Stana"""
+    # permission_classes = [IsAuthenticated]
+    lookup_field = lookup_field
+    queryset = Stanovi.objects.all().order_by('id_stana')
+    serializer_class = ListaPonudaStanaSerializer
+    pagination_class = StandardPaginationStanovi
+
+    def get_queryset(self):
+        id_stana = self.kwargs['id_stana']
+        return Stanovi.objects.all().filter(stan=id_stana)
