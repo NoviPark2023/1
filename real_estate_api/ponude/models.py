@@ -32,7 +32,12 @@ class Ponude(models.Model):
                               on_delete=models.CASCADE,
                               db_column='id_kupca',
                               related_name='lista_ponuda_kupca')
-    stan = models.ForeignKey(Stanovi, on_delete=models.CASCADE, db_column='id_stana', related_name='lista_ponuda_stana')
+
+    stan = models.ForeignKey(Stanovi,
+                             on_delete=models.CASCADE,
+                             db_column='id_stana',
+                             related_name='lista_ponuda_stana')
+
     cena_stana_za_kupca = models.PositiveIntegerField('Cena stana za kupca', default=0)
     napomena = models.CharField(max_length=252, default="", blank=True)
     broj_ugovora = models.CharField(max_length=252, default="", blank=True)
@@ -41,6 +46,7 @@ class Ponude(models.Model):
                                      choices=StatusPonude.choices,
                                      null=False, blank=False,
                                      default=StatusPonude.POTENCIJALAN)
+
     nacin_placanja = models.CharField(max_length=30,
                                       choices=NacinPlacanja.choices,
                                       null=False, blank=False,

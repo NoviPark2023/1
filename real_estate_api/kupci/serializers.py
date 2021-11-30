@@ -9,6 +9,7 @@ class ListaPonudaKupcaSerializer(serializers.ModelSerializer):
     """
     TODO: Komentar za ovaj nested serialilzers
     """
+
     class Meta:
         model = Ponude
         fields = (
@@ -83,8 +84,6 @@ class KupciSerializer(serializers.ModelSerializer):
         """Prosledi API putanju do liste kupaca"""
 
         return reverse("kupci:lista_kupaca")
-
-
 
 
 class DetaljiKupcaSerializer(KupciSerializer):
