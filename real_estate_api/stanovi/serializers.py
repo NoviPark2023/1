@@ -19,6 +19,10 @@ class ListaPonudaStanaSerializer(serializers.ModelSerializer):
     """
     TODO: Komentar za ovaj nested serialilzers
     """
+
+    detalji_kupca_url = serializers.SerializerMethodField()
+    detalji_ponude_url = serializers.SerializerMethodField()
+
     class Meta:
         model = Ponude
         fields = (
@@ -31,7 +35,17 @@ class ListaPonudaStanaSerializer(serializers.ModelSerializer):
             "datum_ugovora",
             "status_ponude",
             "nacin_placanja",
+            "detalji_kupca_url",
+            "detalji_ponude_url",
         )
+
+    def get_detalji_kupca_url(self, obj):
+        """Prosledi u API putanju do detalja kupca stana"""
+        return reverse("kupci:detalji_kupca", args=[obj.pk])
+
+    def get_detalji_ponude_url(self, obj, *args, **kwargs):
+        """Prosledi u API putanju do detalja ponude"""
+        return reverse("ponude:detalji_ponude", args=[obj.id_ponude])
 
 class StanoviSerializer(serializers.ModelSerializer):
     """
