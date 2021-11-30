@@ -63,6 +63,9 @@ class KupciSerializer(serializers.ModelSerializer):
 
 
 class ListaPonudaKupcaSerializer(serializers.ModelSerializer):
+    """
+    TODO: Komentar za ovaj nested serialilzers
+    """
     class Meta:
         model = Ponude
         fields = (
@@ -88,7 +91,7 @@ class DetaljiKupcaSerializer(KupciSerializer):
      * lista svih kupca
     """
 
-    # Inline lista pona kupca
+    # Inline lista ponuda kupca
     lista_ponuda_kupca = ListaPonudaKupcaSerializer(many=True, read_only=True)
 
     class Meta:

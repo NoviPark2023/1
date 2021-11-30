@@ -34,7 +34,6 @@ class ListaPonudaZaStanAPIView(ListaPonudaAPIView):
         the Stan as determined by the Stan ID portion of the URL.
         """
         id_stana = self.kwargs['id_stana']
-
         return Ponude.objects.all().filter(stan=id_stana)
 
 

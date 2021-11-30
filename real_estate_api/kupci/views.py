@@ -38,9 +38,7 @@ class ListaKupacaPoImenuAPIView(generics.ListAPIView):
 
 class KupciDetaljiAPIView(generics.RetrieveAPIView):
     """Get Kupci po ID-ju, || Detalji Kupca"""
-
     # permission_classes = [IsAuthenticated]
-
     lookup_field = lookup_field
     queryset = Kupci.objects.all()
     serializer_class = DetaljiKupcaSerializer
