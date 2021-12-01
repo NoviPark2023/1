@@ -27,3 +27,17 @@ class TestModelaKorisnici(TestCase):
         print('ID Korisnika u testnoj bazi: ' + str(korisnik_id))
         print('---------------')
         self.assertEqual(1, korisnik_id)
+
+    def test_ime_korisnika_exist(self):
+        # Da li postoji Ime Korisnika
+        korisnik_ime = self.korisnik.ime
+        print('IME Korisnika u testnoj bazi: ' + str(korisnik_ime))
+        print('---------------')
+        self.assertEqual('Test_Prodavac', korisnik_ime)
+
+    def test_prezime_korisnika_exist(self):
+        # Da li postoji prezime Korisnika
+        korsinik_prezime = self.korisnik.prezime
+        print('PREZIME Korisnika u testnoj bazi: ' + str(korsinik_prezime))
+        print('---------------')
+        self.assertEqual('Test_Prezime', korsinik_prezime)

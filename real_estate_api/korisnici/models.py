@@ -27,12 +27,12 @@ class CustomAccountManager(BaseUserManager):
         if not email:
             raise ValueError('You must provide an email address')
 
-        username = self.username(username)
-        password = self.password(make_password(password))
-        email = self.normalize_email(email)
-        user = self.model(user_name=username, password=password, email=email,  ime=ime, **druga_polja)
+        # username = self.model.normalize_username(username)
+        # password = self.model.password
+        # email = self.normalize_email(email)
+        user = self.model(username=username, password=password, email=email,  ime=ime, **druga_polja)
         user.set_password(password)
-        user.save()
+        user.save(using=self.db)
         return user
 
 
