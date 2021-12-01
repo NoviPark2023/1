@@ -7,7 +7,7 @@ from ..ponude.models import Ponude
 
 class ListaPonudaKupcaSerializer(serializers.ModelSerializer):
     """
-    TODO: Komentar za ovaj nested serialilzers
+    TODO: Komentar za ovaj nested serializers
     """
 
     class Meta:
@@ -44,7 +44,7 @@ class KupciSerializer(serializers.ModelSerializer):
     kreiraj_kupca_url = serializers.SerializerMethodField()
     lista_kupaca_url = serializers.SerializerMethodField()
 
-    # Inline lista ponuda kupca
+    # nested serializers lista ponuda kupca
     lista_ponuda_kupca = ListaPonudaKupcaSerializer(many=True, read_only=True)
 
     class Meta:

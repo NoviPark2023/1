@@ -4,7 +4,7 @@ from rest_framework.reverse import reverse
 from real_estate_api.ponude.models import Ponude
 
 
-#from .models import SlikaStana
+# from .models import SlikaStana
 
 
 # class SlikaStanaSerializer(serializers.ModelSerializer):
@@ -47,6 +47,7 @@ class ListaPonudaStanaSerializer(serializers.ModelSerializer):
         """Prosledi u API putanju do detalja ponude"""
         return reverse("ponude:detalji_ponude", args=[obj.id_ponude])
 
+
 class StanoviSerializer(serializers.ModelSerializer):
     """
     Detalji STANA sa redukovanim poljima koje poseduje za prikaz u tabeli
@@ -64,10 +65,10 @@ class StanoviSerializer(serializers.ModelSerializer):
     kreiraj_stan_url = serializers.SerializerMethodField()
 
     # Inline slike stana
-    #slike_stana = SlikaStanaSerializer(many=True, read_only=False)
+    # slike_stana = SlikaStanaSerializer(many=True, read_only=False)
 
     # Inline lista ponuda stana
-    lista_ponuda_stana= ListaPonudaStanaSerializer(many=True, read_only=True)
+    lista_ponuda_stana = ListaPonudaStanaSerializer(many=True, read_only=True)
 
     class Meta:
         from .views import Stanovi
@@ -86,8 +87,7 @@ class StanoviSerializer(serializers.ModelSerializer):
             "napomena",
             "status_prodaje",
             "klijent_prodaje",
-            #"slike_stana",
-            #"slike_stana",
+            # "slike_stana",
             'lista_ponuda_stana',
             'detalji_stana_url',
             'izmeni_stan_url',
@@ -109,4 +109,3 @@ class StanoviSerializer(serializers.ModelSerializer):
 
     def get_kreiraj_stan_url(self, obj):
         return reverse("stanovi:kreiraj_stan")
-
