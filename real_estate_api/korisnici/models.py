@@ -7,7 +7,7 @@ from django.contrib.auth.hashers import make_password
 
 class CustomAccountManager(BaseUserManager):
 
-    def create_superuser(self, email, username, ime, password, **druga_polja):
+    def create_superuser(self, username, password, email, ime, prezime, **druga_polja):
 
         druga_polja.setdefault('is_staff', True)
         druga_polja.setdefault('is_superuser', True)
@@ -20,9 +20,9 @@ class CustomAccountManager(BaseUserManager):
             raise ValueError(
                 'Superuser must be assigned to is_superuser=True.')
 
-        return self.create_user(email, username, ime, password, **druga_polja)
+        return self.create_user(username, password, email, ime, prezime, **druga_polja)
 
-    def create_user(self, username, password, email, ime, **druga_polja):
+    def create_user(self, username, password, email, ime, prezime, **druga_polja):
 
         if not email:
             raise ValueError('You must provide an email address')
@@ -30,7 +30,13 @@ class CustomAccountManager(BaseUserManager):
         # username = self.model.normalize_username(username)
         # password = self.model.password
         # email = self.normalize_email(email)
-        user = self.model(username=username, password=password, email=email,  ime=ime, **druga_polja)
+        user = self.model(username=username,
+                          password=password,
+                          email=email,
+                          ime=ime,
+                          prezime=prezime,
+
+                          **druga_polja)
         user.set_password(password)
         user.save(using=self.db)
         return user
