@@ -60,12 +60,19 @@ GRANT ALL PRIVILEGES ON DATABASE recrm_api TO recrm_api;
 # USEFUL COMMANDS:
 
 ```bash
-py manage.py makemigrations --dry-run --verbosity 3
-py manage.py runserver
-py manage.py createsuperuser 
+python manage.py makemigrations --dry-run --verbosity 3
+python manage.py runserver
+python manage.py createsuperuser 
 pip install coverage
 coverage run --omit='*/venv/*' manage.py test
 coverage html
 pip install djangorestframework
+
+# Print 'fixture' data from database table
+python manage.py dumpdata <ime_tablele> --indent=2
+# Save 'fixture' data in file
+python manage.py dumpdata <ime_tablele> --indent=2 --output <putanja><ime_fajla>.json
+# Load 'fixture' data file in db table 
+python manage.py dumpdata <ime_tablele> --indent=2 --loaddata <putanja><ime_fajla>.json
 ```
 
