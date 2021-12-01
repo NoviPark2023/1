@@ -6,9 +6,9 @@ from real_estate_api.korisnici.models import Korisnici
 class TestModelaKorisnici(TestCase):
 
     @classmethod
-    def setUp(self):
+    def setUp(cls):
         # Kreiraj TEST Korisnika
-        self.korisnik = Korisnici.objects.create_user(
+        cls.korisnik = Korisnici.objects.create_user(
             ime='Test_Prodavac',
             prezime='Test_Prezime',
             role='Prodavac',
