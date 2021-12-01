@@ -35,7 +35,6 @@ class CustomAccountManager(BaseUserManager):
                           email=email,
                           ime=ime,
                           prezime=prezime,
-
                           **druga_polja)
         user.set_password(password)
         user.save(using=self.db)
@@ -74,7 +73,7 @@ class Korisnici(AbstractBaseUser, PermissionsMixin):
     objects = CustomAccountManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['ime', 'email']
+    REQUIRED_FIELDS = ['ime', 'email', 'prezime']
 
     def __repr__(self):
         return self.ime + 'ime' + self.prezime + 'prezime' + 'je dodat.'
