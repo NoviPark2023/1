@@ -14,7 +14,7 @@ class UserAdminConfig(UserAdmin):
     model = Korisnici
     search_fields = ('email', 'ime',)
     list_filter = ('id', 'email', 'is_active', 'is_staff', 'ime',)
-    ordering = ('-start_date',)
+    ordering = ('-id',)
     list_display = ('id', 'email',
                     'is_active', 'is_staff')
     fieldsets = (
@@ -26,7 +26,6 @@ class UserAdminConfig(UserAdmin):
                                        'role',
                                        'last_login',
                                        'is_superuser',
-                                       'start_date',
                                        )}),
         ('Permissions', {'fields': ('is_staff',
                                     'is_active'
