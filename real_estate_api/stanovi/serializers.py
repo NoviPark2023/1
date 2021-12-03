@@ -35,6 +35,7 @@ class ListaPonudaStanaSerializer(serializers.ModelSerializer):
             "datum_ugovora",
             "status_ponude",
             "nacin_placanja",
+            'odobrenje',
             "detalji_kupca_url",
             "detalji_ponude_url",
         )
