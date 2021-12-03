@@ -135,7 +135,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         #'NAME': 'recrm_api', # for DEPLOY
-        'NAME': 'recrm_api-1', # for Local DB-BASE
+        'NAME': 'recrm_api', # for Local DB-BASE
         'USER': 'recrm_api',
         'PASSWORD': 'fwwrecrm',
         'HOST': 'localhost',
