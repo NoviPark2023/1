@@ -297,7 +297,7 @@ SWAGGER_SETTINGS = {
     # see https://github.com/swagger-api/swagger-ui/blob/112bca906553a937ac67adc2e500bdeed96d067b/docs/usage/configuration.md#parameters
     'OPERATIONS_SORTER': None,
     'TAGS_SORTER': None,
-    'DOC_EXPANSION': 'list',
+    'DOC_EXPANSION': 'none',
     'DEEP_LINKING': False,
     'SHOW_EXTENSIONS': True,
     'DEFAULT_MODEL_RENDERING': 'model',
