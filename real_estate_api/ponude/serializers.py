@@ -24,7 +24,7 @@ class PonudeSerializer(serializers.ModelSerializer):
         * kreiraj_ponudu_url
         * lista_ponuda_url
     """
-
+    datum_ugovora=serializers.DateField(format="%d.%m.%Y",input_formats=['%d.%m.%Y',])
     detalji_ponude_url = serializers.SerializerMethodField()
     izmeni_ponudu_url = serializers.SerializerMethodField()
     obrisi_ponudu_url = serializers.SerializerMethodField()
@@ -51,6 +51,7 @@ class PonudeSerializer(serializers.ModelSerializer):
             'kreiraj_ponudu_url',
             'lista_ponuda_url',
         )
+        ordering = ('-id_ponude',)
 
     def get_detalji_ponude_url(self, obj):
         """Prosledi API putanju do detalja Ponuda"""
@@ -73,42 +74,3 @@ class PonudeSerializer(serializers.ModelSerializer):
         return reverse('ponude:lista_ponuda')
 
 
-class DetaljiPonudeSerializer(PonudeSerializer):
-    """
-    Detalji Ponude sa ukljucenim svim poljima.
-        Ukljucene API putanje (API URLs) su:
-        ------------------------------------
-        * kupac
-        * stan
-        * cena_stana_za_kupca
-        * napomena
-        * broj_ugovora
-        * datum_ugovora
-        * status_ponude
-        * nacin_placanja
-        * detalji_ponude_url
-        * izmeni_ponudu_url
-        * obrisi_ponudu_url
-        * kreiraj_ponudu_url
-        * lista_ponuda_url
-    """
-
-    class Meta:
-        model = Ponude
-        fields = (
-            'id_ponude',
-            'kupac',
-            'stan',
-            'cena_stana_za_kupca',
-            'napomena',
-            'broj_ugovora',
-            'datum_ugovora',
-            'status_ponude',
-            'nacin_placanja',
-            'odobrenje',
-            'detalji_ponude_url',
-            'izmeni_ponudu_url',
-            'obrisi_ponudu_url',
-            'kreiraj_ponudu_url',
-            'lista_ponuda_url',
-        )
