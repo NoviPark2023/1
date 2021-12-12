@@ -65,3 +65,4 @@ class Ponude(models.Model):
         db_table = 'ponude'
         verbose_name = "Ponuda Kupcima"
         verbose_name_plural = "Ponude Kupcima"
+        ordering = ['-id_ponude']

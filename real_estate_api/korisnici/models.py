@@ -88,3 +88,4 @@ class Korisnici(AbstractBaseUser, PermissionsMixin):
         db_table = 'korisnici'
         verbose_name = "Korisnik"
         verbose_name_plural = "Korisnici"
+        ordering = ['-ime']

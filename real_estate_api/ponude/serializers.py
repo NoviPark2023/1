@@ -51,7 +51,6 @@ class PonudeSerializer(serializers.ModelSerializer):
             'kreiraj_ponudu_url',
             'lista_ponuda_url',
         )
-        ordering = ('-id_ponude',)
 
     def get_detalji_ponude_url(self, obj):
         """Prosledi API putanju do detalja Ponuda"""

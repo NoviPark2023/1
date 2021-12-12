@@ -42,3 +42,4 @@ class Kupci(models.Model):
         db_table: str = 'kupci'
         verbose_name: str = "Kupac"
         verbose_name_plural: str = "Kupci"
+        ordering = ['-id_kupca']
