@@ -41,6 +41,7 @@ THIRD_PARTY_APPS = [
     'corsheaders',
     "crispy_forms",
     'drf_yasg',
+    'django_filters',
 ]
 
 LOCAL_APPS = [
@@ -139,7 +140,7 @@ DATABASES = {
         'NAME': 'recrm_api',  # for Local DB-BASE
         'USER': 'recrm_api',
         'PASSWORD': 'fwwrecrm',
-        'HOST': 'localhost',
+        'HOST': 'host.docker.internal',
         'PORT': '',
     }
 }

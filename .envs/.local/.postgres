@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=host.docker.internal
+POSTGRES_PORT=5432
+POSTGRES_DB=recrm_api
+POSTGRES_USER=recrm_api
+POSTGRES_PASSWORD=fwwrecrm

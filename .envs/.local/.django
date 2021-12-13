@@ -1,0 +1,5 @@
+# General
+# ------------------------------------------------------------------------------
+# USE_DOCKER=yes
+# IPYTHONDIR=/app/.ipython
+POSTGRES_HOST: host.docker.internal
