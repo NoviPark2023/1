@@ -24,7 +24,7 @@ class ListaKorisnikaAPIview(generics.ListAPIView):
         DjangoFilterBackend,
     ]
     filterset_fields = {
-        "username": ["exact"],
+        "username": ["exact", "username__contains"],
     }
     ordering = ("-id",)
 

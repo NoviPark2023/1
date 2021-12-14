@@ -6,7 +6,6 @@ import os
 import sys
 import dj_database_url
 
-
 # GENERAL
 # ------------------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -75,6 +74,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 # URLS
@@ -134,7 +134,7 @@ TEMPLATES = [
 #     }
 # }
 
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "True") == "True"
 
 if DEVELOPMENT_MODE is True:
     DATABASES = {
@@ -227,6 +227,7 @@ USE_TZ = True
 STATIC_ROOT = str(BASE_DIR / "static")  # In production we want to use CDN
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [str(APPS_DIR / "static")]
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
@@ -276,13 +277,12 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
-         #'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     # @see https://www.django-rest-framework.org/api-guide/permissions/
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
     ),
-
 
 }
 
