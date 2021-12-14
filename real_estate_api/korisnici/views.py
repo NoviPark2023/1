@@ -19,6 +19,13 @@ class ListaKorisnikaAPIview(generics.ListAPIView):
     queryset = Korisnici.objects.all().order_by('id')
     serializer_class = KorisniciSerializers
     pagination_class = StandardPaginationKorisnici
+    filter_backends = api_settings.DEFAULT_FILTER_BACKENDS + [
+        filters.OrderingFilter,
+        DjangoFilterBackend,
+    ]
+    filterset_fields = {
+        "username": ["exact"],
+    }
 
 
 class KorisniciDetaljiAPIView(generics.RetrieveAPIView):
