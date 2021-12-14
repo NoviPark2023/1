@@ -1,19 +1,21 @@
 from pathlib import Path
 from django.conf import settings
-import environ
+from django.core.management.utils import get_random_secret_key
 from datetime import timedelta
+import os
+import sys
+import dj_database_url
 
-env = environ.Env()
 
 # GENERAL
 # ------------------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 APPS_DIR = BASE_DIR / "real_estate_api"
 
-SECRET_KEY = 'django-insecure-_fxn9=h#-#a0(k#-$*1px(trt=hz^!62xux&w*)b4^3v27o79v'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = ['*']
 
@@ -132,18 +134,27 @@ TEMPLATES = [
 #     }
 # }
 
-DATABASES = {
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        # 'NAME': 'recrm_api', # for DEPLOY
-        'NAME': 'recrm_api',  # for Local DB-BASE
-        'USER': 'recrm_api',
-        'PASSWORD': 'fwwrecrm',
-        'HOST': 'host.docker.internal',
-        'PORT': '',
+if DEVELOPMENT_MODE is True:
+    DATABASES = {
+
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            # 'NAME': 'recrm_api', # for DEPLOY
+            'NAME': 'recrm_api',  # for Local DB-BASE
+            'USER': 'recrm_api',
+            'PASSWORD': 'fwwrecrm',
+            'HOST': 'host.docker.internal',
+            'PORT': '',
+        }
     }
-}
+elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
+    if os.getenv("DATABASE_URL", None) is None:
+        raise Exception("DATABASE_URL environment variable not defined")
+    DATABASES = {
+        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
+    }
 
 # PASSWORDS VALIDATORS
 # ------------------------------------------------------------------------------
@@ -213,9 +224,9 @@ USE_TZ = True
 
 # STATIC
 # ------------------------------------------------------------------------------
-STATIC_ROOT = str(BASE_DIR / "static")  # In production we want to use CDN
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [str(APPS_DIR / "static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",

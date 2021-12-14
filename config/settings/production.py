@@ -1,5 +1,4 @@
 from .base import *
-from .base import env
 
 
 # DJANGO-REST-FRAMEWORK
