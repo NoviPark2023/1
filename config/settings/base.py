@@ -224,9 +224,9 @@ USE_TZ = True
 
 # STATIC
 # ------------------------------------------------------------------------------
+STATIC_ROOT = str(BASE_DIR / "static")  # In production we want to use CDN
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+STATICFILES_DIRS = [str(APPS_DIR / "static")]
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",

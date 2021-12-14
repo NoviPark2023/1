@@ -337,4 +337,5 @@ my_awesome_project/media/
 !.envs/.local/
 
 !/.envs/
-!/db.sqlite3
+!/db.sqlite3!/real_estate_api/ponude/migrations/0002_alter_ponude_datum_ugovora.py
+!/real_estate_api/ponude/migrations/0003_alter_ponude_datum_ugovora.py
