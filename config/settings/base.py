@@ -239,6 +239,9 @@ MEDIA_URL = "/media/"
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = [
+    'https://stanovi.biz',
+    'https://api.stanovi.biz',
+    'https://prodaja-stanova-front-pnyfj.ondigitalocean.app/',
     'http://api.dejan.pro',
     'http://localhost:3000',
     'http://127.0.0.1:8000',
