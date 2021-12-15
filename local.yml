@@ -21,7 +21,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      POSTGRES_HOST: host.docker.internal
+      POSTGRES_HOST: postgres
     command: /start
 
   postgres:

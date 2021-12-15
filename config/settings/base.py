@@ -14,7 +14,7 @@ APPS_DIR = BASE_DIR / "real_estate_api"
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = os.getenv("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = ['*']
 
@@ -134,7 +134,7 @@ TEMPLATES = [
 #     }
 # }
 
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "True") == "True"
 
 if DEVELOPMENT_MODE is True:
     DATABASES = {
@@ -145,8 +145,8 @@ if DEVELOPMENT_MODE is True:
             'NAME': 'recrm_api',  # for Local DB-BASE
             'USER': 'recrm_api',
             'PASSWORD': 'fwwrecrm',
-            'HOST': 'host.docker.internal',
-            'PORT': '',
+            'HOST': 'postgres',
+            'PORT': '5432',
         }
     }
 elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
