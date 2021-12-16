@@ -6,7 +6,7 @@ import os
 import sys
 import dj_database_url
 
-# GENERAL
+# region GENERAL
 # ------------------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 APPS_DIR = BASE_DIR / "real_estate_api"
@@ -14,7 +14,7 @@ APPS_DIR = BASE_DIR / "real_estate_api"
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "True") == "True"
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = ['*']
 
@@ -23,8 +23,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DATE_FORMAT = "d.m.Y"
 DATE_INPUT_FORMATS = ['%d.%m.%Y.']
+# endregion
 
-# APPS
+# region APPS
 # ------------------------------------------------------------------------------
 DJANGO_APPS = [
     'django.contrib.admin',
@@ -53,8 +54,9 @@ LOCAL_APPS = [
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+# endregion
 
-# AUTHENTICATION
+# region AUTHENTICATION
 # ------------------------------------------------------------------------------
 AUTH_USER_MODEL = 'korisnici.Korisnici'
 
@@ -62,8 +64,9 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.RemoteUserBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
+# endregion
 
-# MIDDLEWARE
+# region MIDDLEWARE
 # ------------------------------------------------------------------------------
 MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
@@ -76,8 +79,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
+# endregion
 
-# URLS
+# region URLS
 # ------------------------------------------------------------------------------
 ROOT_URLCONF = 'config.urls'
 
@@ -89,7 +93,9 @@ LOGOUT_REDIRECT_URL = '/'
 
 LOGIN_URL = "/admin/"
 
-# TEMPLATES
+# endregion
+
+# region TEMPLATES
 # ------------------------------------------------------------------------------
 TEMPLATES = [
     {
@@ -106,8 +112,9 @@ TEMPLATES = [
         },
     },
 ]
+# endregion
 
-# SECURITY
+# region SECURITY
 # ------------------------------------------------------------------------------
 # SESSION_COOKIE_HTTPONLY = True
 # CSRF_COOKIE_HTTPONLY = True
@@ -125,38 +132,35 @@ TEMPLATES = [
 # SECURE_HSTS_PRELOAD = True
 # SECURE_HSTS_SECONDS = 3600
 
-# DATABASES
+# endregion
+
+# region DATABASES
 # ------------------------------------------------------------------------------
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "True") == "True"
-
-if DEVELOPMENT_MODE is True:
+if DEBUG is True:
     DATABASES = {
-
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            # 'NAME': 'recrm_api', # for DEPLOY
+            'NAME': os.getenv("POSTGRES_DB", 'recrm_api'),
+            'USER': os.getenv("POSTGRES_USER", 'recrm_api'),
+            'PASSWORD': os.getenv("POSTGRES_PASSWORD", 'recrm_api'),
+            'HOST': os.getenv("POSTGRES_HOST", 'fwwrecrm'),
+            'PORT': os.getenv("POSTGRES_PORT", '5432'),
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'recrm_api',  # for Local DB-BASE
             'USER': 'recrm_api',
-            'PASSWORD': '8Ib4sCdLNxZp7wG9',
+            'PASSWORD': 'fwwrecrm',
             'HOST': 'recrmapi-do-user-3327901-0.b.db.ondigitalocean.com',
             'PORT': '25060',
         }
     }
-elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
-    if os.getenv("DATABASE_URL", None) is None:
-        raise Exception("DATABASE_URL environment variable not defined")
-    DATABASES = {
-        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
-    }
+# endregion
 
-# PASSWORDS VALIDATORS
+# region PASSWORDS VALIDATORS
 # ------------------------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -172,13 +176,17 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
     'django.contrib.auth.hashers.Argon2PasswordHasher',
     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
 ]
+# endregion
 
+# region SIMPLE_JWT
+# ------------------------------------------------------------------------------
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
@@ -209,8 +217,9 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+# endregion
 
-# INTERNATIONALIZATION
+# region INTERNATIONALIZATION
 # ------------------------------------------------------------------------------
 LANGUAGE_CODE = 'en-us'
 
@@ -221,8 +230,9 @@ USE_I18N = False
 USE_L10N = False
 
 USE_TZ = True
+# endregion
 
-# STATIC
+# region STATIC
 # ------------------------------------------------------------------------------
 STATIC_ROOT = str(BASE_DIR / "static")  # In production we want to use CDN
 STATIC_URL = "/static/"
@@ -232,7 +242,9 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
-# MEDIA
+# endregion
+
+# region MEDIA
 # ------------------------------------------------------------------------------
 MEDIA_ROOT = str(BASE_DIR / "media")
 MEDIA_URL = "/media/"
@@ -270,8 +282,9 @@ CORS_ALLOW_HEADERS = [
     'x-csrftoken',
     'x-requested-with',
 ]
+# endregion
 
-# REST_FRAMEWORK
+# region REST_FRAMEWORK
 # ------------------------------------------------------------------------------
 REST_FRAMEWORK = {
 
@@ -286,10 +299,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
     ),
-
 }
+# endregion
 
-# DOCS
+# region SWAGGER DOCS
 # ------------------------------------------------------------------------------
 SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': True,  # add Django Login and Django Logout buttons, CSRF token to swagger UI page
@@ -323,3 +336,4 @@ SWAGGER_SETTINGS = {
     'DEFAULT_MODEL_RENDERING': 'model',
     'DEFAULT_MODEL_DEPTH': 2,
 }
+# endregion
