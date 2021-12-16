@@ -144,9 +144,9 @@ if DEVELOPMENT_MODE is True:
             # 'NAME': 'recrm_api', # for DEPLOY
             'NAME': 'recrm_api',  # for Local DB-BASE
             'USER': 'recrm_api',
-            'PASSWORD': 'fwwrecrm',
-            'HOST': 'postgres',
-            'PORT': '5432',
+            'PASSWORD': '8Ib4sCdLNxZp7wG9',
+            'HOST': 'recrmapi-do-user-3327901-0.b.db.ondigitalocean.com',
+            'PORT': '25060',
         }
     }
 elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
@@ -241,7 +241,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = [
     'https://stanovi.biz',
     'https://api.stanovi.biz',
-    'https://prodaja-stanova-front-pnyfj.ondigitalocean.app/',
+    'https://prodaja-stanova-front-pnyfj.ondigitalocean.app',
     'http://api.dejan.pro',
     'http://localhost:3000',
     'http://127.0.0.1:8000',
