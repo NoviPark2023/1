@@ -137,14 +137,24 @@ TEMPLATES = [
 # region DATABASES
 # ------------------------------------------------------------------------------
 if DEBUG is True:
+    # DATABASES = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #         'NAME': os.getenv("POSTGRES_DB", 'recrm_api'),
+    #         'USER': os.getenv("POSTGRES_USER", 'recrm_api'),
+    #         'PASSWORD': os.getenv("POSTGRES_PASSWORD", 'recrm_api'),
+    #         'HOST': os.getenv("POSTGRES_HOST", 'fwwrecrm'),
+    #         'PORT': os.getenv("POSTGRES_PORT", '5432'),
+    #     }
+    # }
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.getenv("POSTGRES_DB", 'recrm_api'),
-            'USER': os.getenv("POSTGRES_USER", 'recrm_api'),
-            'PASSWORD': os.getenv("POSTGRES_PASSWORD", 'recrm_api'),
-            'HOST': os.getenv("POSTGRES_HOST", 'fwwrecrm'),
-            'PORT': os.getenv("POSTGRES_PORT", '5432'),
+            'NAME': 'recrm_api',  # for Local DB-BASE
+            'USER': 'recrm_api',
+            'PASSWORD': '8Ib4sCdLNxZp7wG9',
+            'HOST': 'recrmapi-do-user-3327901-0.b.db.ondigitalocean.com',
+            'PORT': '25060',
         }
     }
 else:
