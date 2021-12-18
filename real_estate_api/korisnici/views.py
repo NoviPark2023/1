@@ -1,10 +1,12 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics, filters
+from rest_framework import generics, filters, permissions
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.settings import api_settings
 from .models import Korisnici
 from real_estate_api.korisnici.serializers import KorisniciSerializers
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class StandardPaginationKorisnici(PageNumberPagination):
@@ -19,6 +21,7 @@ class ListaKorisnikaAPIview(generics.ListAPIView):
     queryset = Korisnici.objects.all().order_by('id')
     serializer_class = KorisniciSerializers
     pagination_class = StandardPaginationKorisnici
+
     filter_backends = api_settings.DEFAULT_FILTER_BACKENDS + [
         filters.OrderingFilter,
         DjangoFilterBackend,
@@ -37,7 +40,6 @@ class KorisniciDetaljiAPIView(generics.RetrieveAPIView):
 
 class KreirajKorisnika(generics.CreateAPIView):
     """Kreiranje novog Korisnika"""
-    permission_classes = [AllowAny]
     queryset = Korisnici.objects.all()
     serializer_class = KorisniciSerializers
 

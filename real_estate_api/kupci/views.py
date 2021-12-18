@@ -1,9 +1,14 @@
 from django.db.models import QuerySet
 from rest_framework import generics
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Kupci
-from real_estate_api.kupci.serializers import KupciSerializer, DetaljiKupcaSerializer, ListaPonudaKupcaSerializer
+from real_estate_api.kupci.serializers import (
+    KupciSerializer,
+    DetaljiKupcaSerializer,
+    ListaPonudaKupcaSerializer
+)
 from ..ponude.models import Ponude
 
 lookup_field = 'id_kupca'
@@ -18,7 +23,7 @@ class StandardPaginationKupci(PageNumberPagination):
 
 class ListaKupacaAPIView(generics.ListAPIView):
     """Lista svih Kupaca"""
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     queryset = Kupci.objects.all().order_by('id_kupca')
     serializer_class = KupciSerializer
     pagination_class = StandardPaginationKupci

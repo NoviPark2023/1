@@ -303,11 +303,13 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ),
     # @see https://www.django-rest-framework.org/api-guide/permissions/
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ),
 }
 # endregion
@@ -315,21 +317,14 @@ REST_FRAMEWORK = {
 # region SWAGGER DOCS
 # ------------------------------------------------------------------------------
 SWAGGER_SETTINGS = {
-    'USE_SESSION_AUTH': True,  # add Django Login and Django Logout buttons, CSRF token to swagger UI page
+    "USE_SESSION_AUTH": True,  # add Django Login and Django Logout buttons, CSRF token to swagger UI page
     'LOGIN_URL': getattr(settings, 'LOGIN_URL', None),  # URL for the login button
     'LOGOUT_URL': getattr(settings, 'LOGOUT_URL', None),  # URL for the logout button
 
     # Swagger security definitions to include in the schema;
     # see https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#security-definitions-object
-    'SECURITY_DEFINITIONS': {
-        'basic': {
-            'type': 'basic'
-        },
-        "api_key": {
-            "type": "apiKey",
-            "name": "api_key",
-            "in": "header"
-        },
+    "SECURITY_DEFINITIONS": {
+        "apiKey": {"type": "apiKey", "name": "Authorization", "in": "header"}
     },
 
     # url to an external Swagger validation service; defaults to 'http://online.swagger.io/validator/'
