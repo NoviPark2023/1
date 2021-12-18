@@ -164,16 +164,6 @@ if DEBUG is True:
             'PORT': os.getenv("POSTGRES_PORT", '5432'),
         }
     }
-    # DATABASES = {
-    #     'default': {
-    #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #         'NAME': 'recrm_api',  # for Local DB-BASE
-    #         'USER': 'recrm_api',
-    #         'PASSWORD': '8Ib4sCdLNxZp7wG9',
-    #         'HOST': 'recrmapi-do-user-3327901-0.b.db.ondigitalocean.com',
-    #         'PORT': '25060',
-    #     }
-    # }
 else:
     DATABASES = {
         'default': {

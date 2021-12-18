@@ -1,8 +1,7 @@
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
-from django.utils import timezone
-from django.contrib.auth.hashers import make_password
+import datetime
 
 
 class CustomAccountManager(BaseUserManager):
@@ -27,9 +26,6 @@ class CustomAccountManager(BaseUserManager):
         if not email:
             raise ValueError('You must provide an email address')
 
-        # username = self.model.normalize_username(username)
-        # password = self.model.password
-        # email = self.normalize_email(email)
         user = self.model(username=username,
                           password=password,
                           email=email,
@@ -56,7 +52,7 @@ class Korisnici(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField('email address', unique=True)
     username = models.CharField(max_length=150, unique=True)
-    start_date = models.DateTimeField(default=timezone.now)
+    start_date = models.DateField(default=datetime.date.today)
 
     ime = models.CharField('Ime Korisnika', max_length=50, default="")
     prezime = models.CharField('Prezime Korisnika', max_length=50, default="")
