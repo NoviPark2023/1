@@ -48,6 +48,7 @@ urlpatterns = [
     path('ponude/', include('real_estate_api.ponude.urls', namespace='ponude')),
     # Root Putanja do Dokumentacije
     url(r'^docs/$', schema_view.with_ui('swagger', cache_timeout=0), name='docs'),
+    url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='docs-redoc'),
 ]
 
 # If we are in dev mode -- DEBUG=True, also use this urlpatterns form MEDIA

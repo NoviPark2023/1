@@ -316,23 +316,21 @@ REST_FRAMEWORK = {
 
 # region SWAGGER DOCS
 # ------------------------------------------------------------------------------
+# @see https://drf-yasg.readthedocs.io/en/stable/index.html
 SWAGGER_SETTINGS = {
     "USE_SESSION_AUTH": True,  # add Django Login and Django Logout buttons, CSRF token to swagger UI page
     'LOGIN_URL': getattr(settings, 'LOGIN_URL', None),  # URL for the login button
     'LOGOUT_URL': getattr(settings, 'LOGOUT_URL', None),  # URL for the logout button
 
     # Swagger security definitions to include in the schema;
-    # see https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#security-definitions-object
     "SECURITY_DEFINITIONS": {
         "apiKey": {"type": "apiKey", "name": "Authorization", "in": "header"}
     },
 
-    # url to an external Swagger validation service; defaults to 'http://online.swagger.io/validator/'
     # set to None to disable the schema validation badge in the UI
-    'VALIDATOR_URL': '',
+    'VALIDATOR_URL': 'http://online.swagger.io/validator/',
 
-    # swagger-ui configuration settings,
-    # see https://github.com/swagger-api/swagger-ui/blob/112bca906553a937ac67adc2e500bdeed96d067b/docs/usage/configuration.md#parameters
+     # swagger-ui configuration settings,
     'OPERATIONS_SORTER': None,
     'TAGS_SORTER': None,
     'DOC_EXPANSION': 'none',
@@ -340,5 +338,6 @@ SWAGGER_SETTINGS = {
     'SHOW_EXTENSIONS': True,
     'DEFAULT_MODEL_RENDERING': 'model',
     'DEFAULT_MODEL_DEPTH': 2,
+    'PERSIST_AUTH': True,
 }
 # endregion
