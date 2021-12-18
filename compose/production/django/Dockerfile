@@ -1,7 +1,5 @@
 ARG PYTHON_VERSION=3.9-slim-bullseye
 
-
-
 # define an alias for the specfic python version used in this file.
 FROM python:${PYTHON_VERSION} as python
 
@@ -57,13 +55,11 @@ COPY --from=python-build-stage /usr/src/app/wheels  /wheels/
 
 # use wheels to install python dependencies
 RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
-  && rm -rf /wheels/
-
+	&& rm -rf /wheels/
 
 COPY --chown=django:django ./compose/production/django/entrypoint /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
-
 
 COPY --chown=django:django ./compose/production/django/start /start
 RUN sed -i 's/\r$//g' /start
