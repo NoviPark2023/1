@@ -116,22 +116,39 @@ TEMPLATES = [
 
 # region SECURITY
 # ------------------------------------------------------------------------------
-# SESSION_COOKIE_HTTPONLY = True
-# CSRF_COOKIE_HTTPONLY = True
-# SECURE_BROWSER_XSS_FILTER = True
-# X_FRAME_OPTIONS = "DENY"
-
-# USE_X_FORWARDED_HOST = True
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-# SESSION_COOKIE_SECURE = True
-# CSRF_COOKIE_SECURE = True
-
-# Security Headers
-# SECURE_CONTENT_TYPE_NOSNIFF = True
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-# SECURE_HSTS_PRELOAD = True
-# SECURE_HSTS_SECONDS = 3600
-
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = [
+    'https://stanovi.biz',
+    'https://api.stanovi.biz',
+    'https://prodaja-stanova-front-pnyfj.ondigitalocean.app',
+    'http://api.dejan.pro',
+    'http://localhost:3000',
+    'http://127.0.0.1:8000',
+    'http://127.0.0.1',
+    'http://127.0.0.1:3000',
+    'http://164.92.253.160',
+    'https://stanovi.dejan.pro',
+    'http://stanovi.dejan.pro',
+]
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 # endregion
 
 # region DATABASES
@@ -163,9 +180,10 @@ else:
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'recrm_api',  # for Local DB-BASE
             'USER': 'recrm_api',
-            'PASSWORD': 'fwwrecrm',
+            'PASSWORD': '8Ib4sCdLNxZp7wG9',
             'HOST': 'recrmapi-do-user-3327901-0.b.db.ondigitalocean.com',
             'PORT': '25060',
+            'OPTIONS': {'sslmode': 'require'},
         }
     }
 # endregion
@@ -259,39 +277,6 @@ STATICFILES_FINDERS = [
 MEDIA_ROOT = str(BASE_DIR / "media")
 MEDIA_URL = "/media/"
 
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = [
-    'https://stanovi.biz',
-    'https://api.stanovi.biz',
-    'https://prodaja-stanova-front-pnyfj.ondigitalocean.app',
-    'http://api.dejan.pro',
-    'http://localhost:3000',
-    'http://127.0.0.1:8000',
-    'http://127.0.0.1',
-    'http://127.0.0.1:3000',
-    'http://164.92.253.160',
-    'https://stanovi.dejan.pro',
-    'http://stanovi.dejan.pro',
-]
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-]
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-]
 # endregion
 
 # region REST_FRAMEWORK
@@ -330,7 +315,7 @@ SWAGGER_SETTINGS = {
     # set to None to disable the schema validation badge in the UI
     'VALIDATOR_URL': 'http://online.swagger.io/validator/',
 
-     # swagger-ui configuration settings,
+    # swagger-ui configuration settings,
     'OPERATIONS_SORTER': None,
     'TAGS_SORTER': None,
     'DOC_EXPANSION': 'none',
@@ -339,5 +324,30 @@ SWAGGER_SETTINGS = {
     'DEFAULT_MODEL_RENDERING': 'model',
     'DEFAULT_MODEL_DEPTH': 2,
     'PERSIST_AUTH': True,
+}
+# endregion
+
+# region LOGGING
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#logging
+# See https://docs.djangoproject.com/en/dev/topics/logging for
+# more details on how to customize your logging configuration.
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "%(levelname)s %(asctime)s %(module)s "
+                      "%(process)d %(thread)d %(message)s"
+        }
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        }
+    },
+    "root": {"level": "INFO", "handlers": ["console"]},
 }
 # endregion
