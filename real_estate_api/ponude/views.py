@@ -1,7 +1,6 @@
-from django.db.backends.ddl_references import Table
-from django.db.models import Case, When, Value, F
 from rest_framework import generics
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Ponude
 from .serializers import PonudeSerializer
@@ -20,6 +19,7 @@ class StandardPaginationPonude(PageNumberPagination):
 
 class ListaPonudaAPIView(generics.ListAPIView):
     """Lista svih Ponuda"""
+    permission_classes = [IsAuthenticated, ]
     queryset = Ponude.objects.all().order_by(lookup_field)
     serializer_class = PonudeSerializer
     pagination_class = StandardPaginationPonude
@@ -27,6 +27,7 @@ class ListaPonudaAPIView(generics.ListAPIView):
 
 class ListaPonudaZaStanAPIView(ListaPonudaAPIView):
     """Lista svih Ponuda"""
+    permission_classes = [IsAuthenticated, ]
     lookup_field_stan = lookup_field_stan
     queryset = Ponude.objects.all()
     serializer_class = PonudeSerializer
@@ -42,6 +43,7 @@ class ListaPonudaZaStanAPIView(ListaPonudaAPIView):
 
 class PonudeDetaljiAPIView(generics.RetrieveAPIView):
     """Get Ponude po ID-ju  || Detalji Ponude"""
+    permission_classes = [IsAuthenticated, ]
     lookup_field = lookup_field
     queryset = Ponude.objects.all()
     serializer_class = PonudeSerializer
@@ -49,6 +51,7 @@ class PonudeDetaljiAPIView(generics.RetrieveAPIView):
 
 class KreirajPonudeuAPIView(generics.CreateAPIView):
     """Kreiranje nove Ponude"""
+    permission_classes = [IsAuthenticated, ]
     lookup_field_stan = lookup_field_stan
     queryset = Ponude.objects.all()
     serializer_class = PonudeSerializer
@@ -60,6 +63,7 @@ class KreirajPonudeuAPIView(generics.CreateAPIView):
 
 class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
     """Urednjivanje Ponude po ID-ju"""
+    permission_classes = [IsAuthenticated, ]
     lookup_field = lookup_field
     queryset = Ponude.objects.all()
     serializer_class = PonudeSerializer
@@ -91,6 +95,7 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
 
 class ObrisiPonuduAPIView(generics.RetrieveDestroyAPIView):
     """Brisanje Ponude po ID-ju"""
+    permission_classes = [IsAuthenticated, ]
     lookup_field = lookup_field
     queryset = Ponude.objects.all()
     serializer_class = PonudeSerializer

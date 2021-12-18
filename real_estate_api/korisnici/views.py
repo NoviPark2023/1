@@ -1,12 +1,10 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics, filters, permissions
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework import generics, filters
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.settings import api_settings
 from .models import Korisnici
 from real_estate_api.korisnici.serializers import KorisniciSerializers
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class StandardPaginationKorisnici(PageNumberPagination):
@@ -18,6 +16,7 @@ class StandardPaginationKorisnici(PageNumberPagination):
 
 class ListaKorisnikaAPIview(generics.ListAPIView):
     """Lista svih korisnika"""
+    permission_classes = [IsAuthenticated, ]
     queryset = Korisnici.objects.all().order_by('id')
     serializer_class = KorisniciSerializers
     pagination_class = StandardPaginationKorisnici
@@ -33,18 +32,21 @@ class ListaKorisnikaAPIview(generics.ListAPIView):
 
 class KorisniciDetaljiAPIView(generics.RetrieveAPIView):
     """Get Korisnika po ID-ju, || Detalji Kupca"""
+    permission_classes = [IsAuthenticated, ]
     lookup_field = 'id'
     queryset = Korisnici.objects.all()
     serializer_class = KorisniciSerializers
 
 
 class KreirajKorisnika(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated, ]
     """Kreiranje novog Korisnika"""
     queryset = Korisnici.objects.all()
     serializer_class = KorisniciSerializers
 
 
 class UrediKorisnika(generics.RetrieveUpdateAPIView):
+    permission_classes = [IsAuthenticated, ]
     """Uredivanje korisnika po id-pk"""
     lookup_field = 'id'
     queryset = Korisnici.objects.all()
@@ -52,6 +54,7 @@ class UrediKorisnika(generics.RetrieveUpdateAPIView):
 
 
 class ObrisiKoriniska(generics.RetrieveDestroyAPIView):
+    permission_classes = [IsAuthenticated, ]
     """Brisanje Korinila po id-pk"""
     lookup_field = 'id'
     queryset = Korisnici.objects.all()
