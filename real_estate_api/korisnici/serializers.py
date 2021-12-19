@@ -1,4 +1,3 @@
-from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
@@ -63,10 +62,13 @@ class KorisniciSerializers(serializers.ModelSerializer):
         :param validated_data:
         :return: Meta.model(**validated_data)
         """
-        user = Korisnici(username=validated_data['username'])
-        user.set_password(make_password(validated_data['password']))
-        user.save()
-        return user
+        password = validated_data.pop('password', None)
+        # as long as the fields are the same, we can just use this
+        instance = self.Meta.model(**validated_data)
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+        return instance
 
     @staticmethod
     def get_detalji_korisnika_url(obj):
