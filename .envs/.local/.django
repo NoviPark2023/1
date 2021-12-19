@@ -3,4 +3,4 @@
 # USE_DOCKER=yes
 # IPYTHONDIR=/app/.ipython
 POSTGRES_HOST: postgres
-DEBUG: False
+DEBUG: True
