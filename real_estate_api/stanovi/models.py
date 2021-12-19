@@ -28,7 +28,6 @@ class Stanovi(models.Model):
                                       null=True)
     broj_terasa = models.PositiveIntegerField('Broj terasa stana', default=0)
     cena_stana = models.PositiveIntegerField('Cena stana', default=0)
-    #cena_stana_za_kupca = models.PositiveIntegerField('Cena stana za kupca', default=0)
     napomena = models.CharField('Napomena', null=True, blank=True, max_length=250, default='')
     status_prodaje = models.CharField(max_length=20,
                                       choices=StatusProdaje.choices,
@@ -40,42 +39,8 @@ class Stanovi(models.Model):
 
     def __str__(self):
         return f"{self.id_stana}, {self.lamela}, {self.kvadratura}"
-        # return f"{self.id_stana} {self.lamela} {self.kvadratura}  \
-        #        {self.sprat} {self.broj_soba} {self.cena_stana} \
-        #        {self.orijentisanost} {self.broj_terasa} {self.cena_stana} \
-        #        {self.status_prodaje}"
 
     class Meta:
         db_table = 'stanovi'
         verbose_name = "Stan"
         verbose_name_plural = "Stanovi"
-
-
-# SLIKE ZA STANOVE MODEL
-# class SlikaStana(models.Model):
-#     """TODO: CEKA SE FRONT"""
-#     id_slike = models.BigAutoField(primary_key=True)
-#     slika_stana = models.ImageField(
-#         verbose_name='Slika_Stana',
-#         help_text='Molimo da dodate sliku',
-#         upload_to='images/',
-#         default='images/default.png',
-#         null=True,
-#         blank=True
-#     )
-#     alt_text = models.CharField(
-#         verbose_name='Alternativni Text',
-#         help_text='Molimo da dodate sliku',
-#         max_length=255,
-#         null=True,
-#         blank=True
-#     )
-#     kreirana = models.DateTimeField(auto_now_add=True, editable=False)
-#     ucitana = models.DateTimeField(auto_now=True)
-#
-#     stan = models.ForeignKey(Stanovi, on_delete=models.CASCADE, related_name='slike_stana')
-#
-#     class Meta:
-#         db_table = 'slika_stana'
-#         verbose_name = "slika_stana"
-#         verbose_name_plural = "slike_stanova"

@@ -8,21 +8,6 @@ from ..stanovi.serializers import StanoviSerializer
 class PonudeSerializer(serializers.ModelSerializer):
     """
     Ponude sa redukovanim poljima koje poseduje za prikaz u tabeli i u slucaju responiva u frontendu.
-        Ukljucene API putanje (API URLs) su:
-        ------------------------------------
-        * kupac
-        * stan
-        * cena_stana_za_kupca
-        * napomena
-        * broj_ugovora
-        * datum_ugovora
-        * status_ponude
-        * nacin_placanja
-        * detalji_ponude_url
-        * izmeni_ponudu_url
-        * obrisi_ponudu_url
-        * kreiraj_ponudu_url
-        * lista_ponuda_url
     """
     datum_ugovora=serializers.DateField(format="%d.%m.%Y",input_formats=['%d.%m.%Y',])
     detalji_ponude_url = serializers.SerializerMethodField()
