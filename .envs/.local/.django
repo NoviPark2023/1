@@ -4,3 +4,4 @@
 # IPYTHONDIR=/app/.ipython
 POSTGRES_HOST: postgres
 DEBUG: True
+OPTIONS: {'sslmode': 'require'}
