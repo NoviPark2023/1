@@ -162,20 +162,21 @@ if DEBUG is True:
             'PASSWORD': os.getenv("POSTGRES_PASSWORD", 'recrm_api'),
             'HOST': os.getenv("POSTGRES_HOST", 'fwwrecrm'),
             'PORT': os.getenv("POSTGRES_PORT", '5432'),
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'recrm_api',  # for Local DB-BASE
-            'USER': 'recrm_api',
-            'PASSWORD': '8Ib4sCdLNxZp7wG9',
-            'HOST': 'recrmapi-do-user-3327901-0.b.db.ondigitalocean.com',
-            'PORT': '25060',
             'OPTIONS': {'sslmode': 'require'},
         }
     }
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#             'NAME': 'recrm_api',  # for Local DB-BASE
+#             'USER': 'recrm_api',
+#             'PASSWORD': '8Ib4sCdLNxZp7wG9',
+#             'HOST': 'recrmapi-do-user-3327901-0.b.db.ondigitalocean.com',
+#             'PORT': '25060',
+#             'OPTIONS': {'sslmode': 'require'},
+#         }
+#     }
 # endregion
 
 # region PASSWORDS VALIDATORS
