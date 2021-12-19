@@ -6,18 +6,21 @@ from real_estate_api.ponude.models import Ponude
 
 class ListaPonudaStanaSerializer(serializers.ModelSerializer):
     """
-    TODO: Komentar za ovaj nested serialilzers
+    Listing 'Ponuda' for every 'Stan'
     """
-
     detalji_kupca_url = serializers.SerializerMethodField()
     detalji_ponude_url = serializers.SerializerMethodField()
 
+    adresa_stana = serializers.ReadOnlyField()  # Get field 'Adresa Stana' from 'Ponuda' model
+    cena_stana = serializers.ReadOnlyField()  # Get field 'Cena Stana' from 'Ponuda' model
     class Meta:
         model = Ponude
         fields = (
-            "kupac",
-            "stan_id",
             "id_ponude",
+            "stan_id",
+            "kupac",
+            'adresa_stana',
+            'cena_stana',
             "cena_stana_za_kupca",
             "napomena",
             "broj_ugovora",
