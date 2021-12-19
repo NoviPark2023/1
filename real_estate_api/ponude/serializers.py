@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from .views import Ponude
+from ..stanovi.models import Stanovi
 from ..stanovi.serializers import StanoviSerializer
 
 
@@ -16,13 +17,17 @@ class PonudeSerializer(serializers.ModelSerializer):
     kreiraj_ponudu_url = serializers.SerializerMethodField()
     lista_ponuda_url = serializers.SerializerMethodField()
 
+    adresa_stana = serializers.ReadOnlyField() # Get field 'Adresa Stana' from 'Ponuda' model
+    cena_stana = serializers.ReadOnlyField() # Get field 'Cena Stana' from 'Ponuda' model
+
     class Meta:
-        stanovi = StanoviSerializer(many=True, read_only=True)
         model = Ponude
         fields = (
             'id_ponude',
             'kupac',
             'stan',
+            'adresa_stana',
+            'cena_stana',
             'cena_stana_za_kupca',
             'napomena',
             'broj_ugovora',

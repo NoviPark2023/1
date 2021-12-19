@@ -54,9 +54,19 @@ class Ponude(models.Model):
 
     odobrenje = models.BooleanField(default=False)
 
+    @property
+    def adresa_stana(self):
+        """Return field 'adresa_stana' for Ponuda serializers"""
+        return self.stan.adresa_stana
+
+    @property
+    def cena_stana(self):
+        """Return field 'cena_stana' for Ponuda serializers"""
+        return self.stan.cena_stana
+
     def __str__(self):
         return f"{self.kupac.id_kupca} {self.cena_stana_za_kupca} \
-                  {self.broj_ugovora} {self.kupac.ime_prezime}"
+                  {self.broj_ugovora} {self.kupac.ime_prezime} {self.stan.adresa_stana}"
 
     class Meta:
         """
