@@ -11,6 +11,7 @@ class ListaPonudaStanaSerializer(serializers.ModelSerializer):
     detalji_kupca_url = serializers.SerializerMethodField()
     detalji_ponude_url = serializers.SerializerMethodField()
 
+    datum_ugovora = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y', ])
     adresa_stana = serializers.ReadOnlyField()  # Get field 'Adresa Stana' from 'Ponuda' model
     cena_stana = serializers.ReadOnlyField()  # Get field 'Cena Stana' from 'Ponuda' model
     class Meta:

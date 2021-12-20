@@ -9,6 +9,7 @@ class ListaPonudaKupcaSerializer(serializers.ModelSerializer):
     """
     Listing 'Ponuda' for every 'Kupac'
     """
+    datum_ugovora = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y', ])
     adresa_stana = serializers.ReadOnlyField()  # Get field 'Adresa Stana' from 'Ponuda' model
     cena_stana = serializers.ReadOnlyField()  # Get field 'Cena Stana' from 'Ponuda' model
 
