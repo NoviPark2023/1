@@ -7,16 +7,20 @@ from ..ponude.models import Ponude
 
 class ListaPonudaKupcaSerializer(serializers.ModelSerializer):
     """
-    TODO: Komentar za ovaj nested serializers
+    Listing 'Ponuda' for every 'Kupac'
     """
+    adresa_stana = serializers.ReadOnlyField()  # Get field 'Adresa Stana' from 'Ponuda' model
+    cena_stana = serializers.ReadOnlyField()  # Get field 'Cena Stana' from 'Ponuda' model
 
     class Meta:
         model = Ponude
         fields = (
-            "kupac",
-            "stan_id",
             "id_ponude",
+            "stan_id",
+            "kupac",
             "cena_stana_za_kupca",
+            "cena_stana",
+            "adresa_stana",
             "napomena",
             "broj_ugovora",
             "datum_ugovora",
