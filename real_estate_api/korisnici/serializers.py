@@ -22,6 +22,10 @@ class KorisniciSerializers(serializers.ModelSerializer):
     lista_korisnika_url = serializers.SerializerMethodField()
     kreiraj_korisnika_url = serializers.SerializerMethodField()
 
+    # Fix date format
+    last_login = serializers.DateTimeField(format="%d.%m.%Y", input_formats=['%d.%m.%Y', ])
+    start_date = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y', ])
+
     class Meta:
         """
         Opisni model entiteta Korisnici sa ukljucenim poljim a ka opeacijama sa istim.
