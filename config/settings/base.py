@@ -20,9 +20,6 @@ ALLOWED_HOSTS = ['*']
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-DATE_FORMAT = "d.m.Y"
-DATE_INPUT_FORMATS = ['%d.%m.%Y.']
 # endregion
 
 # region APPS
@@ -239,13 +236,13 @@ SIMPLE_JWT = {
 
 # region INTERNATIONALIZATION
 # ------------------------------------------------------------------------------
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'sr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Belgrade'
 
 USE_I18N = False
 
-USE_L10N = False
+USE_L10N = True
 
 USE_TZ = True
 # endregion

@@ -2,8 +2,6 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from .views import Ponude
-from ..stanovi.models import Stanovi
-from ..stanovi.serializers import StanoviSerializer
 
 
 class PonudeSerializer(serializers.ModelSerializer):

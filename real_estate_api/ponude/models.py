@@ -1,5 +1,8 @@
-from django.db import models
 import datetime
+from datetime import date
+
+from django.db import models
+from django.utils import timezone
 
 from real_estate_api.kupci.models import Kupci
 from real_estate_api.stanovi.models import Stanovi
@@ -41,7 +44,7 @@ class Ponude(models.Model):
     cena_stana_za_kupca = models.PositiveIntegerField('Cena stana za kupca', default=0)
     napomena = models.CharField(max_length=252, default="", blank=True)
     broj_ugovora = models.CharField(max_length=252, default="", blank=True)
-    datum_ugovora = models.DateField(default=datetime.date.today)
+    datum_ugovora = models.DateField ("Datum Ponude", null=True, blank=True)
     status_ponude = models.CharField(max_length=20,
                                      choices=StatusPonude.choices,
                                      null=False, blank=False,
@@ -53,6 +56,7 @@ class Ponude(models.Model):
                                       default=NacinPlacanja.U_CELOSTI)
 
     odobrenje = models.BooleanField(default=False)
+
 
     @property
     def adresa_stana(self):
