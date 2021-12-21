@@ -11,6 +11,6 @@ class URLTest(APITestCase, URLPatternsTestCase):
 
     def test_lista_ponuda_API_end_point(self):
         """Test lista ponuda API end point"""
-        url = reverse('lista_ponuda')
+        url = reverse('ponude:lista_ponuda')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

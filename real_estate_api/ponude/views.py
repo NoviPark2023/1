@@ -120,7 +120,7 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
         stan.save()
         ponuda.save()
 
-        return response.Response(u'KREIRANO')
+        return self.partial_update(request, *args, **kwargs)
 
     # def put(self, request, *args, **kwargs):
     #     """
