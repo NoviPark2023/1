@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
 from rest_framework.pagination import PageNumberPagination
@@ -51,6 +52,15 @@ class UrediKorisnika(generics.RetrieveUpdateAPIView):
     lookup_field = 'id'
     queryset = Korisnici.objects.all()
     serializer_class = KorisniciSerializers
+
+    def put(self, request, *args, **kwargs):
+        """
+        Promena lozinke Korisnika
+        """
+        my_password = request.data['password']
+        hashed_my_password = make_password(my_password)
+        request.data['password'] = hashed_my_password
+        return self.partial_update(request, *args, **kwargs)
 
 
 class ObrisiKoriniska(generics.RetrieveDestroyAPIView):
