@@ -85,7 +85,7 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
     queryset = Ponude.objects.all()
     serializer_class = PonudeSerializer
 
-    def retrieve(self, request, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
         print("REEEEEETREEEEEEEEVEEEEEEEE")
 
         stan = Stanovi.objects.get(id_stana__exact=request.data['stan'])
