@@ -6,6 +6,8 @@ from .models import Ponude
 from .serializers import PonudeSerializer
 from ..stanovi.models import Stanovi
 
+from docxtpl import DocxTemplate
+
 lookup_field = 'id_ponude'
 lookup_field_stan = 'id_stana'
 
@@ -82,7 +84,12 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
         """
         stan = Stanovi.objects.get(id_stana__exact=request.data['stan'])
         ponuda = Ponude.objects.get(id_ponude__exact=kwargs['id_ponude'])
-
+        ponuda_status = request.data['status_ponude']
+        print(ponuda_status)
+        if request.data['status_ponude'] == 'rezervisan':
+            print("TRUEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
+        else:
+            print("no no")
         if stan.cena_stana == int(request.data['cena_stana_za_kupca']):
             ponuda.odobrenje = False
         else:
