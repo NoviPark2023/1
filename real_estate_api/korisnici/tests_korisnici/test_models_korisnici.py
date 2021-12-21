@@ -1,5 +1,6 @@
-from django.test import TestCase
-
+from django.template.defaulttags import csrf_token
+from django.test import TestCase, Client
+import json
 from real_estate_api.korisnici.models import Korisnici
 
 
@@ -41,3 +42,17 @@ class TestModelaKorisnici(TestCase):
         print('PREZIME Korisnika u testnoj bazi: ' + str(korsinik_prezime))
         print('---------------')
         self.assertEqual('Test_Prezime', korsinik_prezime)
+
+
+class PasswordChange(TestCase):
+    def test_change_password(self):
+        c = Client()
+        url = 'http://0.0.0.0:8000/korisnici/izmeni-korisnika/14/'
+        payload = {'csrf_token': csrf_token, 'payload': json.dumps({'password': 'test2'})}
+        headers = {'Cookie': 'csrftoken=' + csrf_token}
+
+        res = c.post(url, payload, headers=headers)
+        res = res.json()
+        self.assertEqual(res['password_changed'], True)
+        korisnik = Korisnici.objects.get(username='ivana')
+        self.assertEqual(korisnik.check_password('test2'), True)
