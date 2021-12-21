@@ -1,7 +1,11 @@
-from rest_framework import generics
+from wsgiref.util import FileWrapper
+
+from django.http import HttpResponse
+from rest_framework import generics, mixins, response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 
+from django.conf import settings
 from .models import Ponude
 from .serializers import PonudeSerializer
 from ..stanovi.models import Stanovi
@@ -63,6 +67,17 @@ class KreirajPonudeuAPIView(generics.CreateAPIView):
         return Ponude.objects.all().filter(stan=id_stana)
 
 
+
+class FileDownloadListAPIView(generics.ListAPIView):
+
+    def get(self, request, *args, **kwargs):
+        queryset = Ponude.objects.get(id_ponude__exact=kwargs['id_ponude'])
+        file_handle = settings.MEDIA_ROOT + '/ugovor' + str(queryset.id_ponude) + '.docx'
+        document = open(file_handle, 'rb')
+        response = HttpResponse(FileWrapper(document), content_type='application/msword')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % file_handle
+        return response
+
 class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
     """Urednjivanje Ponude po ID-ju"""
     permission_classes = [IsAuthenticated, ]
@@ -70,24 +85,31 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
     queryset = Ponude.objects.all()
     serializer_class = PonudeSerializer
 
-    def put(self, request, *args, **kwargs):
-        """
-        Ukoliko se cena Stana razlikuje od cene Stana u Ponudi, automatski se polje
-        modela u Ponudama setuje na True ili False.
+    def retrieve(self, request, *args, **kwargs):
+        print("REEEEEETREEEEEEEEVEEEEEEEE")
 
-        * True = Kada se cena razlikuje
-        * False = Kada je cena ista
-
-        :param request: Ceo Objekat Ponue u responsu
-        :param kwargs: Vraca ID Ponude
-        :return: partial_update
-        """
         stan = Stanovi.objects.get(id_stana__exact=request.data['stan'])
         ponuda = Ponude.objects.get(id_ponude__exact=kwargs['id_ponude'])
         ponuda_status = request.data['status_ponude']
         print(ponuda_status)
         if request.data['status_ponude'] == 'rezervisan':
+            template = 'real_estate_api/static/ugovor/ugovor_tmpl.docx'
             print("TRUEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
+            document = DocxTemplate(template)
+            context = {
+                'id_stana': stan.id_stana,
+                'datum_ugovora': ponuda.datum_ugovora,
+                'broj_ugovora': ponuda.broj_ugovora,
+                # 'kupac': ponuda.kupac,
+                # 'kupac_adresa': ponuda.,
+                # 'cena_stana': ponuda.cena_stana,
+                # 'nacin_placanja': nacin_placanja
+            }
+            document.render(context)
+            document.save(settings.MEDIA_ROOT + '/ugovor' + str(ponuda.id_ponude) + '.docx')
+
+
+
         else:
             print("no no")
         if stan.cena_stana == int(request.data['cena_stana_za_kupca']):
@@ -97,7 +119,28 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
 
         stan.save()
         ponuda.save()
-        return self.partial_update(request, *args, **kwargs)
+
+        return response.Response(u'KREIRANO')
+
+    # def put(self, request, *args, **kwargs):
+    #     """
+    #     Ukoliko se cena Stana razlikuje od cene Stana u Ponudi, automatski se polje
+    #     modela u Ponudama setuje na True ili False.
+    #
+    #     * True = Kada se cena razlikuje
+    #     * False = Kada je cena ista
+    #
+    #     :param request: Ceo Objekat Ponue u responsu
+    #     :param kwargs: Vraca ID Ponude
+    #     :return: partial_update
+    #     """
+    #
+    #     return self.partial_update(request, *args, **kwargs)
+    #
+    #
+    # @staticmethod
+    # def get_success_url():
+    #     print('get_success_url')
 
 
 class ObrisiPonuduAPIView(generics.RetrieveDestroyAPIView):

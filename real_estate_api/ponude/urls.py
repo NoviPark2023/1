@@ -7,7 +7,7 @@ from .views import (
     KreirajPonudeuAPIView,
     ObrisiPonuduAPIView,
     PonudeDetaljiAPIView,
-    UrediPonuduViewAPI,
+    UrediPonuduViewAPI, FileDownloadListAPIView,
 
 )
 
@@ -25,6 +25,7 @@ urlpatterns = [
     # Obrisi Ponudu
     path('obrisi-ponudu/<int:id_ponude>/', ObrisiPonuduAPIView.as_view(), name='obrisi_ponudu'),
     # Kreiraj Ponudu
-    path('kreiraj-ponudu/', KreirajPonudeuAPIView.as_view(), name='kreiraj_ponudu')
+    path('kreiraj-ponudu/', KreirajPonudeuAPIView.as_view(), name='kreiraj_ponudu'),
+    path('download/<int:id_ponude>/', FileDownloadListAPIView.as_view())
 
 ]
