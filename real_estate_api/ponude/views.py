@@ -16,19 +16,11 @@ lookup_field = 'id_ponude'
 lookup_field_stan = 'id_stana'
 
 
-class StandardPaginationPonude(PageNumberPagination):
-    """Standardna paginacija sa 5 prikaza po stranici za Ponude"""
-    page_size = 5
-    page_size_query_param = 'page_size'
-    max_page_size = 5
-
-
 class ListaPonudaAPIView(generics.ListAPIView):
     """Lista svih Ponuda"""
     permission_classes = [IsAuthenticated, ]
     queryset = Ponude.objects.all().order_by(lookup_field)
     serializer_class = PonudeSerializer
-    pagination_class = StandardPaginationPonude
 
 
 class ListaPonudaZaStanAPIView(ListaPonudaAPIView):

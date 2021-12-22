@@ -8,19 +8,11 @@ from .serializers import StanoviSerializer, ListaPonudaStanaSerializer
 lookup_field = 'id_stana'
 
 
-class StandardPaginationStanovi(PageNumberPagination):
-    """Standardna paginacija sa 5 prikaza po srtanici za Stanove"""
-    page_size = 5
-    page_size_query_param = 'page_size'
-    max_page_size = 5
-
-
 class ListaStanovaAPIView(generics.ListAPIView):
     """Lista svih Stanova"""
     permission_classes = [IsAuthenticated, ]
     queryset = Stanovi.objects.all().order_by('id_stana')
     serializer_class = StanoviSerializer
-    pagination_class = StandardPaginationStanovi
 
 
 class StanoviDetaljiAPIVIew(generics.RetrieveAPIView):
@@ -60,7 +52,6 @@ class ListaPonudaStanaAPIView(generics.RetrieveAPIView):
     lookup_field = lookup_field
     queryset = Stanovi.objects.all().order_by('id_stana')
     serializer_class = ListaPonudaStanaSerializer
-    pagination_class = StandardPaginationStanovi
 
     def get_queryset(self):
         id_stana = self.kwargs['id_stana']
