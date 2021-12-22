@@ -14,19 +14,11 @@ from ..ponude.models import Ponude
 lookup_field = 'id_kupca'
 
 
-class StandardPaginationKupci(PageNumberPagination):
-    """Standart paginacija sa 5 prikaza po stranici za Kupce"""
-    page_size = 5
-    page_size_query_param = 'page_size'
-    max_page_size = 5
-
-
 class ListaKupacaAPIView(generics.ListAPIView):
     """Lista svih Kupaca"""
     permission_classes = [IsAuthenticated]
     queryset = Kupci.objects.all().order_by('id_kupca')
     serializer_class = KupciSerializer
-    pagination_class = StandardPaginationKupci
 
 
 class ListaKupacaPoImenuAPIView(generics.ListAPIView):
@@ -79,8 +71,7 @@ class ListaPonudaKupcaAPIView(generics.RetrieveAPIView):
     lookup_field = lookup_field
     queryset = Kupci.objects.all().order_by('id_kupca')
     serializer_class = ListaPonudaKupcaSerializer
-    pagination_class = StandardPaginationKupci
-
+    
     def get_queryset(self):
         id_kupca = self.kwargs['id_kupca']
         return Ponude.objects.all().filter(kupac=id_kupca)
