@@ -23,8 +23,8 @@ class KorisniciSerializers(serializers.ModelSerializer):
     kreiraj_korisnika_url = serializers.SerializerMethodField()
 
     # Fix date format
-    last_login = serializers.DateTimeField(format="%d.%m.%Y", input_formats=['%d.%m.%Y', ])
-    start_date = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y', ])
+    #last_login = serializers.DateTimeField(format="%d.%m.%Y", input_formats=['%d.%m.%Y', ])
+    #start_date = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y', ])
 
     class Meta:
         """
@@ -46,10 +46,10 @@ class KorisniciSerializers(serializers.ModelSerializer):
             "username",
             "password",
             "role",
-            "last_login",
+            #"last_login",
             "is_superuser",
             "is_staff",
-            "start_date",
+            #"start_date",
             "about",
             "detalji_korisnika_url",
             "izmeni_korisnika_url",
