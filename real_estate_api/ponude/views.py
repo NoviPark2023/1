@@ -99,15 +99,17 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
             }
             document.render(context)
             document.save(settings.MEDIA_ROOT + '/ugovor' + str(ponuda.id_ponude) + '.docx')
+            stan.status_prodaje = 'rezervisan'
+            ponuda.odobrenje = True # Potrebno odobrenje jer je stan kaparisan (Rezervisan)
 
-
-
+        elif request.data['status_ponude'] == 'kupljen':
+            # Kada Ponuda predje u status 'kupljen' automatski mapiraj polje 'prodat' u modelu Stana
+            stan.status_prodaje = 'prodat'
         else:
-            print("no no")
-        if stan.cena_stana == int(request.data['cena_stana_za_kupca']):
+            # Kada Ponuda predje u status 'potencijalan' automatski mapiraj polje 'dostupan' u modelu Stana
+            stan.status_prodaje = 'dostupan'
+            # Stan je presao u status 'Dostupa'...nije potrebno odobrenje
             ponuda.odobrenje = False
-        else:
-            ponuda.odobrenje = True
 
         stan.save()
         ponuda.save()

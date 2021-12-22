@@ -244,6 +244,8 @@ USE_I18N = False
 USE_L10N = True
 
 USE_TZ = True
+
+THOUSAND_SEPARATOR = True
 # endregion
 
 # region STATIC

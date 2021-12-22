@@ -33,8 +33,10 @@ class Stanovi(models.Model):
                                       choices=StatusProdaje.choices,
                                       default=StatusProdaje.DOSTUPAN)
 
-    ''' null=True || zato sto kada se kreira stan ne znamo kom klijentu ce se dodeliti.
-            models.SET_NULL || Jer kada se obrise iz sistema Klijent svi stanovi ostaju.'''
+    '''
+     * null=True || zato sto kada se kreira stan ne znamo kom klijentu ce se dodeliti.
+     * models.SET_NULL || Jer kada se obrise iz sistema Klijent svi stanovi ostaju.
+    '''
     klijent_prodaje = models.ForeignKey(Korisnici, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):

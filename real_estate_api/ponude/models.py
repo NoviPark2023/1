@@ -41,10 +41,10 @@ class Ponude(models.Model):
                              db_column='id_stana',
                              related_name='lista_ponuda_stana')
 
-    cena_stana_za_kupca = models.PositiveIntegerField('Cena stana za kupca', default=0)
+    cena_stana_za_kupca = models.FloatField('Cena stana za kupca', default=0)
     napomena = models.CharField(max_length=252, default="", blank=True)
     broj_ugovora = models.CharField(max_length=252, default="", blank=True)
-    datum_ugovora = models.DateField ("Datum Ponude", null=True, blank=True)
+    datum_ugovora = models.DateField("Datum Ponude", null=True, blank=True)
     status_ponude = models.CharField(max_length=20,
                                      choices=StatusPonude.choices,
                                      null=False, blank=False,
@@ -56,7 +56,6 @@ class Ponude(models.Model):
                                       default=NacinPlacanja.U_CELOSTI)
 
     odobrenje = models.BooleanField(default=False)
-
 
     @property
     def adresa_stana(self):
