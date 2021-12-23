@@ -15,7 +15,6 @@ class CreateContract:
         * Potrebno je odobrenje vlasnika-administratora sistema ove ponude @see(ponuda.odobrenje = True).
         * Takodje se setuje status Stana na 'rezervisan', @see(stan.status_prodaje = 'rezervisan')
         :param request: Ponude
-        :return: partial_update
         """
 
         stan = Stanovi.objects.get(id_stana__exact=request.data['stan'])

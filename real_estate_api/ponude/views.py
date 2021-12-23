@@ -80,12 +80,13 @@ class FileDownloadListAPIView(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         """Preuzimanje ugovora"""
+
         queryset = Ponude.objects.get(id_ponude__exact=kwargs['id_ponude'])
         file_handle = settings.MEDIA_ROOT + '/ugovor' + str(queryset.id_ponude) + '.docx'
         try:
             document = open(file_handle, 'rb')
             response = HttpResponse(FileWrapper(document), content_type='application/msword')
-            response['Content-Disposition'] = 'attachment; filename="%s"' % file_handle
+            response['Content-Disposition'] = 'attachment; filename=Ugovor-Ponude-' + str(kwargs['id_ponude']) + '.docx'
         except FileNotFoundError:
             raise NotFound('Željeni ugovor nije nađen !', code=500)
 

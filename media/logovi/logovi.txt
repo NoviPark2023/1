@@ -1,4 +1,0 @@
-2021-12-23 22:33:56,263 WARNING Unauthorized: /ponude/preuzmi-ugovor/1/
-2021-12-23 22:33:56,264 WARNING "GET /ponude/preuzmi-ugovor/1/ HTTP/1.1" 401 58
-2021-12-23 22:35:24,824 WARNING Not Found: /ponude/preuzmi-ugovor/1/
-2021-12-23 22:35:24,824 WARNING "GET /ponude/preuzmi-ugovor/1/ HTTP/1.1" 404 42
