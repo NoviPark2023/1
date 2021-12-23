@@ -28,20 +28,6 @@ class KreirajStanAPIView(generics.CreateAPIView):
     queryset = Stanovi.objects.all()
     serializer_class = StanoviSerializer
 
-    def post(self, request, *args, **kwargs):
-        """
-        Prilikom kreiranja Stana automatski update polja 'klijent_prodaje, sa
-        korisnikom koji je prijavljen.
-
-        :param request:
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        # TODO: ivana.tepavac implement [PS-64]
-        #  @hint *(Dobijanje prijavljenog korisnika iz requesta-)
-        print('test post funkcije prilikom CREATE stana')
-        return self.create(request, *args, **kwargs)
 
 
 class UrediStanViewAPI(generics.RetrieveUpdateAPIView):

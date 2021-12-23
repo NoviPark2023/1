@@ -33,6 +33,7 @@ class PonudeSerializer(serializers.ModelSerializer):
             'status_ponude',
             'nacin_placanja',
             'odobrenje',
+            "klijent_prodaje",
             'detalji_ponude_url',
             'izmeni_ponudu_url',
             'obrisi_ponudu_url',

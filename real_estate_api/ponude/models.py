@@ -4,6 +4,7 @@ from datetime import date
 from django.db import models
 from django.utils import timezone
 
+from real_estate_api.korisnici.models import Korisnici
 from real_estate_api.kupci.models import Kupci
 from real_estate_api.stanovi.models import Stanovi
 
@@ -40,6 +41,12 @@ class Ponude(models.Model):
                              on_delete=models.CASCADE,
                              db_column='id_stana',
                              related_name='lista_ponuda_stana')
+
+    '''
+        * null=True || zato sto kada se kreira stan ne znamo kom klijentu ce se dodeliti.
+        * models.SET_NULL || Jer kada se obrise iz sistema Klijent svi stanovi ostaju.
+       '''
+    klijent_prodaje = models.ForeignKey(Korisnici, null=True, blank=True, on_delete=models.SET_NULL)
 
     cena_stana_za_kupca = models.FloatField('Cena stana za kupca', default=0)
     napomena = models.CharField(max_length=252, default="", blank=True)
