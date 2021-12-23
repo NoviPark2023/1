@@ -57,28 +57,24 @@ class KreirajPonudeuAPIView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         """
         Prilikom kreiranja Stana automatski update polja 'klijent_prodaje, sa
-        korisnikom koji je prijavljen.
+        korisnikom koji je prijavljen. Prosledjuje se ka Izvestajima.
 
-        :param request:
-        :param args:
-        :param kwargs:
-        :return:
+        :param request: klijent_plrodaje
+        :return: Ponude request
         """
-        # TODO: ivana.tepavac implement [PS-64]
-        #  @hint *(Dobijanje prijavljenog korisnika iz requesta-)
-        print('test post funkcije prilikom CREATE stana')
+        request.data['klijent_prodaje'] = request.user.id
         return self.create(request, *args, **kwargs)
-
 
     def get_queryset(self):
         id_stana = self.kwargs['id_stana']
         return Ponude.objects.all().filter(stan=id_stana)
 
 
-
 class FileDownloadListAPIView(generics.ListAPIView):
+    """TODO: Uneti Komentar"""
 
     def get(self, request, *args, **kwargs):
+        """TODO: Uneti Komentar"""
         queryset = Ponude.objects.get(id_ponude__exact=kwargs['id_ponude'])
         file_handle = settings.MEDIA_ROOT + '/ugovor' + str(queryset.id_ponude) + '.docx'
         document = open(file_handle, 'rb')
@@ -86,13 +82,13 @@ class FileDownloadListAPIView(generics.ListAPIView):
         response['Content-Disposition'] = 'attachment; filename="%s"' % file_handle
         return response
 
+
 class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
     """Urednjivanje Ponude po ID-ju"""
     permission_classes = [IsAuthenticated, ]
     lookup_field = lookup_field
     queryset = Ponude.objects.all()
     serializer_class = PonudeSerializer
-
 
     def put(self, request, *args, **kwargs):
         print("REEEEEETREEEEEEEEVEEEEEEEE")
@@ -117,7 +113,7 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
             document.render(context)
             document.save(settings.MEDIA_ROOT + '/ugovor' + str(ponuda.id_ponude) + '.docx')
             stan.status_prodaje = 'rezervisan'
-            ponuda.odobrenje = True # Potrebno odobrenje jer je stan kaparisan (Rezervisan)
+            ponuda.odobrenje = True  # Potrebno odobrenje jer je stan kaparisan (Rezervisan)
 
         elif request.data['status_ponude'] == 'kupljen':
             # Kada Ponuda predje u status 'kupljen' automatski mapiraj polje 'prodat' u modelu Stana
