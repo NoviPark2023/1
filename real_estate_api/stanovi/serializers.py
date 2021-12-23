@@ -76,7 +76,6 @@ class StanoviSerializer(serializers.ModelSerializer):
             "cena_stana",
             "napomena",
             "status_prodaje",
-            "klijent_prodaje",
             'lista_ponuda_stana',
             'detalji_stana_url',
             'izmeni_stan_url',

@@ -54,6 +54,22 @@ class KreirajPonudeuAPIView(generics.CreateAPIView):
     queryset = Ponude.objects.all()
     serializer_class = PonudeSerializer
 
+    def post(self, request, *args, **kwargs):
+        """
+        Prilikom kreiranja Stana automatski update polja 'klijent_prodaje, sa
+        korisnikom koji je prijavljen.
+
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        # TODO: ivana.tepavac implement [PS-64]
+        #  @hint *(Dobijanje prijavljenog korisnika iz requesta-)
+        print('test post funkcije prilikom CREATE stana')
+        return self.create(request, *args, **kwargs)
+
+
     def get_queryset(self):
         id_stana = self.kwargs['id_stana']
         return Ponude.objects.all().filter(stan=id_stana)
@@ -76,6 +92,7 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
     lookup_field = lookup_field
     queryset = Ponude.objects.all()
     serializer_class = PonudeSerializer
+
 
     def put(self, request, *args, **kwargs):
         print("REEEEEETREEEEEEEEVEEEEEEEE")
