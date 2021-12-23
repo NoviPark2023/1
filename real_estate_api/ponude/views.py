@@ -2,6 +2,7 @@ from wsgiref.util import FileWrapper
 
 from django.http import HttpResponse
 from rest_framework import generics
+from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 
 from django.conf import settings
@@ -81,9 +82,13 @@ class FileDownloadListAPIView(generics.ListAPIView):
         """Preuzimanje ugovora"""
         queryset = Ponude.objects.get(id_ponude__exact=kwargs['id_ponude'])
         file_handle = settings.MEDIA_ROOT + '/ugovor' + str(queryset.id_ponude) + '.docx'
-        document = open(file_handle, 'rb')
-        response = HttpResponse(FileWrapper(document), content_type='application/msword')
-        response['Content-Disposition'] = 'attachment; filename="%s"' % file_handle
+        try:
+            document = open(file_handle, 'rb')
+            response = HttpResponse(FileWrapper(document), content_type='application/msword')
+            response['Content-Disposition'] = 'attachment; filename="%s"' % file_handle
+        except FileNotFoundError:
+            raise NotFound('Željeni ugovor nije nađen !', code=500)
+
         return response
 
 

@@ -31,7 +31,7 @@ wheels/
 *.manifest
 *.spec
 
-# Installer logs
+# Installer logovi
 pip-log.txt
 pip-delete-this-directory.txt
 
@@ -81,7 +81,7 @@ ENV/
 
 ### Node template
 # Logs
-logs
+media/logovi
 *.log
 npm-debug.log*
 yarn-debug.log*

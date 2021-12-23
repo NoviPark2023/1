@@ -334,7 +334,7 @@ LOGGING = {
         'file': {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
-            'filename': MEDIA_ROOT + '/logs/logs.log',
+            'filename': MEDIA_ROOT + '/logovi/logovi.txt',
             'formatter': 'timestamp'
         },
         'console': {
