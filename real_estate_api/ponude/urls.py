@@ -4,7 +4,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from .views import (
     ListaPonudaAPIView,
     ListaPonudaZaStanAPIView,
-    KreirajPonudeuAPIView,
+    KreirajPonuduAPIView,
     ObrisiPonuduAPIView,
     PonudeDetaljiAPIView,
     UrediPonuduViewAPI, FileDownloadListAPIView,
@@ -25,7 +25,8 @@ urlpatterns = [
     # Obrisi Ponudu
     path('obrisi-ponudu/<int:id_ponude>/', ObrisiPonuduAPIView.as_view(), name='obrisi_ponudu'),
     # Kreiraj Ponudu
-    path('kreiraj-ponudu/', KreirajPonudeuAPIView.as_view(), name='kreiraj_ponudu'),
-    path('download/<int:id_ponude>/', FileDownloadListAPIView.as_view())
+    path('kreiraj-ponudu/', KreirajPonuduAPIView.as_view(), name='kreiraj_ponudu'),
+    # Preuzimanje generisanog ugovora
+    path('preuzmi-ugovor/<int:id_ponude>/', FileDownloadListAPIView.as_view())
 
 ]

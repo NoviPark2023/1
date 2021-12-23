@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from .views import Ponude
+from .views import *
 
 
 class PonudeSerializer(serializers.ModelSerializer):
@@ -62,3 +62,6 @@ class PonudeSerializer(serializers.ModelSerializer):
         return reverse('ponude:lista_ponuda')
 
 
+class FileDownloadListAPI(generics.GenericAPIView):
+    """Swagger complain if not register this empty serializers"""
+    pass

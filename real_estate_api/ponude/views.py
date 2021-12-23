@@ -1,16 +1,13 @@
 from wsgiref.util import FileWrapper
 
 from django.http import HttpResponse
-from rest_framework import generics, mixins, response
-from rest_framework.pagination import PageNumberPagination
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 from django.conf import settings
 from .models import Ponude
 from .serializers import PonudeSerializer
-from ..stanovi.models import Stanovi
-
-from docxtpl import DocxTemplate
+from .ugovor.ugovori import CreateContract
 
 lookup_field = 'id_ponude'
 lookup_field_stan = 'id_stana'
@@ -47,7 +44,7 @@ class PonudeDetaljiAPIView(generics.RetrieveAPIView):
     serializer_class = PonudeSerializer
 
 
-class KreirajPonudeuAPIView(generics.CreateAPIView):
+class KreirajPonuduAPIView(generics.CreateAPIView):
     """Kreiranje nove Ponude"""
     permission_classes = [IsAuthenticated, ]
     lookup_field_stan = lookup_field_stan
@@ -56,13 +53,17 @@ class KreirajPonudeuAPIView(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         """
-        Prilikom kreiranja Stana automatski update polja 'klijent_prodaje, sa
-        korisnikom koji je prijavljen. Prosledjuje se ka Izvestajima.
-
+        * Prilikom kreiranja Stana automatski update polja 'klijent_prodaje, sa
+          korisnikom koji je prijavljen. Prosledjuje se ka Izvestajima.
+        * Kreiranje Ugovora ukoliko je inicijalno ponuda na statusu 'rezervisan'.
         :param request: klijent_plrodaje
         :return: Ponude request
         """
+        CreateContract.create_contract(request, **kwargs)  # Kreiraj ugovor.
+
+        # Set Klijenta prodaje stana u ponudu, potrebno kasnije za izvestaje.
         request.data['klijent_prodaje'] = request.user.id
+
         return self.create(request, *args, **kwargs)
 
     def get_queryset(self):
@@ -71,10 +72,13 @@ class KreirajPonudeuAPIView(generics.CreateAPIView):
 
 
 class FileDownloadListAPIView(generics.ListAPIView):
-    """TODO: Uneti Komentar"""
+    """
+    API View za preuzimanje generisanog ugovora.
+    """
+    serializer_class = PonudeSerializer
 
     def get(self, request, *args, **kwargs):
-        """TODO: Uneti Komentar"""
+        """Preuzimanje ugovora"""
         queryset = Ponude.objects.get(id_ponude__exact=kwargs['id_ponude'])
         file_handle = settings.MEDIA_ROOT + '/ugovor' + str(queryset.id_ponude) + '.docx'
         document = open(file_handle, 'rb')
@@ -85,69 +89,23 @@ class FileDownloadListAPIView(generics.ListAPIView):
 
 class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
     """Urednjivanje Ponude po ID-ju"""
+
     permission_classes = [IsAuthenticated, ]
     lookup_field = lookup_field
     queryset = Ponude.objects.all()
     serializer_class = PonudeSerializer
 
     def put(self, request, *args, **kwargs):
-        print("REEEEEETREEEEEEEEVEEEEEEEE")
-
-        stan = Stanovi.objects.get(id_stana__exact=request.data['stan'])
-        ponuda = Ponude.objects.get(id_ponude__exact=kwargs['id_ponude'])
-        ponuda_status = request.data['status_ponude']
-        print(ponuda_status)
-        if request.data['status_ponude'] == 'rezervisan':
-            template = 'real_estate_api/static/ugovor/ugovor_tmpl.docx'
-            print("TRUEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
-            document = DocxTemplate(template)
-            context = {
-                'id_stana': stan.id_stana,
-                'datum_ugovora': ponuda.datum_ugovora,
-                'broj_ugovora': ponuda.broj_ugovora,
-                # 'kupac': ponuda.kupac,
-                # 'kupac_adresa': ponuda.,
-                # 'cena_stana': ponuda.cena_stana,
-                # 'nacin_placanja': nacin_placanja
-            }
-            document.render(context)
-            document.save(settings.MEDIA_ROOT + '/ugovor' + str(ponuda.id_ponude) + '.docx')
-            stan.status_prodaje = 'rezervisan'
-            ponuda.odobrenje = True  # Potrebno odobrenje jer je stan kaparisan (Rezervisan)
-
-        elif request.data['status_ponude'] == 'kupljen':
-            # Kada Ponuda predje u status 'kupljen' automatski mapiraj polje 'prodat' u modelu Stana
-            stan.status_prodaje = 'prodat'
-        else:
-            # Kada Ponuda predje u status 'potencijalan' automatski mapiraj polje 'dostupan' u modelu Stana
-            stan.status_prodaje = 'dostupan'
-            # Stan je presao u status 'Dostupa'...nije potrebno odobrenje
-            ponuda.odobrenje = False
-
-        stan.save()
-        ponuda.save()
+        """
+        * U trenutku setovanja statusa ponuda na 'Rezervisan', Stan se smatra kaparisan.
+        * Takodje se setuje status Stana na 'rezervisan', @see(stan.status_prodaje = 'rezervisan')
+        * :see: CreateContract
+        :param request: Ponude
+        :return:
+        """
+        CreateContract.create_contract(request, **kwargs)  # Kreiraj ugovor
 
         return self.partial_update(request, *args, **kwargs)
-
-    # def put(self, request, *args, **kwargs):
-    #     """
-    #     Ukoliko se cena Stana razlikuje od cene Stana u Ponudi, automatski se polje
-    #     modela u Ponudama setuje na True ili False.
-    #
-    #     * True = Kada se cena razlikuje
-    #     * False = Kada je cena ista
-    #
-    #     :param request: Ceo Objekat Ponue u responsu
-    #     :param kwargs: Vraca ID Ponude
-    #     :return: partial_update
-    #     """
-    #
-    #     return self.partial_update(request, *args, **kwargs)
-    #
-    #
-    # @staticmethod
-    # def get_success_url():
-    #     print('get_success_url')
 
 
 class ObrisiPonuduAPIView(generics.RetrieveDestroyAPIView):
