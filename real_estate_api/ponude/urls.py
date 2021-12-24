@@ -1,5 +1,4 @@
 from django.urls import path
-from rest_framework.authtoken.views import obtain_auth_token
 
 from .views import (
     ListaPonudaAPIView,
@@ -7,7 +6,9 @@ from .views import (
     KreirajPonuduAPIView,
     ObrisiPonuduAPIView,
     PonudeDetaljiAPIView,
-    UrediPonuduViewAPI, FileDownloadListAPIView,
+    UrediPonuduViewAPI,
+    UgovorPonudeDownloadListAPIView,
+    PonudaReportAPIView,
 
 )
 
@@ -26,7 +27,9 @@ urlpatterns = [
     path('obrisi-ponudu/<int:id_ponude>/', ObrisiPonuduAPIView.as_view(), name='obrisi_ponudu'),
     # Kreiraj Ponudu
     path('kreiraj-ponudu/', KreirajPonuduAPIView.as_view(), name='kreiraj_ponudu'),
-    # Preuzimanje generisanog ugovora
-    path('preuzmi-ugovor/<int:id_ponude>/', FileDownloadListAPIView.as_view())
+    # Preuzimanje generisanog ugovora Ponude
+    path('preuzmi-ugovor/<int:id_ponude>/', UgovorPonudeDownloadListAPIView.as_view()),
+    # Ponude Reports
+    path('ponude-reports/', PonudaReportAPIView.as_view())
 
 ]

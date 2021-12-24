@@ -1,13 +1,17 @@
 from wsgiref.util import FileWrapper
 
+from django.db.models import Sum, Count
 from django.http import HttpResponse
 from rest_framework import generics
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 
 from django.conf import settings
+from rest_framework.views import APIView
+
 from .models import Ponude
-from .serializers import PonudeSerializer
+from .reports_ponude.reports_ponude import ponude_report
+from .serializers import PonudeSerializer, FileDownloadListAPI, PonudeReportsListAPI
 from .ugovor.ugovori import CreateContract
 
 lookup_field = 'id_ponude'
@@ -60,7 +64,8 @@ class KreirajPonuduAPIView(generics.CreateAPIView):
         :param request: klijent_plrodaje
         :return: Ponude request
         """
-        CreateContract.create_contract(request, **kwargs)  # Kreiraj ugovor.
+        if request.data['status_ponude'] == 'rezervisan':
+            CreateContract.create_contract(request, **kwargs)  # Kreiraj ugovor.
 
         # Set Klijenta prodaje stana u ponudu, potrebno kasnije za izvestaje.
         request.data['klijent_prodaje'] = request.user.id
@@ -72,7 +77,7 @@ class KreirajPonuduAPIView(generics.CreateAPIView):
         return Ponude.objects.all().filter(stan=id_stana)
 
 
-class FileDownloadListAPIView(generics.ListAPIView):
+class UgovorPonudeDownloadListAPIView(generics.ListAPIView):
     """
     API View za preuzimanje generisanog ugovora.
     """
@@ -124,3 +129,12 @@ class ObrisiPonuduAPIView(generics.RetrieveDestroyAPIView):
     lookup_field = lookup_field
     queryset = Ponude.objects.all()
     serializer_class = PonudeSerializer
+
+
+class PonudaReportAPIView(generics.ListAPIView):
+    """Lista svih Ponuda"""
+    permission_classes = [IsAuthenticated, ]
+    queryset = ponude_report()
+    serializer_class = PonudeReportsListAPI
+
+

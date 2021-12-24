@@ -8,15 +8,15 @@ class PonudeSerializer(serializers.ModelSerializer):
     """
     Ponude sa redukovanim poljima koje poseduje za prikaz u tabeli i u slucaju responiva u frontendu.
     """
-    datum_ugovora=serializers.DateField(format="%d.%m.%Y",input_formats=['%d.%m.%Y',])
+    datum_ugovora = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y', ])
     detalji_ponude_url = serializers.SerializerMethodField()
     izmeni_ponudu_url = serializers.SerializerMethodField()
     obrisi_ponudu_url = serializers.SerializerMethodField()
     kreiraj_ponudu_url = serializers.SerializerMethodField()
     lista_ponuda_url = serializers.SerializerMethodField()
 
-    adresa_stana = serializers.ReadOnlyField() # Get field 'Adresa Stana' from 'Ponuda' model
-    cena_stana = serializers.ReadOnlyField() # Get field 'Cena Stana' from 'Ponuda' model
+    adresa_stana = serializers.ReadOnlyField()  # Get field 'Adresa Stana' from 'Ponuda' model
+    cena_stana = serializers.ReadOnlyField()  # Get field 'Cena Stana' from 'Ponuda' model
 
     class Meta:
         model = Ponude
@@ -65,3 +65,15 @@ class PonudeSerializer(serializers.ModelSerializer):
 class FileDownloadListAPI(generics.GenericAPIView):
     """Swagger complain if not register this empty serializers"""
     pass
+
+
+class PonudeReportsListAPI(serializers.ModelSerializer):
+    """TODO: Koment this serializers"""
+
+    class Meta:
+        model = Ponude
+        fields = (
+            'id_ponude',
+            'cena_stana',
+            'cena_stana_za_kupca',
+        )
