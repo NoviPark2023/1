@@ -104,11 +104,15 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
     def put(self, request, *args, **kwargs):
         """
         * U trenutku setovanja statusa ponuda na 'Rezervisan', Stan se smatra kaparisan.
-        * Takodje se setuje status Stana na 'rezervisan', @see(stan.status_prodaje = 'rezervisan')
+        * Takodje se setuje status Stana na 'rezervisan', @see(CreateContract)
         * :see: CreateContract
         :param request: Ponude
-        :return:
+        :return: partial_update
         """
+
+        # Set Klijenta prodaje stana u ponudu, potrebno kasnije za izvestaje.
+        request.data['klijent_prodaje'] = request.user.id
+
         CreateContract.create_contract(request, **kwargs)  # Kreiraj ugovor
 
         return self.partial_update(request, *args, **kwargs)
