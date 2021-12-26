@@ -1,7 +1,5 @@
 from django.db import models
 
-from real_estate_api.korisnici.models import Korisnici
-
 
 class Stanovi(models.Model):
     class OrijentacijaStana(models.TextChoices):

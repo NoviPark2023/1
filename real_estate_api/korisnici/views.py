@@ -1,7 +1,6 @@
 from django.contrib.auth.hashers import make_password
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.settings import api_settings
 from .models import Korisnici

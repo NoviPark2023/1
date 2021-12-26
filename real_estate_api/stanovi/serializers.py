@@ -14,12 +14,14 @@ class ListaPonudaStanaSerializer(serializers.ModelSerializer):
     datum_ugovora = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y', ])
     adresa_stana = serializers.ReadOnlyField()  # Get field 'Adresa Stana' from 'Ponuda' model
     cena_stana = serializers.ReadOnlyField()  # Get field 'Cena Stana' from 'Ponuda' model
+
     class Meta:
         model = Ponude
         fields = (
             "id_ponude",
             "stan_id",
             "kupac",
+            "ime_kupca",
             'adresa_stana',
             'cena_stana',
             "cena_stana_za_kupca",
@@ -35,9 +37,9 @@ class ListaPonudaStanaSerializer(serializers.ModelSerializer):
 
     def get_detalji_kupca_url(self, obj):
         """Prosledi u API putanju do detalja kupca stana"""
-        return reverse("kupci:detalji_kupca", args=[obj.pk])
+        return reverse("kupci:detalji_kupca", args=[obj.kupac.id_kupca])
 
-    def get_detalji_ponude_url(self, obj, *args, **kwargs):
+    def get_detalji_ponude_url(self, obj):
         """Prosledi u API putanju do detalja ponude"""
         return reverse("ponude:detalji_ponude", args=[obj.id_ponude])
 

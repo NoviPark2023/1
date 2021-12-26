@@ -1,5 +1,5 @@
 from django.db.models import Count
-from rest_framework import generics, views, serializers
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 from real_estate_api.korisnici.models import Korisnici
@@ -15,7 +15,6 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated, ]
     serializer_class = ReportsSerializer
     pagination_class = None
-
 
     def get(self, request, *args, **kwargs):
         """
@@ -84,11 +83,11 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
         }
 
         agregacioni_api = stanovi_ukupan_broj | \
-             ukuno_stanovi_rezervisan | \
-             ukuno_stanovi_dostupan | \
-             ukuno_stanovi_prodat | \
-             stanovi_agregirano_procenti |\
-             prodaja_po_mesecima
+                          ukuno_stanovi_rezervisan | \
+                          ukuno_stanovi_dostupan | \
+                          ukuno_stanovi_prodat | \
+                          stanovi_agregirano_procenti | \
+                          prodaja_po_mesecima
         return Response(agregacioni_api)
 
 
@@ -98,5 +97,3 @@ class ReportsProdajaStanovaPoKorisnikuAPIView(generics.ListAPIView):
     queryset = Korisnici.objects.all()
     serializer_class = ProdajaStanovaPoKorisnikuSerializer
     pagination_class = None
-
-

@@ -65,6 +65,11 @@ class Ponude(models.Model):
     odobrenje = models.BooleanField(default=False)
 
     @property
+    def ime_kupca(self):
+        """Return field 'ime_kupca' for Ponuda serializers and in front form table"""
+        return self.kupac.ime_prezime
+
+    @property
     def adresa_stana(self):
         """Return field 'adresa_stana' for Ponuda serializers"""
         return self.stan.adresa_stana

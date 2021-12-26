@@ -29,7 +29,6 @@ class KreirajStanAPIView(generics.CreateAPIView):
     serializer_class = StanoviSerializer
 
 
-
 class UrediStanViewAPI(generics.RetrieveUpdateAPIView):
     """EDIT Stana poi polju 'id_stana '"""
     permission_classes = [IsAuthenticated, ]

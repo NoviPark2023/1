@@ -276,7 +276,6 @@ REST_FRAMEWORK = {
 
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 
-# TODO: DEKOMENTARISI OVO KADA ZAVRSIS SA REPORTOM
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',

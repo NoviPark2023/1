@@ -29,9 +29,6 @@ class Kupci(models.Model):
     def get_id_kupca(self) -> object:
         return self.id_kupca + ' id_kupca ' + self.id_kupca + ' id_kupca.'
 
-    def __repr__(self):
-        return self.ime_prezime + ' je dodat.'
-
     def __str__(self):
         return f"{self.ime_prezime}"
 

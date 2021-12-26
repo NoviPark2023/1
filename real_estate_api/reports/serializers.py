@@ -6,19 +6,28 @@ from real_estate_api.stanovi.models import Stanovi
 
 
 class ReportsSerializer(serializers.ModelSerializer):
-    # total = serializers.DecimalField(max_digits=15, decimal_places=2)
-    # count = serializers.IntegerField()
-    # avg = serializers.DecimalField(max_digits=15, decimal_places=2)
+    ukupno_stanova = serializers.IntegerField()
+    rezervisano = serializers.IntegerField()
+    dostupan = serializers.IntegerField()
+    prodat = serializers.IntegerField()
+    procenat_rezervisan = serializers.DecimalField(max_digits=15, decimal_places=2)
+    procenat_dostupan = serializers.DecimalField(max_digits=15, decimal_places=2)
+    procenat_prodat = serializers.DecimalField(max_digits=15, decimal_places=2)
 
     class Meta:
         model = Stanovi
         fields = (
-            "id_stana",
+            "ukupno_stanova",
+            "rezervisano",
+            "dostupan",
+            "prodat",
+            "procenat_rezervisan",
+            "procenat_dostupan",
+            "procenat_prodat",
         )
 
 
 class ProdajaStanovaPoKorisnikuSerializer(serializers.ModelSerializer):
-
     prodati_stanovi = serializers.SerializerMethodField()
 
     class Meta:
@@ -34,10 +43,8 @@ class ProdajaStanovaPoKorisnikuSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_prodati_stanovi(obj):
-        prodati_stanovi_klijenta = Ponude.objects.select_related('klijent_prodaje').filter(klijent_prodaje_id=obj.id).filter(
+        prodati_stanovi_klijenta = Ponude.objects.select_related('klijent_prodaje').filter(
+            klijent_prodaje_id=obj.id).filter(
             status_ponude="kupljen").count()
 
         return prodati_stanovi_klijenta
-
-
-

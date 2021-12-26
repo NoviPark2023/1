@@ -1,6 +1,5 @@
 from django.db.models import QuerySet
 from rest_framework import generics
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 
 from .models import Kupci
@@ -71,7 +70,7 @@ class ListaPonudaKupcaAPIView(generics.RetrieveAPIView):
     lookup_field = lookup_field
     queryset = Kupci.objects.all().order_by('id_kupca')
     serializer_class = ListaPonudaKupcaSerializer
-    
+
     def get_queryset(self):
         id_kupca = self.kwargs['id_kupca']
         return Ponude.objects.all().filter(kupac=id_kupca)
