@@ -65,15 +65,3 @@ class PonudeSerializer(serializers.ModelSerializer):
 class FileDownloadListAPI(generics.GenericAPIView):
     """Swagger complain if not register this empty serializers"""
     pass
-
-
-class PonudeReportsListAPI(serializers.ModelSerializer):
-    """TODO: Koment this serializers"""
-
-    class Meta:
-        model = Ponude
-        fields = (
-            'id_ponude',
-            'cena_stana',
-            'cena_stana_za_kupca',
-        )

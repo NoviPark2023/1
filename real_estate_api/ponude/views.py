@@ -1,17 +1,15 @@
 from wsgiref.util import FileWrapper
 
-from django.db.models import Sum, Count
-from django.http import HttpResponse
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse, Http404
 from rest_framework import generics
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 
 from django.conf import settings
-from rest_framework.views import APIView
 
 from .models import Ponude
-from .reports_ponude.reports_ponude import ponude_report
-from .serializers import PonudeSerializer, FileDownloadListAPI, PonudeReportsListAPI
+from .serializers import PonudeSerializer
 from .ugovor.ugovori import CreateContract
 
 lookup_field = 'id_ponude'
@@ -81,6 +79,8 @@ class UgovorPonudeDownloadListAPIView(generics.ListAPIView):
     """
     API View za preuzimanje generisanog ugovora.
     """
+    permission_classes = [IsAuthenticated, ]
+
     serializer_class = PonudeSerializer
 
     def get(self, request, *args, **kwargs):
@@ -92,8 +92,8 @@ class UgovorPonudeDownloadListAPIView(generics.ListAPIView):
             document = open(file_handle, 'rb')
             response = HttpResponse(FileWrapper(document), content_type='application/msword')
             response['Content-Disposition'] = 'attachment; filename=Ugovor-Ponude-' + str(kwargs['id_ponude']) + '.docx'
-        except FileNotFoundError:
-            raise NotFound('Željeni ugovor nije nađen !', code=500)
+        except (FileNotFoundError, Ponude.DoesNotExist):
+            raise NotFound('Željeni ugovor nije nađen !', code=404)
 
         return response
 
@@ -129,12 +129,3 @@ class ObrisiPonuduAPIView(generics.RetrieveDestroyAPIView):
     lookup_field = lookup_field
     queryset = Ponude.objects.all()
     serializer_class = PonudeSerializer
-
-
-class PonudaReportAPIView(generics.ListAPIView):
-    """Lista svih Ponuda"""
-    permission_classes = [IsAuthenticated, ]
-    queryset = ponude_report()
-    serializer_class = PonudeReportsListAPI
-
-

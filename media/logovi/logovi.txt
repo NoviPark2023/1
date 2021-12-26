@@ -1,0 +1,20 @@
+2021-12-26 16:29:26,163 WARNING Unauthorized: /reports/test/
+2021-12-26 16:29:26,163 WARNING "GET /reports/test/ HTTP/1.1" 401 58
+2021-12-26 16:30:00,301 WARNING Unauthorized: /stanovi/
+2021-12-26 16:30:00,302 WARNING "GET /stanovi/ HTTP/1.1" 401 183
+2021-12-26 16:30:01,632 WARNING Unauthorized: /kupci/
+2021-12-26 16:30:01,633 WARNING "GET /kupci/ HTTP/1.1" 401 183
+2021-12-26 16:30:02,253 WARNING Unauthorized: /korisnici/
+2021-12-26 16:30:02,254 WARNING "GET /korisnici/ HTTP/1.1" 401 183
+2021-12-26 16:34:24,921 WARNING Session data corrupted
+2021-12-26 16:34:25,120 WARNING Session data corrupted
+2021-12-26 16:34:26,901 WARNING Session data corrupted
+2021-12-26 16:34:27,908 WARNING Session data corrupted
+2021-12-26 16:34:57,409 WARNING Session data corrupted
+2021-12-26 16:34:58,693 WARNING Session data corrupted
+2021-12-26 16:37:04,248 WARNING Unauthorized: /stanovi/
+2021-12-26 16:37:04,249 WARNING "GET /stanovi/ HTTP/1.1" 401 183
+2021-12-26 16:37:05,101 WARNING Unauthorized: /kupci/
+2021-12-26 16:37:05,102 WARNING "GET /kupci/ HTTP/1.1" 401 183
+2021-12-26 16:37:05,619 WARNING Unauthorized: /korisnici/
+2021-12-26 16:37:05,620 WARNING "GET /korisnici/ HTTP/1.1" 401 183

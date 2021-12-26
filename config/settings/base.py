@@ -3,8 +3,6 @@ from django.conf import settings
 from django.core.management.utils import get_random_secret_key
 from datetime import timedelta
 import os
-import sys
-import dj_database_url
 
 # region GENERAL
 # ------------------------------------------------------------------------------
@@ -48,6 +46,7 @@ LOCAL_APPS = [
     'real_estate_api.korisnici.apps.KorisniciConfig',
     'real_estate_api.stanovi.apps.StanoviConfig',
     'real_estate_api.ponude.apps.PonudeConfig',
+    'real_estate_api.reports.apps.ReportsConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -246,6 +245,7 @@ USE_L10N = True
 USE_TZ = True
 
 THOUSAND_SEPARATOR = True
+USE_THOUSAND_SEPARATOR = True
 # endregion
 
 # region STATIC
@@ -276,6 +276,7 @@ REST_FRAMEWORK = {
 
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 
+# TODO: DEKOMENTARISI OVO KADA ZAVRSIS SA REPORTOM
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',

@@ -71,8 +71,6 @@ class Korisnici(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['ime', 'email', 'prezime']
 
-    def __repr__(self):
-        return self.ime + 'ime' + self.prezime + 'prezime' + 'je dodat.'
 
     def __str__(self):
         return f"{self.username} {self.ime} {self.prezime}"

@@ -40,12 +40,19 @@ urlpatterns = [
 
     # Root Putanja do Kupaca
     path('kupci/', include('real_estate_api.kupci.urls', namespace='kupci')),
+
     # Root Putanja do Korisnika
     path('korisnici/', include('real_estate_api.korisnici.urls', namespace='korisnici')),
+
     # Root Putanja do Stanova
     path('stanovi/', include('real_estate_api.stanovi.urls', namespace='stanovi')),
+
     # Root Putanja do Ponuda
     path('ponude/', include('real_estate_api.ponude.urls', namespace='ponude')),
+
+    # Root Putanja do Reports
+    path('reports/', include('real_estate_api.reports.urls', namespace='reports')),
+
     # Root Putanja do Dokumentacije
     url(r'^docs/$', schema_view.with_ui('swagger', cache_timeout=0), name='docs'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='docs-redoc'),
