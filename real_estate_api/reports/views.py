@@ -27,6 +27,7 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
             * STANOVA PO STATUSU PRODAJE
             * STANOVA PO STATUSU PRODAJE %
             * PRODAJA STANOVA PO MESECIMA
+            * BROJ PONUDA PO MESECIMA
 
         :param request: None
         :param args: None
@@ -92,13 +93,49 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
             ],
         }
 
+        # ############################
+        # BROJ PONUDA PO MESECIMA
+        # ############################
+        january = Ponude.objects.filter(datum_ugovora__month=1).count()
+        february = Ponude.objects.filter(datum_ugovora__month=2).count()
+        march = Ponude.objects.filter(datum_ugovora__month=3).count()
+        april = Ponude.objects.filter(datum_ugovora__month=4).count()
+        may = Ponude.objects.filter(datum_ugovora__month=5).count()
+        june = Ponude.objects.filter(datum_ugovora__month=6).count()
+        july = Ponude.objects.filter(datum_ugovora__month=7).count()
+        august = Ponude.objects.filter(datum_ugovora__month=8).count()
+        september = Ponude.objects.filter(datum_ugovora__month=9).count()
+        october = Ponude.objects.filter(datum_ugovora__month=10).count()
+        november = Ponude.objects.filter(datum_ugovora__month=11).count()
+        december = Ponude.objects.filter(datum_ugovora__month=12).count()
+
+        broj_ponuda_po_mesecima = {'broj_ponuda_po_mesecima':
+            [
+                {
+                    'jan': january,
+                    'feb': february,
+                    'mart': march,
+                    'apr': april,
+                    'maj': may,
+                    'jun': june,
+                    'jul': july,
+                    'avg': august,
+                    'sep': september,
+                    'okt': october,
+                    'nov': november,
+                    'dec': december,
+                }
+            ],
+        }
+
         agregacioni_api = (
             stanovi_ukupan_broj |
             ukuno_stanovi_rezervisan |
             ukuno_stanovi_dostupan |
             ukuno_stanovi_prodat |
             stanovi_agregirano_procenti |
-            prodaja_po_mesecima
+            prodaja_po_mesecima |
+            broj_ponuda_po_mesecima
         )
         return Response(agregacioni_api)
 
