@@ -1,0 +1,276 @@
+2021-12-27 13:47:20,349 ERROR Internal Server Error: /docs/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/views.py", line 94, in get
+    schema = generator.get_schema(request, self.public)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/generators.py", line 246, in get_schema
+    paths, prefix = self.get_paths(endpoints, components, request, public)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/generators.py", line 404, in get_paths
+    operation = self.get_operation(view, path, prefix, method, components, request)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/generators.py", line 446, in get_operation
+    operation = view_inspector.get_operation(operation_keys)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/view.py", line 45, in get_operation
+    responses = self.get_responses()
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/view.py", line 180, in get_responses
+    response_serializers = self.get_response_serializers()
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/view.py", line 235, in get_response_serializers
+    responses = self.get_default_responses()
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/view.py", line 211, in get_default_responses
+    default_schema = self.serializer_to_schema(default_schema) or ''
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/base.py", line 437, in serializer_to_schema
+    return self.probe_inspectors(
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/base.py", line 110, in probe_inspectors
+    result = method(obj, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/field.py", line 33, in get_schema
+    return self.probe_field_inspectors(serializer, openapi.Schema, self.use_definitions)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/base.py", line 228, in probe_field_inspectors
+    return self.probe_inspectors(
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/base.py", line 110, in probe_inspectors
+    result = method(obj, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/field.py", line 124, in field_to_swagger_object
+    actual_schema = definitions.setdefault(ref_name, make_schema_definition)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/openapi.py", line 688, in setdefault
+    ret = maker()
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/field.py", line 93, in make_schema_definition
+    for property_name, child in serializer.fields.items():
+  File "/usr/local/lib/python3.9/site-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 349, in fields
+    for key, value in self.get_fields().items():
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 1029, in get_fields
+    field_names = self.get_field_names(declared_fields, info)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 1125, in get_field_names
+    assert field_name in fields, (
+AssertionError: The field 'prodati_stanovi_korisnici' was declared on serializer ProdajaStanovaPoKorisnikuSerializer, but has not been included in the 'fields' option.
+2021-12-27 13:47:20,356 ERROR "GET /docs/?format=openapi HTTP/1.1" 500 222528
+2021-12-27 13:48:07,012 WARNING Session data corrupted
+2021-12-27 13:48:08,206 WARNING Session data corrupted
+2021-12-27 13:55:33,433 WARNING Session data corrupted
+2021-12-27 13:55:34,968 WARNING Session data corrupted
+2021-12-27 13:55:43,561 ERROR Internal Server Error: /reports/kupci/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/generics.py", line 199, in get
+    return self.list(request, *args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/mixins.py", line 46, in list
+    return Response(serializer.data)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 745, in data
+    ret = super().data
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 246, in data
+    self._data = self.to_representation(self.instance)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 663, in to_representation
+    return [
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 664, in <listcomp>
+    self.child.to_representation(item) for item in iterable
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 515, in to_representation
+    ret[field.field_name] = field.to_representation(attribute)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/fields.py", line 1882, in to_representation
+    return method(value)
+  File "/opt/project/real_estate_api/reports/serializers.py", line 51, in get_prodati_stanovi_korisnici
+    klijent_prodaje_id=obj.id).filter(
+AttributeError: 'Kupci' object has no attribute 'id'
+2021-12-27 13:55:43,571 ERROR "GET /reports/kupci/ HTTP/1.1" 500 20264
+2021-12-27 13:57:08,100 ERROR Internal Server Error: /reports/kupci/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/generics.py", line 199, in get
+    return self.list(request, *args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/mixins.py", line 46, in list
+    return Response(serializer.data)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 745, in data
+    ret = super().data
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 246, in data
+    self._data = self.to_representation(self.instance)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 663, in to_representation
+    return [
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 664, in <listcomp>
+    self.child.to_representation(item) for item in iterable
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 515, in to_representation
+    ret[field.field_name] = field.to_representation(attribute)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/fields.py", line 1882, in to_representation
+    return method(value)
+  File "/opt/project/real_estate_api/reports/serializers.py", line 74, in get_prodati_stanovi_klijenti
+    prodati_stanovi_klijenti = Ponude.objects.select_related('kupac').filter(kupac__id_kupca=obj.id).filter(
+AttributeError: 'Kupci' object has no attribute 'id'
+2021-12-27 13:57:08,110 ERROR "GET /reports/kupci/ HTTP/1.1" 500 20333
+2021-12-27 13:57:40,832 WARNING Session data corrupted
+2021-12-27 13:57:41,928 WARNING Session data corrupted
+2021-12-27 14:00:20,829 WARNING Unauthorized: /stanovi/
+2021-12-27 14:00:20,830 WARNING "GET /stanovi/ HTTP/1.1" 401 183
+2021-12-27 14:00:50,552 WARNING Bad Request: /kupci/kreiraj-kupca/
+2021-12-27 14:00:50,553 WARNING "POST /kupci/kreiraj-kupca/ HTTP/1.1" 400 40
+2021-12-27 14:00:54,232 WARNING Bad Request: /kupci/kreiraj-kupca/
+2021-12-27 14:00:54,233 WARNING "POST /kupci/kreiraj-kupca/ HTTP/1.1" 400 40
+2021-12-27 14:01:07,462 WARNING Bad Request: /kupci/kreiraj-kupca/
+2021-12-27 14:01:07,464 WARNING "POST /kupci/kreiraj-kupca/ HTTP/1.1" 400 40
+2021-12-27 14:02:59,869 WARNING Session data corrupted
+2021-12-27 14:03:01,261 WARNING Session data corrupted
+2021-12-27 14:03:02,620 ERROR Internal Server Error: /docs/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/views.py", line 94, in get
+    schema = generator.get_schema(request, self.public)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/generators.py", line 246, in get_schema
+    paths, prefix = self.get_paths(endpoints, components, request, public)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/generators.py", line 404, in get_paths
+    operation = self.get_operation(view, path, prefix, method, components, request)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/generators.py", line 446, in get_operation
+    operation = view_inspector.get_operation(operation_keys)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/view.py", line 45, in get_operation
+    responses = self.get_responses()
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/view.py", line 180, in get_responses
+    response_serializers = self.get_response_serializers()
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/view.py", line 235, in get_response_serializers
+    responses = self.get_default_responses()
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/view.py", line 211, in get_default_responses
+    default_schema = self.serializer_to_schema(default_schema) or ''
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/base.py", line 437, in serializer_to_schema
+    return self.probe_inspectors(
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/base.py", line 110, in probe_inspectors
+    result = method(obj, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/field.py", line 33, in get_schema
+    return self.probe_field_inspectors(serializer, openapi.Schema, self.use_definitions)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/base.py", line 228, in probe_field_inspectors
+    return self.probe_inspectors(
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/base.py", line 110, in probe_inspectors
+    result = method(obj, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/field.py", line 124, in field_to_swagger_object
+    actual_schema = definitions.setdefault(ref_name, make_schema_definition)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/openapi.py", line 688, in setdefault
+    ret = maker()
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/field.py", line 93, in make_schema_definition
+    for property_name, child in serializer.fields.items():
+  File "/usr/local/lib/python3.9/site-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 349, in fields
+    for key, value in self.get_fields().items():
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 1029, in get_fields
+    field_names = self.get_field_names(declared_fields, info)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 1125, in get_field_names
+    assert field_name in fields, (
+AssertionError: The field 'rezervisani_stanovi_klijenti' was declared on serializer ProdajaStanovaPoKlijentuSerializer, but has not been included in the 'fields' option.
+2021-12-27 14:03:02,623 ERROR "GET /docs/?format=openapi HTTP/1.1" 500 218130
+2021-12-27 14:04:06,806 WARNING Session data corrupted
+2021-12-27 14:04:08,046 WARNING Session data corrupted
+2021-12-27 14:04:09,484 ERROR Internal Server Error: /docs/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/views.py", line 94, in get
+    schema = generator.get_schema(request, self.public)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/generators.py", line 246, in get_schema
+    paths, prefix = self.get_paths(endpoints, components, request, public)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/generators.py", line 404, in get_paths
+    operation = self.get_operation(view, path, prefix, method, components, request)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/generators.py", line 446, in get_operation
+    operation = view_inspector.get_operation(operation_keys)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/view.py", line 45, in get_operation
+    responses = self.get_responses()
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/view.py", line 180, in get_responses
+    response_serializers = self.get_response_serializers()
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/view.py", line 235, in get_response_serializers
+    responses = self.get_default_responses()
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/view.py", line 211, in get_default_responses
+    default_schema = self.serializer_to_schema(default_schema) or ''
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/base.py", line 437, in serializer_to_schema
+    return self.probe_inspectors(
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/base.py", line 110, in probe_inspectors
+    result = method(obj, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/field.py", line 33, in get_schema
+    return self.probe_field_inspectors(serializer, openapi.Schema, self.use_definitions)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/base.py", line 228, in probe_field_inspectors
+    return self.probe_inspectors(
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/base.py", line 110, in probe_inspectors
+    result = method(obj, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/field.py", line 124, in field_to_swagger_object
+    actual_schema = definitions.setdefault(ref_name, make_schema_definition)
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/openapi.py", line 688, in setdefault
+    ret = maker()
+  File "/usr/local/lib/python3.9/site-packages/drf_yasg/inspectors/field.py", line 93, in make_schema_definition
+    for property_name, child in serializer.fields.items():
+  File "/usr/local/lib/python3.9/site-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 349, in fields
+    for key, value in self.get_fields().items():
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 1029, in get_fields
+    field_names = self.get_field_names(declared_fields, info)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/serializers.py", line 1125, in get_field_names
+    assert field_name in fields, (
+AssertionError: The field 'rezervisani_stanovi_klijenti' was declared on serializer ProdajaStanovaPoKlijentuSerializer, but has not been included in the 'fields' option.
+2021-12-27 14:04:09,489 ERROR "GET /docs/?format=openapi HTTP/1.1" 500 218130
+2021-12-27 14:04:29,630 WARNING Session data corrupted
+2021-12-27 14:04:30,780 WARNING Session data corrupted

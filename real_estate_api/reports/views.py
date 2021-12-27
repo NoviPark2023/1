@@ -3,10 +3,14 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 from real_estate_api.korisnici.models import Korisnici
+from real_estate_api.kupci.models import Kupci
 from real_estate_api.ponude.models import Ponude
-from real_estate_api.reports.serializers import ReportsSerializer, ProdajaStanovaPoKorisnikuSerializer
+from real_estate_api.reports.serializers import (
+    ReportsSerializer,
+    ProdajaStanovaPoKorisnikuSerializer,
+    ProdajaStanovaPoKlijentuSerializer,
+)
 from real_estate_api.stanovi.models import Stanovi
-
 from rest_framework.response import Response
 
 
@@ -92,8 +96,16 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
 
 
 class ReportsProdajaStanovaPoKorisnikuAPIView(generics.ListAPIView):
-    """Broj svih Stanova"""
+    """Broj svih rezervisanih Stanova po Korisniku (Agentu) """
     permission_classes = [IsAuthenticated, ]
     queryset = Korisnici.objects.all()
     serializer_class = ProdajaStanovaPoKorisnikuSerializer
+    pagination_class = None
+
+
+class ReportsProdajaStanovaPoKlijentuAPIView(generics.ListAPIView):
+    """Broj svih rezervisanih Stanova po Klijentu (Kupcu) """
+    permission_classes = [IsAuthenticated, ]
+    queryset = Kupci.objects.all()
+    serializer_class = ProdajaStanovaPoKlijentuSerializer
     pagination_class = None
