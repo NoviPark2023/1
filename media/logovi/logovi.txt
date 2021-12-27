@@ -1,0 +1,43 @@
+2021-12-27 13:17:11,281 WARNING Session data corrupted
+2021-12-27 13:17:33,831 WARNING Session data corrupted
+2021-12-27 13:17:37,939 WARNING Session data corrupted
+2021-12-27 13:17:47,685 WARNING Not Found: /favicon.ico
+2021-12-27 13:17:47,686 WARNING "GET /favicon.ico HTTP/1.1" 404 3532
+2021-12-27 13:19:59,516 WARNING Session data corrupted
+2021-12-27 13:20:04,115 WARNING Session data corrupted
+2021-12-27 13:20:48,799 ERROR Internal Server Error: /stanovi/kalkulacija-cena-stana/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 511, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 423, in finalize_response
+    assert isinstance(response, HttpResponseBase), (
+AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<class 'NoneType'>`
+2021-12-27 13:21:05,291 ERROR "GET /stanovi/kalkulacija-cena-stana/ HTTP/1.1" 500 27495
+2021-12-27 13:21:13,545 WARNING Session data corrupted
+2021-12-27 13:21:18,344 WARNING Session data corrupted
+2021-12-27 13:21:32,289 ERROR Internal Server Error: /stanovi/kalkulacija-cena-stana/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.9/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.9/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.9/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/django/views/generic/base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 511, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+  File "/usr/local/lib/python3.9/site-packages/rest_framework/views.py", line 423, in finalize_response
+    assert isinstance(response, HttpResponseBase), (
+AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<class 'NoneType'>`
+2021-12-27 13:21:32,290 ERROR "GET /stanovi/kalkulacija-cena-stana/ HTTP/1.1" 500 18819
+2021-12-27 13:23:28,827 WARNING Session data corrupted
+2021-12-27 13:23:32,436 WARNING Session data corrupted

@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from real_estate_api.ponude.models import Ponude
+from real_estate_api.stanovi.models import Stanovi
 
 
 class ListaPonudaStanaSerializer(serializers.ModelSerializer):
@@ -99,3 +100,20 @@ class StanoviSerializer(serializers.ModelSerializer):
 
     def get_kreiraj_stan_url(self, obj):
         return reverse("stanovi:kreiraj_stan")
+
+
+class AzuriranjeCenaSerijalizer(serializers.ModelSerializer):
+    """
+    Automatska kalkulacija cene Stanavoa serializers
+    """
+
+    class Meta:
+        model = Stanovi
+        fields = (
+            "id_stana",
+            "sprat",
+            "broj_soba",
+            "orijentisanost",
+            "kvadratura",
+            "cena_stana",
+        )
