@@ -63,6 +63,8 @@ class StanoviSerializer(serializers.ModelSerializer):
 
     # Inline lista ponuda stana
     lista_ponuda_stana = ListaPonudaStanaSerializer(many=True, read_only=True)
+    # Ukupan broj Ponuda za jedan Stan
+    broj_ponuda_za_stan = serializers.SerializerMethodField()
 
     class Meta:
         from .views import Stanovi
@@ -79,12 +81,23 @@ class StanoviSerializer(serializers.ModelSerializer):
             "cena_stana",
             "napomena",
             "status_prodaje",
+            "broj_ponuda_za_stan",
             'lista_ponuda_stana',
             'detalji_stana_url',
             'izmeni_stan_url',
             'obrisi_stan_url',
             'kreiraj_stan_url',
         )
+
+    @staticmethod
+    def get_broj_ponuda_za_stan(obj):
+        """
+        Ukupan broj ponuda za svaki stan. Suma ponuda jednog stana.
+        :param obj: ForeignKey in Stanovi ka Ponudi
+        :return: ukupan broj Ponuda za jedan Stan
+        """
+        broj_ponuda_stanovi = Ponude.objects.select_related('stan').filter(stan_id=obj.id_stana).count()
+        return broj_ponuda_stanovi
 
     def get_detalji_stana_url(self, obj):
         """Prosledi u API putanju do detalji stana"""
