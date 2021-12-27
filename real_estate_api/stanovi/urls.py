@@ -7,6 +7,7 @@ from .views import (
     UrediStanViewAPI,
     ObrisiStanViewAPI,
     AzuriranjeCena,
+    BrojPonudaStanovaPoMesecimaAPIView,
 )
 
 app_name = "stanovi"
@@ -23,5 +24,7 @@ urlpatterns = [
     # Brisanje Stana
     path('obrisi-stan/<int:id_stana>', ObrisiStanViewAPI.as_view(), name='obrisi_stan'),
     # Kalkulacija cena Stana
-    path('kalkulacija-cena-stana/', AzuriranjeCena.as_view(), name='kalkulacija-cena-stana')
+    path('kalkulacija-cena-stana/', AzuriranjeCena.as_view(), name='kalkulacija-cena-stana'),
+    # Broj Ponuda za Stan po mesecima
+    path('ponude-stana-meseci/<int:id_stana>', BrojPonudaStanovaPoMesecimaAPIView.as_view(), name='ponude-stana-meseci')
 ]

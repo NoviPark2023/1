@@ -115,6 +115,18 @@ class StanoviSerializer(serializers.ModelSerializer):
         return reverse("stanovi:kreiraj_stan")
 
 
+class BrojPonudaStanaPoMesecimaSerializer(serializers.ModelSerializer):
+    """
+    Ukupan broj Ponuda za svaki stan po MESECIMA.
+    """
+
+    class Meta:
+        model = Ponude
+        fields = (
+            "id_ponude",
+        )
+
+
 class AzuriranjeCenaSerijalizer(serializers.ModelSerializer):
     """
     Automatska kalkulacija cene Stanavoa serializers

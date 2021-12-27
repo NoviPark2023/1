@@ -75,8 +75,9 @@ class ProdajaStanovaPoKlijentuSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_prodati_stanovi_klijenti(obj):
-        prodati_stanovi_klijenti = Ponude.objects.select_related('kupac').filter(kupac__id_kupca=obj.id_kupca).filter(
-            status_ponude="kupljen").count()
+        ponude_po_kupcima = Ponude.objects.select_related('kupac')
+        filter_po_id_kupca = ponude_po_kupcima.filter(kupac__id_kupca=obj.id_kupca)
+        prodati_stanovi_klijenti = filter_po_id_kupca.filter(status_ponude="kupljen").count()
 
         return prodati_stanovi_klijenti
 
