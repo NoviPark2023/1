@@ -321,36 +321,37 @@ SWAGGER_SETTINGS = {
 # https://docs.djangoproject.com/en/dev/ref/settings/#logging
 # See https://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'timestamp': {
-            'format': '{asctime} {levelname} {message}',
-            'style': '{',
+if DEBUG is False:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'timestamp': {
+                'format': '{asctime} {levelname} {message}',
+                'style': '{',
+            },
         },
-    },
-    'handlers': {
-        'file': {
+        'handlers': {
+            'file': {
+                'level': 'WARNING',
+                'class': 'logging.FileHandler',
+                'filename': MEDIA_ROOT + '/logovi/logovi.txt',
+                'formatter': 'timestamp'
+            },
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
+        },
+        'loggers': {
+            'django': {
+                'handlers': ['file'],
+                'level': 'INFO',
+                'propagate': True,
+            },
+        },
+        'root': {
+            'handlers': ['console'],
             'level': 'WARNING',
-            'class': 'logging.FileHandler',
-            'filename': MEDIA_ROOT + '/logovi/logovi.txt',
-            'formatter': 'timestamp'
         },
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'INFO',
-            'propagate': True,
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'WARNING',
-    },
-}
+    }
 # endregion

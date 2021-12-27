@@ -15,16 +15,24 @@ from rest_framework.response import Response
 
 
 class StanoviStatistikaAPIView(generics.ListAPIView):
-    """Lista svih Stanova"""
+    """ Kreiranje izvestaja za entitet 'STANOVI' """
+
     permission_classes = [IsAuthenticated, ]
     serializer_class = ReportsSerializer
     pagination_class = None
 
     def get(self, request, *args, **kwargs):
         """
-        TODO: Komentar
-        """
+        Kreiranje izvestaja po kriterijumima:
+            * STANOVA PO STATUSU PRODAJE
+            * STANOVA PO STATUSU PRODAJE %
+            * PRODAJA STANOVA PO MESECIMA
 
+        :param request: None
+        :param args: None
+        :param kwargs: None
+        :return: Resposne 'agregacioni_api' gorespomenutih kriterijumima
+        """
         stanovi_global_ukupno = Stanovi.objects.all().count()
         stanovi_ukupan_broj = Stanovi.objects.aggregate(ukupno_stanova=Count('id_stana'))
 
@@ -36,15 +44,12 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
         ukuno_stanovi_dostupan = Stanovi.objects.filter(status_prodaje='dostupan').aggregate(dostupan=Count('id_stana'))
         ukuno_stanovi_prodat = Stanovi.objects.filter(status_prodaje='prodat').aggregate(prodat=Count('id_stana'))
 
-        # ###################################
+        # #######################################
         # REPORTS STANOVA PO STATUSU PRODAJE U %
-        # ###################################
+        # #######################################
         stanovi_rezervisano_procenti = (ukuno_stanovi_rezervisan.get('rezervisano') / stanovi_global_ukupno) * 100
-        print(stanovi_rezervisano_procenti)
         stanovi_dostupan_procenti = (ukuno_stanovi_dostupan.get('dostupan') / stanovi_global_ukupno) * 100
-        print(stanovi_dostupan_procenti)
         stanovi_prodati_procenti = (ukuno_stanovi_prodat.get('prodat') / stanovi_global_ukupno) * 100
-        print(stanovi_prodati_procenti)
 
         stanovi_agregirano_procenti = {
             'procenat_rezervisan': stanovi_rezervisano_procenti,
@@ -52,9 +57,9 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
             'procenat_prodat': stanovi_prodati_procenti
         }
 
-        # ###################################
-        # PRODAJA PO MESECIMA
-        # ###################################
+        # ############################
+        # PRODAJA STANOVA PO MESECIMA
+        # ############################
         january = Ponude.objects.filter(datum_ugovora__month=1).filter(status_ponude='kupljen').count()
         february = Ponude.objects.filter(datum_ugovora__month=2).filter(status_ponude='kupljen').count()
         march = Ponude.objects.filter(datum_ugovora__month=3).filter(status_ponude='kupljen').count()
@@ -67,6 +72,7 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
         october = Ponude.objects.filter(datum_ugovora__month=10).filter(status_ponude='kupljen').count()
         november = Ponude.objects.filter(datum_ugovora__month=11).filter(status_ponude='kupljen').count()
         december = Ponude.objects.filter(datum_ugovora__month=12).filter(status_ponude='kupljen').count()
+
         prodaja_po_mesecima = {'prodaja_po_mesecima':
             [
                 {
@@ -86,12 +92,14 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
             ],
         }
 
-        agregacioni_api = stanovi_ukupan_broj | \
-                          ukuno_stanovi_rezervisan | \
-                          ukuno_stanovi_dostupan | \
-                          ukuno_stanovi_prodat | \
-                          stanovi_agregirano_procenti | \
-                          prodaja_po_mesecima
+        agregacioni_api = (
+            stanovi_ukupan_broj |
+            ukuno_stanovi_rezervisan |
+            ukuno_stanovi_dostupan |
+            ukuno_stanovi_prodat |
+            stanovi_agregirano_procenti |
+            prodaja_po_mesecima
+        )
         return Response(agregacioni_api)
 
 
