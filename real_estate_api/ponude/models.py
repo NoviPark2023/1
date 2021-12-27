@@ -1,8 +1,4 @@
-import datetime
-from datetime import date
-
 from django.db import models
-from django.utils import timezone
 
 from real_estate_api.korisnici.models import Korisnici
 from real_estate_api.kupci.models import Kupci

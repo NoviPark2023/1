@@ -9,6 +9,7 @@ from real_estate_api.reports.serializers import (
     ReportsSerializer,
     ProdajaStanovaPoKorisnikuSerializer,
     ProdajaStanovaPoKlijentuSerializer,
+    RoiSerializer,
 )
 from real_estate_api.stanovi.models import Stanovi
 from rest_framework.response import Response
@@ -28,7 +29,7 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
             * STANOVA PO STATUSU PRODAJE %
             * PRODAJA STANOVA PO MESECIMA
             * BROJ PONUDA PO MESECIMA
-
+        ---
         :param request: None
         :param args: None
         :param kwargs: None
@@ -141,7 +142,7 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
 
 
 class ReportsProdajaStanovaPoKorisnikuAPIView(generics.ListAPIView):
-    """Broj svih rezervisanih Stanova po Korisniku (Agentu) """
+    """ Broj svih rezervisanih Stanova po Korisniku (Agentu) """
     permission_classes = [IsAuthenticated, ]
     queryset = Korisnici.objects.all()
     serializer_class = ProdajaStanovaPoKorisnikuSerializer
@@ -149,8 +150,15 @@ class ReportsProdajaStanovaPoKorisnikuAPIView(generics.ListAPIView):
 
 
 class ReportsProdajaStanovaPoKlijentuAPIView(generics.ListAPIView):
-    """Broj svih rezervisanih Stanova po Klijentu (Kupcu) """
+    """ Broj svih rezervisanih Stanova po Klijentu (Kupcu) """
     permission_classes = [IsAuthenticated, ]
     queryset = Kupci.objects.all()
     serializer_class = ProdajaStanovaPoKlijentuSerializer
+    pagination_class = None
+
+class RoiStanovaAPIView(generics.ListAPIView):
+    """ Broj svih rezervisanih Stanova po Klijentu (Kupcu) """
+    permission_classes = [IsAuthenticated, ]
+    queryset = Stanovi.objects.all()
+    serializer_class = RoiSerializer
     pagination_class = None

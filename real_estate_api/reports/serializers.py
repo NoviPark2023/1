@@ -47,17 +47,25 @@ class ProdajaStanovaPoKorisnikuSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_prodati_stanovi_korisnici(obj):
+        """
+        Ukupan broj prodatih stanova filtriran po klijentu prodaje(korisniku-agentu).
+            * klijent Prodaje je zapravo agent prodaje, u sistemu nazvan Korisnik.
+        Ponude su filtrirane po id klienta prodaje i po statusu Ponude='kupljen'.
+        ---
+        :param obj: Korisnici *(Agenti nekretnina - Prodavci)
+        :return: Ponude (filtrirane po Korisniku)
+        """
+
         prodati_stanovi_korisnici = Ponude.objects.select_related('klijent_prodaje').filter(
-            klijent_prodaje_id=obj.id).filter(
-            status_ponude="kupljen").count()
+            klijent_prodaje_id=obj.id).filter(status_ponude="kupljen").count()
 
         return prodati_stanovi_korisnici
 
 
 class ProdajaStanovaPoKlijentuSerializer(serializers.ModelSerializer):
     """
-        Serijalazer za report ukupno prodatih Stanova po Klijentima (Prodavcima)
-        """
+    Serijalazer za report ukupno prodatih Stanova po Klijentima (Prodavcima)
+    """
     potencijalan_stanovi_klijenti = serializers.SerializerMethodField()
     rezervisani_stanovi_klijenti = serializers.SerializerMethodField()
     prodati_stanovi_klijenti = serializers.SerializerMethodField()
@@ -83,7 +91,8 @@ class ProdajaStanovaPoKlijentuSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_rezervisani_stanovi_klijenti(obj):
-        rezervisani_stanovi_klijenti = Ponude.objects.select_related('kupac').filter(kupac__id_kupca=obj.id_kupca).filter(
+        rezervisani_stanovi_klijenti = Ponude.objects.select_related('kupac').filter(
+            kupac__id_kupca=obj.id_kupca).filter(
             status_ponude="rezervisan").count()
 
         return rezervisani_stanovi_klijenti
@@ -95,3 +104,17 @@ class ProdajaStanovaPoKlijentuSerializer(serializers.ModelSerializer):
             status_ponude="potencijalan").count()
 
         return potencijalan_stanovi_klijenti
+
+
+class RoiSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Stanovi
+        fields = (
+            "id_stana",
+            "sprat",
+            "broj_soba",
+            "orijentisanost",
+            "kvadratura",
+            "cena_stana",
+        )
