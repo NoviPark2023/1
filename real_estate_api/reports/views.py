@@ -1,4 +1,4 @@
-from django.db.models import Count
+from django.db.models import Count, Sum
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
@@ -159,6 +159,15 @@ class ReportsProdajaStanovaPoKlijentuAPIView(generics.ListAPIView):
 class RoiStanovaAPIView(generics.ListAPIView):
     """ Broj svih rezervisanih Stanova po Klijentu (Kupcu) """
     permission_classes = [IsAuthenticated, ]
-    queryset = Stanovi.objects.all()
     serializer_class = RoiSerializer
     pagination_class = None
+
+    def get(self, request, *args, **kwargs):
+
+        query_stanovi_ukupno_kvadrata = Stanovi.objects.aggregate(stanovi_ukupno_kvadrata=Sum('kvadratura'))
+
+        # stanovi_ukupno_kvadrata = {
+        #     'stanovi_ukupno_kvadrata': query_stanovi_ukupno_kvadrata,
+        # }
+
+        return Response(query_stanovi_ukupno_kvadrata)
