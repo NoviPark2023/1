@@ -74,6 +74,7 @@ class StanoviSerializer(serializers.ModelSerializer):
             "lamela",
             "adresa_stana",
             "kvadratura",
+            "kvadratura_tri_od_sto",
             "sprat",
             "broj_soba",
             "orijentisanost",
@@ -140,5 +141,6 @@ class AzuriranjeCenaSerijalizer(serializers.ModelSerializer):
             "broj_soba",
             "orijentisanost",
             "kvadratura",
+            "kvadratura_tri_od_sto",
             "cena_stana",
         )
