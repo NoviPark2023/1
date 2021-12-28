@@ -128,31 +128,29 @@ class AzuriranjeCena(generics.ListAPIView):
     """Mesecno azuriranje cena stanova"""
     permission_classes = [IsAuthenticated, ]
     pagination_class = None
-    serializer_class = AzuriranjeCenaSerijalizer
-    def get(self, request, *args, **kwargs):
 
-        queryset = Stanovi.objects.all()
+    def get(self, request, *args, **kwargs):
+        queryset_stanova = Stanovi.objects.all()
 
         file = open('real_estate_api/static/cals-stanovi-cena/AzuriranjeCena.csv')
         csv_reader = csv.DictReader(file, delimiter=',')
         for row in csv_reader:
 
-            for s in queryset:
+            for stan in queryset_stanova:
                 # QuerySet data
-                sprat = s.sprat
-                broj_soba = s.broj_soba
-                orijentisanost = s.orijentisanost
+                sprat = stan.sprat
+                broj_soba = stan.broj_soba
+                orijentisanost = stan.orijentisanost
 
                 # CSV Data
-                sprat_csv : int  = int(row["sprat"])
-                broj_soba_csv : float = float(row["broj_soba"])
-                orijentisanost_csv : str = row["orijentisanost"]
-
+                sprat_csv: str = row["sprat"]
+                broj_soba_csv: float = float(row["broj_soba"])
+                orijentisanost_csv: str = row["orijentisanost"]
 
                 if sprat == sprat_csv and broj_soba == broj_soba_csv and orijentisanost == orijentisanost_csv:
-                    s.cena_stana = (float(s.kvadratura)*0.97) * float(row["cena_kvadrata"])
-                    print(s.id_stana, s.cena_stana)
+                    stan.cena_stana = (float(stan.kvadratura) * 0.97) * float(row["cena_kvadrata"])
+                    print(stan.id_stana, stan.cena_stana)
 
-                    s.save()
+                    stan.save()
 
-            return Response("ISPRAVITI RESPONSE")
+        return Response("Uspešno izvršena rekalkulacija cena stanova.")
