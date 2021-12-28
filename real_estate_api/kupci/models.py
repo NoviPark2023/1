@@ -20,10 +20,10 @@ class Kupci(models.Model):
     lice: str = models.CharField(max_length=20,
                                  choices=StatusLicaKupaca.choices,
                                  default=StatusLicaKupaca.FIZICKO, )
-    ime_prezime: str = models.CharField('Ime i prezime Kupca', max_length=50)
-    email: str = models.EmailField('Email Kupca')
-    broj_telefona: str = models.CharField('Broj telefona', max_length=20)
-    Jmbg_Pib: str = models.CharField('JMBG ili PIB', max_length=30)
+    ime_prezime: str = models.CharField('Ime i prezime Kupca', max_length=50, unique=True)
+    email: str = models.EmailField('Email Kupca', unique=True)
+    broj_telefona: str = models.CharField('Broj telefona', max_length=20, unique=True)
+    Jmbg_Pib: str = models.CharField('JMBG ili PIB', max_length=30, unique=True)
     adresa: str = models.CharField('Adresa', max_length=50)
 
     def get_id_kupca(self) -> object:
