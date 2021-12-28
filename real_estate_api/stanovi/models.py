@@ -20,7 +20,11 @@ class Stanovi(models.Model):
     lamela = models.CharField('Lamela', max_length=50, default='')
     adresa_stana = models.CharField('Adresa stana', max_length=254, default='', blank=False, null=False)
     kvadratura = models.DecimalField('Kvadratura stana', max_digits=7, decimal_places=2)
-    kvadratura_tri_od_sto = models.DecimalField('Korekcija kvadrature', max_digits=7, decimal_places=2, blank=True)
+    kvadratura_tri_od_sto = models.DecimalField('Korekcija kvadrature',
+                                                max_digits=7,
+                                                decimal_places=2,
+                                                default=0,
+                                                blank=True)
     sprat = models.CharField('Sprat stana', max_length=10, default='1')
     broj_soba = models.FloatField('Broj soba stana', default=1)
     orijentisanost = models.CharField(max_length=20,
