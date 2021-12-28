@@ -169,17 +169,17 @@ class AzuriranjeCena(generics.ListAPIView):
             sprat_csv: int = int(row["sprat"])
             broj_soba_csv: float = float(row["broj_soba"])
             orijentisanost_csv: str = row["orijentisanost"]
-                # CSV Data
-                sprat_csv : int  = int(row["sprat"])
-                broj_soba_csv : float = float(row["broj_soba"])
-                orijentisanost_csv : str = row["orijentisanost"]
+            # CSV Data
+            sprat_csv: int = int(row["sprat"])
+            broj_soba_csv: float = float(row["broj_soba"])
+            orijentisanost_csv: str = row["orijentisanost"]
+
+        if sprat == sprat_csv and broj_soba == broj_soba_csv and orijentisanost == orijentisanost_csv:
+            s.cena_stana = (float(s.kvadratura) * 0.97) * float(row["cena_kvadrata"])
+            print(s.id_stana, s.cena_stana)
 
             if sprat == sprat_csv and broj_soba == broj_soba_csv and orijentisanost == orijentisanost_csv:
                 s.cena_stana = (float(s.kvadratura) * 0.97) * float(row["cena_kvadrata"])
                 print(s.id_stana, s.cena_stana)
 
-                if sprat == sprat_csv and broj_soba == broj_soba_csv and orijentisanost == orijentisanost_csv:
-                    s.cena_stana = (float(s.kvadratura)*0.97) * float(row["cena_kvadrata"])
-                    print(s.id_stana, s.cena_stana)
-
-                    s.save()
+                s.save()
