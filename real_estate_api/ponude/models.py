@@ -31,34 +31,53 @@ class Ponude(models.Model):
     kupac = models.ForeignKey(Kupci,
                               on_delete=models.CASCADE,
                               db_column='id_kupca',
-                              related_name='lista_ponuda_kupca')
+                              related_name='lista_ponuda_kupca'
+                              )
 
     stan = models.ForeignKey(Stanovi,
                              on_delete=models.CASCADE,
                              db_column='id_stana',
-                             related_name='lista_ponuda_stana')
+                             related_name='lista_ponuda_stana'
+                             )
 
     '''
         * null=True || zato sto kada se kreira stan ne znamo kom klijentu ce se dodeliti.
         * models.SET_NULL || Jer kada se obrise iz sistema Klijent svi stanovi ostaju.
        '''
-    klijent_prodaje = models.ForeignKey(Korisnici, null=True, blank=True, on_delete=models.SET_NULL)
+    klijent_prodaje = models.ForeignKey(Korisnici,
+                                        null=True,
+                                        blank=True,
+                                        on_delete=models.SET_NULL
+                                        )
 
     cena_stana_za_kupca = models.FloatField('Cena stana za kupca', default=0)
-    napomena = models.CharField(max_length=252, default="", blank=True)
-    broj_ugovora = models.CharField(max_length=252, default="", blank=True)
+
+    napomena = models.CharField("Napomena", max_length=252,
+                                default="",
+                                blank=True
+                                )
+
+    broj_ugovora = models.CharField("Broj Ugovora", max_length=252,
+                                    default="",
+                                    blank=True,
+                                    unique=True
+                                    )
+
     datum_ugovora = models.DateField("Datum Ponude", null=True, blank=True)
+
     status_ponude = models.CharField(max_length=20,
                                      choices=StatusPonude.choices,
                                      null=False, blank=False,
-                                     default=StatusPonude.POTENCIJALAN)
+                                     default=StatusPonude.POTENCIJALAN
+                                     )
 
-    nacin_placanja = models.CharField(max_length=30,
+    nacin_placanja = models.CharField("Nacin Placanja", max_length=30,
                                       choices=NacinPlacanja.choices,
                                       null=False, blank=False,
-                                      default=NacinPlacanja.U_CELOSTI)
+                                      default=NacinPlacanja.U_CELOSTI
+                                      )
 
-    odobrenje = models.BooleanField(default=False)
+    odobrenje = models.BooleanField("Odobrenje", default=False)
 
     @property
     def ime_kupca(self):
