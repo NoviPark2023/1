@@ -74,12 +74,14 @@ class StanoviSerializer(serializers.ModelSerializer):
             "lamela",
             "adresa_stana",
             "kvadratura",
-            "kvadratura_tri_od_sto",
+            "kvadratura_korekcija",
+            "iznos_za_korekciju_kvadrature",
             "sprat",
             "broj_soba",
             "orijentisanost",
             "broj_terasa",
             "cena_stana",
+            "cena_kvadrata",
             "napomena",
             "status_prodaje",
             "broj_ponuda_za_stan",
@@ -128,19 +130,21 @@ class BrojPonudaStanaPoMesecimaSerializer(serializers.ModelSerializer):
         )
 
 
-class AzuriranjeCenaSerijalizer(serializers.ModelSerializer):
-    """
-    Automatska kalkulacija cene Stanavoa serializers
-    """
-
-    class Meta:
-        model = Stanovi
-        fields = (
-            "id_stana",
-            "sprat",
-            "broj_soba",
-            "orijentisanost",
-            "kvadratura",
-            "kvadratura_tri_od_sto",
-            "cena_stana",
-        )
+# class AzuriranjeCenaSerijalizer(serializers.ModelSerializer):
+#     """
+#     Automatska kalkulacija cene Stanova serializers
+#     """
+#
+#     class Meta:
+#         model = Stanovi
+#         fields = (
+#             "id_stana",
+#             "sprat",
+#             "broj_soba",
+#             "orijentisanost",
+#             "kvadratura",
+#             "kvadratura_korekcija",
+#             "iznos_za_korekciju_kvadrature",
+#             "cena_stana",
+#             "cena_kvadrata"
+#         )
