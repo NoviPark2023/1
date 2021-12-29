@@ -40,6 +40,9 @@ class CreateContract:
 
             ponuda.odobrenje = True  # Potrebno odobrenje jer je stan kaparisan (Rezervisan)
 
+            stan.save()
+            ponuda.save()
+
         elif request.data['status_ponude'] == 'kupljen':
             # Kada Ponuda predje u status 'kupljen' automatski mapiraj polje 'prodat' u modelu Stana
             stan.status_prodaje = 'prodat'
