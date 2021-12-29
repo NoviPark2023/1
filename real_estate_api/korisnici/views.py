@@ -27,14 +27,14 @@ class KorisniciDetaljiAPIView(generics.RetrieveAPIView):
     """Get Korisnika po ID-ju, || Detalji Kupca"""
     permission_classes = [IsAuthenticated, ]
     lookup_field = 'id'
-    queryset = Korisnici.objects.all()
+    queryset = Korisnici.objects.all().order_by('id')
     serializer_class = KorisniciSerializers
 
 
 class KreirajKorisnika(generics.CreateAPIView):
     permission_classes = [IsAuthenticated, ]
     """Kreiranje novog Korisnika"""
-    queryset = Korisnici.objects.all()
+    queryset = Korisnici.objects.all().order_by('id')
     serializer_class = KorisniciSerializers
 
 
@@ -42,7 +42,7 @@ class UrediKorisnika(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated, ]
     """Uredivanje korisnika po id-pk"""
     lookup_field = 'id'
-    queryset = Korisnici.objects.all()
+    queryset = Korisnici.objects.all().order_by('id')
     serializer_class = KorisniciSerializers
 
     def put(self, request, *args, **kwargs):
@@ -59,5 +59,5 @@ class ObrisiKoriniska(generics.RetrieveDestroyAPIView):
     permission_classes = [IsAuthenticated, ]
     """Brisanje Korinila po id-pk"""
     lookup_field = 'id'
-    queryset = Korisnici.objects.all()
+    queryset = Korisnici.objects.all().order_by('id')
     serializer_class = KorisniciSerializers

@@ -27,14 +27,14 @@ class StanoviDetaljiAPIVIew(generics.RetrieveAPIView):
     """Get Stanovi po ID-ju || DETALJI STANA"""
     permission_classes = [IsAuthenticated, ]
     lookup_field = lookup_field
-    queryset = Stanovi.objects.all()
+    queryset = Stanovi.objects.all().order_by('id_stana')
     serializer_class = StanoviSerializer
 
 
 class KreirajStanAPIView(generics.CreateAPIView):
     """Kreiranje novog Stana"""
     permission_classes = [IsAuthenticated, ]
-    queryset = Stanovi.objects.all()
+    queryset = Stanovi.objects.all().order_by('id_stana')
     serializer_class = StanoviSerializer
 
 
@@ -42,7 +42,7 @@ class UrediStanViewAPI(generics.RetrieveUpdateAPIView):
     """EDIT Stana poi polju 'id_stana '"""
     permission_classes = [IsAuthenticated, ]
     lookup_field = lookup_field
-    queryset = Stanovi.objects.all()
+    queryset = Stanovi.objects.all().order_by('id_stana')
     serializer_class = StanoviSerializer
 
 
@@ -50,7 +50,7 @@ class ObrisiStanViewAPI(generics.RetrieveDestroyAPIView):
     """Brisanje Stana"""
     permission_classes = [IsAuthenticated, ]
     lookup_field = lookup_field
-    queryset = Stanovi.objects.all()
+    queryset = Stanovi.objects.all().order_by('id_stana')
     serializer_class = StanoviSerializer
 
 

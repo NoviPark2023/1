@@ -1,7 +1,6 @@
 from wsgiref.util import FileWrapper
 
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from rest_framework import generics
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
@@ -11,6 +10,7 @@ from django.conf import settings
 from .models import Ponude
 from .serializers import PonudeSerializer
 from .ugovor.ugovori import CreateContract
+from ..stanovi.models import Stanovi
 
 lookup_field = 'id_ponude'
 lookup_field_stan = 'id_stana'
@@ -51,7 +51,7 @@ class KreirajPonuduAPIView(generics.CreateAPIView):
     """Kreiranje nove Ponude"""
     permission_classes = [IsAuthenticated, ]
     lookup_field_stan = lookup_field_stan
-    queryset = Ponude.objects.all()
+    queryset = Ponude.objects.all().order_by('-id_ponude')
     serializer_class = PonudeSerializer
 
     def post(self, request, *args, **kwargs):
@@ -59,11 +59,18 @@ class KreirajPonuduAPIView(generics.CreateAPIView):
         * Prilikom kreiranja Stana automatski update polja 'klijent_prodaje, sa
           korisnikom koji je prijavljen. Prosledjuje se ka Izvestajima.
         * Kreiranje Ugovora ukoliko je inicijalno ponuda na statusu 'rezervisan'.
+        ---
         :param request: klijent_plrodaje
         :return: Ponude request
         """
         if request.data['status_ponude'] == 'rezervisan':
             CreateContract.create_contract(request, **kwargs)  # Kreiraj ugovor.
+
+        elif request.data['status_ponude'] == 'kupljen':
+            # Ukoliko je status ponude preskocio fazu rezervisan, update Stan na kupljen
+            stan = Stanovi.objects.get(id_stana__exact=request.data['stan'])
+            stan.status_prodaje = 'rezervisan'
+            stan.save()
 
         # Set Klijenta prodaje stana u ponudu, potrebno kasnije za izvestaje.
         request.data['klijent_prodaje'] = request.user.id
@@ -71,31 +78,9 @@ class KreirajPonuduAPIView(generics.CreateAPIView):
         return self.create(request, *args, **kwargs)
 
     def get_queryset(self):
+        # Potrebno za prikaz svih Ponuda samo za odredjeni Stan
         id_stana = self.kwargs['id_stana']
         return Ponude.objects.all().filter(stan=id_stana)
-
-
-class UgovorPonudeDownloadListAPIView(generics.ListAPIView):
-    """
-    API View za preuzimanje generisanog ugovora.
-    """
-    permission_classes = [IsAuthenticated, ]
-
-    serializer_class = PonudeSerializer
-
-    def get(self, request, *args, **kwargs):
-        """Preuzimanje ugovora"""
-
-        queryset = Ponude.objects.get(id_ponude__exact=kwargs['id_ponude'])
-        file_handle = settings.MEDIA_ROOT + '/ugovor' + str(queryset.id_ponude) + '.docx'
-        try:
-            document = open(file_handle, 'rb')
-            response = HttpResponse(FileWrapper(document), content_type='application/msword')
-            response['Content-Disposition'] = 'attachment; filename=Ugovor-Ponude-' + str(kwargs['id_ponude']) + '.docx'
-        except (FileNotFoundError, Ponude.DoesNotExist):
-            raise NotFound('Željeni ugovor nije nađen !', code=404)
-
-        return response
 
 
 class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
@@ -103,7 +88,7 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
 
     permission_classes = [IsAuthenticated, ]
     lookup_field = lookup_field
-    queryset = Ponude.objects.all()
+    queryset = Ponude.objects.all().order_by('-id_ponude')
     serializer_class = PonudeSerializer
 
     def put(self, request, *args, **kwargs):
@@ -127,5 +112,28 @@ class ObrisiPonuduAPIView(generics.RetrieveDestroyAPIView):
     """Brisanje Ponude po ID-ju"""
     permission_classes = [IsAuthenticated, ]
     lookup_field = lookup_field
-    queryset = Ponude.objects.all()
+    queryset = Ponude.objects.all().order_by('-id_ponude')
     serializer_class = PonudeSerializer
+
+
+class UgovorPonudeDownloadListAPIView(generics.ListAPIView):
+    """
+    API View za preuzimanje generisanog ugovora.
+    """
+    permission_classes = [IsAuthenticated, ]
+
+    serializer_class = PonudeSerializer
+
+    def get(self, request, *args, **kwargs):
+        """Preuzimanje ugovora"""
+
+        queryset = Ponude.objects.get(id_ponude__exact=kwargs['id_ponude'])
+        file_handle = settings.MEDIA_ROOT + '/ugovor' + str(queryset.id_ponude) + '.docx'
+        try:
+            document = open(file_handle, 'rb')
+            response = HttpResponse(FileWrapper(document), content_type='application/msword')
+            response['Content-Disposition'] = 'attachment; filename=Ugovor-Ponude-' + str(kwargs['id_ponude']) + '.docx'
+        except (FileNotFoundError, Ponude.DoesNotExist):
+            raise NotFound('Željeni ugovor nije nađen !', code=404)
+
+        return response

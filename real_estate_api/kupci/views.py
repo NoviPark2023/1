@@ -37,14 +37,14 @@ class KupciDetaljiAPIView(generics.RetrieveAPIView):
     """Get Kupci po ID-ju, || Detalji Kupca"""
     permission_classes = [IsAuthenticated, ]
     lookup_field = lookup_field
-    queryset = Kupci.objects.all()
+    queryset = Kupci.objects.all().order_by('id_kupca')
     serializer_class = DetaljiKupcaSerializer
 
 
 class KreirajKupcaAPIView(generics.CreateAPIView):
     """Kreiranje novog Kupca"""
     permission_classes = [IsAuthenticated, ]
-    queryset = Kupci.objects.all()
+    queryset = Kupci.objects.all().order_by('id_kupca')
     serializer_class = KupciSerializer
 
 
@@ -52,7 +52,7 @@ class UrediKupcaAPIView(generics.RetrieveUpdateAPIView):
     """Uredjivanje Kupca po pk-id"""
     permission_classes = [IsAuthenticated, ]
     lookup_field = lookup_field
-    queryset = Kupci.objects.all()
+    queryset = Kupci.objects.all().order_by('id_kupca')
     serializer_class = KupciSerializer
 
 
@@ -60,7 +60,7 @@ class ObrisiKupcaAPIView(generics.RetrieveDestroyAPIView):
     """Obrisi Kupa po id"""
     permission_classes = [IsAuthenticated, ]
     lookup_field = lookup_field
-    queryset = Kupci.objects.all()
+    queryset = Kupci.objects.all().order_by('id_kupca')
     serializer_class = KupciSerializer
 
 
