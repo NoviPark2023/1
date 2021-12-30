@@ -54,6 +54,7 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
         stanovi_prodati_procenti = (ukuno_stanovi_prodat.get('prodat') / stanovi_global_ukupno) * 100
 
         stanovi_agregirano_procenti = {
+            # Zaokruzi procente na 2 decimale
             'procenat_rezervisan': round(stanovi_rezervisano_procenti, 2),
             'procenat_dostupan': round(stanovi_dostupan_procenti, 2),
             'procenat_prodat': round(stanovi_prodati_procenti, 2)
@@ -132,65 +133,71 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
         # #####################
         # RAST PRODAJE REPORT
         # #####################
+
         january = Ponude.objects.filter(datum_ugovora__month=1).filter(
             status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
             ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
-        )
-
+        )['ukupna_suma_prodatih_stanova'] or 0
+        print('#####################################')
+        print(bool(january))
+        print('#####################################')
+        # if january is not None:
+        #     january = 0
+        #     print(january)
         february = Ponude.objects.filter(datum_ugovora__month=2).filter(
             status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
             ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
-        )
+        )['ukupna_suma_prodatih_stanova'] or 0
 
         march = Ponude.objects.filter(datum_ugovora__month=3).filter(
             status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
             ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
-        )
+        )['ukupna_suma_prodatih_stanova'] or 0
 
         april = Ponude.objects.filter(datum_ugovora__month=4).filter(
             status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
             ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
-        )
+        )['ukupna_suma_prodatih_stanova'] or 0
 
         may = Ponude.objects.filter(datum_ugovora__month=5).filter(
             status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
             ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
-        )
+        )['ukupna_suma_prodatih_stanova'] or 0
 
         june = Ponude.objects.filter(datum_ugovora__month=6).filter(
             status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
             ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
-        )
+        )['ukupna_suma_prodatih_stanova'] or 0
 
         july = Ponude.objects.filter(datum_ugovora__month=7).filter(
             status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
             ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
-        )
+        )['ukupna_suma_prodatih_stanova'] or 0
 
         august = Ponude.objects.filter(datum_ugovora__month=8).filter(
             status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
             ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
-        )
+        )['ukupna_suma_prodatih_stanova'] or 0
 
         september = Ponude.objects.filter(datum_ugovora__month=9).filter(
             status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
             ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
-        )
+        )['ukupna_suma_prodatih_stanova'] or 0
 
         october = Ponude.objects.filter(datum_ugovora__month=10).filter(
             status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
             ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
-        )
+        )['ukupna_suma_prodatih_stanova'] or 0
 
         november = Ponude.objects.filter(datum_ugovora__month=11).filter(
             status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
             ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
-        )
+        )['ukupna_suma_prodatih_stanova'] or 0
 
         december = Ponude.objects.filter(datum_ugovora__month=12).filter(
             status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
             ukupno_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
-        )
+        )['ukupno_suma_prodatih_stanova'] or 0
 
         ukupna_suma_prodatih_stanova = {'ukupna_suma_prodatih_stanova':
             [
