@@ -138,3 +138,28 @@ class AzuriranjeCenaStanaAPIView(generics.ListAPIView):
         pass
 
 # TODO: IMPLEMENTIRATI UPDATE, CREATE, DELETE ZA AZURIRANJE CENA
+
+
+class AzuriranjeCenaCreateAPIView(generics.CreateAPIView):
+    """ Kreiranje mesecne cene kvadrata. """
+
+    permission_classes = [IsAuthenticated, ]
+    queryset = AzuriranjeCena.objects.all()
+    serializer_class = AzuriranjeCenaSerializer
+
+
+class AzuriranjeCenaUpdateAPIView(generics.RetrieveUpdateAPIView):
+    """ Mesecna izmena cene kvadrata po id-ju. """
+
+    permission_classes = [IsAuthenticated, ]
+    queryset = AzuriranjeCena.objects.all()
+    serializer_class = AzuriranjeCenaSerializer
+    lookup_field = 'id_azur_cene'
+
+
+class AzuriranjeCenaDeleteAPIView(generics.DestroyAPIView):
+    """ Brisanje cena kvadrata po id-ju. """
+
+    permission_classes = [IsAuthenticated, ]
+    queryset = AzuriranjeCena.objects.all()
+    lookup_field = 'id_azur_cene'
