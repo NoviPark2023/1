@@ -33,11 +33,11 @@ class Stanovi(models.Model):
     kvadratura = models.DecimalField('Kvadratura stana', max_digits=7, decimal_places=2)
 
     kvadratura_korekcija = models.DecimalField('Korekcija kvadrature',
-                                                max_digits=7,
-                                                decimal_places=2,
-                                                default=0,
-                                                blank=True
-                                                )
+                                               max_digits=7,
+                                               decimal_places=2,
+                                               default=0,
+                                               blank=True
+                                               )
     # mora se uneti kao decimalni broj, npr 0.97 za korekciju od 3%
     iznos_za_korekciju_kvadrature = models.DecimalField('Iznos za korekciju kvadrature',
                                                         max_digits=3,
@@ -67,35 +67,32 @@ class Stanovi(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        Polje 'kvadratura_korekcija' predstavlja korekciju polja 'kvadratura' za x%.
+        Automatsko izracunavanje cene kvadrata na osnovu predefinisanih pravila Korisnika.
+        Izracunavanje cene se odvija nad korigovanom kvadraturom.
+        Cena se izracunava prilikom samog unosa Stana u sistem.
+
+          * Polje 'kvadratura_korekcija' predstavlja korekciju polja 'kvadratura' za x%
+            koje deklarise sam korisnik sistema.
+          * Cena Stana se odredjuje po 3 parametra (sprat, broj soba, orijentacija)
+          * Pronalazimo cenu tako sto filtriramo tabelu 'azuriranje_cena' po ova 3 parametra.
+        ---
         @param args: none
         @param kwargs: none
-        @return: kvadratura_korekcija
+        @save: Korigovanu cenu Stana
         """
 
-        self.kvadratura_korekcija = self.kvadratura * self.iznos_za_korekciju_kvadrature
+        self.kvadratura_korekcija = Decimal(self.kvadratura) * Decimal(self.iznos_za_korekciju_kvadrature)
         self.cena_stana = self.kvadratura_korekcija * self.cena_kvadrata
 
-        test = AzuriranjeCena.objects.all().values()
-        # for stan in test:
+        pronadji_cenu_stana = AzuriranjeCena.objects.all().filter(
+            sprat=self.sprat).filter(
+            broj_soba=float(self.broj_soba)).filter(
+            orijentisanost=self.orijentisanost)
 
-        # QuerySet AzuriranjeCena mapiranja
-        sprat_tbl = test[0]['sprat']
-        broj_soba_tbl = test[0]['broj_soba']
-        orijentisanost_tbl = test[0]['orijentisanost']
-        cena_kvadrata_tbl = test[0]['cena_kvadrata']
+        # Moze .first() jer samo jedna cena moze da se pronadje
+        self.cena_kvadrata = pronadji_cenu_stana.first().cena_kvadrata
 
-        # Stan Objects
-        sprat_obj: str = self.sprat
-        broj_soba_obj: float = float(self.broj_soba)
-        orijentisanost_obj: str = self.orijentisanost
-
-        if sprat_obj == sprat_tbl and broj_soba_obj == broj_soba_tbl and orijentisanost_obj == orijentisanost_tbl:
-            self.cena_stana = (float(self.kvadratura_korekcija)) * float(cena_kvadrata_tbl)
-            print(self.id_stana, self.cena_stana)
-            self.save()
-
-        return super().save(*args, **kwargs)
+        super(Stanovi, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.id_stana}, {self.lamela}, {self.kvadratura}"
@@ -107,6 +104,10 @@ class Stanovi(models.Model):
 
 
 class AzuriranjeCena(models.Model):
+    """
+    Pomocna klasa(tabela) koja sluzi za automatsku kalkulaciju cena Stanova
+    pri samom unosu Stana.
+    """
 
     class OrijentacijaStana(models.TextChoices):
         SEVER = 'Sever', "Sever"
@@ -114,6 +115,7 @@ class AzuriranjeCena(models.Model):
         ISTOK = 'Istok', "Istok"
         ZAPAD = 'Zapad', "Zapad"
 
+    id_azur_cene = models.BigAutoField(primary_key=True)
     sprat = models.CharField('Sprat stana', max_length=10, default='1')
     broj_soba = models.FloatField('Broj soba stana', default=1)
     orijentisanost = models.CharField(max_length=20,
@@ -121,6 +123,7 @@ class AzuriranjeCena(models.Model):
                                       default=OrijentacijaStana.JUG,
                                       blank=True,
                                       null=True)
+
     cena_kvadrata = models.DecimalField('Cena kvadrata', max_digits=8, decimal_places=2, default=0)
 
     class Meta:

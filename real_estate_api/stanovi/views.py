@@ -2,13 +2,14 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Stanovi
+from .models import Stanovi, AzuriranjeCena
 from .serializers import (
     StanoviSerializer,
     ListaPonudaStanaSerializer,
-    BrojPonudaStanaPoMesecimaSerializer
+    BrojPonudaStanaPoMesecimaSerializer,
+    AzuriranjeCenaSerializer
 )
-from ..ponude.models import Ponude
+from real_estate_api.ponude.models import Ponude
 
 lookup_field = 'id_stana'
 
@@ -120,34 +121,20 @@ class BrojPonudaStanovaPoMesecimaAPIView(generics.ListAPIView):
 
         return Response(id_stana | broj_ponuda_stana_po_mesecima)
 
-#
-# class AzuriranjeCena(generics.ListAPIView):
-#     """Mesecno azuriranje cena stanova"""
-#     permission_classes = [IsAuthenticated, ]
-#     pagination_class = None
-#
-#     def get(self, request, *args, **kwargs):
-#         queryset_stanova = Stanovi.objects.all()
-#
-#         file = open('real_estate_api/static/cals-stanovi-cena/AzuriranjeCena.csv')
-#         csv_reader = csv.DictReader(file, delimiter=',')
-#         for row in csv_reader:
-#
-#             for stan in queryset_stanova:
-#                 # QuerySet data
-#                 sprat = stan.sprat
-#                 broj_soba = stan.broj_soba
-#                 orijentisanost = stan.orijentisanost
-#
-#                 # CSV Data
-#                 sprat_csv: str = row["sprat"]
-#                 broj_soba_csv: float = float(row["broj_soba"])
-#                 orijentisanost_csv: str = row["orijentisanost"]
-#
-#                 if sprat == sprat_csv and broj_soba == broj_soba_csv and orijentisanost == orijentisanost_csv:
-#                     stan.cena_stana = (float(stan.kvadratura) * 0.97) * float(row["cena_kvadrata"])
-#                     print(stan.id_stana, stan.cena_stana)
-#
-#                     stan.save()
-#
-#         return Response("Uspešno izvršena rekalkulacija cena stanova.")
+
+# ################################################
+# AUTOMATSKO AZURIRANJE CENA STANOVA SERIALIZERS
+# ################################################
+
+class AzuriranjeCenaStanaAPIView(generics.ListAPIView):
+    """Lista svih cena stanova po deklaraciji Korisnika sistema"""
+
+    permission_classes = [IsAuthenticated, ]
+    queryset = AzuriranjeCena.objects.all().order_by('id_azur_cene')
+    pagination_class = None
+    serializer_class = AzuriranjeCenaSerializer
+
+    def get(self, request, *args, **kwargs):
+        pass
+
+# TODO: IMPLEMENTIRATI UPDATE, CREATE, DELETE ZA AZURIRANJE CENA

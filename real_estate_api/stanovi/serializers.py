@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from real_estate_api.ponude.models import Ponude
-from real_estate_api.stanovi.models import Stanovi
+from real_estate_api.stanovi.models import Stanovi, AzuriranjeCena
 
 
 class ListaPonudaStanaSerializer(serializers.ModelSerializer):
@@ -67,7 +67,6 @@ class StanoviSerializer(serializers.ModelSerializer):
     broj_ponuda_za_stan = serializers.SerializerMethodField()
 
     class Meta:
-        from .views import Stanovi
         model = Stanovi
         fields = (
             "id_stana",
@@ -130,21 +129,15 @@ class BrojPonudaStanaPoMesecimaSerializer(serializers.ModelSerializer):
         )
 
 
-# class AzuriranjeCenaSerijalizer(serializers.ModelSerializer):
-#     """
-#     Automatska kalkulacija cene Stanova serializers
-#     """
-#
-#     class Meta:
-#         model = Stanovi
-#         fields = (
-#             "id_stana",
-#             "sprat",
-#             "broj_soba",
-#             "orijentisanost",
-#             "kvadratura",
-#             "kvadratura_korekcija",
-#             "iznos_za_korekciju_kvadrature",
-#             "cena_stana",
-#             "cena_kvadrata"
-#         )
+class AzuriranjeCenaSerializer(serializers.ModelSerializer):
+    """ Automatska kalkulacija cene Stanova serializers """
+
+    class Meta:
+        model = AzuriranjeCena
+        fields = (
+            "id_azur_cene",
+            "sprat",
+            "broj_soba",
+            "orijentisanost",
+            "cena_kvadrata",
+        )

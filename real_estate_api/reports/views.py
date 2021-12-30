@@ -156,6 +156,7 @@ class ReportsProdajaStanovaPoKlijentuAPIView(generics.ListAPIView):
     serializer_class = ProdajaStanovaPoKlijentuSerializer
     pagination_class = None
 
+
 class RoiStanovaAPIView(generics.ListAPIView):
     """ Broj svih rezervisanih Stanova po Klijentu (Kupcu) """
     permission_classes = [IsAuthenticated, ]
@@ -163,7 +164,6 @@ class RoiStanovaAPIView(generics.ListAPIView):
     pagination_class = None
 
     def get(self, request, *args, **kwargs):
-
         query_stanovi_ukupno_kvadrata = Stanovi.objects.aggregate(stanovi_ukupno_kvadrata=Sum('kvadratura'))
 
         # Ukupna suma svih cena po Lameli 1 *(L1)
@@ -174,7 +174,6 @@ class RoiStanovaAPIView(generics.ListAPIView):
         print(svi_staovi_po_lameli_l1_TEST)
         print('##################################')
         print('##################################')
-
 
         svi_staovi_po_lameli_l2 = Stanovi.objects.values('cena_stana').filter(lamela__startswith='L2')
         svi_staovi_po_lameli_l3 = Stanovi.objects.values('cena_stana').filter(lamela__startswith='L3')
