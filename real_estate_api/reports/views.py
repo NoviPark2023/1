@@ -38,17 +38,17 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
         stanovi_global_ukupno = Stanovi.objects.all().count()
         stanovi_ukupan_broj = Stanovi.objects.aggregate(ukupno_stanova=Count('id_stana'))
 
-        # ###################################
-        # REPORTS STANOVA PO STATUSU PRODAJE
-        # ###################################
+        # ###########################################
+        # REPORTS STANOVA PO STATUSU PRODAJE  REPORT
+        # ###########################################
         ukuno_stanovi_rezervisan = Stanovi.objects.filter(status_prodaje='rezervisan').aggregate(
             rezervisano=Count('id_stana'))
         ukuno_stanovi_dostupan = Stanovi.objects.filter(status_prodaje='dostupan').aggregate(dostupan=Count('id_stana'))
         ukuno_stanovi_prodat = Stanovi.objects.filter(status_prodaje='prodat').aggregate(prodat=Count('id_stana'))
 
-        # #######################################
-        # REPORTS STANOVA PO STATUSU PRODAJE U %
-        # #######################################
+        # ###############################################
+        # REPORTS STANOVA PO STATUSU PRODAJE U %  REPORT
+        # ###############################################
         stanovi_rezervisano_procenti = (ukuno_stanovi_rezervisan.get('rezervisano') / stanovi_global_ukupno) * 100
         stanovi_dostupan_procenti = (ukuno_stanovi_dostupan.get('dostupan') / stanovi_global_ukupno) * 100
         stanovi_prodati_procenti = (ukuno_stanovi_prodat.get('prodat') / stanovi_global_ukupno) * 100
@@ -59,9 +59,9 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
             'procenat_prodat': stanovi_prodati_procenti
         }
 
-        # ############################
-        # PRODAJA STANOVA PO MESECIMA
-        # ############################
+        # ####################################
+        # PRODAJA STANOVA PO MESECIMA REPORT
+        # ####################################
         january = Ponude.objects.filter(datum_ugovora__month=1).filter(status_ponude='kupljen').count()
         february = Ponude.objects.filter(datum_ugovora__month=2).filter(status_ponude='kupljen').count()
         march = Ponude.objects.filter(datum_ugovora__month=3).filter(status_ponude='kupljen').count()
@@ -94,9 +94,9 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
             ],
         }
 
-        # ############################
-        # BROJ PONUDA PO MESECIMA
-        # ############################
+        # #################################
+        # BROJ PONUDA PO MESECIMA REPORT
+        # #################################
         january = Ponude.objects.filter(datum_ugovora__month=1).count()
         february = Ponude.objects.filter(datum_ugovora__month=2).count()
         march = Ponude.objects.filter(datum_ugovora__month=3).count()
@@ -129,6 +129,88 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
             ],
         }
 
+        # #####################
+        # RAST PRODAJE REPORT
+        # #####################
+        january = Ponude.objects.filter(datum_ugovora__month=1).filter(
+            status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
+            ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
+        )
+
+        february = Ponude.objects.filter(datum_ugovora__month=2).filter(
+            status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
+            ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
+        )
+
+        march = Ponude.objects.filter(datum_ugovora__month=3).filter(
+            status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
+            ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
+        )
+
+        april = Ponude.objects.filter(datum_ugovora__month=4).filter(
+            status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
+            ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
+        )
+
+        may = Ponude.objects.filter(datum_ugovora__month=5).filter(
+            status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
+            ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
+        )
+
+        june = Ponude.objects.filter(datum_ugovora__month=6).filter(
+            status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
+            ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
+        )
+
+        july = Ponude.objects.filter(datum_ugovora__month=7).filter(
+            status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
+            ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
+        )
+
+        august = Ponude.objects.filter(datum_ugovora__month=8).filter(
+            status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
+            ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
+        )
+
+        september = Ponude.objects.filter(datum_ugovora__month=9).filter(
+            status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
+            ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
+        )
+
+        october = Ponude.objects.filter(datum_ugovora__month=10).filter(
+            status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
+            ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
+        )
+
+        november = Ponude.objects.filter(datum_ugovora__month=11).filter(
+            status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
+            ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
+        )
+
+        december = Ponude.objects.filter(datum_ugovora__month=12).filter(
+            status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
+            ukupno_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
+        )
+
+        ukupna_suma_prodatih_stanova = {'ukupna_suma_prodatih_stanova':
+            [
+                {
+                    'jan': january,
+                    'feb': february,
+                    'mart': march,
+                    'apr': april,
+                    'maj': may,
+                    'jun': june,
+                    'jul': july,
+                    'avg': august,
+                    'sep': september,
+                    'okt': october,
+                    'nov': november,
+                    'dec': december,
+                }
+            ],
+        }
+
         agregacioni_api = (
             stanovi_ukupan_broj |
             ukuno_stanovi_rezervisan |
@@ -136,7 +218,8 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
             ukuno_stanovi_prodat |
             stanovi_agregirano_procenti |
             prodaja_po_mesecima |
-            broj_ponuda_po_mesecima
+            broj_ponuda_po_mesecima |
+            ukupna_suma_prodatih_stanova
         )
         return Response(agregacioni_api)
 

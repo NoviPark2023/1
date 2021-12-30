@@ -69,7 +69,7 @@ class KreirajPonuduAPIView(generics.CreateAPIView):
         elif request.data['status_ponude'] == 'kupljen':
             # Ukoliko je status ponude preskocio fazu rezervisan, update Stan na kupljen
             stan = Stanovi.objects.get(id_stana__exact=request.data['stan'])
-            stan.status_prodaje = 'rezervisan'
+            stan.status_prodaje = 'prodat'
             stan.save()
 
         # Set Klijenta prodaje stana u ponudu, potrebno kasnije za izvestaje.

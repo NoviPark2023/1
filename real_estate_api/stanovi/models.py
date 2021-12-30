@@ -38,6 +38,7 @@ class Stanovi(models.Model):
                                                default=0,
                                                blank=True
                                                )
+
     # mora se uneti kao decimalni broj, npr 0.97 za korekciju od 3%
     iznos_za_korekciju_kvadrature = models.DecimalField('Iznos za korekciju kvadrature',
                                                         max_digits=3,
