@@ -1,6 +1,6 @@
 from wsgiref.util import FileWrapper
 
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from rest_framework import generics
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
@@ -133,6 +133,9 @@ class UgovorPonudeDownloadListAPIView(generics.ListAPIView):
             document = open(file_handle, 'rb')
             response = HttpResponse(FileWrapper(document), content_type='application/msword')
             response['Content-Disposition'] = 'attachment; filename=Ugovor-Ponude-' + str(kwargs['id_ponude']) + '.docx'
+            # FilePointer = open(file_handle, "rb")
+            # response = HttpResponse(FilePointer, content_type='application/force-download')
+            # response['Content-Disposition'] = 'attachment; filename=Ugovor-Ponude-' + str(kwargs['id_ponude']) + '.docx'
         except (FileNotFoundError, Ponude.DoesNotExist):
             raise NotFound('Željeni ugovor nije nađen !', code=404)
 

@@ -138,12 +138,6 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
             status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
             ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
         )['ukupna_suma_prodatih_stanova'] or 0
-        print('#####################################')
-        print(bool(january))
-        print('#####################################')
-        # if january is not None:
-        #     january = 0
-        #     print(january)
         february = Ponude.objects.filter(datum_ugovora__month=2).filter(
             status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
             ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
