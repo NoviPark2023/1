@@ -54,9 +54,9 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
         stanovi_prodati_procenti = (ukuno_stanovi_prodat.get('prodat') / stanovi_global_ukupno) * 100
 
         stanovi_agregirano_procenti = {
-            'procenat_rezervisan': stanovi_rezervisano_procenti,
-            'procenat_dostupan': stanovi_dostupan_procenti,
-            'procenat_prodat': stanovi_prodati_procenti
+            'procenat_rezervisan': round(stanovi_rezervisano_procenti, 2),
+            'procenat_dostupan': round(stanovi_dostupan_procenti, 2),
+            'procenat_prodat': round(stanovi_prodati_procenti, 2)
         }
 
         # ####################################
