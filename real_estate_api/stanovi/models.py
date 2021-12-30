@@ -82,17 +82,22 @@ class Stanovi(models.Model):
         """
 
         self.kvadratura_korekcija = Decimal(self.kvadratura) * Decimal(self.iznos_za_korekciju_kvadrature)
-        self.cena_stana = self.kvadratura_korekcija * self.cena_kvadrata
 
-        pronadji_cenu_stana = AzuriranjeCena.objects.all().filter(
-            sprat=self.sprat).filter(
-            broj_soba=float(self.broj_soba)).filter(
-            orijentisanost=self.orijentisanost)
+
+        pronadji_cenu_stana = AzuriranjeCena.objects.get(
+            sprat=self.sprat,
+            broj_soba=float(self.broj_soba),
+            orijentisanost=self.orijentisanost
+        )
+
+        # Izracunaj Cenu Stana
+        self.cena_stana = self.kvadratura_korekcija * pronadji_cenu_stana.cena_kvadrata
 
         # Moze .first() jer samo jedna cena moze da se pronadje
-        self.cena_kvadrata = pronadji_cenu_stana.first().cena_kvadrata
+        self.cena_kvadrata = pronadji_cenu_stana.cena_kvadrata
 
-        super(Stanovi, self).save(*args, **kwargs)
+        return super(Stanovi, self).save(*args, **kwargs)
+
 
     def __str__(self):
         return f"{self.id_stana}, {self.lamela}, {self.kvadratura}"
