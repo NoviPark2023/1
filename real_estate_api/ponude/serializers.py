@@ -18,6 +18,7 @@ class PonudeSerializer(serializers.ModelSerializer):
     adresa_stana = serializers.ReadOnlyField()  # Get field 'Adresa Stana' from 'Ponuda' model
     cena_stana = serializers.ReadOnlyField()  # Get field 'Cena Stana' from 'Ponuda' model
     ime_kupca = serializers.ReadOnlyField()  # Get field 'ime_kupca Stana' from 'Ponuda' model
+    lamela_stana = serializers.ReadOnlyField()  # Get field 'ime_kupca Stana' from 'Ponuda' model
 
     class Meta:
         model = Ponude
@@ -27,6 +28,7 @@ class PonudeSerializer(serializers.ModelSerializer):
             "ime_kupca",
             'stan',
             'adresa_stana',
+            'lamela_stana',
             'cena_stana',
             'cena_stana_za_kupca',
             'napomena',
