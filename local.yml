@@ -35,3 +35,13 @@ services:
       - local_postgres_data_backups:/backups:z
     env_file:
       - ./.envs/.local/.postgres
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: dejan.cugalj@factoryww.com
+      PGADMIN_DEFAULT_PASSWORD: ds241165A!
+    ports:
+      - "5050:80"
