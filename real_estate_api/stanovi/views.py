@@ -134,11 +134,6 @@ class AzuriranjeCenaStanaAPIView(generics.ListAPIView):
     pagination_class = None
     serializer_class = AzuriranjeCenaSerializer
 
-    def get(self, request, *args, **kwargs):
-        pass
-
-# TODO: IMPLEMENTIRATI UPDATE, CREATE, DELETE ZA AZURIRANJE CENA
-
 
 class AzuriranjeCenaCreateAPIView(generics.CreateAPIView):
     """ Kreiranje mesecne cene kvadrata. """
