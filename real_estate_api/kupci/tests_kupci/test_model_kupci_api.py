@@ -1,32 +1,23 @@
-from django.test import TestCase
-
 from real_estate_api.kupci.models import Kupci
 
 
-class TestKupciSerializersAppModels(TestCase):
+class TestKupciSerializersAppModels:
 
-    @classmethod
-    def setUp(self):
-        # Kreiraj TEST Korisnika
-        self.kupac = Kupci.objects.create(
-            lice='Test_Kupac',
-            ime_prezime='Test_Prezime',
-            email='Prodavac',
-            broj_telefona='test_user_name',
-            Jmbg_Pib='test_JMBG',
-            adresa='Test adresa Kupca'
-        )
+    def test_kreiranje_novog_kupca(self, kreiraj_novog_kupaca):
+        assert kreiraj_novog_kupaca.lice == "Fizicko"
+        assert kreiraj_novog_kupaca.ime_prezime == "Slobodan Tomic"
+        assert kreiraj_novog_kupaca.email == "sloba@factoryww.com"
+        assert kreiraj_novog_kupaca.broj_telefona == "+381 63 136 90 98"
+        assert kreiraj_novog_kupaca.Jmbg_Pib == "123456789123"
+        assert kreiraj_novog_kupaca.adresa == "Test Adresa Kupaca"
+        assert Kupci.objects.count() == 1
+        assert Kupci.objects.count() != 2
 
-    def test_queryset_exists(self):
-        qs = Kupci.objects.all()
-        print("--------------------")
-        print("QS: " + str(qs))
-        print("--------------------")
-        self.assertTrue(qs.exists())
+    def test_kreiranje_novog_kupca_fizicko_lice(self, kreiraj_novog_kupaca_fizicko_lice):
+        assert kreiraj_novog_kupaca_fizicko_lice.lice == "Fizicko"
 
-    def test_id_kupca_exist(self):
-        # Da li postoji ID Kupca
-        kupac_id = self.kupac.id_kupca
-        print('ID Kupca u testnoj bazi: ' + str(kupac_id))
-        print('---------------')
-        self.assertEqual(1, kupac_id)
+    def test_kreiranje_novog_kupca_pravno_lice(self, kreiraj_novog_kupaca_pravno_lice):
+        assert kreiraj_novog_kupaca_pravno_lice.lice == "Pravno"
+
+    def test_id_kupca_exist(self, kreiraj_novog_kupaca):
+        assert kreiraj_novog_kupaca.id_kupca == 1
