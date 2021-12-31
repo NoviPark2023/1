@@ -222,7 +222,7 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
             broj_ponuda_po_mesecima |
             ukupna_suma_prodatih_stanova
         )
-        return Response(agregacioni_api)
+        return Response(agregacioni_api, content_type="application/json")
 
 
 class ReportsProdajaStanovaPoKorisnikuAPIView(generics.ListAPIView):
