@@ -4,6 +4,7 @@ from real_estate_api.kupci.models import Kupci
 class TestKupciSerializersAppModels:
 
     def test_kreiranje_novog_kupca(self, kreiraj_novog_kupaca):
+        assert kreiraj_novog_kupaca.id_kupca == 1
         assert kreiraj_novog_kupaca.lice == "Fizicko"
         assert kreiraj_novog_kupaca.ime_prezime == "Slobodan Tomic"
         assert kreiraj_novog_kupaca.email == "sloba@factoryww.com"
@@ -19,5 +20,3 @@ class TestKupciSerializersAppModels:
     def test_kreiranje_novog_kupca_pravno_lice(self, kreiraj_novog_kupaca_pravno_lice):
         assert kreiraj_novog_kupaca_pravno_lice.lice == "Pravno"
 
-    def test_id_kupca_exist(self, kreiraj_novog_kupaca):
-        assert kreiraj_novog_kupaca.id_kupca == 1
