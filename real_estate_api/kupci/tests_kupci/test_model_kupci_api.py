@@ -1,22 +1,23 @@
+import pytest
+from faker import Faker
+
 from real_estate_api.kupci.models import Kupci
 
+fake = Faker()
 
-class TestKupciSerializersAppModels:
 
-    def test_kreiranje_novog_kupca(self, kreiraj_novog_kupaca):
-        assert kreiraj_novog_kupaca.id_kupca == 1
-        assert kreiraj_novog_kupaca.lice == "Fizicko"
-        assert kreiraj_novog_kupaca.ime_prezime == "Slobodan Tomic"
-        assert kreiraj_novog_kupaca.email == "sloba@factoryww.com"
-        assert kreiraj_novog_kupaca.broj_telefona == "+381 63 136 90 98"
-        assert kreiraj_novog_kupaca.Jmbg_Pib == "123456789123"
-        assert kreiraj_novog_kupaca.adresa == "Test Adresa Kupaca"
-        assert Kupci.objects.count() == 1
-        assert Kupci.objects.count() != 2
+@pytest.mark.django_db
+def test_new_korisnik(kupci_factory):
+    kupac = kupci_factory.create()
+    print('\n')
+    print(f'########### KUPAC IME PREZIME: {kupci_factory.ime_prezime}  #############################')
+    print(f'########### KUPAC EMAIL: {kupci_factory.email}  #############################')
+    print(f'##############  TELEFON KUPCA: {kupci_factory.broj_telefona}  ##########################')
+    broj_kupaca_u_bazi = Kupci.objects.all().count()
+    print(f'##############  COUNT: {broj_kupaca_u_bazi}  ##########################')
 
-    def test_kreiranje_novog_kupca_fizicko_lice(self, kreiraj_novog_kupaca_fizicko_lice):
-        assert kreiraj_novog_kupaca_fizicko_lice.lice == "Fizicko"
-
-    def test_kreiranje_novog_kupca_pravno_lice(self, kreiraj_novog_kupaca_pravno_lice):
-        assert kreiraj_novog_kupaca_pravno_lice.lice == "Pravno"
-
+    assert broj_kupaca_u_bazi == 1
+    assert kupac.id_kupca == 1
+    assert kupac.lice == "Fizicko"
+    assert kupac.Jmbg_Pib == "1234567890"
+    assert kupac.adresa == "Test Adresa 1"
