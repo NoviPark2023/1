@@ -1,4 +1,4 @@
-from babel.numbers import format_decimal
+from babel.numbers import format_decimal, parse_decimal
 from django.db.models import Count, Sum
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
@@ -274,8 +274,8 @@ class RoiStanovaAPIView(generics.ListAPIView):
             * XX: Broj Lamela  ||  Y: Broj Sprata  ||  ZZ: Broj Stana
 
         ---
-        :param lamela: naziv lamele *(npr. L1.1).
-        :return: Formatirana (decimal) suma cene stanova po lameli.
+        :param lamela: str: 'lamela__startswith' -> naziv lamele *(npr. L1.1).
+        :return: str: Formatirana (decimal) suma cene stanova po lameli.
         """
         svi_stanovi_po_lameli = Stanovi.objects.values('cena_stana').filter(
             lamela__startswith=lamela).aggregate(Sum('cena_stana'))
@@ -494,30 +494,56 @@ class RoiStanovaAPIView(generics.ListAPIView):
                 }
         }
 
-        # TODO 1: Suma Po spratovima za L1, L2. L3
-        # TODO 2: UKUPNA Suma Po spratovima za L1, L2. L3
-        # TODO 3: Suma SUMARAKA ZA  L1, L2. L3
-        # TODO 4: PROSECNA CENA KVADRATA (SUMA SUMARAKA / UKUPNO KVADRATA)
+        # #####################################
+        # UKUPNA SUMA CENE STANOVA PO LAMELAMA
+        # #####################################
+        # Ukupna suma cene Stanova po Lameli L1
+        ukupna_suma_cena_lamela_l1 = self.suma_stanova_po_lameli('L1')
 
-        # svi_stanovi_po_lameli_l1_TEST = Stanovi.objects.annotate(test=Count('cena_stana')).values()
-        # print('##################################')
-        # print('##################################')
-        # print(svi_stanovi_po_lameli_l1_TEST)
-        # print('##################################')
-        # print('##################################')
-        #
-        # svi_stanovi_po_lameli_l2 = Stanovi.objects.values('cena_stana').filter(lamela__startswith='L2')
-        # svi_stanovi_po_lameli_l3 = Stanovi.objects.values('cena_stana').filter(lamela__startswith='L3')
-        # print('########### svi_staovi_po_lameli_L1 ###########')
-        # print(svi_stanovi_po_lameli_l1)
-        # print('########### svi_staovi_po_lameli_L2 ###########')
-        # print(svi_stanovi_po_lameli_l2)
-        # print('########### svi_staovi_po_lameli_L3 ###########')
-        # print(svi_stanovi_po_lameli_l3)
-        # # stanovi_ukupno_kvadrata = {
-        # #     'stanovi_ukupno_kvadrata': query_stanovi_ukupno_kvadrata,
-        # # }
+        # Ukupna suma cene Stanova po Lameli L1
+        ukupna_suma_cena_lamela_l2 = self.suma_stanova_po_lameli('L2')
+
+        # Ukupna suma cene Stanova po Lameli L1
+        ukupna_suma_cena_lamela_l3 = self.suma_stanova_po_lameli('L3')
+
+        print('################# Ukupna suma cene Stanova po Lamelama #################')
+        print('##################################')
+        print(f'SUMA STANOVA LAMELA 1: {ukupna_suma_cena_lamela_l1}')
+        print(f'SUMA STANOVA LAMELA 2: {ukupna_suma_cena_lamela_l2}')
+        print(f'SUMA STANOVA LAMELA 3: {ukupna_suma_cena_lamela_l3}')
+        print('##################################')
+        print('##################################')
+
+
+        # ########################
+        # UKUPNA SUMA CENE STANOVA
+        # ########################
+        # Ukupna suma cene Stanova po Lameli L1
+        ukupna_suma_cena_stanova_decimal = Stanovi.objects.values('cena_stana').aggregate(Sum('cena_stana'))
+        ukupna_suma_cena_stanova = format_decimal(ukupna_suma_cena_stanova_decimal['cena_stana__sum'], locale='sr_RS')
+        print('################# UKUPNA SUMA CENE STANOVA #################')
+        print('##################################')
+        print(f'UKUPNA SUMA CENE STANOVA: {ukupna_suma_cena_stanova}')
+        print('##################################')
+        print('##################################')
+        print(f'UKUPNA SUMA CENE STANOVA: {ukupna_suma_cena_stanova}')
+        print(f'UKUPNO KVADRATA: {stanovi_ukupno_korekcija_kvadrata}')
+        prosecna_cena_kvadrata = parse_decimal(
+            ukupna_suma_cena_stanova, locale='sr_RS') / parse_decimal(stanovi_ukupno_korekcija_kvadrata,
+                                                                      locale='sr_RS')
+        print(f"PROSECNA CENA KVADRATA: {format_decimal(prosecna_cena_kvadrata, locale='sr_RS')}")
+
+        ukupan_roi_stanova = {
+            'ukupan_roi_stanova':
+                {
+                    'suma_cena_stanova_lamela_l1': ukupna_suma_cena_lamela_l1,
+                    'suma_cena_stanova_lamela_l2': ukupna_suma_cena_lamela_l2,
+                    'suma_cena_stanova_lamela_l3': ukupna_suma_cena_lamela_l3,
+                    'ukupna_suma_cena_stanova': ukupna_suma_cena_stanova,
+                    'prosecna_cena_kvadrata': format_decimal(prosecna_cena_kvadrata, locale='sr_RS'),
+                }
+        }
 
         return Response(
-            kvadratura_stanova | ukupna_suma_stanova_po_lameli
+            kvadratura_stanova | ukupna_suma_stanova_po_lameli | ukupan_roi_stanova
         )
