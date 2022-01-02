@@ -313,7 +313,6 @@ class RoiStanovaAPIView(generics.ListAPIView):
         # #########################
         # UKUPNO KVADRATA KOREKCIJA
         # #########################
-        # Suma Kvadrata sa korekcijom
         stanovi_ukupno_korekcija_kvadrata = Stanovi.objects.aggregate(
             stanovi_ukupno_korekcija_kvadrata=Sum('kvadratura_korekcija')
         )
@@ -322,7 +321,7 @@ class RoiStanovaAPIView(generics.ListAPIView):
             stanovi_ukupno_korekcija_kvadrata['stanovi_ukupno_korekcija_kvadrata'],
             locale='sr_RS')
 
-        # Return API Structure
+        # Return API Structure 'kvadratura_stanova'
         kvadratura_stanova = {
             'kvadratura_stanova':
                 {
@@ -428,42 +427,7 @@ class RoiStanovaAPIView(generics.ListAPIView):
         # LAMELA: PS SPRAT LAMELA 3 (L3.1)
         svi_stanovi_po_lameli_l3_ps = self.suma_stanova_po_lameli('L3.PS')
 
-        print('##################################')
-        print('##################################')
-        print(f'SUMA STANOVA LAMELA 1 PRVI SPRAT: {svi_stanovi_po_lameli_l1_1}')
-        print(f'SUMA STANOVA LAMELA 2 PRVI SPRAT: {svi_stanovi_po_lameli_l2_1}')
-        print(f'SUMA STANOVA LAMELA 3 PRVI SPRAT: {svi_stanovi_po_lameli_l3_1}')
-        print('############# DRUGI SPRAT #####################')
-        print(f'SUMA STANOVA LAMELA 1 DRUGI SPRAT: {svi_stanovi_po_lameli_l1_2}')
-        print(f'SUMA STANOVA LAMELA 2 DRUGI SPRAT: {svi_stanovi_po_lameli_l2_2}')
-        print(f'SUMA STANOVA LAMELA 3 DRUGI SPRAT: {svi_stanovi_po_lameli_l3_2}')
-        print('############# TRECI SPRAT #####################')
-        print(f'SUMA STANOVA LAMELA 1 TRECI SPRAT: {svi_stanovi_po_lameli_l1_3}')
-        print(f'SUMA STANOVA LAMELA 2 TRECI SPRAT: {svi_stanovi_po_lameli_l2_3}')
-        print(f'SUMA STANOVA LAMELA 3 TRECI SPRAT: {svi_stanovi_po_lameli_l3_3}')
-        print('############# CETVRTI SPRAT #####################')
-        print(f'SUMA STANOVA LAMELA 1 CETVRTI SPRAT: {svi_stanovi_po_lameli_l1_4}')
-        print(f'SUMA STANOVA LAMELA 2 CETVRTI SPRAT: {svi_stanovi_po_lameli_l2_4}')
-        print(f'SUMA STANOVA LAMELA 3 CETVRTI SPRAT: {svi_stanovi_po_lameli_l3_4}')
-        print('############# PETI SPRAT #####################')
-        print(f'SUMA STANOVA LAMELA 1 PETI SPRAT: {svi_stanovi_po_lameli_l1_5}')
-        print(f'SUMA STANOVA LAMELA 2 PETI SPRAT: {svi_stanovi_po_lameli_l2_5}')
-        print(f'SUMA STANOVA LAMELA 3 PETI SPRAT: {svi_stanovi_po_lameli_l3_5}')
-        print('############# SESTI SPRAT #####################')
-        print(f'SUMA STANOVA LAMELA 1 SESTI SPRAT: {svi_stanovi_po_lameli_l1_6}')
-        print(f'SUMA STANOVA LAMELA 2 SESTI SPRAT: {svi_stanovi_po_lameli_l2_6}')
-        print(f'SUMA STANOVA LAMELA 3 SESTI SPRAT: {svi_stanovi_po_lameli_l3_6}')
-        print('############# SEDMI SPRAT #####################')
-        print(f'SUMA STANOVA LAMELA 1 SEDMI SPRAT: {svi_stanovi_po_lameli_l1_7}')
-        print(f'SUMA STANOVA LAMELA 2 SEDMI SPRAT: {svi_stanovi_po_lameli_l2_7}')
-        print(f'SUMA STANOVA LAMELA 3 SEDMI SPRAT: {svi_stanovi_po_lameli_l3_7}')
-        print('############# PS SPRAT #####################')
-        print(f'SUMA STANOVA LAMELA 1 PS SPRAT: {svi_stanovi_po_lameli_l1_ps}')
-        print(f'SUMA STANOVA LAMELA 2 PS SPRAT: {svi_stanovi_po_lameli_l2_ps}')
-        print(f'SUMA STANOVA LAMELA 3 PS SPRAT: {svi_stanovi_po_lameli_l3_ps}')
-        print('##################################')
-        print('##################################')
-
+        # Return API Structure 'ukupna_suma_stanova_po_lameli'
         ukupna_suma_stanova_po_lameli = {
             'ukupna_cena_stanova_po_lamelama':
                 {
@@ -506,33 +470,20 @@ class RoiStanovaAPIView(generics.ListAPIView):
         # Ukupna suma cene Stanova po Lameli L1
         ukupna_suma_cena_lamela_l3 = self.suma_stanova_po_lameli('L3')
 
-        print('################# Ukupna suma cene Stanova po Lamelama #################')
-        print('##################################')
-        print(f'SUMA STANOVA LAMELA 1: {ukupna_suma_cena_lamela_l1}')
-        print(f'SUMA STANOVA LAMELA 2: {ukupna_suma_cena_lamela_l2}')
-        print(f'SUMA STANOVA LAMELA 3: {ukupna_suma_cena_lamela_l3}')
-        print('##################################')
-        print('##################################')
-
-
         # ########################
         # UKUPNA SUMA CENE STANOVA
         # ########################
-        # Ukupna suma cene Stanova po Lameli L1
         ukupna_suma_cena_stanova_decimal = Stanovi.objects.values('cena_stana').aggregate(Sum('cena_stana'))
+
         ukupna_suma_cena_stanova = format_decimal(ukupna_suma_cena_stanova_decimal['cena_stana__sum'], locale='sr_RS')
-        print('################# UKUPNA SUMA CENE STANOVA #################')
-        print('##################################')
-        print(f'UKUPNA SUMA CENE STANOVA: {ukupna_suma_cena_stanova}')
-        print('##################################')
-        print('##################################')
-        print(f'UKUPNA SUMA CENE STANOVA: {ukupna_suma_cena_stanova}')
-        print(f'UKUPNO KVADRATA: {stanovi_ukupno_korekcija_kvadrata}')
+
+        # ############################
+        # PROSECNA CENA KVADRATA STANA
+        # ############################
         prosecna_cena_kvadrata = parse_decimal(
             ukupna_suma_cena_stanova, locale='sr_RS') / parse_decimal(stanovi_ukupno_korekcija_kvadrata,
                                                                       locale='sr_RS')
-        print(f"PROSECNA CENA KVADRATA: {format_decimal(prosecna_cena_kvadrata, locale='sr_RS')}")
-
+        # Return API Structure 'ukupan_roi_stanova'
         ukupan_roi_stanova = {
             'ukupan_roi_stanova':
                 {
