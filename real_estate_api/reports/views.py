@@ -1,3 +1,4 @@
+from babel.numbers import format_decimal
 from django.db.models import Count, Sum
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
@@ -251,9 +252,6 @@ class ReportsProdajaStanovaPoKlijentuAPIView(generics.ListAPIView):
     pagination_class = None
 
 
-from babel.numbers import format_number, format_decimal, format_percent
-
-
 class RoiStanovaAPIView(generics.ListAPIView):
     """ Return on investment za Stanove Report"""
 
@@ -327,11 +325,11 @@ class RoiStanovaAPIView(generics.ListAPIView):
         # Return API Structure
         kvadratura_stanova = {
             'kvadratura_stanova':
-                    {
-                        'stanovi_ukupno_kvadrata': stanovi_ukupno_kvadrata,
-                        'stanovi_ukupno_korekcija_kvadrata': stanovi_ukupno_korekcija_kvadrata,
+                {
+                    'stanovi_ukupno_kvadrata': stanovi_ukupno_kvadrata,
+                    'stanovi_ukupno_korekcija_kvadrata': stanovi_ukupno_korekcija_kvadrata,
 
-                    }
+                }
         }
 
         # #############################
@@ -467,7 +465,7 @@ class RoiStanovaAPIView(generics.ListAPIView):
         print('##################################')
 
         ukupna_suma_stanova_po_lameli = {
-            'ukupna_suma_stanova_po_lameli':
+            'ukupna_cena_stanova_po_lamelama':
                 {
                     'svi_stanovi_po_lameli_l1_1': svi_stanovi_po_lameli_l1_1,
                     'svi_stanovi_po_lameli_l2_1': svi_stanovi_po_lameli_l2_1,
@@ -495,6 +493,11 @@ class RoiStanovaAPIView(generics.ListAPIView):
                     'svi_stanovi_po_lameli_l3_ps': svi_stanovi_po_lameli_l3_ps,
                 }
         }
+
+        # TODO 1: Suma Po spratovima za L1, L2. L3
+        # TODO 2: UKUPNA Suma Po spratovima za L1, L2. L3
+        # TODO 3: Suma SUMARAKA ZA  L1, L2. L3
+        # TODO 4: PROSECNA CENA KVADRATA (SUMA SUMARAKA / UKUONO KVADRATA)
 
         # svi_stanovi_po_lameli_l1_TEST = Stanovi.objects.annotate(test=Count('cena_stana')).values()
         # print('##################################')
