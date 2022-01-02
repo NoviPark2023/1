@@ -42,17 +42,17 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
         # ###########################################
         # REPORTS STANOVA PO STATUSU PRODAJE  REPORT
         # ###########################################
-        ukuno_stanovi_rezervisan = Stanovi.objects.filter(
+        ukupno_stanovi_rezervisan = Stanovi.objects.filter(
             status_prodaje=Stanovi.StatusProdaje.REZERVISAN
         ).aggregate(
             rezervisano=Count('id_stana')
         )
-        ukuno_stanovi_dostupan = Stanovi.objects.filter(
+        ukupno_stanovi_dostupan = Stanovi.objects.filter(
             status_prodaje=Stanovi.StatusProdaje.DOSTUPAN
         ).aggregate(
             dostupan=Count('id_stana')
         )
-        ukuno_stanovi_prodat = Stanovi.objects.filter(
+        ukupno_stanovi_prodat = Stanovi.objects.filter(
             status_prodaje=Stanovi.StatusProdaje.PRODAT
         ).aggregate(
             prodat=Count('id_stana')
@@ -61,9 +61,9 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
         # ###############################################
         # REPORTS STANOVA PO STATUSU PRODAJE U %  REPORT
         # ###############################################
-        stanovi_rezervisano_procenti = (ukuno_stanovi_rezervisan.get('rezervisano') / stanovi_global_ukupno) * 100
-        stanovi_dostupan_procenti = (ukuno_stanovi_dostupan.get('dostupan') / stanovi_global_ukupno) * 100
-        stanovi_prodati_procenti = (ukuno_stanovi_prodat.get('prodat') / stanovi_global_ukupno) * 100
+        stanovi_rezervisano_procenti = (ukupno_stanovi_rezervisan.get('rezervisano') / stanovi_global_ukupno) * 100
+        stanovi_dostupan_procenti = (ukupno_stanovi_dostupan.get('dostupan') / stanovi_global_ukupno) * 100
+        stanovi_prodati_procenti = (ukupno_stanovi_prodat.get('prodat') / stanovi_global_ukupno) * 100
 
         stanovi_agregirano_procenti = {
             # Zaokruzi procente na 2 decimale
@@ -225,9 +225,9 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
 
         agregacioni_api = (
             stanovi_ukupan_broj |
-            ukuno_stanovi_rezervisan |
-            ukuno_stanovi_dostupan |
-            ukuno_stanovi_prodat |
+            ukupno_stanovi_rezervisan |
+            ukupno_stanovi_dostupan |
+            ukupno_stanovi_prodat |
             stanovi_agregirano_procenti |
             prodaja_po_mesecima |
             broj_ponuda_po_mesecima |
@@ -289,7 +289,7 @@ class RoiStanovaAPIView(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         """
-        Agregacija APIja za ROI stanova i to pokriterijumima:
+        Agregacija APIja za ROI stanova i to po kriterijumima:
             * Ukupna kvadratura Stanova
             * Ukupna kvadratura Stanova sa korekcijom *(sada 3%)
 
@@ -497,7 +497,7 @@ class RoiStanovaAPIView(generics.ListAPIView):
         # TODO 1: Suma Po spratovima za L1, L2. L3
         # TODO 2: UKUPNA Suma Po spratovima za L1, L2. L3
         # TODO 3: Suma SUMARAKA ZA  L1, L2. L3
-        # TODO 4: PROSECNA CENA KVADRATA (SUMA SUMARAKA / UKUONO KVADRATA)
+        # TODO 4: PROSECNA CENA KVADRATA (SUMA SUMARAKA / UKUPNO KVADRATA)
 
         # svi_stanovi_po_lameli_l1_TEST = Stanovi.objects.annotate(test=Count('cena_stana')).values()
         # print('##################################')
