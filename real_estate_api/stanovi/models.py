@@ -36,7 +36,7 @@ class Stanovi(models.Model):
                                                max_digits=7,
                                                decimal_places=2,
                                                default=0,
-                                               blank=True
+                                               blank=True,
                                                )
 
     # mora se uneti kao decimalni broj, npr 0.97 za korekciju od 3%

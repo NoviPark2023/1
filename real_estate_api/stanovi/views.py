@@ -83,40 +83,43 @@ class BrojPonudaStanovaPoMesecimaAPIView(generics.ListAPIView):
         # #################################
         # BROJ PONUDA PO MESECIMA ZA STAN
         # #################################
-        january = Ponude.objects.filter(datum_ugovora__month=1).filter(stan__id_stana=kwargs['id_stana']).count()
-        february = Ponude.objects.filter(datum_ugovora__month=2).filter(stan__id_stana=kwargs['id_stana']).count()
-        march = Ponude.objects.filter(datum_ugovora__month=3).filter(stan__id_stana=kwargs['id_stana']).count()
-        april = Ponude.objects.filter(datum_ugovora__month=4).filter(stan__id_stana=kwargs['id_stana']).count()
-        may = Ponude.objects.filter(datum_ugovora__month=5).filter(stan__id_stana=kwargs['id_stana']).count()
-        june = Ponude.objects.filter(datum_ugovora__month=6).filter(stan__id_stana=kwargs['id_stana']).count()
-        july = Ponude.objects.filter(datum_ugovora__month=7).filter(stan__id_stana=kwargs['id_stana']).count()
-        august = Ponude.objects.filter(datum_ugovora__month=8).filter(stan__id_stana=kwargs['id_stana']).count()
-        september = Ponude.objects.filter(datum_ugovora__month=9).filter(stan__id_stana=kwargs['id_stana']).count()
-        october = Ponude.objects.filter(datum_ugovora__month=10).filter(stan__id_stana=kwargs['id_stana']).count()
-        november = Ponude.objects.filter(datum_ugovora__month=11).filter(stan__id_stana=kwargs['id_stana']).count()
-        december = Ponude.objects.filter(datum_ugovora__month=12).filter(stan__id_stana=kwargs['id_stana']).count()
+        kwargs_field = 'id_stana'
+
+        january = Ponude.objects.filter(datum_ugovora__month=1).filter(stan__id_stana=kwargs[kwargs_field]).count()
+        february = Ponude.objects.filter(datum_ugovora__month=2).filter(stan__id_stana=kwargs[kwargs_field]).count()
+        march = Ponude.objects.filter(datum_ugovora__month=3).filter(stan__id_stana=kwargs[kwargs_field]).count()
+        april = Ponude.objects.filter(datum_ugovora__month=4).filter(stan__id_stana=kwargs[kwargs_field]).count()
+        may = Ponude.objects.filter(datum_ugovora__month=5).filter(stan__id_stana=kwargs[kwargs_field]).count()
+        june = Ponude.objects.filter(datum_ugovora__month=6).filter(stan__id_stana=kwargs[kwargs_field]).count()
+        july = Ponude.objects.filter(datum_ugovora__month=7).filter(stan__id_stana=kwargs[kwargs_field]).count()
+        august = Ponude.objects.filter(datum_ugovora__month=8).filter(stan__id_stana=kwargs[kwargs_field]).count()
+        september = Ponude.objects.filter(datum_ugovora__month=9).filter(stan__id_stana=kwargs[kwargs_field]).count()
+        october = Ponude.objects.filter(datum_ugovora__month=10).filter(stan__id_stana=kwargs[kwargs_field]).count()
+        november = Ponude.objects.filter(datum_ugovora__month=11).filter(stan__id_stana=kwargs[kwargs_field]).count()
+        december = Ponude.objects.filter(datum_ugovora__month=12).filter(stan__id_stana=kwargs[kwargs_field]).count()
 
         id_stana = {
-            'id_stana': self.kwargs['id_stana']
+            'id_stana': self.kwargs[kwargs_field]
         }
 
-        broj_ponuda_stana_po_mesecima = {'broj_ponuda_po_mesecima':
-            [
-                {
-                    'jan': january,
-                    'feb': february,
-                    'mart': march,
-                    'apr': april,
-                    'maj': may,
-                    'jun': june,
-                    'jul': july,
-                    'avg': august,
-                    'sep': september,
-                    'okt': october,
-                    'nov': november,
-                    'dec': december,
-                }
-            ],
+        broj_ponuda_stana_po_mesecima = {
+            'broj_ponuda_po_mesecima':
+                [
+                    {
+                        'jan': january,
+                        'feb': february,
+                        'mart': march,
+                        'apr': april,
+                        'maj': may,
+                        'jun': june,
+                        'jul': july,
+                        'avg': august,
+                        'sep': september,
+                        'okt': october,
+                        'nov': november,
+                        'dec': december,
+                    }
+                ],
         }
 
         return Response(id_stana | broj_ponuda_stana_po_mesecima)
@@ -125,7 +128,6 @@ class BrojPonudaStanovaPoMesecimaAPIView(generics.ListAPIView):
 # ################################################
 # AUTOMATSKO AZURIRANJE CENA STANOVA SERIALIZERS
 # ################################################
-
 class AzuriranjeCenaStanaAPIView(generics.ListAPIView):
     """Lista svih cena stanova po deklaraciji Korisnika sistema"""
 

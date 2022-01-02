@@ -41,10 +41,21 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
         # ###########################################
         # REPORTS STANOVA PO STATUSU PRODAJE  REPORT
         # ###########################################
-        ukuno_stanovi_rezervisan = Stanovi.objects.filter(status_prodaje='rezervisan').aggregate(
-            rezervisano=Count('id_stana'))
-        ukuno_stanovi_dostupan = Stanovi.objects.filter(status_prodaje='dostupan').aggregate(dostupan=Count('id_stana'))
-        ukuno_stanovi_prodat = Stanovi.objects.filter(status_prodaje='prodat').aggregate(prodat=Count('id_stana'))
+        ukuno_stanovi_rezervisan = Stanovi.objects.filter(
+            status_prodaje=Stanovi.StatusProdaje.REZERVISAN
+        ).aggregate(
+            rezervisano=Count('id_stana')
+        )
+        ukuno_stanovi_dostupan = Stanovi.objects.filter(
+            status_prodaje=Stanovi.StatusProdaje.DOSTUPAN
+        ).aggregate(
+            dostupan=Count('id_stana')
+        )
+        ukuno_stanovi_prodat = Stanovi.objects.filter(
+            status_prodaje=Stanovi.StatusProdaje.PRODAT
+        ).aggregate(
+            prodat=Count('id_stana')
+        )
 
         # ###############################################
         # REPORTS STANOVA PO STATUSU PRODAJE U %  REPORT
@@ -133,7 +144,6 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
         # #####################
         # RAST PRODAJE REPORT
         # #####################
-
         january = Ponude.objects.filter(datum_ugovora__month=1).filter(
             status_ponude=Ponude.StatusPonude.KUPLJEN).aggregate(
             ukupna_suma_prodatih_stanova=Sum('cena_stana_za_kupca')
@@ -241,34 +251,270 @@ class ReportsProdajaStanovaPoKlijentuAPIView(generics.ListAPIView):
     pagination_class = None
 
 
+from babel.numbers import format_number, format_decimal, format_percent
+
+
 class RoiStanovaAPIView(generics.ListAPIView):
-    """ Broj svih rezervisanih Stanova po Klijentu (Kupcu) """
+    """ Return on investment za Stanove Report"""
+
     permission_classes = [IsAuthenticated, ]
     serializer_class = RoiSerializer
     pagination_class = None
 
+    @staticmethod
+    def suma_stanova_po_lameli(lamela: str) -> str:
+        """
+        Stanovi se razvrstavaju po Lamelama, ukupno ih ima 3 i to:
+            * L1.1.zz  ||  L2.1.zz  || L3.1.zz
+            * L1.2.zz  ||  L2.2.zz  || L3.2.zz
+            * L1.3.zz  ||  L2.3.zz  || L3.3.zz
+            *          . . .
+            * L1.7.zz  ||  L2.7.zz  || L3.7.zz
+            * L1.PS.zz  ||  L2.PS.zz  || L3.PS.zz
+        Strukutra oznake Lamela je:
+            * XX.Y.ZZ Ceo hash Lamele
+            * XX: Broj Lamela  ||  Y: Broj Sprata  ||  ZZ: Broj Stana
+
+        ---
+        :param lamela: naziv lamele *(npr. L1.1).
+        :return: Formatirana (decimal) suma cene stanova po lameli.
+        """
+        svi_stanovi_po_lameli = Stanovi.objects.values('cena_stana').filter(
+            lamela__startswith=lamela).aggregate(Sum('cena_stana'))
+
+        # Format decimala za 'svi_stanovi_po_lameli_l1_1'
+        svi_stanovi_po_lameli = format_decimal(
+            svi_stanovi_po_lameli['cena_stana__sum'],
+            locale='sr_RS')
+
+        return svi_stanovi_po_lameli
+
     def get(self, request, *args, **kwargs):
-        query_stanovi_ukupno_kvadrata = Stanovi.objects.aggregate(stanovi_ukupno_kvadrata=Sum('kvadratura'))
+        """
+        Agregacija APIja za ROI stanova i to pokriterijumima:
+            * Ukupna kvadratura Stanova
+            * Ukupna kvadratura Stanova sa korekcijom *(sada 3%)
 
-        # Ukupna suma svih cena po Lameli 1 *(L1)
-        svi_staovi_po_lameli_l1 = Stanovi.objects.values('cena_stana').filter(lamela__startswith='L1')
-        svi_staovi_po_lameli_l1_TEST = Stanovi.objects.annotate(test=Count('cena_stana')).values()
+        :param request: None
+        :param args: None
+        :param kwargs: None
+        :return: agregacioni_api za ROI
+        """
+        # #####################
+        # UKUPNO KVADRATA
+        # #####################
+        # Suma Kvadrata bez korekcije
+        stanovi_ukupno_kvadrata = Stanovi.objects.aggregate(
+            stanovi_ukupno_kvadrata=Sum('kvadratura')
+        )
+        # Format decimal places for 'stanovi_ukupno_kvadrata'
+        stanovi_ukupno_kvadrata = format_decimal(
+            stanovi_ukupno_kvadrata['stanovi_ukupno_kvadrata'],
+            locale='sr_RS')
+
+        # #########################
+        # UKUPNO KVADRATA KOREKCIJA
+        # #########################
+        # Suma Kvadrata sa korekcijom
+        stanovi_ukupno_korekcija_kvadrata = Stanovi.objects.aggregate(
+            stanovi_ukupno_korekcija_kvadrata=Sum('kvadratura_korekcija')
+        )
+        # Format decimal places for 'stanovi_ukupno_korekcija_kvadrata'
+        stanovi_ukupno_korekcija_kvadrata = format_decimal(
+            stanovi_ukupno_korekcija_kvadrata['stanovi_ukupno_korekcija_kvadrata'],
+            locale='sr_RS')
+
+        # Return API Structure
+        kvadratura_stanova = {
+            'kvadratura_stanova':
+                    {
+                        'stanovi_ukupno_kvadrata': stanovi_ukupno_kvadrata,
+                        'stanovi_ukupno_korekcija_kvadrata': stanovi_ukupno_korekcija_kvadrata,
+
+                    }
+        }
+
+        # #############################
+        # SUMA CENE STANOVA PRVI SPRAT
+        # #############################
+        # LAMELA: PRVI SPRAT LAMELA 1 (L1.1)
+        svi_stanovi_po_lameli_l1_1 = self.suma_stanova_po_lameli('L1.1')
+
+        # LAMELA: PRVI SPRAT LAMELA 2 (L2.1)
+        svi_stanovi_po_lameli_l2_1 = self.suma_stanova_po_lameli('L2.1')
+
+        # LAMELA: PRVI SPRAT LAMELA 3 (L3.1)
+        svi_stanovi_po_lameli_l3_1 = self.suma_stanova_po_lameli('L3.1')
+
+        # #############################
+        # SUMA CENE STANOVA DRUGI SPRAT
+        # #############################
+        # LAMELA: DRUGI SPRAT LAMELA 1 (L1.2)
+        svi_stanovi_po_lameli_l1_2 = self.suma_stanova_po_lameli('L1.2')
+
+        # LAMELA: DRUGI SPRAT LAMELA 2 (L2.1)
+        svi_stanovi_po_lameli_l2_2 = self.suma_stanova_po_lameli('L2.2')
+
+        # LAMELA: DRUGI SPRAT LAMELA 3 (L3.1)
+        svi_stanovi_po_lameli_l3_2 = self.suma_stanova_po_lameli('L3.2')
+
+        # #############################
+        # SUMA CENE STANOVA TRECI SPRAT
+        # #############################
+        # LAMELA: TRECI SPRAT LAMELA 1 (L1.2)
+        svi_stanovi_po_lameli_l1_3 = self.suma_stanova_po_lameli('L1.3')
+
+        # LAMELA: TRECI SPRAT LAMELA 2 (L2.1)
+        svi_stanovi_po_lameli_l2_3 = self.suma_stanova_po_lameli('L2.3')
+
+        # LAMELA: TRECI SPRAT LAMELA 3 (L3.1)
+        svi_stanovi_po_lameli_l3_3 = self.suma_stanova_po_lameli('L3.3')
+
+        # #############################
+        # SUMA CENE STANOVA CETVRTI SPRAT
+        # #############################
+        # LAMELA: CETVRTI SPRAT LAMELA 1 (L1.2)
+        svi_stanovi_po_lameli_l1_4 = self.suma_stanova_po_lameli('L1.4')
+
+        # LAMELA: CETVRTI SPRAT LAMELA 2 (L2.1)
+        svi_stanovi_po_lameli_l2_4 = self.suma_stanova_po_lameli('L2.4')
+
+        # LAMELA: CETVRTI SPRAT LAMELA 3 (L3.1)
+        svi_stanovi_po_lameli_l3_4 = self.suma_stanova_po_lameli('L3.4')
+
+        # #############################
+        # SUMA CENE STANOVA PETI SPRAT
+        # #############################
+        # LAMELA: PETI SPRAT LAMELA 1 (L1.2)
+        svi_stanovi_po_lameli_l1_5 = self.suma_stanova_po_lameli('L1.5')
+
+        # LAMELA: PETI SPRAT LAMELA 2 (L2.1)
+        svi_stanovi_po_lameli_l2_5 = self.suma_stanova_po_lameli('L2.5')
+
+        # LAMELA: PETI SPRAT LAMELA 3 (L3.1)
+        svi_stanovi_po_lameli_l3_5 = self.suma_stanova_po_lameli('L3.5')
+
+        # #############################
+        # SUMA CENE STANOVA SESTI SPRAT
+        # #############################
+        # LAMELA: SESTI SPRAT LAMELA 1 (L1.2)
+        svi_stanovi_po_lameli_l1_6 = self.suma_stanova_po_lameli('L1.6')
+
+        # LAMELA: SESTI SPRAT LAMELA 2 (L2.1)
+        svi_stanovi_po_lameli_l2_6 = self.suma_stanova_po_lameli('L2.6')
+
+        # LAMELA: SESTI SPRAT LAMELA 3 (L3.1)
+        svi_stanovi_po_lameli_l3_6 = self.suma_stanova_po_lameli('L3.6')
+
+        # #############################
+        # SUMA CENE STANOVA SEDMI SPRAT
+        # #############################
+        # LAMELA: SEDMI SPRAT LAMELA 1 (L1.2)
+        svi_stanovi_po_lameli_l1_7 = self.suma_stanova_po_lameli('L1.7')
+
+        # LAMELA: SEDMI SPRAT LAMELA 2 (L2.1)
+        svi_stanovi_po_lameli_l2_7 = self.suma_stanova_po_lameli('L2.7')
+
+        # LAMELA: SEDMI SPRAT LAMELA 3 (L3.1)
+        svi_stanovi_po_lameli_l3_7 = self.suma_stanova_po_lameli('L3.7')
+
+        # #############################
+        # SUMA CENE STANOVA PS SPRAT
+        # #############################
+        # LAMELA: PS SPRAT LAMELA 1 (L1.2)
+        svi_stanovi_po_lameli_l1_ps = self.suma_stanova_po_lameli('L1.PS')
+
+        # LAMELA: PS SPRAT LAMELA 2 (L2.1)
+        svi_stanovi_po_lameli_l2_ps = self.suma_stanova_po_lameli('L2.PS')
+
+        # LAMELA: PS SPRAT LAMELA 3 (L3.1)
+        svi_stanovi_po_lameli_l3_ps = self.suma_stanova_po_lameli('L3.PS')
+
         print('##################################')
         print('##################################')
-        print(svi_staovi_po_lameli_l1_TEST)
+        print(f'SUMA STANOVA LAMELA 1 PRVI SPRAT: {svi_stanovi_po_lameli_l1_1}')
+        print(f'SUMA STANOVA LAMELA 2 PRVI SPRAT: {svi_stanovi_po_lameli_l2_1}')
+        print(f'SUMA STANOVA LAMELA 3 PRVI SPRAT: {svi_stanovi_po_lameli_l3_1}')
+        print('############# DRUGI SPRAT #####################')
+        print(f'SUMA STANOVA LAMELA 1 DRUGI SPRAT: {svi_stanovi_po_lameli_l1_2}')
+        print(f'SUMA STANOVA LAMELA 2 DRUGI SPRAT: {svi_stanovi_po_lameli_l2_2}')
+        print(f'SUMA STANOVA LAMELA 3 DRUGI SPRAT: {svi_stanovi_po_lameli_l3_2}')
+        print('############# TRECI SPRAT #####################')
+        print(f'SUMA STANOVA LAMELA 1 TRECI SPRAT: {svi_stanovi_po_lameli_l1_3}')
+        print(f'SUMA STANOVA LAMELA 2 TRECI SPRAT: {svi_stanovi_po_lameli_l2_3}')
+        print(f'SUMA STANOVA LAMELA 3 TRECI SPRAT: {svi_stanovi_po_lameli_l3_3}')
+        print('############# CETVRTI SPRAT #####################')
+        print(f'SUMA STANOVA LAMELA 1 CETVRTI SPRAT: {svi_stanovi_po_lameli_l1_4}')
+        print(f'SUMA STANOVA LAMELA 2 CETVRTI SPRAT: {svi_stanovi_po_lameli_l2_4}')
+        print(f'SUMA STANOVA LAMELA 3 CETVRTI SPRAT: {svi_stanovi_po_lameli_l3_4}')
+        print('############# PETI SPRAT #####################')
+        print(f'SUMA STANOVA LAMELA 1 PETI SPRAT: {svi_stanovi_po_lameli_l1_5}')
+        print(f'SUMA STANOVA LAMELA 2 PETI SPRAT: {svi_stanovi_po_lameli_l2_5}')
+        print(f'SUMA STANOVA LAMELA 3 PETI SPRAT: {svi_stanovi_po_lameli_l3_5}')
+        print('############# SESTI SPRAT #####################')
+        print(f'SUMA STANOVA LAMELA 1 SESTI SPRAT: {svi_stanovi_po_lameli_l1_6}')
+        print(f'SUMA STANOVA LAMELA 2 SESTI SPRAT: {svi_stanovi_po_lameli_l2_6}')
+        print(f'SUMA STANOVA LAMELA 3 SESTI SPRAT: {svi_stanovi_po_lameli_l3_6}')
+        print('############# SEDMI SPRAT #####################')
+        print(f'SUMA STANOVA LAMELA 1 SEDMI SPRAT: {svi_stanovi_po_lameli_l1_7}')
+        print(f'SUMA STANOVA LAMELA 2 SEDMI SPRAT: {svi_stanovi_po_lameli_l2_7}')
+        print(f'SUMA STANOVA LAMELA 3 SEDMI SPRAT: {svi_stanovi_po_lameli_l3_7}')
+        print('############# PS SPRAT #####################')
+        print(f'SUMA STANOVA LAMELA 1 PS SPRAT: {svi_stanovi_po_lameli_l1_ps}')
+        print(f'SUMA STANOVA LAMELA 2 PS SPRAT: {svi_stanovi_po_lameli_l2_ps}')
+        print(f'SUMA STANOVA LAMELA 3 PS SPRAT: {svi_stanovi_po_lameli_l3_ps}')
         print('##################################')
         print('##################################')
 
-        svi_staovi_po_lameli_l2 = Stanovi.objects.values('cena_stana').filter(lamela__startswith='L2')
-        svi_staovi_po_lameli_l3 = Stanovi.objects.values('cena_stana').filter(lamela__startswith='L3')
-        print('########### svi_staovi_po_lameli_L1 ###########')
-        print(svi_staovi_po_lameli_l1)
-        print('########### svi_staovi_po_lameli_L2 ###########')
-        print(svi_staovi_po_lameli_l2)
-        print('########### svi_staovi_po_lameli_L3 ###########')
-        print(svi_staovi_po_lameli_l3)
-        # stanovi_ukupno_kvadrata = {
-        #     'stanovi_ukupno_kvadrata': query_stanovi_ukupno_kvadrata,
-        # }
+        ukupna_suma_stanova_po_lameli = {
+            'ukupna_suma_stanova_po_lameli':
+                {
+                    'svi_stanovi_po_lameli_l1_1': svi_stanovi_po_lameli_l1_1,
+                    'svi_stanovi_po_lameli_l2_1': svi_stanovi_po_lameli_l2_1,
+                    'svi_stanovi_po_lameli_l3_1': svi_stanovi_po_lameli_l3_1,
+                    'svi_stanovi_po_lameli_l1_2': svi_stanovi_po_lameli_l1_2,
+                    'svi_stanovi_po_lameli_l2_2': svi_stanovi_po_lameli_l2_2,
+                    'svi_stanovi_po_lameli_l3_2': svi_stanovi_po_lameli_l3_2,
+                    'svi_stanovi_po_lameli_l1_3': svi_stanovi_po_lameli_l1_3,
+                    'svi_stanovi_po_lameli_l2_3': svi_stanovi_po_lameli_l2_3,
+                    'svi_stanovi_po_lameli_l3_3': svi_stanovi_po_lameli_l3_3,
+                    'svi_stanovi_po_lameli_l1_4': svi_stanovi_po_lameli_l1_4,
+                    'svi_stanovi_po_lameli_l2_4': svi_stanovi_po_lameli_l2_4,
+                    'svi_stanovi_po_lameli_l3_4': svi_stanovi_po_lameli_l3_4,
+                    'svi_stanovi_po_lameli_l1_5': svi_stanovi_po_lameli_l1_5,
+                    'svi_stanovi_po_lameli_l2_5': svi_stanovi_po_lameli_l2_5,
+                    'svi_stanovi_po_lameli_l3_5': svi_stanovi_po_lameli_l3_5,
+                    'svi_stanovi_po_lameli_l1_6': svi_stanovi_po_lameli_l1_6,
+                    'svi_stanovi_po_lameli_l2_6': svi_stanovi_po_lameli_l2_6,
+                    'svi_stanovi_po_lameli_l3_6': svi_stanovi_po_lameli_l3_6,
+                    'svi_stanovi_po_lameli_l1_7': svi_stanovi_po_lameli_l1_7,
+                    'svi_stanovi_po_lameli_l2_7': svi_stanovi_po_lameli_l2_7,
+                    'svi_stanovi_po_lameli_l3_7': svi_stanovi_po_lameli_l3_7,
+                    'svi_stanovi_po_lameli_l1_ps': svi_stanovi_po_lameli_l1_ps,
+                    'svi_stanovi_po_lameli_l2_ps': svi_stanovi_po_lameli_l2_ps,
+                    'svi_stanovi_po_lameli_l3_ps': svi_stanovi_po_lameli_l3_ps,
+                }
+        }
 
-        return Response(query_stanovi_ukupno_kvadrata | svi_staovi_po_lameli_l1_TEST[0])
+        # svi_stanovi_po_lameli_l1_TEST = Stanovi.objects.annotate(test=Count('cena_stana')).values()
+        # print('##################################')
+        # print('##################################')
+        # print(svi_stanovi_po_lameli_l1_TEST)
+        # print('##################################')
+        # print('##################################')
+        #
+        # svi_stanovi_po_lameli_l2 = Stanovi.objects.values('cena_stana').filter(lamela__startswith='L2')
+        # svi_stanovi_po_lameli_l3 = Stanovi.objects.values('cena_stana').filter(lamela__startswith='L3')
+        # print('########### svi_staovi_po_lameli_L1 ###########')
+        # print(svi_stanovi_po_lameli_l1)
+        # print('########### svi_staovi_po_lameli_L2 ###########')
+        # print(svi_stanovi_po_lameli_l2)
+        # print('########### svi_staovi_po_lameli_L3 ###########')
+        # print(svi_stanovi_po_lameli_l3)
+        # # stanovi_ukupno_kvadrata = {
+        # #     'stanovi_ukupno_kvadrata': query_stanovi_ukupno_kvadrata,
+        # # }
+
+        return Response(
+            kvadratura_stanova | ukupna_suma_stanova_po_lameli
+        )
