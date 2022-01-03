@@ -39,6 +39,7 @@ THIRD_PARTY_APPS = [
     "crispy_forms",
     'drf_yasg',
     'django_filters',
+    'storages',
 ]
 
 LOCAL_APPS = [
@@ -250,21 +251,61 @@ USE_THOUSAND_SEPARATOR = True
 
 # region STATIC
 # ------------------------------------------------------------------------------
-STATIC_ROOT = str(BASE_DIR / "static")  # In production we want to use CDN
-STATIC_URL = "/static/"
-STATICFILES_DIRS = [str(APPS_DIR / "static")]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-STATICFILES_FINDERS = [
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-]
-# endregion
+if DEBUG is False:
+    STATIC_ROOT = str(BASE_DIR / "static")  # In production we want to use CDN
+    STATIC_URL = "/static/"
+    STATICFILES_DIRS = [str(APPS_DIR / "static")]
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    STATICFILES_FINDERS = [
+        "django.contrib.staticfiles.finders.FileSystemFinder",
+        "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    ]
+    # endregion
 
-# region MEDIA
-# ------------------------------------------------------------------------------
-MEDIA_ROOT = str(BASE_DIR / "media")
-MEDIA_URL = "/media/"
-
+    # region MEDIA
+    # ------------------------------------------------------------------------------
+    MEDIA_ROOT = str(BASE_DIR / "media")
+    MEDIA_URL = "/media/"
+else:
+    # STORAGES
+    # ------------------------------------------------------------------------------
+    AWS_ACCESS_KEY_ID = 'JYSXGRW5TXXGZGURLCQC'
+    AWS_SECRET_ACCESS_KEY = 'AdfPyUQ+aCZppT0BCzEXXAhdnOYeHBaT6O6C6Nj21Q0'
+    AWS_STORAGE_BUCKET_NAME = 'stanovi'
+    AWS_S3_ENDPOINT_URL = 'stanovi.fra1.digitaloceanspaces.com'
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
+    AWS_S3_CUSTOM_DOMAIN = 'stanovi.fra1.digitaloceanspaces.com /stanovi'
+    AWS_LOCATION = 'static'
+    AWS_QUERYSTRING_AUTH = False
+    # STATIC
+    # ------------------------
+    #STATIC_ROOT = str(BASE_DIR / "static")  # In production we want to use CDN
+    #STATIC_URL = "/static/"
+    #STATICFILES_DIRS = [str(APPS_DIR / "static")]
+    #STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    # STATICFILES_FINDERS = [
+    #     "django.contrib.staticfiles.finders.FileSystemFinder",
+    #     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    # ]
+    STATICFILES_DIRS = [str(APPS_DIR / "static")]
+    STATIC_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, AWS_LOCATION)
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    # MEDIA
+    # ------------------------------------------------------------------------------
+    # public media settings
+    #DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    #MEDIA_URL = f'https://{AWS_S3_ENDPOINT_URL}/media/'
+    MEDIA_ROOT = 'media/'
+    MEDIA_URL = '{}/{}/'.format(AWS_S3_CUSTOM_DOMAIN, MEDIA_ROOT)
+    DEFAULT_FILE_STORAGE = 'real_estate_api.utils.storages.MediaStorage'
+    #PUBLIC_MEDIA_LOCATION = 'media'
+    #MEDIA_URL = f'https://{AWS_S3_ENDPOINT_URL}/{PUBLIC_MEDIA_LOCATION}/'
+    #DEFAULT_FILE_STORAGE = "real_estate_api.utils.storages.MediaRootS3Boto3Storage"
+    #MEDIA_ROOT = 'https://%s/%s' % (AWS_S3_ENDPOINT_URL, PUBLIC_MEDIA_LOCATION)
+    # MEDIA_ROOT = 'https://%s/%s' % (AWS_S3_ENDPOINT_URL, 'static')
+    # MEDIA_URL = f"https://stanovi.fra1.digitaloceanspaces.com/media/"
 # endregion
 
 # region REST_FRAMEWORK

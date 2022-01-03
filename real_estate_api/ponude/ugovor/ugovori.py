@@ -35,7 +35,8 @@ class CreateContract:
                 # 'nacin_placanja': nacin_placanja
             }
             document.render(context)
-            document.save(settings.MEDIA_ROOT + '/ugovor' + str(ponuda.id_ponude) + '.docx')
+            document.save(settings.MEDIA_URL + '/ugovor' + str(ponuda.id_ponude) + '.docx')
+            #document.save(settings.MEDIA_ROOT + '/ugovor' + str(ponuda.id_ponude) + '.docx')
             stan.status_prodaje = 'rezervisan'
 
             ponuda.odobrenje = True  # Potrebno odobrenje jer je stan kaparisan (Rezervisan)
