@@ -51,12 +51,7 @@ class CreateContract:
             document.render(context)
 
             # Sacuvaj generisani Ugovor.
-            document.save(settings.MEDIA_URL + 'ugovor-br-' + str(ponuda.broj_ugovora) + '.docx')
-
-            # Ucitaj na Digital Ocean Space
-            client.upload_file(settings.MEDIA_URL + 'ugovor-br-' + str(ponuda.broj_ugovora) + '.docx',
-                               'ugovori',
-                               'ugovor-br-' + str(ponuda.broj_ugovora) + '.docx')
+            document.save('real_estate_api/static/ugovor/' + 'ugovor-br-' + str(ponuda.broj_ugovora) + '.docx')
 
             stan.status_prodaje = 'rezervisan'
 
@@ -64,6 +59,11 @@ class CreateContract:
 
             stan.save()
             ponuda.save()
+
+            # Ucitaj na Digital Ocean Space
+            client.upload_file('real_estate_api/static/ugovor' + '/ugovor-br-' + str(ponuda.broj_ugovora) + '.docx',
+                               'ugovori',
+                               'ugovor-br-' + str(ponuda.broj_ugovora) + '.docx')
 
         elif request.data['status_ponude'] == 'kupljen':
             # Kada Ponuda predje u status 'kupljen' automatski mapiraj polje 'prodat' u modelu Stana.
