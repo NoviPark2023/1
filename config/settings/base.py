@@ -264,7 +264,7 @@ STATICFILES_FINDERS = [
 
 # region MEDIA
 # ------------------------------------------------------------------------------
-MEDIA_ROOT = str(BASE_DIR / "media")
+MEDIA_ROOT = str(APPS_DIR / "media")
 MEDIA_URL = "/media/"
 # endregion
 
