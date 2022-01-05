@@ -2,6 +2,13 @@
 # ------------------------------------------------------------------------------
 # USE_DOCKER=yes
 # IPYTHONDIR=/app/.ipython
-POSTGRES_HOST: postgres
-DEBUG: True
-OPTIONS: {'sslmode': 'require'}
+POSTGRES_HOST=postgres
+DEBUG=True
+OPTIONS={'sslmode': 'require'}
+
+#STORAGES
+# ------------------------------------------------------------------------------
+AWS_SECRET_ACCESS_KEY=AdfPyUQ+aCZppT0BCzEXXAhdnOYeHBaT6O6C6Nj21Q0
+AWS_ACCESS_KEY_ID=JYSXGRW5TXXGZGURLCQC
+AWS_S3_ENDPOINT_URL=https://stanovi.fra1.digitaloceanspaces.com
+AWS_REGION_NAME=fra1

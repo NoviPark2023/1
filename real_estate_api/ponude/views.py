@@ -1,11 +1,13 @@
 from wsgiref.util import FileWrapper
 
+import boto3
 from django.http import HttpResponse, FileResponse
-from rest_framework import generics
+from rest_framework import generics, response
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 
 from django.conf import settings
+from rest_framework.response import Response
 
 from .models import Ponude
 from .serializers import PonudeSerializer
@@ -121,22 +123,38 @@ class UgovorPonudeDownloadListAPIView(generics.ListAPIView):
     API View za preuzimanje generisanog ugovora.
     """
     permission_classes = [IsAuthenticated, ]
-
     serializer_class = PonudeSerializer
 
     def get(self, request, *args, **kwargs):
-        """Preuzimanje ugovora"""
+        """
+        Generisanje jedinstvenog URL za svaki ugovor koji je ucitan na Digital Ocean Space.
+        Url se generisa sa sigurnosnim parametrima AWSa.
+
+        @see Generisanje Ugovora: CreateContract
+        @param request: None
+        @param args: None
+        @param kwargs: ID Ponude Stana
+        @return: Respons sa jedinstvenim URL za preuzimanje ugovora
+        """
 
         queryset = Ponude.objects.get(id_ponude__exact=kwargs['id_ponude'])
-        file_handle = settings.MEDIA_ROOT + '/ugovor' + str(queryset.id_ponude) + '.docx'
+
         try:
-            document = open(file_handle, 'rb')
-            response = HttpResponse(FileWrapper(document), content_type='application/msword')
-            response['Content-Disposition'] = 'attachment; filename=Ugovor-Ponude-' + str(kwargs['id_ponude']) + '.docx'
-            # FilePointer = open(file_handle, "rb")
-            # response = HttpResponse(FilePointer, content_type='application/force-download')
-            # response['Content-Disposition'] = 'attachment; filename=Ugovor-Ponude-' + str(kwargs['id_ponude']) + '.docx'
+            session = boto3.session.Session()
+            client = session.client('s3',
+                                    region_name='fra1',
+                                    endpoint_url=settings.AWS_S3_ENDPOINT_URL,
+                                    aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                                    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+
+            # Generisi sigurnosni URL za preuzimanje ugovora
+            url = client.generate_presigned_url(ClientMethod='get_object',
+                                                Params={
+                                                    'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
+                                                    'Key': 'ugovor-br-' + str(queryset.broj_ugovora) + '.docx'
+                                                }, ExpiresIn=70000)
+
         except (FileNotFoundError, Ponude.DoesNotExist):
             raise NotFound('Željeni ugovor nije nađen !', code=404)
 
-        return response
+        return HttpResponse(url)
