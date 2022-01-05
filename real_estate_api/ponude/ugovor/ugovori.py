@@ -51,7 +51,7 @@ class CreateContract:
             document.render(context)
 
             # Sacuvaj generisani Ugovor.
-            document.save(settings.MEDIA_URL + 'ugovor-br-' + str(ponuda.broj_ugovora) + '.docx')
+            document.save(settings.MEDIA_URL + '/ugovor-br-' + str(ponuda.broj_ugovora) + '.docx')
 
             # Ucitaj na Digital Ocean Space
             client.upload_file(settings.MEDIA_URL + 'ugovor-br-' + str(ponuda.broj_ugovora) + '.docx',
