@@ -1,13 +1,10 @@
-from wsgiref.util import FileWrapper
-
 import boto3
-from django.http import HttpResponse, FileResponse
-from rest_framework import generics, response
+from django.http import HttpResponse
+from rest_framework import generics
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 
 from django.conf import settings
-from rest_framework.response import Response
 
 from .models import Ponude
 from .serializers import PonudeSerializer

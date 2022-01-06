@@ -1,5 +1,6 @@
 import boto3
 from django.conf import settings
+from django.core.mail import send_mail
 from docxtpl import DocxTemplate
 
 from real_estate_api.kupci.models import Kupci
@@ -65,9 +66,25 @@ class CreateContract:
                                'ugovori',
                                'ugovor-br-' + str(ponuda.broj_ugovora) + '.docx')
 
+            # Posalji svim preplatnicima EMAIL da je Stan REZERVISAN.
+            for korisnici_email in settings.RECIPIENT_ADDRESS:
+                send_mail(f'Potrebno ODOBRENJE za Stan ID: {str(stan.id_stana)}.',
+                          f'Stan ID: {str(stan.id_stana)}, Adresa: {str(stan.adresa_stana)} je rezervisan.\n'
+                          f'Cena stana: {round(stan.cena_stana, 2)}\n'
+                          f'Cena Ponude je: {round(ponuda.cena_stana_za_kupca, 2)}.',
+                          settings.EMAIL_HOST_USER, [korisnici_email])
+
         elif request.data['status_ponude'] == 'kupljen':
             # Kada Ponuda predje u status 'kupljen' automatski mapiraj polje 'prodat' u modelu Stana.
             stan.status_prodaje = 'prodat'
+
+            # Posalji svim preplatnicima EMAIL da je Stan KUPLJEN.
+            for korisnici_email in settings.RECIPIENT_ADDRESS:
+                send_mail(f'Stan ID: {str(stan.id_stana)} je KUPLJEN.',
+                          f'Stan ID: {str(stan.id_stana)}, Adresa: {str(stan.adresa_stana)} je kupljen.\n'
+                          f'Cena stana: {round(stan.cena_stana, 2)}\n'
+                          f'Cena Ponude je: {round(ponuda.cena_stana_za_kupca, 2)}.',
+                          settings.EMAIL_HOST_USER, [korisnici_email])
 
             stan.save()
             ponuda.save()

@@ -84,7 +84,6 @@ class Stanovi(models.Model):
 
         self.kvadratura_korekcija = Decimal(self.kvadratura) * Decimal(self.iznos_za_korekciju_kvadrature)
 
-
         pronadji_cenu_stana = AzuriranjeCena.objects.get(
             sprat=self.sprat,
             broj_soba=float(self.broj_soba),
@@ -98,7 +97,6 @@ class Stanovi(models.Model):
         self.cena_kvadrata = pronadji_cenu_stana.cena_kvadrata
 
         return super(Stanovi, self).save(*args, **kwargs)
-
 
     def __str__(self):
         return f"{self.id_stana}, {self.lamela}, {self.kvadratura}"
