@@ -27,7 +27,7 @@ class Kupci(models.Model):
     adresa: str = models.CharField('Adresa', max_length=50)
 
     def get_id_kupca(self) -> object:
-        return self.id_kupca + ' id_kupca ' + self.id_kupca + ' id_kupca.'
+        return self.id_kupca + ' id_kupca '
 
     def __str__(self):
         return f"{self.ime_prezime}"

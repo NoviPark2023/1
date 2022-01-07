@@ -1,15 +1,14 @@
 import pytest
 
-from factories_kupci import KupciFactory
-from real_estate_api.kupci.models import Kupci
-from pytest_factoryboy import register
+#from real_estate_api.kupci.models import Kupci
+#from pytest_factoryboy import register
 
-register(KupciFactory) # for impl. use: < kupci_factory >
+# register(KupciFactory) # for impl. use: < kupci_factory >
 
-@pytest.fixture()
-def kupac(db, kupci_factory) -> Kupci:
-    kupac = kupci_factory.create()
-    return kupac
+# @pytest.fixture()
+# def kupac(db, kupci_factory) -> Kupci:
+#     kupac = kupci_factory.create()
+#     return kupac
 
 # @pytest.fixture()
 # def novi_kupac_factory(db):
