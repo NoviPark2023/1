@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from babel.numbers import format_decimal, parse_decimal
 from django.db.models import Count, Sum
 from rest_framework import generics
@@ -305,6 +307,10 @@ class RoiStanovaAPIView(generics.ListAPIView):
         stanovi_ukupno_kvadrata = Stanovi.objects.aggregate(
             stanovi_ukupno_kvadrata=Sum('kvadratura')
         )
+
+        # Za kalkulaciju ralike u kvadratima
+        stanovi_ukupno_kvadrata_float = stanovi_ukupno_kvadrata
+
         # Format decimal places for 'stanovi_ukupno_kvadrata'
         stanovi_ukupno_kvadrata = format_decimal(
             stanovi_ukupno_kvadrata['stanovi_ukupno_kvadrata'],
@@ -316,10 +322,26 @@ class RoiStanovaAPIView(generics.ListAPIView):
         stanovi_ukupno_korekcija_kvadrata = Stanovi.objects.aggregate(
             stanovi_ukupno_korekcija_kvadrata=Sum('kvadratura_korekcija')
         )
+
+        # Za kalkulaciju ralike u kvadratima
+        stanovi_ukupno_korekcija_kvadrata_float = stanovi_ukupno_korekcija_kvadrata
+
         # Format decimal places for 'stanovi_ukupno_korekcija_kvadrata'
         stanovi_ukupno_korekcija_kvadrata = format_decimal(
             stanovi_ukupno_korekcija_kvadrata['stanovi_ukupno_korekcija_kvadrata'],
             locale='sr_RS')
+
+        # #####################################
+        # RAZLIKA UKUPNO KVADRATA - KOREKCIJA
+        # #####################################
+        razlika_kvadrati_korekcija = (
+            stanovi_ukupno_kvadrata_float['stanovi_ukupno_kvadrata'] -
+            stanovi_ukupno_korekcija_kvadrata_float['stanovi_ukupno_korekcija_kvadrata']
+        )
+
+        # Format decimal places for 'stanovi_ukupno_korekcija_kvadrata'
+        razlika_kvadrati_korekcija = format_decimal(
+            razlika_kvadrati_korekcija, locale='sr_RS')
 
         # Return API Structure 'kvadratura_stanova'
         kvadratura_stanova = {
@@ -327,6 +349,7 @@ class RoiStanovaAPIView(generics.ListAPIView):
                 {
                     'stanovi_ukupno_kvadrata': stanovi_ukupno_kvadrata,
                     'stanovi_ukupno_korekcija_kvadrata': stanovi_ukupno_korekcija_kvadrata,
+                    'razlika_kvadrati_korekcija': razlika_kvadrati_korekcija,
 
                 }
         }
