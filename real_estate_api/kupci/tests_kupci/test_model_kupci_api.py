@@ -2,7 +2,6 @@ import pytest
 from faker import Faker
 
 from real_estate_api.kupci.models import Kupci
-from kupci_fixtures import novi_kupac_fixture
 
 fake = Faker()
 

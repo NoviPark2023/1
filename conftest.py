@@ -1,46 +1,52 @@
 import pytest
 
-#from real_estate_api.kupci.models import Kupci
-#from pytest_factoryboy import register
+from real_estate_api.korisnici.models import Korisnici
+from real_estate_api.kupci.models import Kupci
+from faker import Faker
 
-# register(KupciFactory) # for impl. use: < kupci_factory >
-
-# @pytest.fixture()
-# def kupac(db, kupci_factory) -> Kupci:
-#     kupac = kupci_factory.create()
-#     return kupac
-
-# @pytest.fixture()
-# def novi_kupac_factory(db):
-#     def kreiranje_kupca(
-#         lice: str = 'Fizicko',
-#         ime_prezime: str = 'Slobodan Tomic',
-#         email: str = 'sloba@factoryww.com',
-#         broj_telefona: str = '+381 63 136 90 98',
-#         Jmbg_Pib: str = '123456789123',
-#         adresa: str = 'Test Adresa Kupaca',
-#     ):
-#         kupac = Kupci.objects.create(
-#             lice=lice,
-#             ime_prezime=ime_prezime,
-#             email=email,
-#             broj_telefona=broj_telefona,
-#             Jmbg_Pib=Jmbg_Pib,
-#             adresa=adresa,
-#         )
-#         return kupac
-#
-#     return kreiranje_kupca
+fake = Faker()
 
 
+@pytest.fixture(autouse=False)
+def novi_autorizovan_korisnik_fixture(db, client, django_user_model) -> Korisnici:
+    """
+    Kreiranje novog Korisnika i autorizacija istog na sistem.
 
-#
-#
-# @pytest.fixture
-# def kreiraj_novog_kupaca_fizicko_lice(db, novi_kupac_factory) -> Kupci:
-#     return novi_kupac_factory(lice="Fizicko")
-#
-#
-# @pytest.fixture
-# def kreiraj_novog_kupaca_pravno_lice(db, novi_kupac_factory) -> Kupci:
-#     return novi_kupac_factory(lice="Pravno")
+    @param db: Testna DB.
+    @param client: A Django test client instance.
+    @param django_user_model: Korisnik.
+    @return: Entitet autorizovan Korisnik.
+    """
+
+    korisnik = Korisnici.objects.create(
+        username='nikola',
+        password='nikola',
+        email='nikola@nikola.com',
+        ime='Nikola',
+        prezime='Nikola',
+    )
+
+    client.force_login(korisnik)
+    print('############# KORISNIK ##############')
+    return korisnik
+
+
+@pytest.fixture(autouse=False)
+def novi_kupac_fixture(db) -> Kupci:
+    """
+    Kreiranje novog Kupca.
+
+    @param db: Testna DB.
+    @return: Entitet Kupci.
+    """
+    kupac = Kupci.objects.create(
+        id_kupca=1,
+        lice='Fizicko',
+        ime_prezime=fake.name(),
+        email=fake.email(),
+        broj_telefona='+381631369098',
+        Jmbg_Pib=fake.random_int(0, 13),
+        adresa='Milentija Popovica 32',
+    )
+
+    return kupac
