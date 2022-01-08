@@ -73,7 +73,6 @@ def nova_dva_kupaca_fixture(db) -> list:
     @return: Entitet Kupci.
     """
 
-    novi_kupci = []
     kupac_jedan = Kupci.objects.create(
         id_kupca=1,
         lice='Fizicko',

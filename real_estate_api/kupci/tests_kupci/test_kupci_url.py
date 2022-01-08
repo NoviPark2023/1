@@ -13,7 +13,6 @@ class TestRestApiKupci:
             * @see conftest.py (novi_korisnik_ne_autorizovan_fixture)
 
         @param client: A Django test client instance.
-        @param novi_korisnik_ne_autorizovan_fixture: Obican Korisnik bez autorizacije.
         @return status code 401: Unauthorized
         """
 
@@ -40,16 +39,47 @@ class TestRestApiKupci:
 
         assert response.status_code == 200
 
-    def test_detalji_kupca(self, client, novi_autorizovan_korisnik_fixture, novi_kupac_fixture):
+    def test_kreiraj_kupca(self, client, novi_autorizovan_korisnik_fixture, novi_kupac_fixture):
         """
-        Test poziv 'endpoint_detalji_kupca' za API poziv Detalja Kupca sa autorizovanim Korisnikom.
+        Test poziv 'kupci:kreiraj_kupca' za API poziv Kreiranje Kupca sa autorizovanim Korisnikom.
         Takodje se proverava i Response sadrzaj.
 
             * @see conftest.py (novi_autorizovan_korisnik_fixture)
             * @see conftest.py (novi_kupac_fixture)
 
         @param client: A Django test client instance.
-        @param novi_kupac_fixture: Klinet (Kupac).
+        @param novi_kupac_fixture: Klijent (Kupac).
+        @param novi_autorizovan_korisnik_fixture: Obican Korisnik sa autorizacijom.
+        """
+
+        url_kreiraj_kupca = reverse('kupci:kreiraj_kupca')
+
+        # Podaci za izmenu Kupca
+        test_novi_kupac = json.dumps(
+            {
+                "lice": "Pravno",
+                "ime_prezime": "Slobodan Tomic",
+                "email": "slobodan.tomic@factorywws.com",
+                "broj_telefona": "+381 63 136 90 988",
+                "Jmbg_Pib": "0102030605",
+                "adresa": "Milenke Dravica 54"
+            }
+        )
+
+        response = client.post(url_kreiraj_kupca, data=test_novi_kupac, content_type='application/json')
+
+        assert response.status_code == 201
+
+    def test_detalji_kupca(self, client, novi_autorizovan_korisnik_fixture, novi_kupac_fixture):
+        """
+        Test poziv 'kupci:detalji_kupca' za API poziv Detalja Kupca sa autorizovanim Korisnikom.
+        Takodje se proverava i Response sadrzaj.
+
+            * @see conftest.py (novi_autorizovan_korisnik_fixture)
+            * @see conftest.py (novi_kupac_fixture)
+
+        @param client: A Django test client instance.
+        @param novi_kupac_fixture: Klijent (Kupac).
         @param novi_autorizovan_korisnik_fixture: Obican Korisnik sa autorizacijom.
         """
 
@@ -58,6 +88,7 @@ class TestRestApiKupci:
         response = client.get(url_detalji_kupca)
 
         assert response.status_code == 200
+
         assert response.json() == {
             "id_kupca": novi_kupac_fixture.id_kupca,
             "lice": novi_kupac_fixture.lice,
@@ -76,7 +107,7 @@ class TestRestApiKupci:
 
     def test_izmeni_kupca(self, client, novi_autorizovan_korisnik_fixture, novi_kupac_fixture):
         """
-        Test poziv 'endpoint_izmeni_kupca' za API poziv Izmeni Kupca sa autorizovanim Korisnikom.
+        Test poziv 'kupci:izmeni_kupca' za API poziv Izmeni Kupca sa autorizovanim Korisnikom.
         Takodje se proverava i Response sadrzaj.
 
             * @see conftest.py (novi_autorizovan_korisnik_fixture)
@@ -84,21 +115,23 @@ class TestRestApiKupci:
 
         @param client: A Django test client instance.
         @param novi_autorizovan_korisnik_fixture: Korisnik.
-        @param novi_kupac_fixture: Klinet (Kupac).
+        @param novi_kupac_fixture: Klijent (Kupac).
         """
 
         # Proveri prvo da li je ime_prezime iz fixtura 'ime_prezime'
         assert novi_kupac_fixture.ime_prezime == novi_kupac_fixture.ime_prezime
 
         # Podaci za izmenu Kupca
-        test_novi_kupac = json.dumps({
-            "lice": "Pravno",
-            "ime_prezime": "Slobodan Tomic",
-            "email": "slobodan.tomic@factorywws.com",
-            "broj_telefona": "+381 63 136 90 988",
-            "Jmbg_Pib": "0102030605",
-            "adresa": "Milenke Dravica 54"
-        })
+        test_novi_kupac = json.dumps(
+            {
+                "lice": "Pravno",
+                "ime_prezime": "Slobodan Tomic",
+                "email": "slobodan.tomic@factorywws.com",
+                "broj_telefona": "+381 63 136 90 988",
+                "Jmbg_Pib": "0102030605",
+                "adresa": "Milenke Dravica 54"
+            }
+        )
 
         url_izmeni_kupca = reverse('kupci:izmeni_kupca', args=[novi_kupac_fixture.id_kupca])
 
@@ -115,7 +148,7 @@ class TestRestApiKupci:
 
     def test_obrisi_kupca(self, client, novi_autorizovan_korisnik_fixture, novi_kupac_fixture):
         """
-        Test poziv 'endpoint_obrisi_kupca' za API poziv Obrisi Kupca sa autorizovanim Korisnikom.
+        Test poziv 'kupci:obrisi_kupca' za API poziv Obrisi Kupca sa autorizovanim Korisnikom.
         Takodje se proverava i Response sadrzaj.
 
             * @see conftest.py (novi_autorizovan_korisnik_fixture)
@@ -123,7 +156,7 @@ class TestRestApiKupci:
 
         @param client: A Django test client instance.
         @param novi_autorizovan_korisnik_fixture: Korisnik.
-        @param novi_kupac_fixture: Klinet (Kupac).
+        @param novi_kupac_fixture: Klijent (Kupac).
         """
 
         # Proveri prvo da li je ID kupca  iz fixtura 'id_kupca'
