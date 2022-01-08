@@ -39,11 +39,11 @@ class TestKupciSerijalizers:
         assert response.status_code == 200
         assert kupci_broj == 2
 
-    def test_serializers_detalji_jednog_kupca(self,
-                                              client,
-                                              nova_dva_kupaca_fixture,
-                                              novi_autorizovan_korisnik_fixture
-                                              ):
+    def test_valid_serializers_detalji_jednog_kupca(self,
+                                                    client,
+                                                    nova_dva_kupaca_fixture,
+                                                    novi_autorizovan_korisnik_fixture
+                                                    ):
         """
         Testiranje serijalizera za pregled deatalja Klijenata(Kupaca) sa fixturom od dva kreirana nova Kupca.
         Testiranje se vrsi sa autorizovanim Korisnikom sistema.
@@ -60,7 +60,7 @@ class TestKupciSerijalizers:
         broj_kupaca = Kupci.objects.all().count()
         assert broj_kupaca == 2
 
-        # Get valid one Kupaca from Response
+        # Get valid two Kupaca from Response
         url_detalji_kupca_jedan = reverse('kupci:detalji_kupca', args=[nova_dva_kupaca_fixture[0].id_kupca])
         url_detalji_kupca_dva = reverse('kupci:detalji_kupca', args=[nova_dva_kupaca_fixture[1].id_kupca])
 
@@ -81,6 +81,29 @@ class TestKupciSerijalizers:
 
         assert json.dumps(serializer_kupac_one.data) == json.dumps(response_kupac_jedan.json())
         assert json.dumps(serializer_kupac_two.data) == json.dumps(response_kupac_dva.json())
+
+    def test_invalid_serializers_detalji_jednog_kupca(self,
+                                                      client,
+                                                      nova_dva_kupaca_fixture,
+                                                      novi_autorizovan_korisnik_fixture
+                                                      ):
+        """
+        Testiranje serijalizera za pregled deatalja Klijenata(Kupaca) koji ne postoji
+        sa fixturom od dva kreirana nova Kupca.
+
+        Testiranje se vrsi sa autorizovanim Korisnikom sistema.
+
+            * @see conftest.py (novi_autorizovan_korisnik_fixture)
+            * @see conftest.py (nova_dva_kupaca_fixture)
+
+        @param client: A Django test client instance.
+        @param nova_dva_kupaca_fixture: Kupci
+        @param novi_autorizovan_korisnik_fixture: Korisnik
+        """
+        # Get invalid one Kupaca from Response
+        url_detalji_kupca_jedan = reverse('kupci:detalji_kupca', args=[nova_dva_kupaca_fixture[0].id_kupca + 1000])
+        response = client.get(url_detalji_kupca_jedan)
+        assert response.status_code == 404
 
     def test_serializers_kreiraj_jednog_kupca(self,
                                               client,
