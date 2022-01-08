@@ -1,47 +1,96 @@
 import pytest
+import random
+from faker import Faker
 
-from factories_kupci import KupciFactory
+from real_estate_api.korisnici.models import Korisnici
 from real_estate_api.kupci.models import Kupci
-from pytest_factoryboy import register
 
-register(KupciFactory) # for impl. use: < kupci_factory >
+fake = Faker()
+
 
 @pytest.fixture()
-def kupac(db, kupci_factory) -> Kupci:
-    kupac = kupci_factory.create()
+def novi_korisnik_ne_autorizovan_fixture(db) -> Korisnici:
+    return Korisnici.objects.create(
+        username='nikola',
+        password='nikola',
+        email='nikola@nikola.com',
+        ime='Nikola',
+        prezime='Nikola',
+    )
+
+
+@pytest.fixture(autouse=False)
+def novi_autorizovan_korisnik_fixture(db, client, django_user_model) -> Korisnici:
+    """
+    Kreiranje novog Korisnika i autorizacija istog na sistem.
+
+    @param db: Testna DB.
+    @param client: A Django test client instance.
+    @param django_user_model: Korisnik.
+    @return: Entitet autorizovan Korisnik.
+    """
+
+    korisnik = Korisnici.objects.create(
+        username='nikola',
+        password='nikola',
+        email='nikola@nikola.com',
+        ime='Nikola',
+        prezime='Nikola',
+    )
+
+    client.force_login(korisnik)
+
+    return korisnik
+
+
+@pytest.fixture(autouse=False)
+def novi_kupac_fixture(db) -> Kupci:
+    """
+    Kreiranje novog Kupca.
+
+    @param db: Testna DB.
+    @return: Entitet Kupci.
+    """
+    kupac = Kupci.objects.create(
+        id_kupca=1,
+        lice='Fizicko',
+        ime_prezime=fake.name(),
+        email=fake.email(),
+        broj_telefona='+381631369098',
+        Jmbg_Pib=str(random.randrange(1000000000000, 9999999999999)),
+        adresa='Milentija Popovica 32',
+    )
+
     return kupac
 
-# @pytest.fixture()
-# def novi_kupac_factory(db):
-#     def kreiranje_kupca(
-#         lice: str = 'Fizicko',
-#         ime_prezime: str = 'Slobodan Tomic',
-#         email: str = 'sloba@factoryww.com',
-#         broj_telefona: str = '+381 63 136 90 98',
-#         Jmbg_Pib: str = '123456789123',
-#         adresa: str = 'Test Adresa Kupaca',
-#     ):
-#         kupac = Kupci.objects.create(
-#             lice=lice,
-#             ime_prezime=ime_prezime,
-#             email=email,
-#             broj_telefona=broj_telefona,
-#             Jmbg_Pib=Jmbg_Pib,
-#             adresa=adresa,
-#         )
-#         return kupac
-#
-#     return kreiranje_kupca
 
+@pytest.fixture(autouse=False)
+def nova_dva_kupaca_fixture(db) -> list:
+    """
+    Kreiranje dva nova Kupca za test serijalizersa.
 
+    @param db: Testna DB.
+    @return: Entitet Kupci.
+    """
 
-#
-#
-# @pytest.fixture
-# def kreiraj_novog_kupaca_fizicko_lice(db, novi_kupac_factory) -> Kupci:
-#     return novi_kupac_factory(lice="Fizicko")
-#
-#
-# @pytest.fixture
-# def kreiraj_novog_kupaca_pravno_lice(db, novi_kupac_factory) -> Kupci:
-#     return novi_kupac_factory(lice="Pravno")
+    kupac_jedan = Kupci.objects.create(
+        id_kupca=1,
+        lice='Fizicko',
+        ime_prezime=fake.name(),
+        email=fake.email(),
+        broj_telefona='+381631369098',
+        Jmbg_Pib=random.randrange(1000000000000, 9999999999999),  # Random 13 digits number.
+        adresa='Milentija Popovica 32',
+    )
+    kupac_dva = Kupci.objects.create(
+        id_kupca=2,
+        lice='Pravno',
+        ime_prezime=fake.name(),
+        email=fake.email(),
+        broj_telefona='+381 333 999',
+        Jmbg_Pib=random.randrange(1000000000000, 9999999999999),  # Random 13 digits number.
+        adresa='Milke Canic 32',
+    )
+    novi_kupci = [kupac_jedan, kupac_dva]
+
+    return novi_kupci
