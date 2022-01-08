@@ -1,12 +1,16 @@
+import json
+
+
 class TestRestApiKupci:
     """Testitanje API Endpointa entireta Kupci"""
 
     endpoint_svi_kupci = '/kupci'
     endpoint_detalji_kupca = f'{endpoint_svi_kupci}/detalji-kupca'
+    endpoint_izmeni_kupca = f'{endpoint_svi_kupci}/izmeni-kupca'
 
     def test_sa_ne_autorizovanim_korisnikom(self, client, django_user_model, novi_korisnik_ne_autorizovan_fixture):
         """
-        Test poziv 'endpoint_svi_kupci' -a sa ne autorizovanim korisnikom.
+        Test poziv 'endpoint_svi_kupci' -a sa ne autorizovanim Korisnikom.
 
             * @see conftest.py (novi_korisnik_ne_autorizovan_fixture)
 
@@ -21,7 +25,7 @@ class TestRestApiKupci:
 
     def test_sa_autorizovanim_korisnikom(self, client, django_user_model, novi_autorizovan_korisnik_fixture):
         """
-        Test poziv 'endpoint_svi_kupci' -a sa autorizovanim korisnikom.
+        Test poziv 'endpoint_svi_kupci' -a sa autorizovanim Korisnikom.
 
             * @see conftest.py (novi_autorizovan_korisnik_fixture)
 
@@ -35,9 +39,9 @@ class TestRestApiKupci:
 
         assert response.status_code == 200
 
-    def test_detealji_kupca(self, client, django_user_model, novi_autorizovan_korisnik_fixture, novi_kupac_fixture):
+    def test_detalji_kupca(self, client, django_user_model, novi_autorizovan_korisnik_fixture, novi_kupac_fixture):
         """
-        Test poziv 'endpoint_detalji_kupca' za API poziv Detalja Kupca sa autorizovanim korisnikom.
+        Test poziv 'endpoint_detalji_kupca' za API poziv Detalja Kupca sa autorizovanim Korisnikom.
         Takodje se proverava i Response sadrzaj.
 
             * @see conftest.py (novi_autorizovan_korisnik_fixture)
@@ -66,3 +70,42 @@ class TestRestApiKupci:
             "obrisi_kupca_url": "/kupci/obrisi-kupca/1/",
             "lista_kupaca_url": "/kupci/"
         }
+
+    def test_izmeni_kupca(self, client, novi_autorizovan_korisnik_fixture, novi_kupac_fixture):
+        """
+        Test poziv 'endpoint_izmeni_kupca' za API poziv Izmeni Kupca sa autorizovanim Korisnikom.
+        Takodje se proverava i Response sadrzaj.
+
+            * @see conftest.py (novi_autorizovan_korisnik_fixture)
+            * @see conftest.py (novi_kupac_fixture)
+
+        @param client: A Django test client instance.
+        @param novi_autorizovan_korisnik_fixture: Korisnik.
+        @param novi_kupac_fixture: Klinet (Kupac).
+        """
+
+        # Proveri prvo da li je ime_prezime iz fixtura 'ime_prezime'
+        assert novi_kupac_fixture.ime_prezime == novi_kupac_fixture.ime_prezime
+
+        # Podaci za izmenu Kupca
+        test_novi_kupac = json.dumps({
+            "lice": "Pravno",
+            "ime_prezime": "Slobodan Tomic",
+            "email": "slobodan.tomic@factorywws.com",
+            "broj_telefona": "+381 63 136 90 988",
+            "Jmbg_Pib": "0102030605",
+            "adresa": "Milenke Dravica 54"
+        })
+
+        response = client.put(f'{self.endpoint_izmeni_kupca}/{novi_kupac_fixture.id_kupca}/',
+                              data=test_novi_kupac,
+                              content_type='application/json')
+
+        assert response.status_code == 200
+
+        assert response.json()["lice"] == json.loads(test_novi_kupac)['lice']
+        assert response.json()["ime_prezime"] == json.loads(test_novi_kupac)['ime_prezime']
+        assert response.json()["email"] == json.loads(test_novi_kupac)['email']
+        assert response.json()["broj_telefona"] == json.loads(test_novi_kupac)['broj_telefona']
+        assert response.json()["Jmbg_Pib"] == json.loads(test_novi_kupac)['Jmbg_Pib']
+        assert response.json()["adresa"] == json.loads(test_novi_kupac)['adresa']

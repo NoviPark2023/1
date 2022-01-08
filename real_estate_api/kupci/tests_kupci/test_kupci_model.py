@@ -6,7 +6,7 @@ fake = Faker()
 
 
 class TestEntitetaKupci:
-    """testiranje entiteta Kupci"""
+    """Testitanje entiteta Kupci"""
 
     def test_create_novi_kupac(self, novi_kupac_fixture):
         """
