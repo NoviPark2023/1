@@ -184,3 +184,17 @@ class TestEntitetaKupci:
         movi_adresa_kupca = Kupci.objects.get(adresa='Preradovićeva 23')
 
         assert movi_adresa_kupca.adresa == 'Preradovićeva 23'
+
+    def test_delete_kupca_iz_bazepodataka(self, novi_kupac_fixture):
+        """
+        Test brisanja Kupca iz baze podataka.
+
+        @param novi_kupac_fixture: Kupci
+        """
+
+        # Proveri prvo da li postoji kreiran Kupac u bazi.
+        assert Kupci.objects.all().count() == 1
+
+        Kupci.objects.get(id_kupca=novi_kupac_fixture.id_kupca).delete()
+
+        assert Kupci.objects.all().count() == 0

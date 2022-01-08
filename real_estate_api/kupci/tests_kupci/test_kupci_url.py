@@ -2,21 +2,20 @@ import json
 
 
 class TestRestApiKupci:
-    """Testitanje API Endpointa entireta Kupci"""
+    """Testitanje API Endpointa entiteta Kupci"""
 
     endpoint_svi_kupci = '/kupci'
     endpoint_detalji_kupca = f'{endpoint_svi_kupci}/detalji-kupca'
     endpoint_izmeni_kupca = f'{endpoint_svi_kupci}/izmeni-kupca'
     endpoint_obrisi_kupca = f'{endpoint_svi_kupci}/obrisi-kupca'
 
-    def test_sa_ne_autorizovanim_korisnikom(self, client, django_user_model, novi_korisnik_ne_autorizovan_fixture):
+    def test_sa_ne_autorizovanim_korisnikom(self, client):
         """
         Test poziv 'endpoint_svi_kupci' -a sa ne autorizovanim Korisnikom.
 
             * @see conftest.py (novi_korisnik_ne_autorizovan_fixture)
 
         @param client: A Django test client instance.
-        @param django_user_model: Korisnik.
         @param novi_korisnik_ne_autorizovan_fixture: Obican Korisnik bez autorizacije.
         @return status code 401: Unauthorized
         """
@@ -24,14 +23,13 @@ class TestRestApiKupci:
 
         assert response.status_code == 401
 
-    def test_sa_autorizovanim_korisnikom(self, client, django_user_model, novi_autorizovan_korisnik_fixture):
+    def test_sa_autorizovanim_korisnikom(self, client, novi_autorizovan_korisnik_fixture):
         """
         Test poziv 'endpoint_svi_kupci' -a sa autorizovanim Korisnikom.
 
             * @see conftest.py (novi_autorizovan_korisnik_fixture)
 
         @param client: A Django test client instance.
-        @param django_user_model: Korisnik.
         @param novi_autorizovan_korisnik_fixture: Obican Korisnik sa autorizacijom.
         @return status code 200: OK
         """
@@ -40,7 +38,7 @@ class TestRestApiKupci:
 
         assert response.status_code == 200
 
-    def test_detalji_kupca(self, client, django_user_model, novi_autorizovan_korisnik_fixture, novi_kupac_fixture):
+    def test_detalji_kupca(self, client, novi_autorizovan_korisnik_fixture, novi_kupac_fixture):
         """
         Test poziv 'endpoint_detalji_kupca' za API poziv Detalja Kupca sa autorizovanim Korisnikom.
         Takodje se proverava i Response sadrzaj.
@@ -49,7 +47,6 @@ class TestRestApiKupci:
             * @see conftest.py (novi_kupac_fixture)
 
         @param client: A Django test client instance.
-        @param django_user_model: Korisnik.
         @param novi_kupac_fixture: Klinet (Kupac).
         @param novi_autorizovan_korisnik_fixture: Obican Korisnik sa autorizacijom.
         """
