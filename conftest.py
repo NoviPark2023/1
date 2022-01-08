@@ -1,4 +1,5 @@
 import pytest
+from rest_framework.test import APIClient
 
 from real_estate_api.korisnici.models import Korisnici
 from real_estate_api.kupci.models import Kupci
@@ -42,7 +43,7 @@ def novi_autorizovan_korisnik_fixture(db, client, django_user_model) -> Korisnic
     return korisnik
 
 
-@pytest.fixture(autouse=False)
+@pytest.fixture(autouse=True)
 def novi_kupac_fixture(db) -> Kupci:
     """
     Kreiranje novog Kupca.
