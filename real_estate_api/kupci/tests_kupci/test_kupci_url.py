@@ -58,7 +58,6 @@ class TestRestApiKupci:
         response = client.get(url_detalji_kupca)
 
         assert response.status_code == 200
-
         assert response.json() == {
             "id_kupca": novi_kupac_fixture.id_kupca,
             "lice": novi_kupac_fixture.lice,
@@ -68,8 +67,10 @@ class TestRestApiKupci:
             "Jmbg_Pib": str(novi_kupac_fixture.Jmbg_Pib),
             "adresa": novi_kupac_fixture.adresa,
             "lista_ponuda_kupca": [],
+            'detalji_kupca_url': '/kupci/detalji-kupca/1/',
             "izmeni_kupca_url": "/kupci/izmeni-kupca/1/",
             "obrisi_kupca_url": "/kupci/obrisi-kupca/1/",
+            'kreiraj_kupca_url': '/kupci/kreiraj-kupca/',
             "lista_kupaca_url": "/kupci/"
         }
 

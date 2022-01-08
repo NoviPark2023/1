@@ -1,4 +1,5 @@
 import pytest
+import random
 from faker import Faker
 
 from real_estate_api.korisnici.models import Korisnici
@@ -56,7 +57,7 @@ def novi_kupac_fixture(db) -> Kupci:
         ime_prezime=fake.name(),
         email=fake.email(),
         broj_telefona='+381631369098',
-        Jmbg_Pib=str(fake.random_int(0, 13)),
+        Jmbg_Pib=str(random.randrange(1000000000000, 9999999999999)),
         adresa='Milentija Popovica 32',
     )
 
@@ -79,7 +80,7 @@ def nova_dva_kupaca_fixture(db) -> list:
         ime_prezime=fake.name(),
         email=fake.email(),
         broj_telefona='+381631369098',
-        Jmbg_Pib=fake.random_int(0, 13),
+        Jmbg_Pib=random.randrange(1000000000000, 9999999999999),  # Random 13 digits number.
         adresa='Milentija Popovica 32',
     )
     kupac_dva = Kupci.objects.create(
@@ -88,7 +89,7 @@ def nova_dva_kupaca_fixture(db) -> list:
         ime_prezime=fake.name(),
         email=fake.email(),
         broj_telefona='+381 333 999',
-        Jmbg_Pib=fake.random_int(0, 13),
+        Jmbg_Pib=random.randrange(1000000000000, 9999999999999),  # Random 13 digits number.
         adresa='Milke Canic 32',
     )
     novi_kupci = [kupac_jedan, kupac_dva]

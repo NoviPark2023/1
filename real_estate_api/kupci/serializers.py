@@ -120,7 +120,9 @@ class DetaljiKupcaSerializer(KupciSerializer):
             "Jmbg_Pib",
             "adresa",
             "lista_ponuda_kupca",
+            'detalji_kupca_url',
             'izmeni_kupca_url',
             'obrisi_kupca_url',
+            'kreiraj_kupca_url',
             'lista_kupaca_url',
         )
