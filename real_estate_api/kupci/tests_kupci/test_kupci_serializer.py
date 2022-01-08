@@ -63,11 +63,13 @@ class TestKupciSerijalizers:
         # Get valid one Kupaca from Response
         url_detalji_kupca_jedan = reverse('kupci:detalji_kupca', args=[nova_dva_kupaca_fixture[0].id_kupca])
         url_detalji_kupca_dva = reverse('kupci:detalji_kupca', args=[nova_dva_kupaca_fixture[1].id_kupca])
+
         response_kupac_jedan = client.get(url_detalji_kupca_jedan)
         response_kupac_dva = client.get(url_detalji_kupca_dva)
 
         kupac_jedan_from_response = Kupci.objects.get(id_kupca=nova_dva_kupaca_fixture[0].id_kupca)
         kupac_dva_from_response = Kupci.objects.get(id_kupca=nova_dva_kupaca_fixture[1].id_kupca)
+
         print(f'KUPAC ONE FROM RESPONSE: {kupac_jedan_from_response}')
         print(f'KUPAC TWO FROM RESPONSE: {kupac_dva_from_response}')
 
