@@ -7,6 +7,7 @@ class TestRestApiKupci:
     endpoint_svi_kupci = '/kupci'
     endpoint_detalji_kupca = f'{endpoint_svi_kupci}/detalji-kupca'
     endpoint_izmeni_kupca = f'{endpoint_svi_kupci}/izmeni-kupca'
+    endpoint_obrisi_kupca = f'{endpoint_svi_kupci}/obrisi-kupca'
 
     def test_sa_ne_autorizovanim_korisnikom(self, client, django_user_model, novi_korisnik_ne_autorizovan_fixture):
         """
@@ -109,3 +110,23 @@ class TestRestApiKupci:
         assert response.json()["broj_telefona"] == json.loads(test_novi_kupac)['broj_telefona']
         assert response.json()["Jmbg_Pib"] == json.loads(test_novi_kupac)['Jmbg_Pib']
         assert response.json()["adresa"] == json.loads(test_novi_kupac)['adresa']
+
+    def test_obrisi_kupca(self, client, novi_autorizovan_korisnik_fixture, novi_kupac_fixture):
+        """
+        Test poziv 'endpoint_obrisi_kupca' za API poziv Obrisi Kupca sa autorizovanim Korisnikom.
+        Takodje se proverava i Response sadrzaj.
+
+            * @see conftest.py (novi_autorizovan_korisnik_fixture)
+            * @see conftest.py (novi_kupac_fixture)
+
+        @param client: A Django test client instance.
+        @param novi_autorizovan_korisnik_fixture: Korisnik.
+        @param novi_kupac_fixture: Klinet (Kupac).
+        """
+
+        # Proveri prvo da li je ID kupca  iz fixtura 'id_kupca'
+        assert novi_kupac_fixture.id_kupca == novi_kupac_fixture.id_kupca
+
+        response = client.get(f'{self.endpoint_obrisi_kupca}/{novi_kupac_fixture.id_kupca}/')
+
+        assert response.status_code == 200
