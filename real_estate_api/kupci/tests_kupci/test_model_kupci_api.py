@@ -1,4 +1,3 @@
-import pytest
 from faker import Faker
 
 from real_estate_api.kupci.models import Kupci
@@ -7,9 +6,15 @@ fake = Faker()
 
 
 class TestEntitetaKupci:
+    """testiranje entiteta Kupci"""
 
-    @pytest.mark.django_db(transaction=True)
     def test_create_novi_kupac(self, novi_kupac_fixture):
+        """
+        Testiranje kreiranja novog Kupca i provera podataka nakon kreiranja.
+            * @see conftest.py
+
+        @param novi_kupac_fixture: entitet Kupci
+        """
         kupac_from_db = Kupci.objects.all()
         lice = kupac_from_db[0].lice
         ime_prezime = kupac_from_db[0].ime_prezime
@@ -25,16 +30,29 @@ class TestEntitetaKupci:
         assert novi_kupac_fixture.Jmbg_Pib == int(Jmbg_Pib)
         assert novi_kupac_fixture.adresa == adresa
 
-    @pytest.mark.django_db(transaction=True)
     def test_kreiranje_novog_kupca(self, novi_kupac_fixture):
+        """
+        Test da li je samo jedan Kupac kreiran u bazi.
+
+        @param novi_kupac_fixture: Kupci
+        """
+
         assert Kupci.objects.all().count() == 1
 
-    @pytest.mark.django_db(transaction=True)
     def test_filter_ime_prezime(self, novi_kupac_fixture):
+        """
+        Testiranje Filtera po 'ime_prezime' polju.
+
+        @param novi_kupac_fixture: Kupci
+        """
         assert Kupci.objects.filter(ime_prezime=novi_kupac_fixture.ime_prezime).exists()
 
-    @pytest.mark.django_db(transaction=True)
     def test_promeni_ime_prezime(self, novi_kupac_fixture):
+        """
+        Test Promena Imena i Prezimena, ali provo provera da li je u fixture ta vrednost.
+
+        @param novi_kupac_fixture: Kupci
+        """
         # Proveri prvo da li je ime_prezime iz fixtura 'ime_prezime'
         assert novi_kupac_fixture.ime_prezime == novi_kupac_fixture.ime_prezime
 
@@ -44,12 +62,21 @@ class TestEntitetaKupci:
 
         assert movo_ime_kupca.ime_prezime == "Slobodan Tomic"
 
-    @pytest.mark.django_db(transaction=True)
     def test_filter_lice(self, novi_kupac_fixture):
+        """
+        Testiranje Filtera po 'lice' polju.
+
+        @param novi_kupac_fixture: Kupci
+        """
         assert Kupci.objects.filter(lice=novi_kupac_fixture.lice).exists()
 
-    @pytest.mark.django_db(transaction=True)
     def test_promeni_lice(self, novi_kupac_fixture):
+        """
+        Test Promena polja 'lice', ali provo provera da li je u fixture ta vrednost.
+
+        @param novi_kupac_fixture: Kupci
+        """
+
         # Proveri prvo da li je lice iz fixtura 'FIZICKO'
         assert novi_kupac_fixture.lice == "Fizicko"
 
@@ -58,12 +85,22 @@ class TestEntitetaKupci:
         movo_lice_kupca = Kupci.objects.get(lice="Pravno")
         assert movo_lice_kupca.lice == "Pravno"
 
-    @pytest.mark.django_db(transaction=True)
     def test_filter_email(self, novi_kupac_fixture):
+        """
+        Testiranje Filtera po 'email' polju.
+
+        @param novi_kupac_fixture: Kupci
+        """
+
         assert Kupci.objects.filter(email=novi_kupac_fixture.email).exists()
 
-    @pytest.mark.django_db(transaction=True)
     def test_promeni_email(self, novi_kupac_fixture):
+        """
+        Test Promena polja 'email', ali provo provera da li je u fixture ta vrednost.
+
+        @param novi_kupac_fixture: Kupci
+        """
+
         # Proveri prvo da li je iz fixtura 'email'
         assert novi_kupac_fixture.email == novi_kupac_fixture.email
 
@@ -73,12 +110,22 @@ class TestEntitetaKupci:
 
         assert movi_email_kupca.email == "slobodan.tomic@factoryww.com"
 
-    @pytest.mark.django_db(transaction=True)
     def test_filter_broj_telefona(self, novi_kupac_fixture):
+        """
+        Testiranje Filtera po 'broj_telefona' polju.
+
+        @param novi_kupac_fixture: Kupci
+        """
+
         assert Kupci.objects.filter(broj_telefona=novi_kupac_fixture.broj_telefona).exists()
 
-    @pytest.mark.django_db(transaction=True)
     def test_promeni_broj_telefona(self, novi_kupac_fixture):
+        """
+        Test Promena polja 'broj_telefona', ali provo provera da li je u fixture ta vrednost.
+
+        @param novi_kupac_fixture: Kupci
+        """
+
         # Proveri prvo da li je iz fixtura 'broj_telefona'
         assert novi_kupac_fixture.broj_telefona == novi_kupac_fixture.broj_telefona
 
@@ -88,12 +135,22 @@ class TestEntitetaKupci:
 
         assert movi_broj_telefona_kupca.broj_telefona == '+381 66 9878 99 88'
 
-    @pytest.mark.django_db(transaction=True)
     def test_filter_Jmbg_Pib(self, novi_kupac_fixture):
+        """
+        Testiranje Filtera po 'Jmbg_Pib' polju.
+
+        @param novi_kupac_fixture: Kupci
+        """
+
         assert Kupci.objects.filter(Jmbg_Pib=novi_kupac_fixture.Jmbg_Pib).exists()
 
-    @pytest.mark.django_db(transaction=True)
     def test_promeni_Jmbg_Pib(self, novi_kupac_fixture):
+        """
+        Test Promena polja 'Jmbg_Pib', ali provo provera da li je u fixture ta vrednost.
+
+        @param novi_kupac_fixture: Kupci
+        """
+
         # Proveri prvo da li je iz fixtura 'Jmbg_Pib'
         assert novi_kupac_fixture.Jmbg_Pib == novi_kupac_fixture.Jmbg_Pib
 
@@ -103,12 +160,22 @@ class TestEntitetaKupci:
 
         assert movi_Jmbg_Pib_kupca.Jmbg_Pib == '1110975800093'
 
-    @pytest.mark.django_db(transaction=True)
     def test_filter_adresa(self, novi_kupac_fixture):
+        """
+        Testiranje Filtera po 'adresa' polju.
+
+        @param novi_kupac_fixture: Kupci
+        """
+
         assert Kupci.objects.filter(adresa=novi_kupac_fixture.adresa).exists()
 
-    @pytest.mark.django_db(transaction=True)
     def test_promeni_adresa(self, novi_kupac_fixture):
+        """
+        Test Promena polja 'adresa', ali provo provera da li je u fixture ta vrednost.
+
+        @param novi_kupac_fixture: Kupci
+        """
+
         # Proveri prvo da li je iz fixtura 'Jmbg_Pib'
         assert novi_kupac_fixture.adresa == novi_kupac_fixture.adresa
 

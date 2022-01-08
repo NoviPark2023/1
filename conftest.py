@@ -7,6 +7,17 @@ from faker import Faker
 fake = Faker()
 
 
+@pytest.fixture()
+def novi_korisnik_ne_autorizovan_fixture(db) -> Korisnici:
+    return Korisnici.objects.create(
+        username='nikola',
+        password='nikola',
+        email='nikola@nikola.com',
+        ime='Nikola',
+        prezime='Nikola',
+    )
+
+
 @pytest.fixture(autouse=False)
 def novi_autorizovan_korisnik_fixture(db, client, django_user_model) -> Korisnici:
     """
@@ -27,7 +38,7 @@ def novi_autorizovan_korisnik_fixture(db, client, django_user_model) -> Korisnic
     )
 
     client.force_login(korisnik)
-    print('############# KORISNIK ##############')
+
     return korisnik
 
 
