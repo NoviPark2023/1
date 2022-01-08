@@ -27,7 +27,7 @@ class TestEntitetaKupci:
         assert novi_kupac_fixture.ime_prezime == ime_prezime
         assert novi_kupac_fixture.email == email
         assert novi_kupac_fixture.broj_telefona == broj_telefona
-        assert novi_kupac_fixture.Jmbg_Pib == int(Jmbg_Pib)
+        assert novi_kupac_fixture.Jmbg_Pib == Jmbg_Pib
         assert novi_kupac_fixture.adresa == adresa
 
     def test_kreiranje_novog_kupca(self, novi_kupac_fixture):

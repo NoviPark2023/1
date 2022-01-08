@@ -1,9 +1,8 @@
 import pytest
-from rest_framework.test import APIClient
+from faker import Faker
 
 from real_estate_api.korisnici.models import Korisnici
 from real_estate_api.kupci.models import Kupci
-from faker import Faker
 
 fake = Faker()
 
@@ -43,7 +42,7 @@ def novi_autorizovan_korisnik_fixture(db, client, django_user_model) -> Korisnic
     return korisnik
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=False)
 def novi_kupac_fixture(db) -> Kupci:
     """
     Kreiranje novog Kupca.
@@ -57,8 +56,41 @@ def novi_kupac_fixture(db) -> Kupci:
         ime_prezime=fake.name(),
         email=fake.email(),
         broj_telefona='+381631369098',
-        Jmbg_Pib=fake.random_int(0, 13),
+        Jmbg_Pib=str(fake.random_int(0, 13)),
         adresa='Milentija Popovica 32',
     )
 
     return kupac
+
+
+@pytest.fixture(autouse=False)
+def nova_dva_kupaca_fixture(db) -> list:
+    """
+    Kreiranje dva nova Kupca za test serijalizersa.
+
+    @param db: Testna DB.
+    @return: Entitet Kupci.
+    """
+
+    novi_kupci = []
+    kupac_jedan = Kupci.objects.create(
+        id_kupca=1,
+        lice='Fizicko',
+        ime_prezime=fake.name(),
+        email=fake.email(),
+        broj_telefona='+381631369098',
+        Jmbg_Pib=fake.random_int(0, 13),
+        adresa='Milentija Popovica 32',
+    )
+    kupac_dva = Kupci.objects.create(
+        id_kupca=2,
+        lice='Pravno',
+        ime_prezime=fake.name(),
+        email=fake.email(),
+        broj_telefona='+381 333 999',
+        Jmbg_Pib=fake.random_int(0, 13),
+        adresa='Milke Canic 32',
+    )
+    novi_kupci = [kupac_jedan, kupac_dva]
+
+    return novi_kupci
