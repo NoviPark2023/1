@@ -51,7 +51,7 @@ class TestEntitetaKorisnici:
         Testiranje kreiranja nova tri Korisnika i provera podataka nakon kreiranja.
             * @see /test_korisnici/conftest.py : nova_tri_korisnika_fixture
 
-        @param novi_korisnik_fixture: entitet Korisnici
+        @param nova_tri_korisnika_fixture: entitet Korisnici
         """
         korisnici = Korisnici.objects.all().values()
         print(f'KORISNIK IZ DBa: {korisnici}')
