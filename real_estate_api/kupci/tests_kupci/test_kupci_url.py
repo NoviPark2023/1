@@ -22,7 +22,7 @@ class TestRestApiKupci:
 
         assert response.status_code == 401
 
-    def test_sa_autorizovanim_korisnikom(self, client, novi_autorizovan_korisnik_fixture):
+    def test_sa_autorizovanim_korisnikom(self, client, novi_autorizovan_korisnik_fixture_kupci):
         """
         Test poziv 'endpoint_svi_kupci' -a sa autorizovanim Korisnikom.
 
@@ -39,7 +39,7 @@ class TestRestApiKupci:
 
         assert response.status_code == 200
 
-    def test_kreiraj_kupca(self, client, novi_autorizovan_korisnik_fixture, novi_kupac_fixture):
+    def test_kreiraj_kupca(self, client, novi_autorizovan_korisnik_fixture_kupci, novi_kupac_fixture):
         """
         Test poziv 'kupci:kreiraj_kupca' za API poziv Kreiranje Kupca sa autorizovanim Korisnikom.
         Takodje se proverava i Response sadrzaj.
@@ -70,7 +70,7 @@ class TestRestApiKupci:
 
         assert response.status_code == 201
 
-    def test_detalji_kupca(self, client, novi_autorizovan_korisnik_fixture, novi_kupac_fixture):
+    def test_detalji_kupca(self, client, novi_autorizovan_korisnik_fixture_kupci, novi_kupac_fixture):
         """
         Test poziv 'kupci:detalji_kupca' za API poziv Detalja Kupca sa autorizovanim Korisnikom.
         Takodje se proverava i Response sadrzaj.
@@ -105,7 +105,7 @@ class TestRestApiKupci:
             "lista_kupaca_url": "/kupci/"
         }
 
-    def test_izmeni_kupca(self, client, novi_autorizovan_korisnik_fixture, novi_kupac_fixture):
+    def test_izmeni_kupca(self, client, novi_autorizovan_korisnik_fixture_kupci, novi_kupac_fixture):
         """
         Test poziv 'kupci:izmeni_kupca' za API poziv Izmeni Kupca sa autorizovanim Korisnikom.
         Takodje se proverava i Response sadrzaj.
@@ -146,7 +146,7 @@ class TestRestApiKupci:
         assert response.json()["Jmbg_Pib"] == json.loads(test_novi_kupac)['Jmbg_Pib']
         assert response.json()["adresa"] == json.loads(test_novi_kupac)['adresa']
 
-    def test_obrisi_kupca(self, client, novi_autorizovan_korisnik_fixture, novi_kupac_fixture):
+    def test_obrisi_kupca(self, client, novi_autorizovan_korisnik_fixture_kupci, novi_kupac_fixture):
         """
         Test poziv 'kupci:obrisi_kupca' za API poziv Obrisi Kupca sa autorizovanim Korisnikom.
         Takodje se proverava i Response sadrzaj.
