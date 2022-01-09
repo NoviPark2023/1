@@ -7,8 +7,9 @@ from real_estate_api.kupci.models import Kupci
 
 
 class TestKupciSerijalizers:
+    """Tesritanje Serijalizers KUPCI"""
 
-    def test_serializers_svi_kupci(self, client, nova_dva_kupaca_fixture, novi_autorizovan_korisnik_fixture):
+    def test_serializers_svi_kupci(self, client, nova_dva_kupaca_fixture, novi_autorizovan_korisnik_fixture_kupci):
         """
         Testiranje serijalizera za pregled svih Klijenata(Kupaca) sa fixturom od dva kreirana nova Kupca.
         Testiranje se vrsi sa autorizovanim Korisnikom sistema.
@@ -18,7 +19,7 @@ class TestKupciSerijalizers:
 
         @param client: A Django test client instance.
         @param nova_dva_kupaca_fixture: Kupci
-        @param novi_autorizovan_korisnik_fixture: Korisnik
+        @param novi_autorizovan_korisnik_fixture_kupci: Korisnik
         """
 
         response = client.get(reverse('kupci:lista_kupaca'))
@@ -43,7 +44,7 @@ class TestKupciSerijalizers:
     def test_valid_serializers_detalji_jednog_kupca(self,
                                                     client,
                                                     nova_dva_kupaca_fixture,
-                                                    novi_autorizovan_korisnik_fixture
+                                                    novi_autorizovan_korisnik_fixture_kupci
                                                     ):
         """
         Testiranje serijalizera za pregled deatalja Klijenata(Kupaca) sa fixturom od dva kreirana nova Kupca.
@@ -54,7 +55,7 @@ class TestKupciSerijalizers:
 
         @param client: A Django test client instance.
         @param nova_dva_kupaca_fixture: Kupci
-        @param novi_autorizovan_korisnik_fixture: Korisnik
+        @param novi_autorizovan_korisnik_fixture_kupci: Korisnik
         """
 
         # First check how many Kupcaca in DB is *(should be 2)
@@ -86,7 +87,7 @@ class TestKupciSerijalizers:
     def test_invalid_serializers_detalji_jednog_kupca(self,
                                                       client,
                                                       nova_dva_kupaca_fixture,
-                                                      novi_autorizovan_korisnik_fixture
+                                                      novi_autorizovan_korisnik_fixture_kupci
                                                       ):
         """
         Testiranje serijalizera za pregled deatalja Klijenata(Kupaca) koji ne postoji
@@ -99,7 +100,7 @@ class TestKupciSerijalizers:
 
         @param client: A Django test client instance.
         @param nova_dva_kupaca_fixture: Kupci
-        @param novi_autorizovan_korisnik_fixture: Korisnik
+        @param novi_autorizovan_korisnik_fixture_kupci: Korisnik
         """
 
         # Get invalid one Kupaca from Response
@@ -109,7 +110,7 @@ class TestKupciSerijalizers:
 
     def test_serializers_kreiraj_validnog_jednog_kupca(self,
                                                        client,
-                                                       novi_autorizovan_korisnik_fixture
+                                                       novi_autorizovan_korisnik_fixture_kupci
                                                        ):
         """
         Testiranje serijalizera za kreiranje Klijenata(Kupaca) koji je validan,
@@ -120,7 +121,7 @@ class TestKupciSerijalizers:
             * @see conftest.py (novi_autorizovan_korisnik_fixture)
 
         @param client: A Django test client instance.
-        @param novi_autorizovan_korisnik_fixture: Korisnik
+        @param novi_autorizovan_korisnik_fixture_kupci: Korisnik
         """
         url_kreiraj_validnog_kupca = reverse('kupci:kreiraj_kupca')
 
@@ -142,7 +143,7 @@ class TestKupciSerijalizers:
 
     def test_serializers_kreiraj_nevalidnog_jednog_kupca(self,
                                                          client,
-                                                         novi_autorizovan_korisnik_fixture
+                                                         novi_autorizovan_korisnik_fixture_kupci
                                                          ):
         """
         Testiranje serijalizera za kreiranje Klijenata(Kupaca) koji je nije validan *(status.HTTP_400_BAD_REQUEST),
@@ -153,7 +154,7 @@ class TestKupciSerijalizers:
             * @see conftest.py (novi_autorizovan_korisnik_fixture)
 
         @param client: A Django test client instance.
-        @param novi_autorizovan_korisnik_fixture: Korisnik
+        @param novi_autorizovan_korisnik_fixture_kupci: Korisnik
         """
         url_kreiraj_validnog_kupca = reverse('kupci:kreiraj_kupca')
 
@@ -202,7 +203,7 @@ class TestKupciSerijalizers:
     def test_serializers_izmeni_jednog_kupca_validan(self,
                                                      client,
                                                      novi_kupac_fixture,
-                                                     novi_autorizovan_korisnik_fixture
+                                                     novi_autorizovan_korisnik_fixture_kupci
                                                      ):
         """
         Test poziv 'kupci:izmeni_kupca' za API poziv Izmeni Kupca *(VALIDAN) sa autorizovanim Korisnikom.
@@ -212,7 +213,7 @@ class TestKupciSerijalizers:
             * @see conftest.py (novi_kupac_fixture)
 
         @param client: A Django test client instance.
-        @param novi_autorizovan_korisnik_fixture: Korisnik.
+        @param novi_autorizovan_korisnik_fixture_kupci: Korisnik.
         @param novi_kupac_fixture: Klijent (Kupac).
         """
 
@@ -237,7 +238,7 @@ class TestKupciSerijalizers:
     def test_serializers_izmeni_jednog_kupca_nije_validan(self,
                                                           client,
                                                           novi_kupac_fixture,
-                                                          novi_autorizovan_korisnik_fixture
+                                                          novi_autorizovan_korisnik_fixture_kupci
                                                           ):
         """
         Test poziv 'kupci:izmeni_kupca' za API poziv Izmeni Kupca *(NIJE VALIDAN) sa autorizovanim Korisnikom.
@@ -247,7 +248,7 @@ class TestKupciSerijalizers:
             * @see conftest.py (novi_kupac_fixture)
 
         @param client: A Django test client instance.
-        @param novi_autorizovan_korisnik_fixture: Korisnik.
+        @param novi_autorizovan_korisnik_fixture_kupci: Korisnik.
         @param novi_kupac_fixture: Klijent (Kupac).
         """
 
@@ -272,7 +273,7 @@ class TestKupciSerijalizers:
     def test_serializers_obrisi_jednog_kupca_validan(self,
                                                      client,
                                                      novi_kupac_fixture,
-                                                     novi_autorizovan_korisnik_fixture
+                                                     novi_autorizovan_korisnik_fixture_kupci
                                                      ):
         """
         Test poziv 'kupci:obrisi_kupca' za API poziv Obrisi Kupca *(VALIDAN) sa autorizovanim Korisnikom.
@@ -282,7 +283,7 @@ class TestKupciSerijalizers:
             * @see conftest.py (novi_kupac_fixture)
 
         @param client: A Django test client instance.
-        @param novi_autorizovan_korisnik_fixture: Korisnik.
+        @param novi_autorizovan_korisnik_fixture_kupci: Korisnik.
         @param novi_kupac_fixture: Klijent (Kupac).
         """
 
@@ -296,7 +297,7 @@ class TestKupciSerijalizers:
     def test_serializers_obrisi_jednog_kupca_nije_validan(self,
                                                           client,
                                                           novi_kupac_fixture,
-                                                          novi_autorizovan_korisnik_fixture
+                                                          novi_autorizovan_korisnik_fixture_kupci
                                                           ):
         """
         Test poziv 'kupci:obrisi_kupca' za API poziv Obrisi Kupca *(NIJE VALIDAN) sa autorizovanim Korisnikom.
@@ -306,7 +307,7 @@ class TestKupciSerijalizers:
             * @see conftest.py (novi_kupac_fixture)
 
         @param client: A Django test client instance.
-        @param novi_autorizovan_korisnik_fixture: Korisnik.
+        @param novi_autorizovan_korisnik_fixture_kupci: Korisnik.
         @param novi_kupac_fixture: Klijent (Kupac).
         """
 
