@@ -8,7 +8,7 @@ fake = Faker()
 class TestEntitetaKupci:
     """Testitanje entiteta Kupci"""
 
-    def test_create_novi_kupac(self, novi_kupac_fixture):
+    def test_kreiranje_novog_kupca(self, novi_kupac_fixture):
         """
         Testiranje kreiranja novog Kupca i provera podataka nakon kreiranja.
             * @see conftest.py
@@ -30,7 +30,7 @@ class TestEntitetaKupci:
         assert novi_kupac_fixture.Jmbg_Pib == Jmbg_Pib
         assert novi_kupac_fixture.adresa == adresa
 
-    def test_kreiranje_novog_kupca(self, novi_kupac_fixture):
+    def test_broj_novih_kupca_u_bazi(self, novi_kupac_fixture):
         """
         Test da li je samo jedan Kupac kreiran u bazi.
 

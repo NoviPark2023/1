@@ -1,5 +1,6 @@
-import pytest
 import random
+
+import pytest
 from faker import Faker
 
 from real_estate_api.korisnici.models import Korisnici
@@ -8,8 +9,9 @@ from real_estate_api.kupci.models import Kupci
 fake = Faker()
 
 
+# region FIXTURE NE REGISTROVAN KORISNIK
 @pytest.fixture()
-def novi_korisnik_ne_autorizovan_fixture(db) -> Korisnici:
+def novi_korisnik_ne_autorizovan_fixture_kupci(db) -> Korisnici:
     return Korisnici.objects.create(
         username='nikola',
         password='nikola',
@@ -19,8 +21,11 @@ def novi_korisnik_ne_autorizovan_fixture(db) -> Korisnici:
     )
 
 
+# endregion
+
+# region FIXTURE REGISTROVAN KORISNIK
 @pytest.fixture(autouse=False)
-def novi_autorizovan_korisnik_fixture(db, client, django_user_model) -> Korisnici:
+def novi_autorizovan_korisnik_fixture_kupci(db, client, django_user_model) -> Korisnici:
     """
     Kreiranje novog Korisnika i autorizacija istog na sistem.
 
@@ -43,6 +48,9 @@ def novi_autorizovan_korisnik_fixture(db, client, django_user_model) -> Korisnic
     return korisnik
 
 
+# endregion
+
+# region NOVI JEDAN KUPAC FIXTURE
 @pytest.fixture(autouse=False)
 def novi_kupac_fixture(db) -> Kupci:
     """
@@ -64,8 +72,11 @@ def novi_kupac_fixture(db) -> Kupci:
     return kupac
 
 
+# endregion
+
+# region NOVA DVA KUPACA FIXTURE
 @pytest.fixture(autouse=False)
-def nova_dva_kupaca_fixture(db) -> list:
+def nova_dva_kupaca_fixture(db) -> list[Kupci]:
     """
     Kreiranje dva nova Kupca za test serijalizersa.
 
@@ -94,3 +105,4 @@ def nova_dva_kupaca_fixture(db) -> list:
     novi_kupci = [kupac_jedan, kupac_dva]
 
     return novi_kupci
+# endregion
