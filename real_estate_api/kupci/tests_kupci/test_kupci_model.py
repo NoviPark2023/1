@@ -58,9 +58,9 @@ class TestEntitetaKupci:
 
         novi_kupac_fixture.ime_prezime = 'Slobodan Tomic'
         novi_kupac_fixture.save()
-        movo_ime_kupca = Kupci.objects.get(ime_prezime="Slobodan Tomic")
+        novo_ime_kupca = Kupci.objects.get(ime_prezime="Slobodan Tomic")
 
-        assert movo_ime_kupca.ime_prezime == "Slobodan Tomic"
+        assert novo_ime_kupca.ime_prezime == "Slobodan Tomic"
 
     def test_filter_lice(self, novi_kupac_fixture):
         """

@@ -37,7 +37,7 @@ class TestEntitetaKorisnici:
 
     def test_broj_novih_korisnika_u_bazi(self, novi_jedan_auth_korisnik_fixture):
         """
-        Test da li je samo jedan korisnik kreiran u bazi.
+        Test da li je samo jedan Korisnik kreiran u bazi.
             * @see /test_korisnici/conftest.py : novi_jedan_auth_korisnik_fixture
 
         @param novi_jedan_auth_korisnik_fixture: Korisnici
@@ -45,6 +45,15 @@ class TestEntitetaKorisnici:
 
         broj_korisnika_u_bazi = Korisnici.objects.all().count()
         assert broj_korisnika_u_bazi == 1
+
+    def test_is_korsnik_super_user(self, novi_jedan_auth_korisnik_fixture):
+        """
+        Test da li je kreiran Korisnik u bazi "SUPERUSER".
+            * @see /test_korisnici/conftest.py : novi_jedan_auth_korisnik_fixture
+
+        @param novi_jedan_auth_korisnik_fixture: Korisnici
+        """
+        assert Korisnici.objects.filter(is_superuser=True).exists()
 
     def test_kreiranje_tri_nova_korisnika(self, nova_tri_korisnika_fixture):
         """
@@ -60,7 +69,6 @@ class TestEntitetaKorisnici:
 
         # Ovde je 4 jer u bazi pored ova tri ima i jedn registrovan super-user Korisnik.
         assert broj_korisnika_u_bazi == 4
-
 
 # class PasswordChange(TestCase):
 #     def test_change_password(self):
