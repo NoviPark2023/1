@@ -7,6 +7,7 @@ from real_estate_api.kupci.models import Kupci
 
 
 class TestKupciSerijalizers:
+    """Tesritanje Serijalizers KUPCI"""
 
     def test_serializers_svi_kupci(self, client, nova_dva_kupaca_fixture, novi_autorizovan_korisnik_fixture_kupci):
         """

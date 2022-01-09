@@ -3,8 +3,8 @@ import json
 from rest_framework.reverse import reverse
 
 
-class TestRestApiKupci:
-    """Testitanje API Endpointa entiteta Kupci"""
+class TestRestApiUrlsKupci:
+    """Testitanje API URLs Endpointa entiteta Kupci"""
 
     def test_sa_ne_autorizovanim_korisnikom(self, client):
         """
@@ -29,7 +29,7 @@ class TestRestApiKupci:
             * @see conftest.py (novi_autorizovan_korisnik_fixture)
 
         @param client: A Django test client instance.
-        @param novi_autorizovan_korisnik_fixture: Obican Korisnik sa autorizacijom.
+        @param novi_autorizovan_korisnik_fixture_kupci: Obican Korisnik sa autorizacijom.
         @return status code 200: OK
         """
 
@@ -49,7 +49,7 @@ class TestRestApiKupci:
 
         @param client: A Django test client instance.
         @param novi_kupac_fixture: Klijent (Kupac).
-        @param novi_autorizovan_korisnik_fixture: Obican Korisnik sa autorizacijom.
+        @param novi_autorizovan_korisnik_fixture_kupci: Obican Korisnik sa autorizacijom.
         """
 
         url_kreiraj_kupca = reverse('kupci:kreiraj_kupca')
@@ -80,7 +80,7 @@ class TestRestApiKupci:
 
         @param client: A Django test client instance.
         @param novi_kupac_fixture: Klijent (Kupac).
-        @param novi_autorizovan_korisnik_fixture: Obican Korisnik sa autorizacijom.
+        @param novi_autorizovan_korisnik_fixture_kupci: Obican Korisnik sa autorizacijom.
         """
 
         url_detalji_kupca = reverse('kupci:detalji_kupca', args=[novi_kupac_fixture.id_kupca])
@@ -114,7 +114,7 @@ class TestRestApiKupci:
             * @see conftest.py (novi_kupac_fixture)
 
         @param client: A Django test client instance.
-        @param novi_autorizovan_korisnik_fixture: Korisnik.
+        @param novi_autorizovan_korisnik_fixture_kupci: Korisnik.
         @param novi_kupac_fixture: Klijent (Kupac).
         """
 
@@ -155,7 +155,7 @@ class TestRestApiKupci:
             * @see conftest.py (novi_kupac_fixture)
 
         @param client: A Django test client instance.
-        @param novi_autorizovan_korisnik_fixture: Korisnik.
+        @param novi_autorizovan_korisnik_fixture_kupci: Korisnik.
         @param novi_kupac_fixture: Klijent (Kupac).
         """
 

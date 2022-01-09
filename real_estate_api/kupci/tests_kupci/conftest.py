@@ -76,7 +76,7 @@ def novi_kupac_fixture(db) -> Kupci:
 
 # region NOVA DVA KUPACA FIXTURE
 @pytest.fixture(autouse=False)
-def nova_dva_kupaca_fixture(db) -> list:
+def nova_dva_kupaca_fixture(db) -> list[Kupci]:
     """
     Kreiranje dva nova Kupca za test serijalizersa.
 
