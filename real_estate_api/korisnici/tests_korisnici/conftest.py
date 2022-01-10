@@ -1,5 +1,4 @@
-import datetime
-
+import json
 import pytest
 from faker import Faker
 
@@ -22,32 +21,6 @@ def novi_korisnik_ne_autorizovan_fixture(db) -> Korisnici:
 
 # endregion
 
-# region FIXTURE REGISTROVAN KORISNIK
-# @pytest.fixture(autouse=False)
-# def novi_autorizovan_korisnik_fixture(db, client, django_user_model) -> Korisnici:
-#     """
-#     Kreiranje novog Korisnika i autorizacija istog na sistem.
-#
-#     @param db: Testna DB.
-#     @param client: A Django test client instance.
-#     @param django_user_model: Korisnik.
-#     @return: Entitet autorizovan Korisnik.
-#     """
-#
-#     korisnik = Korisnici.objects.create(
-#         username='nikola',
-#         password='nikola',
-#         email='nikola@nikola.com',
-#         ime='Nikola',
-#         prezime='Nikola',
-#     )
-#
-#     client.force_login(korisnik)
-#
-#     return korisnik
-#
-#
-# # endregion
 
 # region FIXTURE REGISTROVAN JEDAN KORISNIK FULL
 @pytest.fixture(autouse=False)
@@ -82,6 +55,37 @@ def novi_jedan_auth_korisnik_fixture(db, client, django_user_model) -> Korisnici
 
 
 # endregion
+
+
+# region FIXTURE REGISTROVANA TRI KORISNIKA FULL
+@pytest.fixture(autouse=False)
+def novi_jedan_korisnik_fixture(db, client, django_user_model, novi_jedan_auth_korisnik_fixture) -> Korisnici:
+    """
+    Kreiranje novog jednog Korisnika bez autorizacija istog na sistem.
+        * Test-Ime-Korisnika je sa rolom PRODAVAC.
+    @param novi_jedan_auth_korisnik_fixture: Autorizovan Korisnik (super user).
+    @param db: Testna DB.
+    @param client: A Django test client instance.
+    @param django_user_model: Korisnik.
+    @return: Entitet autorizovan tri Korisnika.
+    """
+
+    korisnik = Korisnici.objects.create(
+        id=1,
+        email=fake.email(),
+        username=fake.user_name(),
+        password='testpswd',
+        ime='Test-Ime-Korisnika',
+        prezime='Test-Prezime-Korisnika',
+        role=Korisnici.PrivilegijeKorisnika.PRODAVAC,
+        about=fake.text(max_nb_chars=25),
+        is_staff=True,
+        is_active=True,
+        is_superuser=False,
+    )
+
+    return korisnik
+
 
 # region FIXTURE REGISTROVANA TRI KORISNIKA FULL
 @pytest.fixture(autouse=False)
@@ -144,7 +148,26 @@ def nova_tri_korisnika_fixture(db, client, django_user_model, novi_jedan_auth_ko
         ]
     )
 
-
-
     return korisnici
+
+
 # endregion
+
+# region FIXTURE JSON DUMP JEDAN KORISNIK
+@pytest.fixture(autouse=False)
+def novi_jedan_korisnik_json_fixture():
+    return json.dumps(
+        {
+            "id": 5,
+            "email": fake.email(),
+            "username": fake.user_name(),
+            "password": "testStrongPSWD",
+            "ime": fake.name(),
+            "prezime": fake.last_name(),
+            "role": Korisnici.PrivilegijeKorisnika.PRODAVAC,
+            "about": fake.text(max_nb_chars=25),
+            "is_staff": True,
+            "is_active": True,
+            "is_superuser": False,
+        }
+    )
