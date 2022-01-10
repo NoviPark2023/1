@@ -28,7 +28,6 @@ class TestModelaPonude(TestCase):
             klijent_prodaje_id=self.korisnik.id
         )
 
-
     def setUpKupca(self) -> None:
         # Kreiraj TEST Kupca
         from real_estate_api.kupci.models import Kupci
@@ -40,7 +39,6 @@ class TestModelaPonude(TestCase):
             Jmbg_Pib='test_JMBG',
             adresa='Test adresa Kupca'
         )
-
 
     def setUpPonude(self) -> None:
         # Kreiraj TEST Ponuda
@@ -54,7 +52,6 @@ class TestModelaPonude(TestCase):
             kupac_id=self.kupac.id_kupca,
             stan_id=self.stan
         )
-
 
     def test_queryset_exists(self):
         qs = Ponude.objects.all()
