@@ -1,3 +1,4 @@
+import json
 import pytest
 from faker import Faker
 
@@ -169,5 +170,73 @@ def nova_dva_stana_fixture(db, kreiraj_auriranje_cena) -> Stanovi:
     )
 
     return stan
+
+
+# endregion
+
+# region FIXTURE JSON DUMP JEDAN STAN
+@pytest.fixture(autouse=False)
+def novi_jedan_stan_json_fixture():
+    return json.dumps(
+        {
+            "id_stana": 5,
+            "lamela": "L2.1.S10",
+            "adresa_stana": "Adresa Stana L2.1.S10",
+            "kvadratura": 67.49,
+            "kvadratura_korekcija": 65.47,
+            "iznos_za_korekciju_kvadrature": 0.97,
+            "sprat": "1.0",
+            "broj_soba": 3,
+            "orijentisanost": "Jug",
+            "broj_terasa": "0",
+            "cena_stana": "103085.59",
+            "cena_kvadrata": "1574.66",
+            "napomena": 'Nema napomene',
+            "status_prodaje": "dostupan",
+        }
+    )
+
+
+# endregion
+
+# region FIXTURE JSON DUMP DVA STANA
+@pytest.fixture(autouse=False)
+def nova_dva_stana_json_fixture():
+    return json.dumps(
+        [
+            {
+                "id_stana": 5,
+                "lamela": "L2.1.S10",
+                "adresa_stana": "Adresa Stana L2.1.S10",
+                "kvadratura": 67.49,
+                "kvadratura_korekcija": 65.47,
+                "iznos_za_korekciju_kvadrature": 0.97,
+                "sprat": "1.0",
+                "broj_soba": 3,
+                "orijentisanost": "Jug",
+                "broj_terasa": "0",
+                "cena_stana": "103085.59",
+                "cena_kvadrata": "1574.66",
+                "napomena": 'Nema napomene',
+                "status_prodaje": "dostupan",
+            },
+            {
+                "id_stana": 6,
+                "lamela": "L3.1.S1",
+                "adresa_stana": "Adresa Stana L3.1.S1",
+                "kvadratura": 50.25,
+                "kvadratura_korekcija": 48.74,
+                "iznos_za_korekciju_kvadrature": 0.97,
+                "sprat": "1.0",
+                "broj_soba": 3,
+                "orijentisanost": "Jug",
+                "broj_terasa": "1",
+                "cena_stana": "76428.24",
+                "cena_kvadrata": "1568.00",
+                "napomena": 'Nema napomene',
+                "status_prodaje": "dostupan",
+            }
+        ]
+    )
 
 # endregion

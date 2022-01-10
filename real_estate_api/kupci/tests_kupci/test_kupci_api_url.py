@@ -2,6 +2,8 @@ import json
 
 from rest_framework.reverse import reverse
 
+from real_estate_api.kupci.models import Kupci
+
 
 class TestRestApiUrlsKupci:
     """Testitanje API URLs Endpointa entiteta Kupci"""
@@ -30,7 +32,7 @@ class TestRestApiUrlsKupci:
 
         @param client: A Django test client instance.
         @param novi_autorizovan_korisnik_fixture_kupci: Obican Korisnik sa autorizacijom.
-        @return status code 200: OK
+        @return status code 200: HTTP OK
         """
 
         url_svi_kupca = reverse('kupci:lista_kupaca')
@@ -50,6 +52,7 @@ class TestRestApiUrlsKupci:
         @param client: A Django test client instance.
         @param novi_kupac_fixture: Klijent (Kupac).
         @param novi_autorizovan_korisnik_fixture_kupci: Obican Korisnik sa autorizacijom.
+        @return status code 201:  HTTP 201 CREATED
         """
 
         url_kreiraj_kupca = reverse('kupci:kreiraj_kupca')
@@ -81,6 +84,7 @@ class TestRestApiUrlsKupci:
         @param client: A Django test client instance.
         @param novi_kupac_fixture: Klijent (Kupac).
         @param novi_autorizovan_korisnik_fixture_kupci: Obican Korisnik sa autorizacijom.
+        @return status code 200: HTTP OK
         """
 
         url_detalji_kupca = reverse('kupci:detalji_kupca', args=[novi_kupac_fixture.id_kupca])
@@ -116,6 +120,7 @@ class TestRestApiUrlsKupci:
         @param client: A Django test client instance.
         @param novi_autorizovan_korisnik_fixture_kupci: Korisnik.
         @param novi_kupac_fixture: Klijent (Kupac).
+        @return status code 200: HTTP OK
         """
 
         # Proveri prvo da li je ime_prezime iz fixtura 'ime_prezime'
@@ -157,6 +162,7 @@ class TestRestApiUrlsKupci:
         @param client: A Django test client instance.
         @param novi_autorizovan_korisnik_fixture_kupci: Korisnik.
         @param novi_kupac_fixture: Klijent (Kupac).
+        @return status code 204: HTTP No Content
         """
 
         # Proveri prvo da li je ID kupca  iz fixtura 'id_kupca'
@@ -165,6 +171,10 @@ class TestRestApiUrlsKupci:
         url_obrisi_kupca = reverse('kupci:obrisi_kupca', args=[novi_kupac_fixture.id_kupca])
         print(f'REVERSE URLs: {url_obrisi_kupca}')
 
-        response = client.get(url_obrisi_kupca)
+        response = client.delete(url_obrisi_kupca)
 
-        assert response.status_code == 200
+        assert response.status_code == 204
+
+        # Prvo proveri koliko je korisnika u bazi (treba da ima 0 korisnika)
+        broj_kupaca_u_bazi = Kupci.objects.all().count()
+        assert broj_kupaca_u_bazi == 0

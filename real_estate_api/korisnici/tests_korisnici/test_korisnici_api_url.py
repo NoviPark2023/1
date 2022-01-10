@@ -11,7 +11,7 @@ class TestRestApiUrlsKorisnici:
         Test poziv 'lista_korisnika' -a sa ne autorizovanim Korisnikom.
 
         @param client: A Django test client instance.
-        @return status code 401: Unauthorized
+        @return status code 401: HTTP Unauthorized
         """
 
         url_svi_korisnici = reverse('korisnici:lista_korisnika')
@@ -28,7 +28,7 @@ class TestRestApiUrlsKorisnici:
 
         @param client: A Django test client instance.
         @param novi_jedan_auth_korisnik_fixture: Autorizovan Superuser Korisnik.
-        @return status code 200: OK
+        @return status code 200: HTTP OK
         """
 
         url_svi_korisnici = reverse('korisnici:lista_korisnika')
@@ -46,6 +46,7 @@ class TestRestApiUrlsKorisnici:
 
         @param client: A Django test client instance.
         @param novi_jedan_auth_korisnik_fixture: Autorizovan Superuser Korisnik.
+        @return status code 200: HTTP OK
         """
 
         url_svi_korisnici = reverse('korisnici:lista_korisnika')
@@ -69,6 +70,7 @@ class TestRestApiUrlsKorisnici:
         @param client: A Django test client instance.
         @param novi_jedan_auth_korisnik_fixture: Autorizovan Superuser Korisnik.
         @param novi_jedan_korisnik_json_fixture: Novi Korisnik koji se kreira iz Fixture.
+        @return status code 201:  HTTP 201 CREATED
         """
 
         # Prvo proveri koliko je korisnika u bazi (trenutno samo jedan SUPER USER)
@@ -102,6 +104,7 @@ class TestRestApiUrlsKorisnici:
         ---
         @param client: A Django test client instance.
         @param novi_jedan_auth_korisnik_fixture: Autorizovan Superuser Korisnik.
+        @return status code 200: HTTP OK
         """
 
         # Prvo proveri koliko je korisnika u bazi (trenutno samo jedan SUPER USER)
@@ -113,3 +116,72 @@ class TestRestApiUrlsKorisnici:
         response = client.get(url_detalji_korisnika)
 
         assert response.status_code == 200
+
+    def test_izmeni_korisnika(self, client, novi_jedan_auth_korisnik_fixture, novi_jedan_korisnik_json_fixture):
+        """
+        Test poziv 'korisnici:izmeni_korisnika' za API poziv Izmeni Korisnika sa Korisnikom iz fixture
+        "novi_jedan_korisnik_json_fixture". Proverava se razlika i to po:
+            * ime
+            * prezime
+            * email
+            * username
+            * role
+            * is_superuser
+
+        Takodje se proverava i Response status code.
+
+            * @see /test_korisnici/conftest.py (novi_jedan_auth_korisnik_fixture)
+            * @see /test_korisnici/conftest.py (novi_jedan_korisnik_json_fixture)
+            * @see path('izmeni-korisnika/<int:id>/', UrediKorisnika.as_view(), name='izmeni_korisnika'),
+
+        @param client: A Django test client instance.
+        @param novi_jedan_auth_korisnik_fixture: Autorizovan Superuser Korisnik.
+        @param novi_jedan_korisnik_json_fixture: Korisnik za izmenu.
+        @return status code 200: HTTP OK
+        """
+
+        # Prvo proveri koliko je korisnika u bazi (trenutno samo jedan SUPER USER)
+        broj_korisnika_u_bazi = Korisnici.objects.all().count()
+        assert broj_korisnika_u_bazi == 1
+
+        url_izmeni_korisnika = reverse('korisnici:izmeni_korisnika', args=[novi_jedan_auth_korisnik_fixture.id])
+
+        response = client.put(url_izmeni_korisnika,
+                              data=novi_jedan_korisnik_json_fixture,
+                              content_type='application/json'
+                              )
+
+        assert response.status_code == 200
+
+        assert response.json()["ime"] != novi_jedan_auth_korisnik_fixture.ime
+        assert response.json()["prezime"] != novi_jedan_auth_korisnik_fixture.prezime
+        assert response.json()["email"] != novi_jedan_auth_korisnik_fixture.email
+        assert response.json()["username"] != novi_jedan_auth_korisnik_fixture.username
+        assert response.json()["role"] != novi_jedan_auth_korisnik_fixture.role
+        assert response.json()["is_superuser"] != novi_jedan_auth_korisnik_fixture.is_superuser
+
+    def test_obrisi_korisnika(self, client, novi_jedan_auth_korisnik_fixture):
+        """
+        Test poziv 'korisnici:obrisi_korisnika' za API poziv Obrisi Korisnika.
+
+            * @see /test_korisnici/conftest.py (novi_jedan_auth_korisnik_fixture)
+            * @see path('obrisi-korisnika/<int:id>/', ObrisiKoriniska.as_view(), name='obrisi_korisnika')
+
+        @param client: A Django test client instance.
+        @param novi_jedan_auth_korisnik_fixture: Autorizovan Superuser Korisnik.
+        @return status code 204: HTTP No Content
+        """
+
+        # Prvo proveri koliko je korisnika u bazi (trenutno samo jedan SUPER USER)
+        broj_korisnika_u_bazi = Korisnici.objects.all().count()
+        assert broj_korisnika_u_bazi == 1
+
+        url_obrisi_korisnika = reverse('korisnici:obrisi_korisnika', args=[novi_jedan_auth_korisnik_fixture.id])
+
+        response = client.delete(url_obrisi_korisnika)
+
+        assert response.status_code == 204
+
+        # Prvo proveri koliko je korisnika u bazi (treba da ima 0 korisnika)
+        broj_korisnika_u_bazi = Korisnici.objects.all().count()
+        assert broj_korisnika_u_bazi == 0
