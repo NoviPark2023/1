@@ -1,4 +1,5 @@
 import json
+
 import pytest
 from faker import Faker
 
@@ -21,8 +22,7 @@ def novi_korisnik_ne_autorizovan_fixture(db) -> Korisnici:
 
 # endregion
 
-
-# region FIXTURE REGISTROVAN JEDAN KORISNIK FULL
+# region FIXTURE REGISTROVAN JEDAN KORISNIK SUPERUSER  FULL
 @pytest.fixture(autouse=False)
 def novi_jedan_auth_korisnik_fixture(db, client, django_user_model) -> Korisnici:
     """
@@ -56,8 +56,7 @@ def novi_jedan_auth_korisnik_fixture(db, client, django_user_model) -> Korisnici
 
 # endregion
 
-
-# region FIXTURE REGISTROVANA TRI KORISNIKA FULL
+# region FIXTURE REGISTROVANA JEDAN KORISNIKA FULL
 @pytest.fixture(autouse=False)
 def novi_jedan_korisnik_fixture(db, client, django_user_model, novi_jedan_auth_korisnik_fixture) -> Korisnici:
     """
@@ -86,6 +85,8 @@ def novi_jedan_korisnik_fixture(db, client, django_user_model, novi_jedan_auth_k
 
     return korisnik
 
+
+# endregion
 
 # region FIXTURE REGISTROVANA TRI KORISNIKA FULL
 @pytest.fixture(autouse=False)
@@ -171,3 +172,54 @@ def novi_jedan_korisnik_json_fixture():
             "is_superuser": False,
         }
     )
+
+
+# endregion
+
+# region FIXTURE JSON DUMP TRI KORISNIKA
+@pytest.fixture(autouse=False)
+def nova_tri_korisnika_json_fixture():
+    return json.dumps(
+        [
+            {
+                "id": 5,
+                "email": fake.email(),
+                "username": fake.user_name(),
+                "password": "testStrongPSWD",
+                "ime": fake.name(),
+                "prezime": fake.last_name(),
+                "role": Korisnici.PrivilegijeKorisnika.PRODAVAC,
+                "about": fake.text(max_nb_chars=25),
+                "is_staff": True,
+                "is_active": True,
+                "is_superuser": False,
+            },
+            {
+                "id": 6,
+                "email": fake.email(),
+                "username": fake.user_name(),
+                "password": "testStrongPSWD-2",
+                "ime": fake.name(),
+                "prezime": fake.last_name(),
+                "role": Korisnici.PrivilegijeKorisnika.FINANSIJE,
+                "about": fake.text(max_nb_chars=25),
+                "is_staff": True,
+                "is_active": True,
+                "is_superuser": False,
+            },
+            {
+                "id": 7,
+                "email": fake.email(),
+                "username": fake.user_name(),
+                "password": "testStrongPSWD-3",
+                "ime": fake.name(),
+                "prezime": fake.last_name(),
+                "role": Korisnici.PrivilegijeKorisnika.FINANSIJE,
+                "about": fake.text(max_nb_chars=25),
+                "is_staff": True,
+                "is_active": True,
+                "is_superuser": False,
+            }
+        ]
+    )
+# endregion
