@@ -8,7 +8,7 @@ class TestEntitetaKorisnici:
         """
         Testiranje kreiranja novog jednog Korisnika i provera podataka nakon kreiranja.
             * @see /test_korisnici/conftest.py : novi_jedan_auth_korisnik_fixture
-
+        ---
         @param novi_jedan_auth_korisnik_fixture: entitet Korisnici
         """
 
@@ -39,7 +39,7 @@ class TestEntitetaKorisnici:
         """
         Test da li je samo jedan Korisnik kreiran u bazi.
             * @see /test_korisnici/conftest.py : novi_jedan_auth_korisnik_fixture
-
+        ---
         @param novi_jedan_auth_korisnik_fixture: Korisnici
         """
 
@@ -50,7 +50,7 @@ class TestEntitetaKorisnici:
         """
         Test da li je kreiran Korisnik u bazi "SUPERUSER".
             * @see /test_korisnici/conftest.py : novi_jedan_auth_korisnik_fixture
-
+        ---
         @param novi_jedan_auth_korisnik_fixture: Korisnici
         """
         assert Korisnici.objects.filter(is_superuser=True).exists()
@@ -59,7 +59,7 @@ class TestEntitetaKorisnici:
         """
         Testiranje kreiranja nova tri Korisnika i provera podataka nakon kreiranja.
             * @see /test_korisnici/conftest.py : nova_tri_korisnika_fixture
-
+        ---
         @param nova_tri_korisnika_fixture: entitet Korisnici
         """
         korisnici = Korisnici.objects.all().values()
@@ -69,6 +69,56 @@ class TestEntitetaKorisnici:
 
         # Ovde je 4 jer u bazi pored ova tri ima i jedn registrovan super-user Korisnik.
         assert broj_korisnika_u_bazi == 4
+
+    def test_filteri_korisnika_po_atributima(self, nova_tri_korisnika_fixture):
+        """
+        Testiranje filter po nekim od polja i to:
+            - id
+            - ime
+            - prezime
+
+            * @see /test_korisnici/conftest.py : nova_tri_korisnika_fixture
+        ---
+        @param nova_tri_korisnika_fixture: entitet Korisnici
+        """
+
+        # Po Id-u
+        assert Korisnici.objects.filter(id=1).exists()
+        assert Korisnici.objects.filter(id=2).exists()
+        assert Korisnici.objects.filter(id=3).exists()
+
+        # Po Imenu
+        assert Korisnici.objects.filter(ime="Dejan").exists()
+        assert Korisnici.objects.filter(ime="Slobodan").exists()
+        assert Korisnici.objects.filter(ime="Ivana").exists()
+
+        # Po Prezimenu
+        assert Korisnici.objects.filter(prezime="Cugalj").exists()
+        assert Korisnici.objects.filter(prezime="Tomic").exists()
+        assert Korisnici.objects.filter(prezime="Tepavac").exists()
+
+    def test_promeni_ime_super_user_korisniku(self,novi_jedan_auth_korisnik_fixture):
+
+        ime_korisnika = Korisnici.objects.get(ime=novi_jedan_auth_korisnik_fixture.ime).ime
+        ime_iz_fixture_korisnika = novi_jedan_auth_korisnik_fixture.ime
+
+        # Proveri prvo da li je ime iz FIXTURE korisnika isto kao i iz baze
+        assert ime_korisnika == ime_iz_fixture_korisnika
+
+        # Promena imena Korisnika
+        novi_jedan_auth_korisnik_fixture.ime = 'Test Ime'
+        novi_jedan_auth_korisnik_fixture.save()
+
+        novo_ime_korisnika = Korisnici.objects.get(ime=novi_jedan_auth_korisnik_fixture.ime).ime
+
+        assert novo_ime_korisnika == 'Test Ime'
+
+
+
+
+
+
+
 
 # class PasswordChange(TestCase):
 #     def test_change_password(self):
