@@ -17,7 +17,6 @@ class TestModelaEntitetaPonude:
         """
 
         broj_ponuda_from_db = Ponude.objects.all().count()
-
         assert broj_ponuda_from_db == 1
 
     def test_provera_polja_novo_kreirane_ponude(self, nova_jedna_ponuda):

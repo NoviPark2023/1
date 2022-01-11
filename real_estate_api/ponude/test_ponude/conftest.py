@@ -191,7 +191,7 @@ def novi_kupac_fixture(db) -> Kupci:
 # ######## PONUDE FIXTURE ##########
 # ##################################
 
-# region JEDNA PONUDA JSON DUMP FIXTURES
+# region JEDNA PONUDA FIXTURES
 @pytest.fixture()
 def nova_jedna_ponuda(db,
                       novi_kupac_fixture,
@@ -233,7 +233,7 @@ def nova_jedna_ponuda_json_fixture(novi_kupac_fixture, novi_jedan_stan_fixture):
             "napomena": "nema napomene",
             "broj_ugovora": "123",
             "datum_ugovora": "21.12.2021",
-            "status_ponude": "rezervisan",
+            "status_ponude": Ponude.StatusPonude.POTENCIJALAN,
             "nacin_placanja": "kredit",
             "odobrenje": True,
             "klijent_prodaje": 1,
