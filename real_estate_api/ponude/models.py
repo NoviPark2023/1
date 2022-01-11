@@ -1,3 +1,4 @@
+from babel.numbers import format_decimal
 from django.db import models
 
 from real_estate_api.korisnici.models import Korisnici
@@ -92,7 +93,8 @@ class Ponude(models.Model):
     @property
     def cena_stana(self):
         """Return field 'cena_stana' for Ponuda serializers"""
-        return self.stan.cena_stana
+        cena_stana_formatirana = round(self.stan.cena_stana, 2)
+        return cena_stana_formatirana
 
     @property
     def lamela_stana(self):
