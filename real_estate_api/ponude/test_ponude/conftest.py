@@ -193,10 +193,10 @@ def novi_kupac_fixture(db) -> Kupci:
 
 # region JEDNA PONUDA FIXTURES
 @pytest.fixture()
-def nova_jedna_ponuda(db,
-                      novi_kupac_fixture,
-                      novi_jedan_stan_fixture,
-                      novi_jedan_auth_korisnik_fixture) -> Ponude:
+def nova_jedna_ponuda_fixture(db,
+                              novi_kupac_fixture,
+                              novi_jedan_stan_fixture,
+                              novi_jedan_auth_korisnik_fixture) -> Ponude:
     nova_jedna_ponuda_fixture = Ponude.objects.create(
         id_ponude=1,
         kupac=novi_kupac_fixture,
@@ -216,6 +216,46 @@ def nova_jedna_ponuda(db,
 
 # endregion
 
+# region JEDNA PONUDA FIXTURES
+@pytest.fixture()
+def nove_tri_ponude_fixture(db,
+                            novi_kupac_fixture,
+                            novi_jedan_stan_fixture,
+                            novi_jedan_auth_korisnik_fixture) -> Ponude:
+    nova_jedna_ponuda_fixture = Ponude.objects.bulk_create(
+        [
+            Ponude(
+                id_ponude=1,
+                kupac=novi_kupac_fixture,
+                stan=novi_jedan_stan_fixture,
+                klijent_prodaje=novi_jedan_auth_korisnik_fixture,
+                cena_stana_za_kupca=0,
+                napomena=fake.text(max_nb_chars=25),
+                broj_ugovora="broj_ugovora",
+                datum_ugovora=datetime.date(2021, 9, 1),
+                status_ponude=Ponude.StatusPonude.POTENCIJALAN,
+                nacin_placanja=Ponude.NacinPlacanja.U_CELOSTI,
+                odobrenje=False
+            ),
+            Ponude(
+                id_ponude=2,
+                kupac=novi_kupac_fixture,
+                stan=novi_jedan_stan_fixture,
+                klijent_prodaje=novi_jedan_auth_korisnik_fixture,
+                cena_stana_za_kupca=123,
+                napomena=fake.text(max_nb_chars=25),
+                broj_ugovora="broj_ugovora1",
+                datum_ugovora=datetime.date(2021, 9, 1),
+                status_ponude=Ponude.StatusPonude.POTENCIJALAN,
+                nacin_placanja=Ponude.NacinPlacanja.U_CELOSTI,
+                odobrenje=False
+            )
+        ]
+    )
+    return nova_jedna_ponuda_fixture
+
+
+# endregion
 
 # region JEDNA PONUDA JSON DUMP FIXTURES
 @pytest.fixture()

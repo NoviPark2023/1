@@ -119,45 +119,45 @@ class TestRestApiUrlsPonude:
         broj_ponuda_from_db = Ponude.objects.all().count()
         assert broj_ponuda_from_db == 1
 
-    def test_detalji_ponude(self, client, novi_jedan_auth_korisnik_fixture, nova_jedna_ponuda):
+    def test_detalji_ponude(self, client, novi_jedan_auth_korisnik_fixture, nova_jedna_ponuda_fixture):
         """
         Test poziv 'ponude:detalji_ponude' za API poziv detalja Ponude.
         U samoj inicijalizaciji imamo samo jednou Ponudu.
 
-            * @see /test_ponude/conftest.py (nova_jedna_ponuda)
+            * @see /test_ponude/conftest.py (nova_jedna_ponuda_fixture)
             * @see path('detalji-ponude/<int:id_ponude>/', PonudeDetaljiAPIView.as_view(), name='detalji_ponude')
         ---
         @param client: A Django test client instance.
         @param novi_jedan_auth_korisnik_fixture: Autorizovan Superuser Korisnik.
-        @param nova_jedna_ponuda: Ponuda.
+        @param nova_jedna_ponuda_fixture: Ponuda.
         @return status code 200: HTTP OK
         """
 
         broj_ponuda_from_db = Ponude.objects.all().count()
         assert broj_ponuda_from_db == 1
 
-        url_detalji_ponude = reverse('ponude:detalji_ponude', args=[nova_jedna_ponuda.id_ponude])
+        url_detalji_ponude = reverse('ponude:detalji_ponude', args=[nova_jedna_ponuda_fixture.id_ponude])
 
         response = client.get(url_detalji_ponude)
         assert response.status_code == 200
 
-    def test_izmeni_ponudu(self, client, nova_jedna_ponuda, nova_jedna_ponuda_json_fixture):
+    def test_izmeni_ponudu(self, client, nova_jedna_ponuda_fixture, nova_jedna_ponuda_json_fixture):
         """
         Test poziv 'ponude:izmeni_ponudu' za API poziv izmene Ponude.
         U samoj inicijalizaciji imamo samo jednou Ponudu.
 
-            * @see /test_ponude/conftest.py (nova_jedna_ponuda)
+            * @see /test_ponude/conftest.py (nova_jedna_ponuda_fixture)
             * @see /test_ponude/conftest.py (nova_jedna_ponuda_json_fixture)
             * @see path('izmeni-ponudu/<int:id_ponude>/', UrediPonuduViewAPI.as_view(), name='izmeni_ponudu')
         ---
         @param client: A Django test client instance.
-        @param nova_jedna_ponuda: Ponuda.
+        @param nova_jedna_ponuda_fixture: Ponuda.
         @return status code 200: HTTP OK
         """
         broj_ponuda_from_db = Ponude.objects.all().count()
         assert broj_ponuda_from_db == 1
 
-        url_izmeni_ponudu = reverse('ponude:izmeni_ponudu', args=[nova_jedna_ponuda.id_ponude])
+        url_izmeni_ponudu = reverse('ponude:izmeni_ponudu', args=[nova_jedna_ponuda_fixture.id_ponude])
 
         response = client.put(url_izmeni_ponudu,
                               data=nova_jedna_ponuda_json_fixture,
@@ -166,11 +166,11 @@ class TestRestApiUrlsPonude:
 
         assert response.status_code == 200
 
-    def test_obrisi_ponudu(self, client, nova_jedna_ponuda):
+    def test_obrisi_ponudu(self, client, nova_jedna_ponuda_fixture):
         """
         Test poziv 'ponude:obrisi_ponudu' za API poziv Obrisi Ponudu.
 
-            * @see /test_ponude/conftest.py (nova_jedna_ponuda)
+            * @see /test_ponude/conftest.py (nova_jedna_ponuda_fixture)
             * @see path('obrisi-ponudu/<int:id_ponude>/', ObrisiPonuduAPIView.as_view(), name='obrisi_ponudu')
 
         @param client: A Django test client instance.
@@ -180,7 +180,7 @@ class TestRestApiUrlsPonude:
         broj_ponuda_from_db = Ponude.objects.all().count()
         assert broj_ponuda_from_db == 1
 
-        url_obrisi_ponudu = reverse('ponude:obrisi_ponudu', args=[nova_jedna_ponuda.id_ponude])
+        url_obrisi_ponudu = reverse('ponude:obrisi_ponudu', args=[nova_jedna_ponuda_fixture.id_ponude])
 
         response = client.delete(url_obrisi_ponudu)
 
