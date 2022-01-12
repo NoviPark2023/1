@@ -1,5 +1,4 @@
 import json
-from decimal import Decimal
 
 from rest_framework.reverse import reverse
 
@@ -44,7 +43,7 @@ class TestStanovicSerijalizers:
                                               client,
                                               novi_autorizovan_korisnik_fixture_stanovi,
                                               kreiraj_auriranje_cena,
-                                              novi_jedan_stan_fixture
+                                              novi_jedan_stan_json_fixture
                                               ):
         """
         Testiranje serijalizera za kreiranje Stana sa validnim podacima.
@@ -56,24 +55,10 @@ class TestStanovicSerijalizers:
 
         url_kreiraj_validan_stan = reverse('stanovi:kreiraj_stan')
 
-        # validan_stan = json.dumps(
-        #     {'id_stana':3,
-        #      'lamela':"L4.1.S2",
-        #      'adresa_stana':"Adresa Stana L3.1.S2",
-        #      'kvadratura':'48.02',
-        #      'kvadratura_korekcija':46.58,
-        #      'iznos_za_korekciju_kvadrature':'0.97',
-        #      'sprat':"1.0",
-        #      'broj_soba':2,
-        #      'orijentisanost':"Jug",
-        #      'broj_terasa':0,
-        #      'cena_stana':"73036.50",
-        #      'cena_kvadrata':"1568.00",
-        #      'napomena':'Nema napomene',
-        #      'status_prodaje':"dostupan"}
-        # )
-
-        response = client.post(url_kreiraj_validan_stan, data=novi_jedan_stan_fixture, content_type='application/json')
+        response = client.post(url_kreiraj_validan_stan,
+                               data=novi_jedan_stan_json_fixture,
+                               content_type='application/json'
+                               )
 
         assert response.status_code == 201
 
@@ -124,10 +109,9 @@ class TestStanovicSerijalizers:
 
         assert response.status_code == 400
 
-
     def test_invalid_serializers_detalji_jednog_stana(self,
                                                       client,
-                                                      nova_dva_stana_fixture,
+                                                      novi_jedan_stan_fixture_stanovi,
                                                       novi_autorizovan_korisnik_fixture_stanovi
                                                       ):
         """
@@ -140,11 +124,13 @@ class TestStanovicSerijalizers:
         * @see conftest.py (nova_dva_stana_fixture)
 
         @param client: A Django test client instance.
-        @param nova_dva_stana_fixture: Stanovi
+        @param novi_jedan_stan_fixture_stanovi: Stanovi
         @param novi_autorizovan_korisnik_fixture_stanovi: Korisnik
         """
 
         # Get invalid one Kupaca from Response
-        url_detalji_stana_jedan = reverse('stanovi:detalji_stana', args=[nova_dva_stana_fixture[0].id_stana + 1000])
+        url_detalji_stana_jedan = reverse('stanovi:detalji_stana',
+                                          args=[novi_jedan_stan_fixture_stanovi.id_stana + 1000]
+                                          )
         response = client.get(url_detalji_stana_jedan)
         assert response.status_code == 404

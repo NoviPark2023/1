@@ -113,7 +113,7 @@ def novo_azuriranje_cena_fixture(db):
 
 # region NOVI JEDAN STAN FIXTURE
 @pytest.fixture(autouse=False)
-def novi_jedan_stan_fixture(db, kreiraj_auriranje_cena) -> Stanovi:
+def novi_jedan_stan_fixture_stanovi(db, kreiraj_auriranje_cena) -> Stanovi:
     """
     Kreiranje novog Stana.
 
@@ -121,20 +121,20 @@ def novi_jedan_stan_fixture(db, kreiraj_auriranje_cena) -> Stanovi:
     @param db: Testna DB.
     @return: Entitet 'Stanovi'.
     """
-    print("\n")
+
     stan = Stanovi.objects.create(
         id_stana=1,
         lamela="L3.1.S2",
         adresa_stana="Adresa Stana L3.1.S2",
         kvadratura='48.02',
-        kvadratura_korekcija=Decimal("46.58"),
+        kvadratura_korekcija='46.58',
         iznos_za_korekciju_kvadrature='0.97',
         sprat="1.0",
-        broj_soba=2.0,
+        broj_soba=2,
         orijentisanost="Jug",
         broj_terasa=0,
-        cena_stana=Decimal("73036.50"),
-        cena_kvadrata=Decimal("1568.00"),
+        cena_stana="73.036,499",
+        cena_kvadrata="1568.00",
         napomena='Nema napomene',
         status_prodaje="dostupan",
     )
@@ -154,8 +154,7 @@ def nova_dva_stana_fixture(db, kreiraj_auriranje_cena) -> Stanovi:
     @param db: Testna DB.
     @return: Entitet 'Stanovi'.
     """
-    print("\n")
-    stan = Stanovi.objects.bulk_create(
+    stanovi = Stanovi.objects.bulk_create(
         [
             Stanovi(
                 id_stana=1,
@@ -193,7 +192,7 @@ def nova_dva_stana_fixture(db, kreiraj_auriranje_cena) -> Stanovi:
 
     )
 
-    return stan
+    return stanovi
 
 
 # endregion
@@ -210,7 +209,7 @@ def novi_jedan_stan_json_fixture():
             "kvadratura_korekcija": 46.58,
             "iznos_za_korekciju_kvadrature": 0.97,
             "sprat": "1.0",
-            "broj_soba": 3,
+            "broj_soba": 2,
             "orijentisanost": "Jug",
             "broj_terasa": "1",
             "cena_stana": "73036.50",
