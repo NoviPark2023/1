@@ -1,6 +1,9 @@
 import json
+from decimal import Decimal
+
 import pytest
 from faker import Faker
+import json
 
 from real_estate_api.korisnici.models import Korisnici
 from real_estate_api.stanovi.models import Stanovi, AzuriranjeCena
@@ -10,7 +13,7 @@ fake = Faker()
 
 # region FIXTURE NE REGISTROVAN KORISNIK STANOVI
 @pytest.fixture()
-def novi_korisnik_ne_autorizovan_fixture_stanovi(db) -> Korisnici:
+def novi_korisnik_neautorizovan_fixture_stanovi(db) -> Korisnici:
     return Korisnici.objects.create(
         username='nikola',
         password='nikola',
@@ -87,6 +90,27 @@ def kreiraj_auriranje_cena(db) -> list[AzuriranjeCena]:
 
 # endregion
 
+# region NOVO AZURIRANJE CENA FIXTURE
+@pytest.fixture(autouse=False)
+def novo_azuriranje_cena_fixture(db):
+    """
+    Kreiranje novog Azuriranja cena.
+
+    @param db: Testna DB.
+    @return: Entitet 'Azuriranje cena'.
+    """
+    azuriranje_cena = AzuriranjeCena.objects.create(
+        id_azur_cene=1,
+        sprat="1.0",
+        broj_soba=3,
+        orijentisanost="Jug",
+        cena_kvadrata=1568.00
+    )
+
+    return azuriranje_cena
+
+# endregion
+
 # region NOVI JEDAN STAN FIXTURE
 @pytest.fixture(autouse=False)
 def novi_jedan_stan_fixture(db, kreiraj_auriranje_cena) -> Stanovi:
@@ -102,15 +126,15 @@ def novi_jedan_stan_fixture(db, kreiraj_auriranje_cena) -> Stanovi:
         id_stana=1,
         lamela="L3.1.S2",
         adresa_stana="Adresa Stana L3.1.S2",
-        kvadratura=48.02,
-        kvadratura_korekcija=46.58,
-        iznos_za_korekciju_kvadrature=0.97,
+        kvadratura='48.02',
+        kvadratura_korekcija=Decimal("46.58"),
+        iznos_za_korekciju_kvadrature='0.97',
         sprat="1.0",
-        broj_soba=2,
+        broj_soba=2.0,
         orijentisanost="Jug",
-        broj_terasa="0",
-        cena_stana="73036.50",
-        cena_kvadrata="1568.00",
+        broj_terasa=0,
+        cena_stana=Decimal("73036.50"),
+        cena_kvadrata=Decimal("1568.00"),
         napomena='Nema napomene',
         status_prodaje="dostupan",
     )
@@ -182,15 +206,15 @@ def novi_jedan_stan_json_fixture():
             "id_stana": 5,
             "lamela": "L2.1.S10",
             "adresa_stana": "Adresa Stana L2.1.S10",
-            "kvadratura": 67.49,
-            "kvadratura_korekcija": 65.47,
+            "kvadratura": 48.02,
+            "kvadratura_korekcija": 46.58,
             "iznos_za_korekciju_kvadrature": 0.97,
             "sprat": "1.0",
             "broj_soba": 3,
             "orijentisanost": "Jug",
-            "broj_terasa": "0",
-            "cena_stana": "103085.59",
-            "cena_kvadrata": "1574.66",
+            "broj_terasa": "1",
+            "cena_stana": "73036.50",
+            "cena_kvadrata": "1568.00",
             "napomena": 'Nema napomene',
             "status_prodaje": "dostupan",
         }
@@ -238,5 +262,73 @@ def nova_dva_stana_json_fixture():
             }
         ]
     )
+
+
+# endregion
+
+# region FIXTURE JSON DUMP JEDAN NEVALIDAN STAN
+@pytest.fixture(autouse=False)
+def novi_jedan_nevalidan_stan_json_fixture():
+    return json.dumps(
+        {
+         'id_stana': 3,
+         'lamela': "L4.1.S2",
+         'adresa_stana': "Adresa Stana L3.1.S2",
+         'kvadratura': '48.02',
+         'kvadratura_korekcija': 46.58,
+         'iznos_za_korekciju_kvadrature': '0.97',
+         'sprat': 1.0,
+         'broj_soba': 2,
+         'orijentisanost': "Jug",
+         'broj_terasa': -2,
+         'cena_stana': "73036.50",
+         'cena_kvadrata': "1568.00",
+         'napomena': 'Nema napomene',
+         'status_prodaje': "dostupan"
+        }
+    )
+
+# endregion
+
+# region FIXTURE JSON DUMP DVA STANA UNIQUIE LAMELA ERROR
+@pytest.fixture(autouse=False)
+def nova_dva_stana_sa_istom_lamelom_json_fixture():
+    return json.dumps(
+        [
+            {
+                "id_stana": 5,
+                "lamela": "L2.1.S10",
+                "adresa_stana": "Adresa Stana L2.1.S10",
+                "kvadratura": 67.49,
+                "kvadratura_korekcija": 65.47,
+                "iznos_za_korekciju_kvadrature": 0.97,
+                "sprat": "1.0",
+                "broj_soba": 3,
+                "orijentisanost": "Jug",
+                "broj_terasa": "0",
+                "cena_stana": "103085.59",
+                "cena_kvadrata": "1574.66",
+                "napomena": 'Nema napomene',
+                "status_prodaje": "dostupan",
+            },
+            {
+                "id_stana": 6,
+                "lamela": "L2.1.S10",
+                "adresa_stana": "Adresa Stana L3.1.S1",
+                "kvadratura": 50.25,
+                "kvadratura_korekcija": 48.74,
+                "iznos_za_korekciju_kvadrature": 0.97,
+                "sprat": "1.0",
+                "broj_soba": 3,
+                "orijentisanost": "Jug",
+                "broj_terasa": "1",
+                "cena_stana": "76428.24",
+                "cena_kvadrata": "1568.00",
+                "napomena": 'Nema napomene',
+                "status_prodaje": "dostupan",
+            }
+        ]
+    )
+
 
 # endregion
