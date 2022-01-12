@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
@@ -15,8 +17,9 @@ class PonudeSerializer(serializers.ModelSerializer):
     kreiraj_ponudu_url = serializers.SerializerMethodField()
     lista_ponuda_url = serializers.SerializerMethodField()
 
+    cena_stana = serializers.SerializerMethodField()  # Get field 'Cena Stana' from 'Ponuda' model
+
     adresa_stana = serializers.ReadOnlyField()  # Get field 'Adresa Stana' from 'Ponuda' model
-    cena_stana = serializers.ReadOnlyField()  # Get field 'Cena Stana' from 'Ponuda' model
     ime_kupca = serializers.ReadOnlyField()  # Get field 'ime_kupca Stana' from 'Ponuda' model
     lamela_stana = serializers.ReadOnlyField()  # Get field 'ime_kupca Stana' from 'Ponuda' model
 
@@ -45,23 +48,38 @@ class PonudeSerializer(serializers.ModelSerializer):
             'lista_ponuda_url',
         )
 
-    def get_detalji_ponude_url(self, obj):
+    @staticmethod
+    def get_cena_stana(obj):
+        """
+        Konverzija polja "cena_stana" u float broj i zaokruzivanje decimale na 2 polja.
+        @param obj: Ponude
+        @return: cena stana (float) rounded 2 decimale.
+        """
+        cena_stana = float(Decimal(obj.cena_stana))
+        return round(cena_stana, 2)
+
+    @staticmethod
+    def get_detalji_ponude_url(obj):
         """Prosledi API putanju do detalja Ponuda"""
         return reverse('ponude:detalji_ponude', args=[obj.pk])
 
-    def get_izmeni_ponudu_url(self, obj):
+    @staticmethod
+    def get_izmeni_ponudu_url(obj):
         """Prosledi Izmeni Ponudu API putnju"""
         return reverse('ponude:izmeni_ponudu', args=[obj.pk])
 
-    def get_obrisi_ponudu_url(self, obj):
+    @staticmethod
+    def get_obrisi_ponudu_url(obj):
         """Prosledjivanje API putanje za brisanje Ponude"""
         return reverse('ponude:obrisi_ponudu', args=[obj.pk])
 
-    def get_kreiraj_ponudu_url(self, obj):
+    @staticmethod
+    def get_kreiraj_ponudu_url(obj):
         """Prosledjivanje API putanje za kreiranje Ponude"""
         return reverse('ponude:kreiraj_ponudu')
 
-    def get_lista_ponuda_url(self, obj):
+    @staticmethod
+    def get_lista_ponuda_url(obj):
         """Prosledjivanje API putanje do prikaza svih Ponuda"""
         return reverse('ponude:lista_ponuda')
 

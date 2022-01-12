@@ -32,7 +32,7 @@ class TestKorisniciSerijalizers:
 
         assert response.status_code == 200
 
-        # Provea broja Korisnika (4).
+        # Provera broja Korisnika (4).
         # Imamo jednog SuperUser-a (novi_jedan_auth_korisnik_fixture)
         # Imamo tri obicna Korisnika (nova_tri_korisnika_fixture)
         assert broj_korisnika == 4
