@@ -1,4 +1,3 @@
-
 <table align="center">
 <tr>
 <td align="center" width="9999">
@@ -22,7 +21,6 @@ Ovaj Repozitorijum predstavlja back-end CRM (eng. Customer Relationship Manageme
 </tr>
 </table>
 
-
 ---
 
 <table align="center">
@@ -32,19 +30,69 @@ Ovaj Repozitorijum predstavlja back-end CRM (eng. Customer Relationship Manageme
 # Arhitektura DevOps sistema 
 
 Arhitektura **DevOps** sistema se sastoji od:
-- **BackEnd** servera
-- **FrontEnd** servera
+- **BackEnd API service** servera
 - Servera za **Dokument perzistenciju** (Ugovori)
-- Server **Baze Podataka**
+- Server **Baze Podataka** (PostgreSQL 13)
+- <ins>**FrontEnd** servera</ins>
 </td>
 </tr>
 <tr>
 <td align="left" width="9999">
 
-#### Opisi:
-<ins>**BackEnd** server:</ins>
 
-Server za API servise je podignut na "Digital Ocean" hosting provajderu.
+<ins>**BackEnd API service**</ins> server:
+----
+
+Server za API servise je podignut na ["Digital Ocean App Platform"](https://try.digitalocean.com/app-platform) cloud provajderu. (**Basic Plan: $10/mo**)
+
+```bash
+App Platform provides a fully managed solution to rapidly build, deploy, manage, and scale apps. Deploy code by simply pointing
+to GitHub or GitLab repository and let App Platform manage the infrastructure, application runtimes, and other dependencies.
+```
+- GitLab 'stage' repo je povezan sa DO App platformom pa je tako i rešen CI/CD. Drugim rečima, nakon ```git push origin stage``` automatski se pokreće build na DO App platformi.
+</td>
+</tr>
+
+
+<tr>
+<td align="left" width="9999">
+
+<ins>Servera za **Dokument perzistenciju** (Ugovori)</ins>:
+----
+
+Svaki stan potencijalno ima svoje ponude Kupaca. Ponude imaju svoje statuse i to:
+- Potencijalan
+- Rezervisan (kaparisan)
+- Kupljen
+
+Status ponude "rezervian" znači da je Stan kaparisan i u tom trenutku je potrebno generisati ugovor sa podacima koji se preuzimaju iz CRM sistema. Odluka koja je doneta za **perzistentno čuvanje generisanog ugovora** je:
+- ["Digital Ocean Space" ](https://try.digitalocean.com/cloud-storage/) S3-compatible object storage service (**Basic Plan: $5/mo**)
+
+</td>
+</tr>
+
+
+<tr>
+<td align="left" width="9999">
+
+<ins>Server **Baze Podataka** (PostgreSQL 13)</ins>:
+----
+
+Baza podataka **PostgreSQL 13**  je podignuta na:
+- [Digital Ocean DataBase](https://www.digitalocean.com/products/managed-databases-postgresql/)  (**Basic Plan: $15/mo**)
+
+
+</td>
+</tr>
+
+<tr>
+<td align="left" width="9999">
+
+<ins>Pregled DevOps Sistema</ins>:
+----
+
+slika pregled
+
 
 </td>
 </tr>
