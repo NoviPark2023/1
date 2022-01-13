@@ -1,8 +1,29 @@
+
+<table align="center"><tr><td align="center" width="9999">
+
+![STANOVI CRM](https://drive.google.com/uc?export=view&id=10PP2LghV3lHpxwj0jGEhJrPs04F9eydE)
+
+# Pregled Sistema "STANOVI CRM"
+
+Ovaj Repozitorijum predstavlja back-end CRM (eng. Customer Relationship Management) sistem prodaje stanova.
+
+</td>
+</tr>
+</table>
+
+
 ---
 
-![](https://drive.google.com/uc?export=view&id=10PP2LghV3lHpxwj0jGEhJrPs04F9eydE)
+
+
+</p>
+</div>
+
 
 ## Kreiranje TokenAuthentication
+
+
+
 
 ----
 
