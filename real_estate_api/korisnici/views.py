@@ -47,11 +47,13 @@ class UrediKorisnika(generics.RetrieveUpdateAPIView):
 
     def put(self, request, *args, **kwargs):
         """
-        Promena lozinke Korisnika
+        Promena i hesovanje lozinke Korisnika ukoliko iz Responsa dobijemo polje 'password'.
+        Ukoliko nije poslato iz fronta*(responsa) lozinka(password) samo sacuvaj ostale podatke.
         """
-        my_password = request.data['password']
-        hashed_my_password = make_password(my_password)
-        request.data['password'] = hashed_my_password
+        if "password" in request.data:
+            my_password = request.data['password']
+            hashed_my_password = make_password(my_password)
+            request.data['password'] = hashed_my_password
         return self.partial_update(request, *args, **kwargs)
 
 
