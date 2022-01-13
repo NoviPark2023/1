@@ -15,10 +15,8 @@ Ovaj Repozitorijum predstavlja back-end CRM (eng. Customer Relationship Manageme
 <td align="left" width="9999">
 
 ##### Developers:
-- Ivana Tepavac (ivana.tepavac@factoryww.com)
-- Dejan Čugalj (dejan.cugalj@factoryww.com)
-
-
+- **Ivana Tepavac** (ivana.tepavac@factoryww.com)
+- **Dejan Čugalj** (dejan.cugalj@factoryww.com)
 
 </td>
 </tr>
@@ -27,10 +25,30 @@ Ovaj Repozitorijum predstavlja back-end CRM (eng. Customer Relationship Manageme
 
 ---
 
+<table align="center">
+<tr>
+<td align="left" width="9999">
 
+# Arhitektura DevOps sistema 
 
-</p>
-</div>
+Arhitektura **DevOps** sistema se sastoji od:
+- **BackEnd** servera
+- **FrontEnd** servera
+- Servera za **Dokument perzistenciju** (Ugovori)
+- Server **Baze Podataka**
+</td>
+</tr>
+<tr>
+<td align="left" width="9999">
+
+#### Opisi:
+<ins>**BackEnd** server:</ins>
+
+Server za API servise je podignut na "Digital Ocean" hosting provajderu.
+
+</td>
+</tr>
+</table>
 
 
 ## Kreiranje TokenAuthentication
