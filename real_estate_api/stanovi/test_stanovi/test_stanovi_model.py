@@ -63,11 +63,11 @@ class TestEntitetaStanovi:
         """
         assert Stanovi.objects.all().count() == 1
 
-    def test_kreiraj_azuriranje_cena(self, kreiraj_auriranje_cena):
+    def test_kreiraj_azuriranje_cena(self, kreiraj_tri_auriranja_cena_stanovi):
         """
         Testiranje kreiranja Azuriranja cena u bazi podataka i provera "id_azur_cene".
 
-        * @see conftest.py (kreiraj_auriranje_cena)
+        * @see conftest.py (kreiraj_tri_auriranja_cena_stanovi)
         @param kreiraj_auriranje_cena: Entitet AzuriranjeCena
         """
         azuriranje_cena_from_db = AzuriranjeCena.objects.all()

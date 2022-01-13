@@ -54,7 +54,7 @@ def novi_autorizovan_korisnik_fixture_stanovi(db, client, django_user_model) -> 
 
 # region AZURIRANJE CENA Stanov
 @pytest.fixture(autouse=False)
-def kreiraj_auriranje_cena(db) -> list[AzuriranjeCena]:
+def kreiraj_tri_auriranja_cena_stanovi(db) -> list[AzuriranjeCena]:
     """
     Separaciona tabela 'Azuriranje Cena Stanova' koja se koristi za Automatsko
     racunanje cene stanova na osnovu zadatih parametara.
@@ -109,15 +109,34 @@ def novo_azuriranje_cena_fixture(db):
 
     return azuriranje_cena
 
+
+# endregion
+
+# region FIXTURE JSON DUMP AZURIRANJE CENA
+@pytest.fixture(autouse=False)
+def novo_azuriranje_cena_json_fixture():
+    return json.dumps(
+        {
+            "id_azur_cene": 5,
+            "sprat": "2.0",
+            "broj_soba": 2,
+            "orijentisanost": "Jug",
+            "cena_kvadrata": 1500.00,
+        }
+    )
+
+
+# endregion
+
 # endregion
 
 # region NOVI JEDAN STAN FIXTURE
 @pytest.fixture(autouse=False)
-def novi_jedan_stan_fixture_stanovi(db, kreiraj_auriranje_cena) -> Stanovi:
+def novi_jedan_stan_fixture_stanovi(db, kreiraj_tri_auriranja_cena_stanovi) -> Stanovi:
     """
     Kreiranje novog Stana.
 
-    @param kreiraj_auriranje_cena:  pytest.fixture (kreiraj_auriranje_cena)
+    @param kreiraj_auriranje_cena:  pytest.fixture (kreiraj_tri_auriranja_cena_stanovi)
     @param db: Testna DB.
     @return: Entitet 'Stanovi'.
     """
@@ -146,11 +165,11 @@ def novi_jedan_stan_fixture_stanovi(db, kreiraj_auriranje_cena) -> Stanovi:
 
 # region NOVA DVA STANA FIXTURE
 @pytest.fixture(autouse=False)
-def nova_dva_stana_fixture(db, kreiraj_auriranje_cena) -> Stanovi:
+def nova_dva_stana_fixture(db, kreiraj_tri_auriranja_cena_stanovi) -> Stanovi:
     """
     Kreiranje novog Stana.
 
-    @param kreiraj_auriranje_cena:  pytest.fixture (kreiraj_auriranje_cena)
+    @param kreiraj_auriranje_cena:  pytest.fixture (kreiraj_tri_auriranja_cena_stanovi)
     @param db: Testna DB.
     @return: Entitet 'Stanovi'.
     """

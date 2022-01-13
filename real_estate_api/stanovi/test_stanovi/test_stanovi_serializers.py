@@ -42,7 +42,7 @@ class TestStanovicSerijalizers:
     def test_serializers_kreiraj_validan_stan(self,
                                               client,
                                               novi_autorizovan_korisnik_fixture_stanovi,
-                                              kreiraj_auriranje_cena,
+                                              kreiraj_tri_auriranja_cena_stanovi,
                                               novi_jedan_stan_json_fixture
                                               ):
         """
@@ -50,7 +50,7 @@ class TestStanovicSerijalizers:
         Testiranje se vrsi sa autorizovanim Korisnikom sistema.
 
         * @see conftest.py (novi_autorizovan_korisnik_fixture_stanovi)
-        * @see conftest.py (kreiraj_auriranje_cena)
+        * @see conftest.py (kreiraj_tri_auriranja_cena_stanovi)
         """
 
         url_kreiraj_validan_stan = reverse('stanovi:kreiraj_stan')
@@ -65,7 +65,7 @@ class TestStanovicSerijalizers:
     def test_serializers_kreiraj_nevalidan_stan(self,
                                                 client,
                                                 novi_autorizovan_korisnik_fixture_stanovi,
-                                                kreiraj_auriranje_cena,
+                                                kreiraj_tri_auriranja_cena_stanovi,
                                                 novi_jedan_nevalidan_stan_json_fixture
                                                 ):
         """
@@ -75,7 +75,7 @@ class TestStanovicSerijalizers:
         Testiranje se vrsi sa autorizovanim Korisnikom sistema.
 
         * @see conftest.py (novi_autorizovan_korisnik_fixture_stanovi)
-        * @see conftest.py (kreiraj_auriranje_cena)
+        * @see conftest.py (kreiraj_tri_auriranja_cena_stanovi)
         * @see conftest.py (novi_jedan_nevalidan_stan_json_fixture)
         """
 
@@ -89,7 +89,7 @@ class TestStanovicSerijalizers:
     def test_serializers_kreiraj_dva_stana_sa_istim_unique_vrednostima(self,
                                                                        client,
                                                                        novi_autorizovan_korisnik_fixture_stanovi,
-                                                                       kreiraj_auriranje_cena,
+                                                                       kreiraj_tri_auriranja_cena_stanovi,
                                                                        nova_dva_stana_sa_istom_lamelom_json_fixture
                                                                        ):
         """
@@ -98,7 +98,7 @@ class TestStanovicSerijalizers:
         Testiranje se vrsi sa autorizovanim Korisnikom sistema.
 
         * @see conftest.py (novi_autorizovan_korisnik_fixture_stanovi)
-        * @see conftest.py (kreiraj_auriranje_cena)
+        * @see conftest.py (kreiraj_tri_auriranja_cena_stanovi)
         * @see conftest.py (nova_dva_stana_sa_istom_lamelom_json_fixture)
         """
 
