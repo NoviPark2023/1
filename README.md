@@ -1,11 +1,22 @@
 
-<table align="center"><tr><td align="center" width="9999">
+<table align="center">
+<tr>
+<td align="center" width="9999">
 
 ![STANOVI CRM](https://drive.google.com/uc?export=view&id=10PP2LghV3lHpxwj0jGEhJrPs04F9eydE)
 
-# Pregled Sistema "STANOVI CRM"
+# Customer Relationship Management: "PRODAJA STANOVA CRM"
 
 Ovaj Repozitorijum predstavlja back-end CRM (eng. Customer Relationship Management) sistem prodaje stanova.
+
+</td>
+</tr>
+<tr>
+<td align="left" width="9999">
+
+##### Developers: Ivana Tepavac, Dejan Čugalj
+
+
 
 </td>
 </tr>
