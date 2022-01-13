@@ -14,7 +14,9 @@ Ovaj Repozitorijum predstavlja back-end CRM (eng. Customer Relationship Manageme
 <tr>
 <td align="left" width="9999">
 
-##### Developers: Ivana Tepavac, Dejan Čugalj
+##### Developers:
+- Ivana Tepavac (ivana.tepavac@factoryww.com)
+- Dejan Čugalj (dejan.cugalj@factoryww.com)
 
 
 
