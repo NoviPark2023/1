@@ -8,13 +8,10 @@ from django.conf import settings
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+from rest_framework_simplejwt.views import TokenRefreshView
 
 # Dokumentacija inicijalna podesavanja polje u zaglavlju
-from real_estate_api.stanovi.views import CustomTokenObtainPairView
+from real_estate_api.korisnici.views import CustomTokenObtainPairView
 
 schema_view = get_schema_view(
     openapi.Info(
