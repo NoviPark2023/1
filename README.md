@@ -22,7 +22,28 @@ Ovaj Repozitorijum predstavlja back-end CRM (eng. Customer Relationship Manageme
 </tr>
 </table>
 
----
+----
+
+
+<table align="center">
+<tr>
+<td align="left" width="9999">
+
+# Korišćene tehologije
+
+Najvažnije korišćene tehologije tokom razvoja CRM API servisa:
+
+![Python](https://img.shields.io/badge/Python-v3.9.9-blue)
+![PyCharm](https://img.shields.io/badge/PyCharm-v2021.3.1-blue)
+![Django](https://img.shields.io/badge/Django-v3.2.8-green)
+![djangorestframework](https://img.shields.io/badge/DjangoRestFramework-v3.12.4-green)
+![pytest-django](https://img.shields.io/badge/PytestDjango-v4.5.2-green)
+![boto3](https://img.shields.io/badge/Boto3-v1.20.27-green)
+</td>
+</tr>
+</table>
+
+----
 
 <table align="center">
 <tr>
@@ -116,22 +137,42 @@ slika pregled
 </table>
 
 
-----
 
 
 <table align="center">
 <tr>
 <td align="left" width="9999">
 
-# Korišćene tehologije
+# Pokretanje Projekta
 
-Najvažnije korišćene tehologije toko razvijanja API servisa:
+Najlakši i podržan način pokretanja projekta je preko Docker-a.
 
-![Pzthon](https://img.shields.io/badge/Python-v3.9.9-blue)
-![Django](https://img.shields.io/badge/Django-v3.2.8-green)
-![djangorestframework](https://img.shields.io/badge/DjangoRestFramework-v3.12.4-green)
-![pytest-django](https://img.shields.io/badge/PytestDjango-v4.5.2-green)
-![boto3](https://img.shields.io/badge/Boto3-v1.20.27-green)
+Prvo se uradi ```clone``` projekta. Lokacije je na: https://gitlab.com/dejan.cugalj/stanovi-crm-back.
+Obavezno dodajte svoj SSH ključ kako biste mogli lokalno da klonirate repo.
+Uverite se da imate instaliran Git i idite do mesta gde želite da repo bude kloniran.
+
+```bash
+git clone git@gitlab.com:dejan.cugalj/stanovi-crm-back.git
+```
+ili
+
+```bash
+git clone --branch develop git@gitlab.com:dejan.cugalj/stanovi-crm-back.git
+```
+za najnovije promene.
+
+Instaliranje [Docker Desktop](https://www.docker.com/products/docker-desktop) za OS koji se koristi (Windows, Mac, Linux..)
+
+Nakon što ste uspešno instalirali Docker Desktop, uverite se da je Docker Desktop pokrenut i da je instalacija Docker-a prošla kako treba.
+
+```bash
+cd skoda-sales-module
+make up
+```
+If all goes smoothly, the API should be up and running and spinning on http://localhost:8000
+
+The swagger docs can be found here http://localhost:8000/docs
+
 </td>
 </tr>
 </table>
