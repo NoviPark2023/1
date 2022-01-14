@@ -151,7 +151,7 @@ Baza podataka **PostgreSQL 13**  je podignuta na:
 <ins>Pregled DevOps Sistema</ins>:
 ----
 
-slika pregled
+![STANOVI CRM](https://drive.google.com/uc?export=view&id=10WuqUv6-fiha6XM4MJKdrHyFvyAmE3vW)
 
 
 </td>
