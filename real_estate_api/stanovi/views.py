@@ -1,9 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework_simplejwt.views import TokenObtainPairView
 
-from . import serializers
 from .models import Stanovi, AzuriranjeCena
 from .serializers import (
     StanoviSerializer,
@@ -162,11 +160,3 @@ class AzuriranjeCenaDeleteAPIView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated, ]
     queryset = AzuriranjeCena.objects.all()
     lookup_field = 'id_azur_cene'
-
-
-class CustomTokenObtainPairView(TokenObtainPairView):
-    """ Prilagodjeni Serializer za token i podataka Korisnika"""
-
-    from .serializers import CustomTokenObtainPairSerializer
-
-    serializer_class = CustomTokenObtainPairSerializer

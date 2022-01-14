@@ -6,6 +6,8 @@ from rest_framework.settings import api_settings
 from .models import Korisnici
 from real_estate_api.korisnici.serializers import KorisniciSerializers
 
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 
 class ListaKorisnikaAPIview(generics.ListAPIView):
     """Lista svih korisnika"""
@@ -63,3 +65,11 @@ class ObrisiKoriniska(generics.RetrieveDestroyAPIView):
     lookup_field = 'id'
     queryset = Korisnici.objects.all().order_by('id')
     serializer_class = KorisniciSerializers
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    """ Prilagodjeni Serializer za token i podataka Korisnika"""
+
+    from .serializers import CustomTokenObtainPairSerializer
+
+    serializer_class = CustomTokenObtainPairSerializer
