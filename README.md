@@ -35,6 +35,7 @@ Najvažnije korišćene tehologije tokom razvoja CRM API servisa:
 
 ![Python](https://img.shields.io/badge/Python-v3.9.9-blue)
 ![PyCharm](https://img.shields.io/badge/PyCharm-v2021.3.1-blue)
+![Docker](https://img.shields.io/badge/Docker-v20.10.11-blue)
 ![Django](https://img.shields.io/badge/Django-v3.2.8-green)
 ![djangorestframework](https://img.shields.io/badge/DjangoRestFramework-v3.12.4-green)
 ![pytest-django](https://img.shields.io/badge/PytestDjango-v4.5.2-green)
@@ -137,7 +138,7 @@ slika pregled
 </table>
 
 
-
+----
 
 <table align="center">
 <tr>
@@ -166,63 +167,53 @@ Instaliranje [Docker Desktop](https://www.docker.com/products/docker-desktop) za
 Nakon što ste uspešno instalirali Docker Desktop, uverite se da je Docker Desktop pokrenut i da je instalacija Docker-a prošla kako treba.
 
 ```bash
-cd skoda-sales-module
-make up
-```
-If all goes smoothly, the API should be up and running and spinning on http://localhost:8000
+cd stanovi-crm-api
+docker-compose -f local.ym build
 
-The swagger docs can be found here http://localhost:8000/docs
+# U dokeru napraviti SUPER USER-a jer je on potreban za prijavu na CRM API management sistem.
+python manage.py createsuperuser
+```
+
+Ako je sve prošlo kako treba backend API servisi bi trebali da su dostupni na sledećim adresama:
+
+- API CRM management system: http://localhost:8000/
+- Swagger docs na: http://localhost:8000/docs/
+- RedDocs na: http://localhost:8000/redoc/
 
 </td>
 </tr>
 </table>
 
-
-## Kreiranje TokenAuthentication
-
-
-
-
-----
-
-- python.exe .\manage.py drf_create_token datatab
-
-----
-
-- U postman-u sekcija: "Authorisation" --> API Key
-
-METHOD: Get
-KEY: Authorization (For Django)
-VALUE: Token 'space' API GENERATED KEY
-
-----
-
-Another solution :
-django-rest-auth (search Google)
-
-----
-
-GOOD FROM DB SCHEMA online:
-https://dbdiagram.io/d
-
 ----
 
 
-# TESTING COMMANDS :
+<table align="center">
+<tr>
+<td align="left" width="9999">
+
+# Testiranje :
 
 ----
 
-if we want to see what is the placecs that we need to test run:
-1. coverage run .\manage.py test
-2. coverage report
-3. coverage html (to see what is to test)
+Testiranje je potpuno optimizovano za pokretanje iz Docker-a, pa se iz tog razloga i vrši u samom Docker-u.
+Ukoliko se koristi "PyCharm" testiranje je još lakše, pa može da se radi i iz samog IDE-a.
+Ako se radi iz Docker-a potrebno je kreirati ```bash``` terminal pa iz root projekta pokrenuti:
+```bash
+# Testiranje svih modula (aplikacija)
+pytest
 
+# Testiranje jednog modula (aplikacije)
+pytest <puna-putanja-do-modula>
 
-SOME OTHER THINGS:
+# Testiranje jednog dela modula (aplikacije)
+pytest <puna-putanja-do-modula>::<naziv-klase>::<naziv-testa>
+```
+
+Ostalo povezano za testiranje:
 Show Coverage Data (Ctrl+Alt+F6). PyCharm
 
 ----
-
+</table>
 
 # DATABASE :
 
