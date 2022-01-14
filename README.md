@@ -127,11 +127,14 @@ slika pregled
 
 Najvažnije korišćene tehologije toko razvijanja API servisa:
 
+![Pzthon](https://img.shields.io/badge/Python-v3.9.9-blue)
 ![Django](https://img.shields.io/badge/Django-v3.2.8-green)
+![djangorestframework](https://img.shields.io/badge/DjangoRestFramework-v3.12.4-green)
+![pytest-django](https://img.shields.io/badge/PytestDjango-v4.5.2-green)
+![boto3](https://img.shields.io/badge/Boto3-v1.20.27-green)
 </td>
 </tr>
 </table>
-
 
 
 ## Kreiranje TokenAuthentication
@@ -200,12 +203,11 @@ GRANT ALL PRIVILEGES ON DATABASE recrm_api TO recrm_api;
 
 ```bash
 python manage.py makemigrations --dry-run --verbosity 3
-python manage.py runserver
+python manage.py makemigrations
+
 python manage.py createsuperuser 
-pip install coverage
-coverage run --omit='*/venv/*' manage.py test
-coverage html
-pip install djangorestframework
+
+python manage.py runserver
 
 # Print 'fixture' data from database table
 python manage.py dumpdata <ime_tablele> --indent=2
