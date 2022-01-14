@@ -306,6 +306,8 @@ REST_FRAMEWORK = {
 # EMAIL
 # -------------------------------------------------
 # Previous settings ...
+ADMINS = [('Me', 'dejan.cugalj@factoryww.com'), ]
+MANAGERS = ADMINS
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_PORT = 587
@@ -348,22 +350,33 @@ SWAGGER_SETTINGS = {
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#logging
 # See https://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
 if DEBUG is False:
     LOGGING = {
         'version': 1,
         'disable_existing_loggers': False,
         'formatters': {
+            'verbose': {
+                'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+            },
+            'simple': {
+                'format': '%(levelname)s %(message)s'
+            },
             'timestamp': {
                 'format': '{asctime} {levelname} {message}',
                 'style': '{',
             },
+
         },
         'handlers': {
             'file': {
                 'level': 'WARNING',
                 'class': 'logging.FileHandler',
                 'filename': MEDIA_ROOT + '/logovi/logovi.txt',
+                'formatter': 'verbose'
+            },
+            'mail_admins': {
+                'level': 'WARNING',
+                'class': 'django.utils.log.AdminEmailHandler',
                 'formatter': 'timestamp'
             },
             'console': {
@@ -376,10 +389,16 @@ if DEBUG is False:
                 'level': 'INFO',
                 'propagate': True,
             },
+            'django.request': {
+                'handlers': ['mail_admins'],
+                'level': 'WARNING',
+                'propagate': True,
+            },
         },
         'root': {
             'handlers': ['console'],
-            'level': 'WARNING',
+            'level': 'INFO',
         },
+
     }
 # endregion
