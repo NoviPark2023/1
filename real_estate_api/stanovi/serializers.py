@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from real_estate_api.ponude.models import Ponude
 from real_estate_api.stanovi.models import Stanovi, AzuriranjeCena
@@ -141,3 +142,35 @@ class AzuriranjeCenaSerializer(serializers.ModelSerializer):
             "orijentisanost",
             "cena_kvadrata",
         )
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """Pored Tokena Vrati i podatke o Korisniku"""
+
+    def validate(self, attrs):
+        """
+        Kada se generise Token, potrebno je i vratiti neke podatke o Korisniku.
+        Ovo je potrebno da bi se u Frontu odredio kakav ce meni biti, tj.
+        odredjivanje privilegija korisnika sistema na osnovu polja 'ROLE'.
+        Ako je npr. Role: Administrator, on sve vidi u CRM sistemu.
+        Ako je Role: Prodavac, ovaj tip ne sme da vidi neke stvari u Frontu.
+        ---
+        @param attrs: Atributi Korisnika JWT.
+        @return: data_korisnika_sa_tokenom: Korisnik podaci sa Tokenom.
+        """
+        # The default result (access/refresh tokens)
+        data_korisnika_sa_tokenom = super(CustomTokenObtainPairSerializer, self).validate(attrs)
+
+        # Custom data for Korisnika
+        data_korisnika_sa_tokenom.update({'id': self.user.id})
+        data_korisnika_sa_tokenom.update({'username': self.user.username})
+        data_korisnika_sa_tokenom.update({'role': self.user.role})
+        data_korisnika_sa_tokenom.update({'email': self.user.email})
+        data_korisnika_sa_tokenom.update({'ime': self.user.ime})
+        data_korisnika_sa_tokenom.update({'prezime': self.user.prezime})
+        data_korisnika_sa_tokenom.update({'about': self.user.about})
+        data_korisnika_sa_tokenom.update({'is_superuser': self.user.is_superuser})
+        data_korisnika_sa_tokenom.update({'is_staff': self.user.is_staff})
+        data_korisnika_sa_tokenom.update({'is_active': self.user.is_active})
+
+        return data_korisnika_sa_tokenom

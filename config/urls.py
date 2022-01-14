@@ -14,6 +14,8 @@ from rest_framework_simplejwt.views import (
 )
 
 # Dokumentacija inicijalna podesavanja polje u zaglavlju
+from real_estate_api.stanovi.views import CustomTokenObtainPairView
+
 schema_view = get_schema_view(
     openapi.Info(
         title="FACTORY Real Estate API Managment",
@@ -34,8 +36,8 @@ urlpatterns = [
 
     path('logout/', LogoutView.as_view(), name='logout'),
 
-    # PREUZIM API TOKEN
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # PREUZIM API TOKEN (Podatke o Korisniku)
+    path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     # Root Putanja do Kupaca
