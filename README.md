@@ -27,19 +27,40 @@ Ovaj Repozitorijum predstavlja back-end CRM (eng. Customer Relationship Manageme
 
 <table align="center">
 <tr>
+<td colspan="2">
+
+### Korišćene tehologije:
+
+</td>
+</tr>
+
+<tr>
+
 <td align="left" width="9999">
 
-# Korišćene tehologije
-
-Najvažnije korišćene tehologije tokom razvoja CRM API servisa:
+Najvažnije korišćene tehologije tokom razvoja (SYSTEM):
 
 ![Python](https://img.shields.io/badge/Python-v3.9.9-blue)
+
 ![PyCharm](https://img.shields.io/badge/PyCharm-v2021.3.1-blue)
+
 ![Docker](https://img.shields.io/badge/Docker-v20.10.11-blue)
+
+![Babel](https://img.shields.io/badge/Babel-v2.9.1-blue)
+</td>
+
+<td align="left" width="9999">
+
+Najvažnije korišćene tehologije tokom razvoja (FRAMEWORKs):
+
 ![Django](https://img.shields.io/badge/Django-v3.2.8-green)
+
 ![djangorestframework](https://img.shields.io/badge/DjangoRestFramework-v3.12.4-green)
+
 ![pytest-django](https://img.shields.io/badge/PytestDjango-v4.5.2-green)
+
 ![boto3](https://img.shields.io/badge/Boto3-v1.20.27-green)
+
 </td>
 </tr>
 </table>
@@ -50,7 +71,7 @@ Najvažnije korišćene tehologije tokom razvoja CRM API servisa:
 <tr>
 <td align="left" width="9999">
 
-# Arhitektura DevOps sistema 
+# Arhitektura DevOps sistema (DEPLOY)
 
 Arhitektura **DevOps** sistema se sastoji od:
 - **BackEnd API service** servera
@@ -69,7 +90,7 @@ Arhitektura **DevOps** sistema se sastoji od:
 Server za API servise je podignut na ["Digital Ocean App Platform"](https://try.digitalocean.com/app-platform) cloud provajderu. (**Basic Plan: $10/mo**)
 
 ```bash
-App Platform provides a fully managed solution to rapidly build, deploy, manage, and scale apps.ž
+App Platform provides a fully managed solution to rapidly build, deploy, manage, and scale apps.
 Deploy code by simply pointingto GitHub or GitLab repository and let App Platform manage the infrastructure,
 application runtimes, and other dependencies.
 ```
@@ -176,9 +197,9 @@ python manage.py createsuperuser
 
 Ako je sve prošlo kako treba backend API servisi bi trebali da su dostupni na sledećim adresama:
 
-- API CRM management system: http://localhost:8000/
-- Swagger docs na: http://localhost:8000/docs/
-- RedDocs na: http://localhost:8000/redoc/
+- **API CRM management system**: http://localhost:8000/
+- **Swagger** docs na: http://localhost:8000/docs/
+- **RedDocs** na: http://localhost:8000/redoc/
 
 </td>
 </tr>
@@ -210,28 +231,71 @@ pytest <puna-putanja-do-modula>::<naziv-klase>::<naziv-testa>
 ```
 
 Ostalo povezano za testiranje:
-Show Coverage Data (Ctrl+Alt+F6). PyCharm
 
-----
+- Show Coverage Data (Ctrl+Alt+F6). PyCharm
+
+</td>
+</tr>
 </table>
 
-# DATABASE :
-
 ----
 
+
+<table align="center">
+<tr>
+<td align="left" width="9999">
+
+# Baza Podataka (DataBase) :
+
+----
+Baza podataka je takođe dokerizovana. U ovom projektu se koristi [Postgres 13](https://www.postgresql.org/about/news/postgresql-13-released-2077/) baza podataka.
+
+Ukoliko se koristi "PyCharm", manipulacija sa samom bazom je prilično laka, ali za potrebe samog backup-a i lakšeg pregleda, pokrenut je i docker PG-AMIN. Pristup ovom servisu, nakon upsešnog pokretanja projekta se nalazi na adresi:
+
+- http://localhost:5050/
+
+Ceo .yaml:
+
+```bash
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: dejan.cugalj@factoryww.com
+      PGADMIN_DEFAULT_PASSWORD: ds241165A!
+    ports:
+      - "5050:80"
+
+```
+
+
+Korisni komande:
+
+```bash
 CREATE DATABASE recrm_api;
 
-
 CREATE USER recrm_api WITH PASSWORD 'fwwrecrm';
-
 
 ALTER ROLE recrm_api SET client_encoding TO 'utf8';
 ALTER ROLE recrm_api SET default_transaction_isolation TO 'read committed';
 ALTER ROLE recrm_api SET timezone TO 'UTC';
 
 GRANT ALL PRIVILEGES ON DATABASE recrm_api TO recrm_api;
+```
 
-# USEFUL COMMANDS:
+</td>
+</tr>
+</table>
+
+----
+
+
+<table align="center">
+<tr>
+<td align="left" width="9999">
+
+# Korisne Komande:
 
 ```bash
 python manage.py makemigrations --dry-run --verbosity 3
@@ -248,4 +312,6 @@ python manage.py dumpdata <ime_tablele> --indent=2 --output <putanja><ime_fajla>
 # Load 'fixture' data file in db table 
 python manage.py dumpdata <ime_tablele> --indent=2 --loaddata <putanja><ime_fajla>.json
 ```
-
+</td>
+</tr>
+</table>
