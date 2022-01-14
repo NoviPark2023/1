@@ -47,8 +47,9 @@ Arhitektura **DevOps** sistema se sastoji od:
 Server za API servise je podignut na ["Digital Ocean App Platform"](https://try.digitalocean.com/app-platform) cloud provajderu. (**Basic Plan: $10/mo**)
 
 ```bash
-App Platform provides a fully managed solution to rapidly build, deploy, manage, and scale apps. Deploy code by simply pointing
-to GitHub or GitLab repository and let App Platform manage the infrastructure, application runtimes, and other dependencies.
+App Platform provides a fully managed solution to rapidly build, deploy, manage, and scale apps.ž
+Deploy code by simply pointingto GitHub or GitLab repository and let App Platform manage the infrastructure,
+application runtimes, and other dependencies.
 ```
 - GitLab 'stage' repo je povezan sa DO App platformom pa je tako i rešen CI/CD. Drugim rečima, nakon ```git push origin stage``` automatski se pokreće build na DO App platformi.
 </td>
