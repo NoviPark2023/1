@@ -4,12 +4,13 @@
 
 ![STANOVI CRM](https://drive.google.com/uc?export=view&id=10PP2LghV3lHpxwj0jGEhJrPs04F9eydE)
 
-# Customer Relationship Management: "PRODAJA STANOVA CRM"
+# Customer Relationship Management: "PRODAJA STANOVA CRM" <br> ![verzija: beta v1.0](https://img.shields.io/badge/verzija-beta%20v1.0-blue)
 
 Ovaj Repozitorijum predstavlja back-end CRM (eng. Customer Relationship Management) sistem prodaje stanova.
 
 </td>
 </tr>
+
 <tr>
 <td align="left" width="9999">
 
@@ -88,6 +89,21 @@ Baza podataka **PostgreSQL 13**  je podignuta na:
 <tr>
 <td align="left" width="9999">
 
+<ins>**FrontEnd** servera</ins>:
+----
+
+- Frontend je razvijan u [REACT JavaScript library](https://reactjs.org/)
+- Server je podignut na [Digital Ocean App Platform](https://docs.digitalocean.com/products/app-platform/)
+- (**Basic Plan: $0/mo**)
+
+
+</td>
+</tr>
+
+
+<tr>
+<td align="left" width="9999">
+
 <ins>Pregled DevOps Sistema</ins>:
 ----
 
@@ -97,6 +113,24 @@ slika pregled
 </td>
 </tr>
 </table>
+
+
+----
+
+
+<table align="center">
+<tr>
+<td align="left" width="9999">
+
+# Korišćene tehologije
+
+Najvažnije korišćene tehologije toko razvijanja API servisa:
+
+![Django](https://img.shields.io/badge/Django-v3.2.8-green)
+</td>
+</tr>
+</table>
+
 
 
 ## Kreiranje TokenAuthentication
