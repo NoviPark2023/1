@@ -128,8 +128,6 @@ def novo_azuriranje_cena_json_fixture():
 
 # endregion
 
-# endregion
-
 # region NOVI JEDAN STAN FIXTURE
 @pytest.fixture(autouse=False)
 def novi_jedan_stan_fixture_stanovi(db, kreiraj_tri_auriranja_cena_stanovi) -> Stanovi:

@@ -63,9 +63,14 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
         # ###############################################
         # REPORTS STANOVA PO STATUSU PRODAJE U %  REPORT
         # ###############################################
-        stanovi_rezervisano_procenti = (ukupno_stanovi_rezervisan.get('rezervisano') / stanovi_global_ukupno) * 100
-        stanovi_dostupan_procenti = (ukupno_stanovi_dostupan.get('dostupan') / stanovi_global_ukupno) * 100
-        stanovi_prodati_procenti = (ukupno_stanovi_prodat.get('prodat') / stanovi_global_ukupno) * 100
+        try:
+            stanovi_rezervisano_procenti = (ukupno_stanovi_rezervisan.get('rezervisano') / stanovi_global_ukupno) * 100
+            stanovi_dostupan_procenti = (ukupno_stanovi_dostupan.get('dostupan') / stanovi_global_ukupno) * 100
+            stanovi_prodati_procenti = (ukupno_stanovi_prodat.get('prodat') / stanovi_global_ukupno) * 100
+        except ZeroDivisionError:
+            stanovi_rezervisano_procenti = 0
+            stanovi_dostupan_procenti = 0
+            stanovi_prodati_procenti = 0
 
         stanovi_agregirano_procenti = {
             # Zaokruzi procente na 2 decimale
@@ -308,7 +313,7 @@ class RoiStanovaAPIView(generics.ListAPIView):
             stanovi_ukupno_kvadrata=Sum('kvadratura')
         )
 
-        # Za kalkulaciju ralike u kvadratima
+        # Za kalkulaciju ralike u kvadratimaDecimal(
         stanovi_ukupno_kvadrata_float = stanovi_ukupno_kvadrata
 
         # Format decimal places for 'stanovi_ukupno_kvadrata'
