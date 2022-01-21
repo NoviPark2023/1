@@ -63,9 +63,14 @@ class StanoviStatistikaAPIView(generics.ListAPIView):
         # ###############################################
         # REPORTS STANOVA PO STATUSU PRODAJE U %  REPORT
         # ###############################################
-        stanovi_rezervisano_procenti = (ukupno_stanovi_rezervisan.get('rezervisano') / stanovi_global_ukupno) * 100
-        stanovi_dostupan_procenti = (ukupno_stanovi_dostupan.get('dostupan') / stanovi_global_ukupno) * 100
-        stanovi_prodati_procenti = (ukupno_stanovi_prodat.get('prodat') / stanovi_global_ukupno) * 100
+        try:
+            stanovi_rezervisano_procenti = (ukupno_stanovi_rezervisan.get('rezervisano') / stanovi_global_ukupno) * 100
+            stanovi_dostupan_procenti = (ukupno_stanovi_dostupan.get('dostupan') / stanovi_global_ukupno) * 100
+            stanovi_prodati_procenti = (ukupno_stanovi_prodat.get('prodat') / stanovi_global_ukupno) * 100
+        except ZeroDivisionError:
+            stanovi_rezervisano_procenti = 0
+            stanovi_dostupan_procenti = 0
+            stanovi_prodati_procenti = 0
 
         stanovi_agregirano_procenti = {
             # Zaokruzi procente na 2 decimale
@@ -282,10 +287,13 @@ class RoiStanovaAPIView(generics.ListAPIView):
         svi_stanovi_po_lameli = Stanovi.objects.values('cena_stana').filter(
             lamela__startswith=lamela).aggregate(Sum('cena_stana'))
 
-        # Format decimala za 'svi_stanovi_po_lameli_l1_1'
-        svi_stanovi_po_lameli = format_decimal(
-            svi_stanovi_po_lameli['cena_stana__sum'],
-            locale='sr_RS')
+        # Format decimala za sumu cene Stanova
+        if svi_stanovi_po_lameli['cena_stana__sum'] is not None:
+            svi_stanovi_po_lameli = format_decimal(
+                svi_stanovi_po_lameli['cena_stana__sum'],
+                locale='sr_RS')
+        else:
+            svi_stanovi_po_lameli = 0
 
         return svi_stanovi_po_lameli
 
@@ -308,7 +316,7 @@ class RoiStanovaAPIView(generics.ListAPIView):
             stanovi_ukupno_kvadrata=Sum('kvadratura')
         )
 
-        # Za kalkulaciju ralike u kvadratima
+        # Za kalkulaciju ralike u kvadratimaDecimal(
         stanovi_ukupno_kvadrata_float = stanovi_ukupno_kvadrata
 
         # Format decimal places for 'stanovi_ukupno_kvadrata'

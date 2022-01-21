@@ -64,7 +64,7 @@ class ProdajaStanovaPoKorisnikuSerializer(serializers.ModelSerializer):
 
 class ProdajaStanovaPoKlijentuSerializer(serializers.ModelSerializer):
     """
-    Serijalazer za report ukupno prodatih Stanova po Klijentima (Prodavcima)
+    Serijalazer za report ukupno prodatih Stanova po Klijentima (Kupcima)
     """
     potencijalan_stanovi_klijenti = serializers.SerializerMethodField()
     rezervisani_stanovi_klijenti = serializers.SerializerMethodField()
