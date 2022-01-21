@@ -287,10 +287,13 @@ class RoiStanovaAPIView(generics.ListAPIView):
         svi_stanovi_po_lameli = Stanovi.objects.values('cena_stana').filter(
             lamela__startswith=lamela).aggregate(Sum('cena_stana'))
 
-        # Format decimala za 'svi_stanovi_po_lameli_l1_1'
-        svi_stanovi_po_lameli = format_decimal(
-            svi_stanovi_po_lameli['cena_stana__sum'],
-            locale='sr_RS')
+        # Format decimala za sumu cene Stanova
+        if svi_stanovi_po_lameli['cena_stana__sum'] is not None:
+            svi_stanovi_po_lameli = format_decimal(
+                svi_stanovi_po_lameli['cena_stana__sum'],
+                locale='sr_RS')
+        else:
+            svi_stanovi_po_lameli = 0
 
         return svi_stanovi_po_lameli
 

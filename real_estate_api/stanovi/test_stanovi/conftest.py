@@ -1,6 +1,3 @@
-import json
-from decimal import Decimal
-
 import pytest
 from faker import Faker
 import json
@@ -287,22 +284,23 @@ def nova_dva_stana_json_fixture():
 def novi_jedan_nevalidan_stan_json_fixture():
     return json.dumps(
         {
-         'id_stana': 3,
-         'lamela': "L4.1.S2",
-         'adresa_stana': "Adresa Stana L3.1.S2",
-         'kvadratura': '48.02',
-         'kvadratura_korekcija': 46.58,
-         'iznos_za_korekciju_kvadrature': '0.97',
-         'sprat': 1.0,
-         'broj_soba': 2,
-         'orijentisanost': "Jug",
-         'broj_terasa': -2,
-         'cena_stana': "73036.50",
-         'cena_kvadrata': "1568.00",
-         'napomena': 'Nema napomene',
-         'status_prodaje': "dostupan"
+            'id_stana': 3,
+            'lamela': "L4.1.S2",
+            'adresa_stana': "Adresa Stana L3.1.S2",
+            'kvadratura': '48.02',
+            'kvadratura_korekcija': 46.58,
+            'iznos_za_korekciju_kvadrature': '0.97',
+            'sprat': 1.0,
+            'broj_soba': 2,
+            'orijentisanost': "Jug",
+            'broj_terasa': -2,
+            'cena_stana': "73036.50",
+            'cena_kvadrata': "1568.00",
+            'napomena': 'Nema napomene',
+            'status_prodaje': "dostupan"
         }
     )
+
 
 # endregion
 
@@ -345,6 +343,5 @@ def nova_dva_stana_sa_istom_lamelom_json_fixture():
             }
         ]
     )
-
 
 # endregion

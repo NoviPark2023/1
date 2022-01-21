@@ -5,7 +5,6 @@ from decimal import Decimal
 
 from rest_framework.reverse import reverse
 
-from real_estate_api.ponude.models import Ponude
 from real_estate_api.stanovi.models import Stanovi, AzuriranjeCena
 
 

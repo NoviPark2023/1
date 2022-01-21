@@ -1,62 +1,69 @@
-from dataclasses import asdict
-
-from django.db.models import Sum
 from rest_framework.reverse import reverse
-from confest import novi_autorizovan_korisnik_fixture_reports, \
-    novi_izvestaj_stanovi_statistika_fixture, \
-    nova_tri_stana_fixture_reporti, \
-    nove_tri_ponude_fixture_reporti, \
-    novi_kupac_fixture_reporti, \
-    novi_stan_1_fixture_stanovi, \
-    novi_stan_2_fixture_stanovi, \
-    novi_stan_3_fixture_stanovi, \
-    azuriranje_cena_fixture, \
-    novi_izvestaj_prodaja_stanova_po_agentu, \
-    novi_izvestaj_prodaja_stanova_po_kupcu, \
-    novi_izvestaj_roi_stanova
-from real_estate_api.ponude.models import Ponude
-
-from real_estate_api.stanovi.test_stanovi.conftest import *
+from confest import *
 
 
 class TestRestApiUrlsReports:
     """Testitanje API URLs Endpointa Reports-a"""
 
-    def test_sa_neautorizovanim_korisnikom(self, client):
+    def test_sa_neautorizovanim_korisnikom(self, client, novi_neautorizovan_korisnik_fixture_reports):
         """
-        Test poziv 'endpoint_stanovi_statistika' sa neautorizovanim Korisnikom.
+        Direktan poziv bez autorizacije endpointa:
+            * 'reports:reports'
+            * 'reports:reports-stanovi-po-korisniku'
+            * 'reports:reports-stanovi-po-klijentu'
+            * 'reports:reports-roi'
 
-        * @see conftest.py (novi_neautorizovan_korisnik_fixture_reports)
-
+        ---
         @param client: A Django test client instance.
-        @return status code 401: Unauthorized
+        @return status code 401: Unauthorized for all API endpoints.
         """
 
         url_izvestaj_svi_stanovi = reverse('reports:reports')
+        url_reports_po_korisniku = reverse('reports:reports-stanovi-po-korisniku')
+        url_reports_stanovi_po_klijentu = reverse('reports:reports-stanovi-po-klijentu')
+        url_reports_roi_stanova = reverse('reports:reports-roi')
 
         response = client.get(url_izvestaj_svi_stanovi)
+        assert response.status_code == 401
 
+        response = client.get(url_reports_po_korisniku)
+        assert response.status_code == 401
+
+        response = client.get(url_reports_stanovi_po_klijentu)
+        assert response.status_code == 401
+
+        response = client.get(url_reports_roi_stanova)
         assert response.status_code == 401
 
     def test_sa_autorizovanim_korisnikom(self,
                                          client,
-                                         novi_autorizovan_korisnik_fixture_reports,
-                                         novi_jedan_stan_fixture_stanovi
+                                         novi_autorizovan_korisnik_fixture_reports
                                          ):
         """
-        Test poziv 'endpoint_stanovi_statistika' sa autorizovanim Korisnikom.
+        Direktan poziv sa autorizovanim Korisnikom endpointa:
+            * 'reports:reports'
+            * 'reports:reports-stanovi-po-korisniku'
+            * 'reports:reports-stanovi-po-klijentu'
 
         * @see conftest.py (novi_autorizovan_korisnik_fixture_reports)
 
+        ---
         @param client: A Django test client instance.
         @param novi_autorizovan_korisnik_fixture_reports: Obican Korisnik sa autorizacijom.
         @return status code 200: OK
         """
 
         url_izvestaj_svi_stanovi = reverse('reports:reports')
+        url_reports_po_korisniku = reverse('reports:reports-stanovi-po-korisniku')
+        url_reports_stanovi_po_klijentu = reverse('reports:reports-stanovi-po-klijentu')
 
         response = client.get(url_izvestaj_svi_stanovi)
+        assert response.status_code == 200
 
+        response = client.get(url_reports_po_korisniku)
+        assert response.status_code == 200
+
+        response = client.get(url_reports_stanovi_po_klijentu)
         assert response.status_code == 200
 
     def test_kreiranje_izvestaja_za_entitet_stanovi(self, client,
@@ -64,15 +71,17 @@ class TestRestApiUrlsReports:
                                                     novi_izvestaj_stanovi_statistika_fixture,
                                                     ):
         """
-        Test poziv 'endpoint_stanovi_statistika' sa autorizovanim Korisnikom.
+        Test poziv endpointa: 'reports:reports', sa autorizovanim Korisnikom.
         Takodje se proverava i Response sadrzaj.
+        Autorizacije Korisnika se vrsi u 'nove_tri_ponude_fixture_reporti'.
 
-            * @see conftest.py (novi_autorizovan_korisnik_fixture_reports)
-            * @see conftest.py (novi_izvestaj_stanovi_statistika_fixture)
+            * @see  reports.test_reports.conftest.py (nove_tri_ponude_fixture_reporti)
+            * @see reports.test_reports.conftest.py (novi_izvestaj_stanovi_statistika_fixture)
 
+        ---
         @param client: A Django test client instance.
-        @param novi_izvestaj_stanovi_statistika_fixture: Faker.
-        @param novi_autorizovan_korisnik_fixture_stanovi: Obican Korisnik sa autorizacijom.
+        @param novi_izvestaj_stanovi_statistika_fixture: Mock Reporta (Faker).
+        @param nove_tri_ponude_fixture_reporti: Mock 3 Ponude.
         @return status code 200: HTTP OK
         """
         url_izvestaj_svi_stanovi = reverse('reports:reports')
@@ -80,6 +89,10 @@ class TestRestApiUrlsReports:
         response = client.get(url_izvestaj_svi_stanovi, args=novi_izvestaj_stanovi_statistika_fixture)
 
         assert response.status_code == 200
+
+        print('\n')
+        print(f' RESPONS: {response.json()}')
+        print(f' RESPONS TEST: {novi_izvestaj_stanovi_statistika_fixture.broj_ponuda_po_mesecima}')
 
         assert response.json() == {
             "ukupno_stanova": novi_izvestaj_stanovi_statistika_fixture.ukupno_stanova,
@@ -94,77 +107,121 @@ class TestRestApiUrlsReports:
             "ukupna_suma_prodatih_stanova": novi_izvestaj_stanovi_statistika_fixture.ukupna_suma_prodatih_stanova
         }
 
-    def test_prodaja_stanova_po_agentu(self, client,
-                                       nove_tri_ponude_fixture_reporti,
-                                       novi_izvestaj_prodaja_stanova_po_agentu
-                                       ):
-        url_prodaja_stanova_po_agentu = reverse('reports:reports-stanovi-po-korisniku')
+    def test_prodaja_stanova_po_korisniku(self, client,
+                                          nove_tri_ponude_fixture_reporti,
+                                          novi_autorizovan_korisnik_fixture_reports
+                                          ):
+        """
+        Testiranje endpointa ROI Stanova: 'reports:reports-stanovi-po-korisniku'.
+        Reponse vraća sumiran broj prodatih Stanova po Korisniku(Prodavcu) sistema i
+        podatke samog Korisnika.
 
-        # korisnici_model =  Korisnici.objects.all()
-        #
-        # assert Ponude.objects.all().count() == 3
-        #
-        # korisnik_fixture = json.dumps(
-        #     [{
-        #         "id": korisnici_model[0].id,
-        #         "ime": korisnici_model[0].ime,
-        #         "prezime": korisnici_model[0].prezime,
-        #         "email": korisnici_model[0].email,
-        #         "role": korisnici_model[0].role,
-        #         "prodati_stanovi_korisnici": 1
-        #     }],
-        # )
-        #
-        # test1 = dict(response.data)
-        # test2 = json.dumps(korisnik_fixture).strip()
-        #
-        # assert test1== test2
+            * @see  reports.test_reports.conftest.py (nove_tri_ponude_fixture_reporti)
+            * @see reports.test_reports.conftest.py (novi_autorizovan_korisnik_fixture_reports)
 
-        response = client.get(url_prodaja_stanova_po_agentu)
+        ---
+        :param client: A Django test client instance.
+        :param nove_tri_ponude_fixture_reporti:  Mock 3 Ponude.
+        :param novi_autorizovan_korisnik_fixture_reports: Obican Korisnik sa autorizacijom.
+        """
+        url_prodaja_stanova_po_korisniku = reverse('reports:reports-stanovi-po-korisniku')
 
-        assert response.status_code == 200
+        # Broj autorizovanih Korisnika
+        assert Korisnici.objects.all().count() == 1
 
-        # assert response.json() == {
-        #     "id": novi_izvestaj_prodaja_stanova_po_agentu.id,
-        #     "ime": novi_izvestaj_prodaja_stanova_po_agentu.ime,
-        #     "prezime": novi_izvestaj_prodaja_stanova_po_agentu.prezime,
-        #     "email": novi_izvestaj_prodaja_stanova_po_agentu.email,
-        #     "role": novi_izvestaj_prodaja_stanova_po_agentu.role,
-        #     "prodati_stanovi_korisnici": novi_izvestaj_prodaja_stanova_po_agentu.prodati_stanovi_korisnici
-        # }
+        # Broj Ponuda
+        assert Ponude.objects.all().count() == 3
 
-    def test_prodaja_stanova_po_kupcu(self, client,
-                                      nove_tri_ponude_fixture_reporti,
-                                      novi_kupac_fixture_reporti,
-                                      novi_izvestaj_prodaja_stanova_po_kupcu
-                                      ):
-        url_prodaja_stanova_po_kupcu = reverse('reports:reports-stanovi-po-klijentu')
-
-        response = client.get(url_prodaja_stanova_po_kupcu)
+        response = client.get(url_prodaja_stanova_po_korisniku)
 
         assert response.status_code == 200
 
-        # assert response.json() == {
-        #     "id_kupca": novi_izvestaj_prodaja_stanova_po_kupcu.id_kupca,
-        #     "ime_prezime": novi_izvestaj_prodaja_stanova_po_kupcu.ime_prezime,
-        #     "email": novi_izvestaj_prodaja_stanova_po_kupcu.email,
-        #     "prodati_stanovi_klijenti": novi_izvestaj_prodaja_stanova_po_kupcu.prodati_stanovi_klijenti,
-        #     "rezervisani_stanovi_klijenti": novi_izvestaj_prodaja_stanova_po_kupcu.rezervisani_stanovi_klijenti,
-        #     "potencijalan_stanovi_klijenti": novi_izvestaj_prodaja_stanova_po_kupcu.potencijalan_stanovi_klijenti
-        # }
+        assert response.json() == \
+               [
+                   {
+                       "id": novi_autorizovan_korisnik_fixture_reports.id,
+                       "ime": novi_autorizovan_korisnik_fixture_reports.ime,
+                       "prezime": novi_autorizovan_korisnik_fixture_reports.prezime,
+                       "email": novi_autorizovan_korisnik_fixture_reports.email,
+                       "role": novi_autorizovan_korisnik_fixture_reports.role,
+                       "prodati_stanovi_korisnici": 1
+                   }
+               ]
+
+    def test_prodaja_stanova_po_klijentu(self, client,
+                                         nove_tri_ponude_fixture_reporti,
+                                         novi_kupac_fixture_reporti,
+                                         ):
+        """
+        Testiranje endpointa ROI Stanova: 'reports:reports-stanovi-po-klijentu'.
+        Reponse vraća statistiku Stanova po Klijentu(Kupcu) i to:
+            * prodati_stanovi_klijenti
+            * rezervisani_stanovi_klijenti
+            * potencijalan_stanovi_klijenti
+
+        Autorizovan Korisnik se registruje u 'nove_tri_ponude_fixture_reporti' fixturi.
+
+
+            * @see  reports.test_reports.conftest.py (nove_tri_ponude_fixture_reporti)
+            * @see reports.test_reports.conftest.py (novi_kupac_fixture_reporti)
+
+
+        ---
+        :param client: A Django test client instance.
+        :param nove_tri_ponude_fixture_reporti: Mock 3 Ponude.
+        :param novi_kupac_fixture_reporti: Mock jednog Kupaca.
+        """
+        url_prodaja_stanova_po_klijentu = reverse('reports:reports-stanovi-po-klijentu')
+
+        response = client.get(url_prodaja_stanova_po_klijentu)
+
+        assert response.status_code == 200
+
+        assert response.json() == \
+               [
+                   {
+                       "id_kupca": novi_kupac_fixture_reporti.id_kupca,
+                       "ime_prezime": novi_kupac_fixture_reporti.ime_prezime,
+                       "email": novi_kupac_fixture_reporti.email,
+                       "prodati_stanovi_klijenti": 1,
+                       "rezervisani_stanovi_klijenti": 1,
+                       "potencijalan_stanovi_klijenti": 1
+                   }
+               ]
 
     def test_return_on_investment(self, client,
                                   novi_autorizovan_korisnik_fixture_reports,
                                   novi_stan_1_fixture_stanovi,
+                                  novi_stan_2_fixture_stanovi,
+                                  novi_stan_3_fixture_stanovi,
+                                  novi_izvestaj_roi_stanova,
                                   ):
+        """
+        Testiranje endpointa ROI Stanova: 'reports:reports-roi'.
+        ROI Stanova obuhvata tri celine i to:
+            * kvadratura_stanova
+            * ukupna_cena_stanova_po_lamelama
+            * ukupan_roi_stanova
+
+        Sve tri celine imaju svoje sume ukupnih cena, kvadratura (sa i bez korekcija), ukupnih suma sumaraka.
+
+        :param client: A Django test client instance.
+        :param novi_autorizovan_korisnik_fixture_reports: Obican Korisnik sa autorizacijom.
+        :param novi_stan_1_fixture_stanovi: Jedan entitet Stana fixture.
+        :param novi_stan_2_fixture_stanovi: Jedan entitet Stana fixture.
+        :param novi_stan_3_fixture_stanovi: Jedan entitet Stana fixture.
+        :param novi_izvestaj_roi_stanova: Roi izvestaj Stanova
+        """
         url_return_on_investment = reverse('reports:reports-roi')
 
-        response = client.get(url_return_on_investment)
+        response = client.get(url_return_on_investment, args=novi_izvestaj_roi_stanova)
 
         assert response.status_code == 200
 
-        # assert response.json() == {
-        #     "kvadratura_stanova": novi_izvestaj_roi_stanova.kvadratura_stanova,
-        #     "ukupna_cena_stanova_po_lamelama": novi_izvestaj_roi_stanova.ukupna_cena_stanova_po_lamelama,
-        #     "ukupan_roi_stanova": novi_izvestaj_roi_stanova.ukupan_roi_stanova
-        # }
+        print(f' FIXTURE RESPONSE: {novi_izvestaj_roi_stanova}')
+
+        assert response.json() == {
+            "kvadratura_stanova": novi_izvestaj_roi_stanova.kvadratura_stanova,
+            "ukupna_cena_stanova_po_lamelama": novi_izvestaj_roi_stanova.ukupna_cena_stanova_po_lamelama,
+            "ukupan_roi_stanova": novi_izvestaj_roi_stanova.ukupan_roi_stanova
+        }
