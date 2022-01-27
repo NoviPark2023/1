@@ -53,28 +53,43 @@ class KreirajPonuduAPIView(generics.CreateAPIView):
     queryset = Ponude.objects.all().order_by('-id_ponude')
     serializer_class = PonudeSerializer
 
-    def post(self, request, *args, **kwargs):
-        """
-        * Prilikom kreiranja Stana automatski update polja 'klijent_prodaje, sa
-          korisnikom koji je prijavljen. Prosledjuje se ka Izvestajima.
-        * Kreiranje Ugovora ukoliko je inicijalno ponuda na statusu 'rezervisan'.
-        ---
-        :param request: klijent_plrodaje
-        :return: Ponude request
-        """
-        if request.data['status_ponude'] == 'rezervisan':
-            CreateContract.create_contract(request, **kwargs)  # Kreiraj ugovor.
+    def perform_create(self, serializer):
+        """Some doc here!"""
+        ponuda = serializer.save()
+        print(f' id_ponude: {ponuda.id_ponude}')
+        print(f' status_ponude: {ponuda.status_ponude}')
+        print(f' stan: {ponuda.stan}')
+        print(ponuda.id_ponude)
 
-        elif request.data['status_ponude'] == 'kupljen':
-            # Ukoliko je status ponude preskocio fazu rezervisan, update Stan na kupljen
-            stan = Stanovi.objects.get(id_stana__exact=request.data['stan'])
-            stan.status_prodaje = 'prodat'
-            stan.save()
+        if ponuda.status_ponude == 'rezervisan':
 
-        # Set Klijenta prodaje stana u ponudu, potrebno kasnije za izvestaje.
-        request.data['klijent_prodaje'] = request.user.id
+            CreateContract.create_contract(ponuda, ponuda.stan, ponuda.kupac)  # Kreiraj ugovor.
 
-        return self.create(request, *args, **kwargs)
+    # def post(self, request, *args, **kwargs):
+    #     """
+    #     * Prilikom kreiranja Stana automatski update polja 'klijent_prodaje, sa
+    #       korisnikom koji je prijavljen. Prosledjuje se ka Izvestajima.
+    #     * Kreiranje Ugovora ukoliko je inicijalno ponuda na statusu 'rezervisan'.
+    #     ---
+    #     :param request: klijent_plrodaje
+    #     :return: Ponude request
+    #     """
+    #     print(f' KWARGS: {kwargs}')
+    #     if request.data['status_ponude'] == 'rezervisan':
+    #         print(f' KWARGS: {kwargs}')
+    #
+    #         #CreateContract.create_contract(request, **kwargs)  # Kreiraj ugovor.
+    #
+    #     elif request.data['status_ponude'] == 'kupljen':
+    #         # Ukoliko je status ponude preskocio fazu rezervisan, update Stan na kupljen
+    #         stan = Stanovi.objects.get(id_stana__exact=request.data['stan'])
+    #         stan.status_prodaje = 'prodat'
+    #         stan.save()
+    #
+    #     # Set Klijenta prodaje stana u ponudu, potrebno kasnije za izvestaje.
+    #     request.data['klijent_prodaje'] = request.user.id
+    #
+    #     return self.create(request, *args, **kwargs)
 
     def get_queryset(self):
         # Potrebno za prikaz svih Ponuda samo za odredjeni Stan
@@ -90,6 +105,18 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
     queryset = Ponude.objects.all().order_by('-id_ponude')
     serializer_class = PonudeSerializer
 
+    def perform_update(self, serializer):
+        ponuda = serializer.save()
+        print(f' id_ponude: {ponuda.id_ponude}')
+        print(f' status_ponude: {ponuda.status_ponude}')
+        print(f' stan: {ponuda.stan}')
+        print(ponuda.id_ponude)
+
+
+
+        #if ponuda.status_ponude == 'rezervisan':
+        CreateContract.create_contract(ponuda, ponuda.stan, ponuda.kupac)  # Kreiraj ugovor.
+
     def put(self, request, *args, **kwargs):
         """
         * U trenutku setovanja statusa ponuda na 'Rezervisan', Stan se smatra kaparisan.
@@ -102,7 +129,7 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
         # Set Klijenta prodaje stana u ponudu, potrebno kasnije za izvestaje.
         request.data['klijent_prodaje'] = request.user.id
 
-        CreateContract.create_contract(request, **kwargs)  # Kreiraj ugovor
+       # CreateContract.create_contract(request, **kwargs)  # Kreiraj ugovor
 
         return self.partial_update(request, *args, **kwargs)
 

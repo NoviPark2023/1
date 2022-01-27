@@ -12,7 +12,7 @@ class CreateContract:
     """Generisanje Ugovora sa predefinisanim parametrima ia CRM sistema"""
 
     @staticmethod
-    def create_contract(request, **kwargs):
+    def create_contract(ponuda,stan, kupac):
         """
         * U trenutku setovanja statusa ponuda na 'Rezervisan', Stan se smatra kaparisan.
         * Potrebno je odobrenje vlasnika-administratora sistema ove ponude @see(ponuda.odobrenje = True).
@@ -22,10 +22,6 @@ class CreateContract:
         :param request: Ponude
         """
 
-        stan = Stanovi.objects.get(id_stana__exact=request.data['stan'])
-        ponuda = Ponude.objects.get(id_ponude__exact=kwargs['id_ponude'])
-        kupac = Kupci.objects.get(id_kupca__exact=request.data['kupac'])
-
         session = boto3.session.Session()
         client = session.client('s3',
                                 region_name='fra1',
@@ -34,7 +30,7 @@ class CreateContract:
                                 aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
                                 )
 
-        if request.data['status_ponude'] == 'rezervisan':
+        if ponuda.status_ponude == 'rezervisan':
             # Kada je status Ponude rezervisan generisi ugovor.
             # Postavi polje odobrenje na True *(ide na odobrenje).
             template = 'real_estate_api/static/ugovor/ugovor_tmpl.docx'
@@ -74,7 +70,7 @@ class CreateContract:
                           f'Cena Ponude je: {round(ponuda.cena_stana_za_kupca, 2)}.',
                           settings.EMAIL_HOST_USER, [korisnici_email])
 
-        elif request.data['status_ponude'] == 'kupljen':
+        elif ponuda.status_ponude == 'kupljen':
             # Kada Ponuda predje u status 'kupljen' automatski mapiraj polje 'prodat' u modelu Stana.
             stan.status_prodaje = 'prodat'
 
