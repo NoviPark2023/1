@@ -1,18 +1,14 @@
 import boto3
 from django.conf import settings
-from django.core.mail import send_mail
 from docxtpl import DocxTemplate
 
-from real_estate_api.kupci.models import Kupci
-from real_estate_api.ponude.models import Ponude
-from real_estate_api.stanovi.models import Stanovi
 
 
 class CreateContract:
     """Generisanje Ugovora sa predefinisanim parametrima ia CRM sistema"""
 
     @staticmethod
-    def create_contract(ponuda,stan, kupac):
+    def create_contract(ponuda, stan, kupac):
         """
         * U trenutku setovanja statusa ponuda na 'Rezervisan', Stan se smatra kaparisan.
         * Potrebno je odobrenje vlasnika-administratora sistema ove ponude @see(ponuda.odobrenje = True).
@@ -50,12 +46,6 @@ class CreateContract:
             # Sacuvaj generisani Ugovor.
             document.save('real_estate_api/static/ugovor/' + 'ugovor-br-' + str(ponuda.broj_ugovora) + '.docx')
 
-            stan.status_prodaje = 'rezervisan'
-
-            ponuda.odobrenje = True  # Potrebno odobrenje jer je stan kaparisan (Rezervisan)
-
-            stan.save()
-            ponuda.save()
 
             # Ucitaj na Digital Ocean Space
             client.upload_file('real_estate_api/static/ugovor' + '/ugovor-br-' + str(ponuda.broj_ugovora) + '.docx',
@@ -63,41 +53,51 @@ class CreateContract:
                                'ugovor-br-' + str(ponuda.broj_ugovora) + '.docx')
 
             # Posalji svim preplatnicima EMAIL da je Stan REZERVISAN.
-            for korisnici_email in settings.RECIPIENT_ADDRESS:
-                send_mail(f'Potrebno ODOBRENJE za Stan ID: {str(stan.id_stana)}.',
-                          f'Stan ID: {str(stan.id_stana)}, Adresa: {str(stan.adresa_stana)} je rezervisan.\n'
-                          f'Cena stana: {round(stan.cena_stana, 2)}\n'
-                          f'Cena Ponude je: {round(ponuda.cena_stana_za_kupca, 2)}.',
-                          settings.EMAIL_HOST_USER, [korisnici_email])
+
+            # for korisnici_email in settings.RECIPIENT_ADDRESS:
+            #     send_mail(f'Potrebno ODOBRENJE za Stan ID: {str(stan.id_stana)}.',
+            #               f'Stan ID: {str(stan.id_stana)}, Adresa: {str(stan.adresa_stana)} je rezervisan.\n'
+            #               f'Cena stana: {round(stan.cena_stana, 2)}\n'
+            #               f'Cena Ponude je: {round(ponuda.cena_stana_za_kupca, 2)}.',
+            #               settings.EMAIL_HOST_USER, [korisnici_email])
 
         elif ponuda.status_ponude == 'kupljen':
             # Kada Ponuda predje u status 'kupljen' automatski mapiraj polje 'prodat' u modelu Stana.
-            stan.status_prodaje = 'prodat'
+            # stan.status_prodaje = 'prodat'
 
-            # Posalji svim preplatnicima EMAIL da je Stan KUPLJEN.
-            for korisnici_email in settings.RECIPIENT_ADDRESS:
-                send_mail(f'Stan ID: {str(stan.id_stana)} je KUPLJEN.',
-                          f'Stan ID: {str(stan.id_stana)}, Adresa: {str(stan.adresa_stana)} je kupljen.\n'
-                          f'Cena stana: {round(stan.cena_stana, 2)}\n'
-                          f'Cena Ponude je: {round(ponuda.cena_stana_za_kupca, 2)}.',
-                          settings.EMAIL_HOST_USER, [korisnici_email])
+            pass
 
-            stan.save()
-            ponuda.save()
+            # stan.save()
+            # ponuda.save()
 
         else:
             # Kada Ponuda predje u status 'potencijalan' automatski mapiraj polje 'dostupan' u modelu Stana.
-            stan.status_prodaje = 'dostupan'
+            # stan.status_prodaje = 'dostupan'
 
             # Obrisi ugovor jer je Stan presao u status dostupan.
             client.delete_object(Bucket='ugovori',
                                  Key='ugovor-br-' + str(ponuda.broj_ugovora) + '.docx')
-
+            print(f' BRISANJE UGOVORA: {str(ponuda.broj_ugovora)}')
             # Stan je presao u status 'Dostupa'...nije potrebno odobrenje
-            ponuda.odobrenje = False
+            # ponuda.odobrenje = False
 
-            stan.save()
-            ponuda.save()
+            # stan.save()
+            # ponuda.save()
 
-        stan.save()
-        ponuda.save()
+    # stan.save()
+    # ponuda.save()
+
+    @staticmethod
+    def delete_contract(ponuda):
+        session = boto3.session.Session()
+        client = session.client('s3',
+                                region_name='fra1',
+                                endpoint_url=settings.AWS_S3_ENDPOINT_URL,
+                                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+                                )
+
+        # Obrisi ugovor jer je Stan presao u status dostupan.
+        client.delete_object(Bucket='ugovori',
+                             Key='ugovor-br-' + str(ponuda.broj_ugovora) + '.docx')
+        print(f' BRISANJE UGOVORA: {str(ponuda.broj_ugovora)}')

@@ -1,4 +1,7 @@
+from smtplib import SMTPException
+
 import boto3
+from django.core.mail import send_mail
 from django.http import HttpResponse
 from rest_framework import generics
 from rest_framework.exceptions import NotFound
@@ -62,8 +65,41 @@ class KreirajPonuduAPIView(generics.CreateAPIView):
         print(ponuda.id_ponude)
 
         if ponuda.status_ponude == 'rezervisan':
+            CreateContract.create_contract(ponuda, ponuda.stan, ponuda.kupac)
+            ponuda.stan.status_prodaje = 'rezervisan'
+            ponuda.stan.save()
+            print("REZERVISAN !!!")
 
-            CreateContract.create_contract(ponuda, ponuda.stan, ponuda.kupac)  # Kreiraj ugovor.
+            try:
+                for korisnici_email in settings.RECIPIENT_ADDRESS:
+                    send_mail(f'Potrebno ODOBRENJE za Stan ID: {str(ponuda.stan.id_stana)}.',
+                              f'Stan ID: {str(ponuda.stan.id_stana)}, Adresa: {str(ponuda.stan.adresa_stana)} je rezervisan.\n'
+                              f'Cena stana: {round(ponuda.stan.cena_stana, 2)}\n'
+                              f'Cena Ponude je: {round(ponuda.cena_stana_za_kupca, 2)}.',
+                              settings.EMAIL_HOST_USER, [korisnici_email])
+            except SMTPException as e:
+                print(f"failed to send mail: {e}")
+
+        elif ponuda.status_ponude == 'kupljen':
+            CreateContract.create_contract(ponuda, ponuda.stan, ponuda.kupac)
+            ponuda.stan.status_prodaje = 'prodat'
+            ponuda.stan.save()
+            print("PRODAT !!!")
+            # Posalji svim preplatnicima EMAIL da je Stan KUPLJEN.
+            try:
+                for korisnici_email in settings.RECIPIENT_ADDRESS:
+                    send_mail(f'Stan ID: {str(ponuda.stan.id_stana)} je KUPLJEN.',
+                              f'Stan ID: {str(ponuda.stan.id_stana)}, Adresa: {str(ponuda.stan.adresa_stana)} je kupljen.\n'
+                              f'Cena stana: {round(ponuda.stan.cena_stana, 2)}\n'
+                              f'Cena Ponude je: {round(ponuda.cena_stana_za_kupca, 2)}.',
+                              settings.EMAIL_HOST_USER, [korisnici_email])
+            except SMTPException as e:
+                print(f"failed to send mail: {e}")
+
+        elif ponuda.status_ponude == 'potencijalan':
+            ponuda.stan.status_prodaje = 'dostupan'
+            ponuda.stan.save()
+            print("POTENCIJALAN !!!")
 
     # def post(self, request, *args, **kwargs):
     #     """
@@ -107,15 +143,50 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
 
     def perform_update(self, serializer):
         ponuda = serializer.save()
-        print(f' id_ponude: {ponuda.id_ponude}')
-        print(f' status_ponude: {ponuda.status_ponude}')
-        print(f' stan: {ponuda.stan}')
-        print(ponuda.id_ponude)
+
+        if ponuda.status_ponude == 'rezervisan':
+            ponuda.stan.status_prodaje = 'rezervisan'
+            ponuda.stan.save()
+            ponuda.odobrenje = True  # Potrebno odobrenje jer je stan kaparisan (Rezervisan)
+            ponuda.save()
+            CreateContract.create_contract(ponuda, ponuda.stan, ponuda.kupac)
+
+            try:
+                for korisnici_email in settings.RECIPIENT_ADDRESS:
+                    send_mail(f'Potrebno ODOBRENJE za Stan ID: {str(ponuda.stan.id_stana)}.',
+                              f'Stan ID: {str(ponuda.stan.id_stana)}, Adresa: {str(ponuda.stan.adresa_stana)} je rezervisan.\n'
+                              f'Cena stana: {round(ponuda.stan.cena_stana, 2)}\n'
+                              f'Cena Ponude je: {round(ponuda.cena_stana_za_kupca, 2)}.',
+                              settings.EMAIL_HOST_USER, [korisnici_email])
+            except SMTPException as e:
+                print(f"failed to send mail: {e}")
 
 
+        elif ponuda.status_ponude == 'kupljen':
+            ponuda.stan.status_prodaje = 'prodat'
+            ponuda.stan.save()
+            ponuda.odobrenje = True  # Potrebno odobrenje jer je stan kaparisan (Rezervisan)
+            ponuda.save()
+            CreateContract.create_contract(ponuda, ponuda.stan, ponuda.kupac)
 
-        #if ponuda.status_ponude == 'rezervisan':
-        CreateContract.create_contract(ponuda, ponuda.stan, ponuda.kupac)  # Kreiraj ugovor.
+            # Posalji svim preplatnicima EMAIL da je Stan KUPLJEN.
+            try:
+                for korisnici_email in settings.RECIPIENT_ADDRESS:
+                    send_mail(f'Stan ID: {str(ponuda.stan.id_stana)} je KUPLJEN.',
+                              f'Stan ID: {str(ponuda.stan.id_stana)}, Adresa: {str(ponuda.stan.adresa_stana)} je kupljen.\n'
+                              f'Cena stana: {round(ponuda.stan.cena_stana, 2)}\n'
+                              f'Cena Ponude je: {round(ponuda.cena_stana_za_kupca, 2)}.',
+                              settings.EMAIL_HOST_USER, [korisnici_email])
+            except SMTPException as e:
+                print(f"failed to send mail: {e}")
+
+        elif ponuda.status_ponude == 'potencijalan':
+            ponuda.stan.status_prodaje = 'dostupan'
+            ponuda.stan.save()
+            ponuda.odobrenje = False
+            ponuda.save()
+
+            CreateContract.delete_contract(ponuda)
 
     def put(self, request, *args, **kwargs):
         """
@@ -129,7 +200,7 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
         # Set Klijenta prodaje stana u ponudu, potrebno kasnije za izvestaje.
         request.data['klijent_prodaje'] = request.user.id
 
-       # CreateContract.create_contract(request, **kwargs)  # Kreiraj ugovor
+        # CreateContract.create_contract(request, **kwargs)  # Kreiraj ugovor
 
         return self.partial_update(request, *args, **kwargs)
 
@@ -140,6 +211,14 @@ class ObrisiPonuduAPIView(generics.RetrieveDestroyAPIView):
     lookup_field = lookup_field
     queryset = Ponude.objects.all().order_by('-id_ponude')
     serializer_class = PonudeSerializer
+
+    def perform_destroy(self, instance):
+        # TODO setovanje stana na osnovu prioriteta ponuda koje ima
+        # Kada se obrise jedna ponuda, a postoji jos ostalih ponuda setovati status stana
+        # na onu ponudu koja ima najvisi status.
+        # Ukoliko nema ponuda nakon brisanja te jedine, setovati status na DOSTUPAN
+        CreateContract.delete_contract(instance)
+        instance.delete()
 
 
 class UgovorPonudeDownloadListAPIView(generics.ListAPIView):
