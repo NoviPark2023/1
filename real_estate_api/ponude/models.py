@@ -103,7 +103,7 @@ class Ponude(models.Model):
 
     def __str__(self):
         return f"{self.klijent_prodaje.ime} {self.kupac.id_kupca} {self.cena_stana_za_kupca} \
-                  {self.broj_ugovora} {self.kupac.ime_prezime} {self.stan.adresa_stana}"
+                  {self.broj_ugovora} {self.kupac.ime_prezime} {self.stan.adresa_stana} {self.stan.adresa_stana}"
 
     class Meta:
         """

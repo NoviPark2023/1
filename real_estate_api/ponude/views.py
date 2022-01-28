@@ -8,7 +8,7 @@ from django.conf import settings
 
 from .models import Ponude
 from .serializers import PonudeSerializer
-from .ugovor.ugovori import CreateContract
+from .ugovor.ugovori import Contract
 
 lookup_field = 'id_ponude'
 lookup_field_stan = 'id_stana'
@@ -57,21 +57,18 @@ class KreirajPonuduAPIView(generics.CreateAPIView):
         ponuda = serializer.save()
 
         if ponuda.status_ponude == 'rezervisan':
-            CreateContract.create_contract(ponuda, ponuda.stan, ponuda.kupac)
+            Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)
             ponuda.stan.status_prodaje = 'rezervisan'
             ponuda.stan.save()
-            print("REZERVISAN !!!")
 
         elif ponuda.status_ponude == 'kupljen':
-            CreateContract.create_contract(ponuda, ponuda.stan, ponuda.kupac)
+            Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)
             ponuda.stan.status_prodaje = 'prodat'
             ponuda.stan.save()
-            print("PRODAT !!!")
 
         elif ponuda.status_ponude == 'potencijalan':
             ponuda.stan.status_prodaje = 'dostupan'
             ponuda.stan.save()
-            print("POTENCIJALAN !!!")
 
     def get_queryset(self):
         # Potrebno za prikaz svih Ponuda samo za odredjeni Stan
@@ -88,6 +85,17 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
     serializer_class = PonudeSerializer
 
     def perform_update(self, serializer):
+        """
+        Svaki Stan ima svoje statuse prodaje (Dostupan, Rezervisan, Kupljen).
+        Prilikom svake promene statusa Ponude potrebno je azurirati i status prodaje Stana.
+        Ukoliko je status ponude setovan na jedna od dva stanja (Rezervisan, Kupljen),
+        potrebno j egenerisati ugovor.
+        Ukoliko je status ponude promenjen na potencijalan, potrebno je obrisati ugovor.
+
+            @see Generisanje Ugovora: Contract
+        ---
+        :param serializer: PonudeSerializer
+        """
         ponuda = serializer.save()
 
         if ponuda.status_ponude == 'rezervisan':
@@ -95,14 +103,16 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
             ponuda.stan.save()
             ponuda.odobrenje = True  # Potrebno odobrenje jer je stan kaparisan (Rezervisan)
             ponuda.save()
-            CreateContract.create_contract(ponuda, ponuda.stan, ponuda.kupac)
+
+            Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac) # Kreiraj Ugovor.
 
         elif ponuda.status_ponude == 'kupljen':
             ponuda.stan.status_prodaje = 'prodat'
             ponuda.stan.save()
-            ponuda.odobrenje = True  # Potrebno odobrenje jer je stan kaparisan (Rezervisan)
+            ponuda.odobrenje = True
             ponuda.save()
-            CreateContract.create_contract(ponuda, ponuda.stan, ponuda.kupac)
+
+            Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)  # Kreiraj Ugovor.
 
         elif ponuda.status_ponude == 'potencijalan':
             ponuda.stan.status_prodaje = 'dostupan'
@@ -110,13 +120,15 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
             ponuda.odobrenje = False
             ponuda.save()
 
-            delete_contract()
+            Contract.delete_contract(ponuda)  # Obrisi Ugovor.
 
     def put(self, request, *args, **kwargs):
         """
         * U trenutku setovanja statusa ponuda na 'Rezervisan', Stan se smatra kaparisan.
-        * Takodje se setuje status Stana na 'rezervisan', @see(CreateContract)
-        * :see: CreateContract
+        * Takodje se setuje status Stana na 'rezervisan', @see(Contract)
+
+            @see Generisanje Ugovora: Contract
+        ---
         :param request: Ponude
         :return: partial_update
         """
@@ -135,14 +147,33 @@ class ObrisiPonuduAPIView(generics.RetrieveDestroyAPIView):
     serializer_class = PonudeSerializer
 
     def perform_destroy(self, instance):
-        # TODO setovanje stana na osnovu prioriteta ponuda koje ima
+        # TODO: Setovanje stana na osnovu prioriteta ponuda koje ima  (MOZE BOLJE)
         # Kada se obrise jedna ponuda, a postoji jos ostalih ponuda setovati status stana
         # na onu ponudu koja ima najvisi status.
         # Ukoliko nema ponuda nakon brisanja te jedine, setovati status na DOSTUPAN
 
+        ponude_stana = self.get_object()
+        id_stana = ponude_stana.stan.id_stana
 
-        delete_contract()
         instance.delete()
+        Contract.delete_contract(instance)
+
+        # Set Status Stana
+        for status_ponude in self.queryset.filter(stan__id_stana=id_stana).values("status_ponude").iterator():
+            if status_ponude["status_ponude"] == "potencijalan":
+                instance.stan.status_prodaje = 'dostupan'
+                instance.stan.save()
+            elif status_ponude["status_ponude"] == "rezervisan":
+                instance.stan.status_prodaje = 'rezervisan'
+                instance.stan.save()
+            elif status_ponude["status_ponude"] == "kupljen":
+                instance.stan.status_prodaje = 'prodat'
+                instance.stan.save()
+
+        # Nema vise Ponuda, mozemo da setujemo status prodaje Stana na "Dostupan".
+        if self.queryset.filter(stan__id_stana=id_stana).count() == 0:
+            instance.stan.status_prodaje = 'dostupan'
+            instance.stan.save()
 
 
 class UgovorPonudeDownloadListAPIView(generics.ListAPIView):
@@ -157,7 +188,8 @@ class UgovorPonudeDownloadListAPIView(generics.ListAPIView):
         Generisanje jedinstvenog URL za svaki ugovor koji je ucitan na Digital Ocean Space.
         Url se generisa sa sigurnosnim parametrima AWSa.
 
-        @see Generisanje Ugovora: CreateContract
+            @see Generisanje Ugovora: Contract
+        ---
         @param request: None
         @param args: None
         @param kwargs: ID Ponude Stana
