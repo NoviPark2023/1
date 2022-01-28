@@ -31,11 +31,11 @@ class Contract:
                                 aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
                                 )
 
+        template = 'real_estate_api/static/ugovor/ugovor_tmpl.docx'
+        document = DocxTemplate(template)
+
         if ponuda.status_ponude == 'rezervisan':
             # Kada je status Ponude rezervisan generisi ugovor.
-            # Postavi polje odobrenje na True *(ide na odobrenje).
-            template = 'real_estate_api/static/ugovor/ugovor_tmpl.docx'
-            document = DocxTemplate(template)
             context = {
                 'id_stana': stan.id_stana,
                 'datum_ugovora': ponuda.datum_ugovora.strftime("%d.%m.%Y."),
@@ -60,7 +60,28 @@ class Contract:
             SendEmailThreadRezervisanStan(ponuda).start()
 
         elif ponuda.status_ponude == 'kupljen':
-            # Kada Ponuda predje u status 'kupljen' automatski mapiraj polje 'prodat' u modelu Stana.
+            # Kada je status Ponude kupjen, generisi ugovor.
+            context = {
+                'id_stana': stan.id_stana,
+                'datum_ugovora': ponuda.datum_ugovora.strftime("%d.%m.%Y."),
+                'broj_ugovora': ponuda.broj_ugovora,
+                'kupac': kupac.ime_prezime,
+                'adresa_kupaca': kupac.adresa,
+                'kvadratura': stan.kvadratura,
+                'cena_stana': ponuda.cena_stana_za_kupca,
+                # 'nacin_placanja': nacin_placanja
+            }
+            document.render(context)
+
+            # Sacuvaj generisani Ugovor.
+            document.save('real_estate_api/static/ugovor/' + 'ugovor-br-' + str(ponuda.broj_ugovora) + '.docx')
+
+            # Ucitaj na Digital Ocean Space
+            client.upload_file('real_estate_api/static/ugovor' + '/ugovor-br-' + str(ponuda.broj_ugovora) + '.docx',
+                               'ugovori',
+                               'ugovor-br-' + str(ponuda.broj_ugovora) + '.docx')
+
+            # Posalji Email da je Stan kupljen.
             SendEmailThreadKupljenStan(ponuda).start()
 
     @staticmethod
