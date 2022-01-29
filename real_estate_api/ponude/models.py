@@ -1,4 +1,3 @@
-from babel.numbers import format_decimal
 from django.db import models
 
 from real_estate_api.korisnici.models import Korisnici
