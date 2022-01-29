@@ -13,11 +13,24 @@ class Garaze(models.Model):
 
     id_garaze = models.BigAutoField(primary_key=True)
 
-    jedinstveni_broj_garaze = models.PositiveIntegerField('Broj Garaze', null=False, blank=False, unique=True)
+    jedinstveni_broj_garaze = models.PositiveIntegerField('Broj Garaze',
+                                                          null=False,
+                                                          blank=False,
+                                                          unique=True
+                                                          )
 
-    cena_garaze = models.FloatField('Cena Garaze', null=False, blank=False, default=0.0)
+    cena_garaze = models.FloatField('Cena Garaze',
+                                    null=False,
+                                    blank=False,
+                                    default=0.0
+                                    )
 
-    napomena_garaze = models.CharField('Napomena', null=True, blank=True, max_length=250, default='Nema Napomene')
+    napomena_garaze = models.CharField('Napomena',
+                                       null=True,
+                                       blank=True,
+                                       max_length=250,
+                                       default='Nema Napomene'
+                                       )
 
     status_prodaje_garaze = models.CharField(max_length=20,
                                              choices=StatusProdajeGaraze.choices,

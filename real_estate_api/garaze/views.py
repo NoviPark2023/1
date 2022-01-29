@@ -40,7 +40,7 @@ class DetaljiGarazeAPIView(generics.RetrieveAPIView):
 
 class UrediGarazuAPIView(generics.RetrieveUpdateAPIView):
     """Uredjivanje Garaze po pk-id"""
-    # TODO(Ivana): View za Detalje jedne Garaze
+    # TODO(Ivana): View za Uredi jednu Garazu
     ## NEMA KOMPLIKACIJE @see kupci/views.py
     ## Obrisati komentare kada se zavrsi
     ## Testirati
@@ -48,7 +48,7 @@ class UrediGarazuAPIView(generics.RetrieveUpdateAPIView):
 
 class ObrisiGarazuAPIView(generics.RetrieveDestroyAPIView):
     """Brisanje Garaze po pk-id"""
-    # TODO(Ivana): View za Detalje jedne Garaze
+    # TODO(Ivana): View za Obrisi jednu Garazu
     ## NEMA KOMPLIKACIJE @see kupci/views.py
     ## Obrisati komentare kada se zavrsi
     ## Testirati
