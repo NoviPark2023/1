@@ -8,7 +8,7 @@ from real_estate_api.stanovi.models import Stanovi
 
 class Ponude(models.Model):
     """
-    Model Entiteta Ponude
+    Model Entiteta Ponude Stana.
     """
 
     class StatusPonude(models.TextChoices):
@@ -29,6 +29,7 @@ class Ponude(models.Model):
         UCESCE = 'ucesce', "Učešće"
 
     id_ponude = models.BigAutoField(primary_key=True)
+
     kupac = models.ForeignKey(Kupci,
                               on_delete=models.CASCADE,
                               db_column='id_kupca',

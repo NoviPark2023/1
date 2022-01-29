@@ -52,6 +52,9 @@ urlpatterns = [
     # Root Putanja do Reports
     path('reports/', include('real_estate_api.reports.urls', namespace='reports')),
 
+    # Root Putanja do Garaza
+    path('garaze/', include('real_estate_api.garaze.urls', namespace='garaze')),
+
     # Root Putanja do Dokumentacije
     url(r'^docs/$', schema_view.with_ui('swagger', cache_timeout=0), name='docs'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='docs-redoc'),

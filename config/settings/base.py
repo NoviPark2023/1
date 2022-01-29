@@ -47,6 +47,7 @@ LOCAL_APPS = [
     'real_estate_api.korisnici.apps.KorisniciConfig',
     'real_estate_api.stanovi.apps.StanoviConfig',
     'real_estate_api.ponude.apps.PonudeConfig',
+    'real_estate_api.garaze.apps.GarazeConfig',
     'real_estate_api.reports.apps.ReportsConfig',
 ]
 
@@ -287,7 +288,7 @@ AWS_DEFAULT_ACL = 'public-read'
 REST_FRAMEWORK = {
 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 300,
+    'PAGE_SIZE': 350,
 
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 
