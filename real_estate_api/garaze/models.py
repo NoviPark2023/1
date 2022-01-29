@@ -42,7 +42,7 @@ class Garaze(models.Model):
 
     class Meta:
         """
-        Prilagodjeni naziv tabele 'Kupci 'u Bazi Podataka.
+        Prilagodjeni naziv tabele 'Garaze 'u Bazi Podataka.
         """
         db_table: str = 'garaze'
         verbose_name: str = "Garaze"

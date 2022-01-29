@@ -42,7 +42,7 @@ class GarazePonude(models.Model):
                                      )
 
     '''
-        * null=True || zato sto kada se kreira garaza ne znamo kom klijentu ce se dodeliti.
+        * null=True || zato sto kada se kreira ponuda garaze ne znamo kom klijentu ce se dodeliti.
         * models.SET_NULL || Jer kada se obrise iz sistema Klijent sve garaze ostaju.
     '''
     klijent_prodaje_garaze = models.ForeignKey(Korisnici,
@@ -85,7 +85,7 @@ class GarazePonude(models.Model):
 
     @property
     def ime_kupca_garaze(self):
-        """Return field 'ime_kupca' for Ponuda serializers and in front form table"""
+        """Return field 'ime_kupca' for Ponude Garaza serializers and in front form table"""
         return self.kupac_garaze.ime_prezime
 
     def __str__(self):
@@ -99,7 +99,7 @@ class GarazePonude(models.Model):
 
     class Meta:
         """
-        Prilagodjeni naziv tabele 'Ponude 'u Bazi Podataka.
+        Prilagodjeni naziv tabele 'Ponude Garaza 'u Bazi Podataka.
         """
         db_table = 'ponude_garaze'
         verbose_name = "Ponuda Kupcima Garaze"
