@@ -2,7 +2,8 @@ import json
 
 from rest_framework.reverse import reverse
 
-from conftest import fake
+from real_estate_api.kupci.tests_kupci.conftest import fake
+
 from real_estate_api.kupci.models import Kupci
 
 

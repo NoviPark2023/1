@@ -1,5 +1,6 @@
 from rest_framework.reverse import reverse
-from confest import *
+
+from real_estate_api.reports.test_reports.confest import *
 
 
 class TestRestApiUrlsReports:
