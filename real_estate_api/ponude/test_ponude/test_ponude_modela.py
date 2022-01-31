@@ -19,6 +19,20 @@ class TestModelaEntitetaPonude:
         broj_ponuda_from_db = Ponude.objects.all().count()
         assert broj_ponuda_from_db == 1
 
+    def test_da_li_je_jedna_ponuda_kreirana_bez_ugovora(self, nova_jedna_ponuda_bez_ugovora_fixture):
+        """
+        Broj Ugovora se dodeljuje tek nakon sto Notar overi Ugovor, pa je
+        inicijalno br. Ugovora 'null'.
+        Test da li je samo jedna Ponuda kreirana u bazi bez broja ugovora.
+
+            * @see /test_ponude/conftest.py : nova_jedna_ponuda_bez_ugovora_fixture
+        ---
+        @param nova_jedna_ponuda_bez_ugovora_fixture: Ponude
+        """
+
+        broj_ponuda_from_db = Ponude.objects.all().count()
+        assert broj_ponuda_from_db == 1
+
     def test_provera_polja_novo_kreirane_ponude(self, nova_jedna_ponuda_fixture):
         """
         Testiranje kreiranja nove jedne Ponude i provera podataka nakon kreiranja.

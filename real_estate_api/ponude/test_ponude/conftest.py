@@ -2,6 +2,7 @@ import datetime
 import json
 import random
 
+import null
 import pytest
 from faker import Faker
 
@@ -205,6 +206,31 @@ def nova_jedna_ponuda_fixture(db,
         cena_stana_za_kupca=0,
         napomena=fake.text(max_nb_chars=25),
         broj_ugovora="broj_ugovora",
+        datum_ugovora=datetime.date(2021, 9, 1),
+        status_ponude=Ponude.StatusPonude.POTENCIJALAN,
+        nacin_placanja=Ponude.NacinPlacanja.U_CELOSTI,
+        odobrenje=False
+    )
+
+    return nova_jedna_ponuda_fixture
+
+
+# endregion
+
+# region JEDNA PONUDA BEZ UGOVORA FIXTURES
+@pytest.fixture()
+def nova_jedna_ponuda_bez_ugovora_fixture(db,
+                              novi_kupac_fixture_ponude,
+                              novi_jedan_stan_fixture_ponude,
+                              novi_jedan_auth_korisnik_fixture_ponude) -> Ponude:
+    nova_jedna_ponuda_fixture = Ponude.objects.create(
+        id_ponude=1,
+        kupac=novi_kupac_fixture_ponude,
+        stan=novi_jedan_stan_fixture_ponude,
+        klijent_prodaje=novi_jedan_auth_korisnik_fixture_ponude,
+        cena_stana_za_kupca=0,
+        napomena=fake.text(max_nb_chars=25),
+        broj_ugovora="null",
         datum_ugovora=datetime.date(2021, 9, 1),
         status_ponude=Ponude.StatusPonude.POTENCIJALAN,
         nacin_placanja=Ponude.NacinPlacanja.U_CELOSTI,
