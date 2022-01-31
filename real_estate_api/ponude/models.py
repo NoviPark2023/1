@@ -53,14 +53,16 @@ class Ponude(models.Model):
 
     cena_stana_za_kupca = models.FloatField('Cena stana za kupca', default=0)
 
-    napomena = models.CharField("Napomena", max_length=252,
+    napomena = models.CharField("Napomena",
+                                max_length=252,
                                 default="",
                                 blank=True
                                 )
 
-    broj_ugovora = models.CharField("Broj Ugovora", max_length=252,
-                                    default="",
+    broj_ugovora = models.CharField("Broj Ugovora",
+                                    max_length=252,
                                     blank=True,
+                                    null=True,
                                     unique=True
                                     )
 
@@ -68,11 +70,13 @@ class Ponude(models.Model):
 
     status_ponude = models.CharField(max_length=20,
                                      choices=StatusPonude.choices,
-                                     null=False, blank=False,
+                                     null=False,
+                                     blank=False,
                                      default=StatusPonude.POTENCIJALAN
                                      )
 
-    nacin_placanja = models.CharField("Nacin Placanja", max_length=30,
+    nacin_placanja = models.CharField("Nacin Placanja",
+                                      max_length=30,
                                       choices=NacinPlacanja.choices,
                                       null=False, blank=False,
                                       default=NacinPlacanja.U_CELOSTI
