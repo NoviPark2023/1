@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from rest_framework.reverse import reverse
 from real_estate_api.garaze.models import Garaze
 
 from real_estate_api.garaze_ponude.serializers import PonudeGarazaSerializer
@@ -21,5 +21,5 @@ class GarazeSerializer(serializers.ModelSerializer):
             "cena_garaze",
             "napomena_garaze",
             "status_prodaje_garaze",
-            "lista_ponuda_garaza",
+            "lista_ponuda_garaza"
         )
