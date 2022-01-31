@@ -104,4 +104,4 @@ class GarazePonude(models.Model):
         db_table = 'ponude_garaze'
         verbose_name = "Ponuda Kupcima Garaze"
         verbose_name_plural = "Ponude Kupcima Garaze"
-        ordering = ['-id_ponude_garaze']
+        ordering = ['id_ponude_garaze']

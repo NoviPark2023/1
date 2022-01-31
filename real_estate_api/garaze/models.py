@@ -47,4 +47,4 @@ class Garaze(models.Model):
         db_table: str = 'garaze'
         verbose_name: str = "Garaze"
         verbose_name_plural: str = "Garaze"
-        ordering = ['-jedinstveni_broj_garaze']
+        ordering = ['jedinstveni_broj_garaze']
