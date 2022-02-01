@@ -26,6 +26,8 @@ class TestEntitetaGaraze:
 
         assert nova_jedna_garaza_fixture.id_garaze == garaze_from_db[0].id_garaze
         assert nova_jedna_garaza_fixture.jedinstveni_broj_garaze == garaze_from_db[0].jedinstveni_broj_garaze
+        assert nova_jedna_garaza_fixture.kupac == garaze_from_db[0].kupac
+        assert nova_jedna_garaza_fixture.ime_kupca == garaze_from_db[0].ime_kupca
         assert nova_jedna_garaza_fixture.cena_garaze == garaze_from_db[0].cena_garaze
         assert nova_jedna_garaza_fixture.napomena_garaze == garaze_from_db[0].napomena_garaze
         assert nova_jedna_garaza_fixture.status_prodaje_garaze == garaze_from_db[0].status_prodaje_garaze
