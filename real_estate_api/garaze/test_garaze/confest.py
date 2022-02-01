@@ -17,7 +17,6 @@ def novi_korisnik_neautorizovan_fixture_garaze(db) -> Korisnici:
         prezime='Nikola',
     )
 
-
 # endregion
 
 # region FIXTURE REGISTROVAN KORISNIK GARAZE
@@ -56,7 +55,7 @@ def novi_kupac_fixture(db) -> Kupci:
     @return: Entitet Kupci.
     """
     kupac = Kupci.objects.create(
-        id_kupca=1,
+        id_kupca=7,
         lice='Fizicko',
         ime_prezime='Mihajlo Pupin',
         email='miha@gmail.com',
@@ -137,8 +136,8 @@ def nova_jedna_garaza_json_fixture(novi_kupac_fixture):
         {
             "id_garaze": 1,
             "jedinstveni_broj_garaze": 1,
-            "kupac": novi_kupac_fixture,
-            # "ime_kupca": novi_kupac_fixture.ime_prezime,
+            "kupac": 1,
+            "ime_kupca": 'Mihajlo Pupin',
             "cena_garaze": 5000.0,
             "napomena_garaze": 'Najbolja garaza',
             "status_prodaje_garaze": 'dostupna'
@@ -154,8 +153,8 @@ def nova_jedna_nevalidna_garaza_json_fixture(novi_kupac_fixture):
         {
             "id_garaze": 1,
             "jedinstveni_broj_garaze": -2,
-            "kupac": novi_kupac_fixture.id_kupca,
-            "ime_kupca": novi_kupac_fixture.ime_prezime,
+            "kupac": 1,
+            "ime_kupca": 'Mihajlo Pupin',
             "cena_garaze": 8000.0,
             "napomena_garaze": 'Nema napomene',
             "status_prodaje_garaze": 'dostupna'
@@ -172,8 +171,8 @@ def nove_dve_garaze_sa_istim_jedinstvenim_brojem_garaze_json_fixture(novi_kupac_
             {
                 "id_garaze": 1,
                 "jedinstveni_broj_garaze": 1,
-                "kupac": novi_kupac_fixture.id_kupca,
-                "ime_kupca": novi_kupac_fixture.ime_prezime,
+                "kupac": 1,
+                "ime_kupca": 'Mihajlo Pupin',
                 "cena_garaze": 8000.0,
                 "napomena_garaze": 'Nema napomene',
                 "status_prodaje_garaze": 'dostupna',
@@ -181,8 +180,8 @@ def nove_dve_garaze_sa_istim_jedinstvenim_brojem_garaze_json_fixture(novi_kupac_
             {
                 "id_garaze": 2,
                 "jedinstveni_broj_garaze": 1,
-                "kupac": novi_kupac_fixture.id_kupca,
-                "ime_kupca": novi_kupac_fixture.ime_prezime,
+                "kupac": 1,
+                "ime_kupca": 'Mihajlo Pupin',
                 "cena_garaze": 8000.0,
                 "napomena_garaze": 'Nema napomene',
                 "status_prodaje_garaze": 'dostupna'

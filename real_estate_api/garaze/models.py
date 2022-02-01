@@ -23,6 +23,7 @@ class Garaze(models.Model):
     kupac = models.ForeignKey(Kupci,
                               on_delete=models.DO_NOTHING,
                               db_column='id_kupca',
+                              related_name='id_kupca',
                               null=True,
                               blank=True,
                               )
