@@ -79,11 +79,13 @@ class TestRestApiUrlsGaraze:
         url_kreiraj_garazu = reverse('garaze:kreiraj_garazu')
 
         nova_garaza = json.dumps(
-            {"id_garaze": 1,
-             "jedinstveni_broj_garaze": 1,
-             "cena_garaze": 8000.0,
-             "napomena_garaze": 'Nema napomene',
-             "status_prodaje_garaze": 'dostupna'}
+            {
+                "id_garaze": 1,
+                "jedinstveni_broj_garaze": 1,
+                "cena_garaze": 8000.0,
+                "napomena_garaze": 'Nema napomene',
+                "status_prodaje_garaze": 'dostupna'
+            }
         )
 
         response = client.post(url_kreiraj_garazu, data=nova_garaza, content_type='application/json')
@@ -117,7 +119,6 @@ class TestRestApiUrlsGaraze:
             "cena_garaze": nova_jedna_garaza_fixture.cena_garaze,
             "napomena_garaze": nova_jedna_garaza_fixture.napomena_garaze,
             "status_prodaje_garaze": nova_jedna_garaza_fixture.status_prodaje_garaze,
-            "lista_ponuda_garaza": []
         }
 
     def test_izmeni_garazu(self,
