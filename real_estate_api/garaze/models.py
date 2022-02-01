@@ -20,13 +20,13 @@ class Garaze(models.Model):
                                                           unique=True
                                                           )
 
-    kupac = models.ForeignKey(Kupci,
-                              on_delete=models.DO_NOTHING,
-                              db_column='id_kupca',
-                              related_name='id_kupca',
-                              null=True,
-                              blank=True,
-                              )
+    kupac = models.OneToOneField(Kupci,
+                                 on_delete=models.SET_NULL,
+                                 db_column='id_kupca_garaze',
+                                 related_name='kupci_garaze',
+                                 null=True,
+                                 blank=True,
+                                 )
 
     cena_garaze = models.FloatField('Cena Garaze',
                                     null=False,

@@ -66,7 +66,7 @@ class TestRestApiUrlsGaraze:
 
         assert response.status_code == 401  # (HTTP) 401 Unauthorized.
 
-    def test_kreiraj_garazu(self, client, novi_autorizovan_korisnik_fixture_garaze):
+    def test_kreiraj_garazu(self, client, novi_autorizovan_korisnik_fixture_garaze, nova_jedna_garaza_fixture):
         """
         Test poziv 'garaze:kreiraj_garazu' za API poziv Kreiranje Garaza sa autorizovanim Korisnikom.
 
@@ -82,13 +82,14 @@ class TestRestApiUrlsGaraze:
             {
                 "id_garaze": 1,
                 "jedinstveni_broj_garaze": 1,
+                "id_kupca": 1,
                 "cena_garaze": 8000.0,
                 "napomena_garaze": 'Nema napomene',
                 "status_prodaje_garaze": 'dostupna'
             }
         )
 
-        response = client.post(url_kreiraj_garazu, data=nova_garaza, content_type='application/json')
+        response = client.post(url_kreiraj_garazu, data=nova_jedna_garaza_fixture, content_type='application/json')
 
         assert response.status_code == 201
 

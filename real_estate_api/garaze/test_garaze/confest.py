@@ -17,6 +17,7 @@ def novi_korisnik_neautorizovan_fixture_garaze(db) -> Korisnici:
         prezime='Nikola',
     )
 
+
 # endregion
 
 # region FIXTURE REGISTROVAN KORISNIK GARAZE
@@ -43,6 +44,7 @@ def novi_autorizovan_korisnik_fixture_garaze(db, client, django_user_model) -> K
 
     return korisnik
 
+
 # endregion
 
 # region NOVI JEDAN KUPAC FIXTURE
@@ -66,6 +68,7 @@ def novi_kupac_fixture(db) -> Kupci:
 
     return kupac
 
+
 # endregion
 
 # region NOVA JEDNA GARAZA FIXTURE
@@ -81,14 +84,16 @@ def nova_jedna_garaza_fixture(db, novi_kupac_fixture) -> Garaze:
     garaza = Garaze.objects.create(
         id_garaze=1,
         jedinstveni_broj_garaze=1,
-        kupac=novi_kupac_fixture,
         # ime_kupca=novi_kupac_fixture.ime_prezime,
         cena_garaze=8000.0,
         napomena_garaze='Nema napomene',
-        status_prodaje_garaze='dostupna'
+        status_prodaje_garaze='dostupna',
+        kupac=novi_kupac_fixture,
+
     )
 
     return garaza
+
 
 # endregion
 
@@ -127,6 +132,7 @@ def nove_dve_garaze_fixture(db, novi_kupac_fixture) -> Garaze:
 
     return garaza
 
+
 # endregion
 
 # region FIXTURE JSON DUMP JEDNA GARAZA
@@ -144,6 +150,7 @@ def nova_jedna_garaza_json_fixture(novi_kupac_fixture):
         }
     )
 
+
 # endregion
 
 # region FIXTURE JSON DUMP JEDNA NEVALIDNA GARAZA
@@ -160,6 +167,7 @@ def nova_jedna_nevalidna_garaza_json_fixture(novi_kupac_fixture):
             "status_prodaje_garaze": 'dostupna'
         }
     )
+
 
 # endregion
 
