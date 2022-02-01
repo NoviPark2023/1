@@ -1,4 +1,5 @@
 from django.db import models
+from real_estate_api.kupci.models import Kupci
 
 
 class Garaze(models.Model):
@@ -19,6 +20,13 @@ class Garaze(models.Model):
                                                           unique=True
                                                           )
 
+    kupac = models.OneToOneField(Kupci,
+                                 on_delete=models.DO_NOTHING,
+                                 db_column='id_kupca',
+                                 null=True,
+                                 blank=True,
+                                 )
+
     cena_garaze = models.FloatField('Cena Garaze',
                                     null=False,
                                     blank=False,
@@ -36,6 +44,11 @@ class Garaze(models.Model):
                                              choices=StatusProdajeGaraze.choices,
                                              default=StatusProdajeGaraze.DOSTUPNA
                                              )
+
+    @property
+    def ime_kupca(self):
+        """Return field 'ime_kupca' for Garaze serializers and in front form table"""
+        return self.kupac.ime_prezime
 
     def __str__(self):
         return f"{self.jedinstveni_broj_garaze}"
