@@ -43,7 +43,7 @@ class Garaze(models.Model):
                               db_column='id_kupca',
                               related_name='lista_garaza_kupca',
                               blank=True,
-                              null=True,
+                              null=True
                               )
 
     @property

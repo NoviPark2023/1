@@ -39,6 +39,17 @@ class Lokali(models.Model):
                                        default=''
                                        )
 
+    orijentisanost_lokala = models.CharField(max_length=20,
+                                             choices=OrijentacijaLokala.choices,
+                                             default=OrijentacijaLokala.JUG,
+                                             blank=True,
+                                             null=True)
+
+    status_prodaje_lokala = models.CharField(max_length=20,
+                                             choices=StatusProdajeLokala.choices,
+                                             default=StatusProdajeLokala.DOSTUPAN
+                                             )
+
     def __str__(self):
         return f"{self.lamela_lokala}"
 
