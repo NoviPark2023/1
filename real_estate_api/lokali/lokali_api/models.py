@@ -1,4 +1,5 @@
 from django.db import models
+from decimal import Decimal
 
 
 class Lokali(models.Model):
@@ -32,6 +33,21 @@ class Lokali(models.Model):
 
     kvadratura_lokala = models.DecimalField('Kvadratura Lokala', max_digits=7, decimal_places=2)
 
+    kvadratura_korekcija = models.DecimalField('Korekcija kvadrature',
+                                               max_digits=7,
+                                               decimal_places=2,
+                                               default=0,
+                                               blank=True,
+                                               )
+
+    # mora se uneti kao decimalni broj, npr 0.97 za korekciju od 3%
+    iznos_za_korekciju_kvadrature = models.DecimalField('Iznos za korekciju kvadrature',
+                                                        max_digits=3,
+                                                        decimal_places=2,
+                                                        default=0.97)
+
+    broj_prostorija = models.FloatField('Broj prostorija lokala', default=1)
+
     napomena_lokala = models.CharField('Napomena Lokala',
                                        null=True,
                                        blank=True,
@@ -49,6 +65,18 @@ class Lokali(models.Model):
                                              choices=StatusProdajeLokala.choices,
                                              default=StatusProdajeLokala.DOSTUPAN
                                              )
+
+    cena_lokala = models.DecimalField('Cena lokala', max_digits=8, decimal_places=2, default=0)
+
+    cena_kvadrata_lokala = models.DecimalField('Cena kvadrata lokala', max_digits=8, decimal_places=2, default=0)
+
+    def save(self, *args, **kwargs):
+        """
+        Polje 'kvadratura_korekcija' predstavlja korekciju polja 'kvadratura_lokala' za x%
+        koje deklarise sam korisnik sistema.
+        """
+
+        self.kvadratura_korekcija = Decimal(self.kvadratura_lokala) * Decimal(self.iznos_za_korekciju_kvadrature)
 
     def __str__(self):
         return f"{self.lamela_lokala}"

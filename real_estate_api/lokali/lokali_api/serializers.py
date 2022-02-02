@@ -16,4 +16,6 @@ class LokaliSerializer(serializers.ModelSerializer):
             "adresa_lokala",
             "kvadratura_lokala",
             "napomena_lokala",
+            "orijentisanost_lokala",
+            "status_prodaje_lokala"
         )
