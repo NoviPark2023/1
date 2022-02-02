@@ -15,7 +15,7 @@ class Lokali(models.Model):
         REZERVISAN = 'rezervisan', "Rezervisan"
         PRODAT = 'prodat', "Prodat"
 
-    id_lokala = models.BigAutoField(primary_key=True)
+    id_lokala = models.BigAutoField(primary_key=True, null=False)
 
     lamela_lokala = models.CharField('Lamela Lokala',
                                      max_length=50,
@@ -67,10 +67,10 @@ class Lokali(models.Model):
         koje deklarise sam korisnik sistema.
         """
 
-        self.kvadratura_korekcija = self.kvadratura_lokala * self.iznos_za_korekciju_kvadrature
+        self.kvadratura_korekcija = float(self.kvadratura_lokala) * float(self.iznos_za_korekciju_kvadrature)
 
     def __str__(self):
-        return f"{self.lamela_lokala}"
+        return f"{self.id_lokala}, {self.lamela_lokala}"
 
     class Meta:
         """
