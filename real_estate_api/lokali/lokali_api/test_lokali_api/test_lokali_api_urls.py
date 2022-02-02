@@ -1,5 +1,6 @@
-from rest_framework.reverse import reverse
 import json
+
+from rest_framework.reverse import reverse
 
 from real_estate_api.lokali.lokali_api.models import Lokali
 
@@ -37,7 +38,6 @@ class TestRestApiUrlsLokali:
         response = client.get(url_svi_lokali)
 
         assert response.status_code == 200
-
 
     def test_lista_svih_lokala_url_autorizovan_korisnik(self, client, novi_autorizovan_korisnik_fixture_lokali):
         """
@@ -127,18 +127,11 @@ class TestRestApiUrlsLokali:
             "lamela_lokala": novi_jedan_lokal_fixture.lamela_lokala,
             "adresa_lokala": novi_jedan_lokal_fixture.adresa_lokala,
             "kvadratura_lokala": novi_jedan_lokal_fixture.kvadratura_lokala,
-            "kvadratura_korekcija": novi_jedan_lokal_fixture.kvadratura_korekcija,
-            "iznos_za_korekciju_kvadrature": novi_jedan_lokal_fixture.iznos_za_korekciju_kvadrature,
             "broj_prostorija": novi_jedan_lokal_fixture.broj_prostorija,
             "napomena_lokala": novi_jedan_lokal_fixture.napomena_lokala,
             "orijentisanost_lokala": novi_jedan_lokal_fixture.orijentisanost_lokala,
             "status_prodaje_lokala": novi_jedan_lokal_fixture.status_prodaje_lokala,
             "cena_lokala": novi_jedan_lokal_fixture.cena_lokala,
-            "cena_kvadrata_lokala": novi_jedan_lokal_fixture.cena_kvadrata_lokala,
-            "kreiraj_lokal_url": '/lokali/kreiraj-lokal/',                                                              #proveriti url
-            "detalji_lokala_url": '/lokali/detalji-lokala/1/',
-            "izmeni_lokal_url": '/lokali/izmeni-lokal/1/',
-            "obrisi_lokal_url": '/lokali/obrisi-lokal/1/',
         }
 
     def test_izmeni_lokal(self,
@@ -169,14 +162,11 @@ class TestRestApiUrlsLokali:
         assert response.json()["lamela_lokala"] != novi_jedan_lokal_fixture.lamela_lokala
         assert response.json()["adresa_lokala"] != novi_jedan_lokal_fixture.adresa_lokala
         assert response.json()["kvadratura_lokala"] != novi_jedan_lokal_fixture.kvadratura_lokala
-        assert response.json()["kvadratura_korekcija"] == novi_jedan_lokal_fixture.kvadratura_korekcija
-        assert response.json()["iznos_za_korekciju_kvadrature"] == novi_jedan_lokal_fixture.iznos_za_korekciju_kvadrature
         assert response.json()["broj_prostorija"] == novi_jedan_lokal_fixture.broj_prostorija
         assert response.json()["napomena_lokala"] != novi_jedan_lokal_fixture.napomena_lokala
         assert response.json()["orijentisanost_lokala"] != novi_jedan_lokal_fixture.orijentisanost_lokala
         assert response.json()["status_prodaje_lokala"] == novi_jedan_lokal_fixture.status_prodaje_lokala
         assert response.json()["cena_lokala"] != novi_jedan_lokal_fixture.cena_lokala
-        assert response.json()["cena_kvadrata_lokala"] != novi_jedan_lokal_fixture.cena_kvadrata_lokala
 
     def test_obrisi_lokal(self,
                           client,

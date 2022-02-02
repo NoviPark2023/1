@@ -153,11 +153,10 @@ def nova_jedna_garaza_json_fixture(novi_kupac_fixture_garaze):
         {
             "id_garaze": 1,
             "jedinstveni_broj_garaze": 1,
-            "kupac": novi_kupac_fixture_garaze.id_kupca,
-            "ime_kupca": novi_kupac_fixture_garaze.ime_prezime,
             "cena_garaze": 5000.0,
             "napomena_garaze": 'Najbolja garaza',
-            "status_prodaje_garaze": 'dostupna'
+            "status_prodaje_garaze": 'dostupna',
+            "kupac": novi_kupac_fixture_garaze.id_kupca,
         }
     )
 

@@ -41,7 +41,7 @@ class TestRestApiUrlsKupci:
 
         assert response.status_code == 200
 
-    def test_kreiraj_kupca(self, client, novi_autorizovan_korisnik_fixture_kupci, novi_kupac_fixture):
+    def test_kreiraj_kupca(self, client, novi_autorizovan_korisnik_fixture_kupci):
         """
         Test poziv 'kupci:kreiraj_kupca' za API poziv Kreiranje Kupca sa autorizovanim Korisnikom.
         Takodje se proverava i Response sadrzaj.
@@ -50,7 +50,6 @@ class TestRestApiUrlsKupci:
             * @see conftest.py (novi_kupac_fixture)
 
         @param client: A Django test client instance.
-        @param novi_kupac_fixture: Klijent (Kupac).
         @param novi_autorizovan_korisnik_fixture_kupci: Obican Korisnik sa autorizacijom.
         @return status code 201:  HTTP 201 CREATED
         """
@@ -60,6 +59,7 @@ class TestRestApiUrlsKupci:
         # Podaci za izmenu Kupca
         test_novi_kupac = json.dumps(
             {
+                "id_kupca": 2,
                 "lice": "Pravno",
                 "ime_prezime": "Slobodan Tomic",
                 "email": "slobodan.tomic@factorywws.com",

@@ -15,7 +15,7 @@ class Lokali(models.Model):
         REZERVISAN = 'rezervisan', "Rezervisan"
         PRODAT = 'prodat', "Prodat"
 
-    id_lokala = models.BigAutoField(primary_key=True, null=False)
+    id_lokala = models.BigAutoField(primary_key=True)
 
     lamela_lokala = models.CharField('Lamela Lokala',
                                      max_length=50,
@@ -31,11 +31,6 @@ class Lokali(models.Model):
                                      )
 
     kvadratura_lokala = models.FloatField('Kvadratura Lokala', null=False, blank=False, default=0.0)
-
-    kvadratura_korekcija = models.FloatField('Korekcija kvadrature', default=0.0)
-
-    # mora se uneti kao decimalni broj, npr 0.97 za korekciju od 3%
-    iznos_za_korekciju_kvadrature = models.FloatField('Iznos za korekciju kvadrature', default=0.0)
 
     broj_prostorija = models.FloatField('Broj prostorija lokala', default=1)
 
@@ -58,16 +53,6 @@ class Lokali(models.Model):
                                              )
 
     cena_lokala = models.FloatField('Cena lokala', null=False, blank=False, default=0)
-
-    cena_kvadrata_lokala = models.FloatField('Cena kvadrata lokala', default=0)
-
-    def save(self, *args, **kwargs):
-        """
-        Polje 'kvadratura_korekcija' predstavlja korekciju polja 'kvadratura_lokala' za x%
-        koje deklarise sam korisnik sistema.
-        """
-
-        self.kvadratura_korekcija = float(self.kvadratura_lokala) * float(self.iznos_za_korekciju_kvadrature)
 
     def __str__(self):
         return f"{self.id_lokala}, {self.lamela_lokala}"

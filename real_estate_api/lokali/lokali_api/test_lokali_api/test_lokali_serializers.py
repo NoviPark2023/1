@@ -41,7 +41,7 @@ class TestLokaliSerijalizers:
     def test_serializers_kreiraj_validan_lokal(self,
                                                client,
                                                novi_autorizovan_korisnik_fixture_lokali,
-                                               novi_jedan_lokal_fixture
+                                               novi_jedan_lokal_json_fixture
                                                ):
         """
         Testiranje serijalizera za kreiranje Lokala sa validnim podacima.
@@ -52,7 +52,7 @@ class TestLokaliSerijalizers:
         url_kreiraj_validan_lokal = reverse('lokali:kreiraj_lokal')
 
         response = client.post(url_kreiraj_validan_lokal,
-                               data=novi_jedan_lokal_fixture,
+                               data=novi_jedan_lokal_json_fixture,
                                content_type='application/json'
                                )
 

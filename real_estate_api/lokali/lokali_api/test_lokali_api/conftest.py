@@ -15,6 +15,7 @@ def novi_neautorizovan_korisnik_fixture_lokali(db) -> Korisnici:
         prezime='Nikola',
     )
 
+
 # endregion
 
 # region FIXTURE REGISTROVAN KORISNIK LOKALI
@@ -41,6 +42,7 @@ def novi_autorizovan_korisnik_fixture_lokali(db, client, django_user_model) -> K
 
     return korisnik
 
+
 # endregion
 
 # region NOVI JEDAN LOKAL FIXTURE
@@ -55,20 +57,18 @@ def novi_jedan_lokal_fixture(db) -> Lokali:
 
     lokal = Lokali.objects.create(
         id_lokala=1,
-        lamela_lokala='L3.0.P1',                    # lamela 3, sprat 0, broj prostorija 1, dok ne stigne excel
+        lamela_lokala='L3.0.P1',  # lamela 3, sprat 0, broj prostorija 1, dok ne stigne excel
         adresa_lokala='Adresa Lokala L3.0.P1',
-        kvadratura_lokala='48.02',
-        kvadratura_korekcija='0.0',
-        iznos_za_korekciju_kvadrature='0.0',
-        broj_prostorija='1.0',
+        kvadratura_lokala=48.02,
+        broj_prostorija=1.0,
         napomena_lokala='nema napomene',
         orijentisanost_lokala='Jug',
         status_prodaje_lokala='dostupan',
-        cena_lokala="50000",
-        cena_kvadrata_lokala="1041.67",
+        cena_lokala=50000.0,
     )
 
     return lokal
+
 
 # endregion
 
@@ -87,35 +87,30 @@ def nova_dva_lokala_fixture(db) -> Lokali:
                 id_lokala=1,
                 lamela_lokala='L3.0.P1',
                 adresa_lokala='Adresa Lokala L3.0.P1',
-                kvadratura_lokala='48.02',
-                kvadratura_korekcija='0.0',
-                iznos_za_korekciju_kvadrature='0.0',
-                broj_prostorija='1.0',
+                kvadratura_lokala=48.02,
+                broj_prostorija=1.0,
                 napomena_lokala='nema napomene',
                 orijentisanost_lokala='Jug',
                 status_prodaje_lokala='dostupan',
-                cena_lokala="50000",
-                cena_kvadrata_lokala="1041.67",
+                cena_lokala=50000.0,
             ),
             Lokali(
                 id_lokala=2,
                 lamela_lokala='L2.0.P1',
                 adresa_lokala='Adresa Lokala L2.0.P1',
-                kvadratura_lokala='40.0',
-                kvadratura_korekcija='0.0',
-                iznos_za_korekciju_kvadrature='0.0',
-                broj_prostorija='1.0',
+                kvadratura_lokala=40.0,
+                broj_prostorija=1.0,
                 napomena_lokala='nema napomene',
                 orijentisanost_lokala='Sever',
                 status_prodaje_lokala='dostupan',
-                cena_lokala="40000",
-                cena_kvadrata_lokala="1000.0",
+                cena_lokala=40000.0,
             )
         ]
 
     )
 
     return lokali
+
 
 # endregion
 
@@ -128,32 +123,27 @@ def dva_lokala_sa_istom_lamelom_json_fixture():
                 'id_lokala': 3,
                 'lamela_lokala': "L2.0.P1",
                 'adresa_lokala': "Adresa Lokala L2.0.P1",
-                'kvadratura_lokala': "40.0",
-                'kvadratura_korekcija': "0.0",
-                'iznos_za_korekciju_kvadrature': "0.0",
-                'broj_prostorija': "1.0",
+                'kvadratura_lokala': 40.0,
+                'broj_prostorija': 1.0,
                 'napomena_lokala': "nema",
                 'orijentisanost_lokala': "Jug",
                 'status_prodaje_lokala': "dostupan",
-                'cena_lokala': "40000",
-                'cena_kvadrata_lokala': "1000.0",
+                'cena_lokala': 40000.0,
             },
             {
                 'id_lokala': 4,
                 'lamela_lokala': "L2.0.P1",
                 'adresa_lokala': "Adresa Lokala L2.0.P1",
-                'kvadratura_lokala': "30.0",
-                'kvadratura_korekcija': "0.0",
-                'iznos_za_korekciju_kvadrature': "0.0",
-                'broj_prostorija': "1.0",
+                'kvadratura_lokala': 30.0,
+                'broj_prostorija': 1.0,
                 'napomena_lokala': "nema",
                 'orijentisanost_lokala': "Sever",
                 'status_prodaje_lokala': "dostupan",
-                'cena_lokala': "30000",
-                'cena_kvadrata_lokala': "1000.0",
+                'cena_lokala': 30000.0,
             }
         ]
     )
+
 
 # endregion
 
@@ -165,15 +155,12 @@ def novi_jedan_lokal_json_fixture():
             'id_lokala': 4,
             'lamela_lokala': "L2.0.P1",
             'adresa_lokala': "Adresa Lokala L2.0.P1",
-            'kvadratura_lokala': "30.0",
-            'kvadratura_korekcija': "0.0",
-            'iznos_za_korekciju_kvadrature': "0.0",
-            'broj_prostorija': "1.0",
+            'kvadratura_lokala': 30.0,
+            'broj_prostorija': 1.0,
             'napomena_lokala': "nema",
             'orijentisanost_lokala': "Sever",
             'status_prodaje_lokala': "dostupan",
-            'cena_lokala': "30000",
-            'cena_kvadrata_lokala': "1000.0",
+            'cena_lokala': 30000.0,
         }
     )
 

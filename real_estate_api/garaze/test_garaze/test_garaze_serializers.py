@@ -1,5 +1,7 @@
 from rest_framework.reverse import reverse
-from real_estate_api.garaze.test_garaze.conftest import *
+from rest_framework.utils import json
+
+from real_estate_api.garaze.models import Garaze
 
 
 class TestGarazeSerijalizers:
@@ -80,7 +82,7 @@ class TestGarazeSerijalizers:
         client,
         novi_autorizovan_korisnik_fixture_garaze,
         nove_dve_garaze_sa_istim_jedinstvenim_brojem_garaze_json_fixture
-        ):
+    ):
         """
         Testiranje serijalizera za kreiranje Garaza sa istim jedinstvenim brojem garaze.
         (Cime se krsi unique vrednost za to polje)

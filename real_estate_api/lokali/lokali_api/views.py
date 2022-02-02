@@ -29,7 +29,7 @@ class ListaLokalaAPIView(generics.ListAPIView):
         "id_lokala": ["exact"],
     }
 
-    search_fields = ['lamela_lokala', 'id_lokala']
+    search_fields = ['lamela_lokala']
 
 
 class DetaljiLokalaAPIVIew(generics.RetrieveAPIView):
@@ -43,6 +43,7 @@ class DetaljiLokalaAPIVIew(generics.RetrieveAPIView):
 class KreirajLokalAPIView(generics.CreateAPIView):
     """Kreiranje novog Lokala"""
     permission_classes = [IsAuthenticated, ]
+    lookup_field = lookup_field
     queryset = Lokali.objects.all().order_by('id_lokala')
     serializer_class = LokaliSerializer
 

@@ -4,7 +4,7 @@ from real_estate_api.garaze.models import Garaze
 class TestEntitetaGaraze:
     """Testiranje entiteta Garaze"""
 
-    def test_kreiraj_novu_garazu(self, nova_jedna_garaza_fixture, novi_kupac_fixture_garaze):
+    def test_kreiraj_novu_garazu(self, nova_jedna_garaza_fixture):
         """
         testiranje kreiranje nove Garaze u bazi podataka i provera "id_garaze".
 
