@@ -1,5 +1,4 @@
 from django.db import models
-from decimal import Decimal
 
 
 class Lokali(models.Model):
@@ -31,20 +30,12 @@ class Lokali(models.Model):
                                      null=False
                                      )
 
-    kvadratura_lokala = models.DecimalField('Kvadratura Lokala', max_digits=7, decimal_places=2)
+    kvadratura_lokala = models.FloatField('Kvadratura Lokala', null=False, blank=False, default=0.0)
 
-    kvadratura_korekcija = models.DecimalField('Korekcija kvadrature',
-                                               max_digits=7,
-                                               decimal_places=2,
-                                               default=0,
-                                               blank=True,
-                                               )
+    kvadratura_korekcija = models.FloatField('Korekcija kvadrature', default=0.0)
 
     # mora se uneti kao decimalni broj, npr 0.97 za korekciju od 3%
-    iznos_za_korekciju_kvadrature = models.DecimalField('Iznos za korekciju kvadrature',
-                                                        max_digits=3,
-                                                        decimal_places=2,
-                                                        default=0.97)
+    iznos_za_korekciju_kvadrature = models.FloatField('Iznos za korekciju kvadrature', default=0.0)
 
     broj_prostorija = models.FloatField('Broj prostorija lokala', default=1)
 
@@ -66,9 +57,9 @@ class Lokali(models.Model):
                                              default=StatusProdajeLokala.DOSTUPAN
                                              )
 
-    cena_lokala = models.DecimalField('Cena lokala', max_digits=8, decimal_places=2, default=0)
+    cena_lokala = models.FloatField('Cena lokala', null=False, blank=False, default=0)
 
-    cena_kvadrata_lokala = models.DecimalField('Cena kvadrata lokala', max_digits=8, decimal_places=2, default=0)
+    cena_kvadrata_lokala = models.FloatField('Cena kvadrata lokala', default=0)
 
     def save(self, *args, **kwargs):
         """
@@ -76,7 +67,7 @@ class Lokali(models.Model):
         koje deklarise sam korisnik sistema.
         """
 
-        self.kvadratura_korekcija = Decimal(self.kvadratura_lokala) * Decimal(self.iznos_za_korekciju_kvadrature)
+        self.kvadratura_korekcija = self.kvadratura_lokala * self.iznos_za_korekciju_kvadrature
 
     def __str__(self):
         return f"{self.lamela_lokala}"
