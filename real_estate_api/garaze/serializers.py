@@ -14,9 +14,9 @@ class GarazeSerializer(serializers.ModelSerializer):
         fields = (
             "id_garaze",
             "jedinstveni_broj_garaze",
-            "kupac",
-            "ime_kupca",
             "cena_garaze",
             "napomena_garaze",
             "status_prodaje_garaze",
+            "kupac",
+            "ime_kupca",
         )

@@ -20,14 +20,6 @@ class Garaze(models.Model):
                                                           unique=True
                                                           )
 
-    kupac = models.ForeignKey(Kupci,
-                              on_delete=models.SET_NULL,
-                              db_column='id_kupca_garaze',
-                              related_name='kupci_garaze',
-                              null=True,
-                              blank=True,
-                              )
-
     cena_garaze = models.FloatField('Cena Garaze',
                                     null=False,
                                     blank=False,
@@ -45,6 +37,14 @@ class Garaze(models.Model):
                                              choices=StatusProdajeGaraze.choices,
                                              default=StatusProdajeGaraze.DOSTUPNA
                                              )
+
+    kupac = models.ForeignKey(Kupci,
+                              on_delete=models.SET_NULL,
+                              db_column='id_kupca',
+                              related_name='lista_garaza_kupca',
+                              blank=True,
+                              null=True,
+                              )
 
     @property
     def ime_kupca(self):

@@ -220,9 +220,9 @@ def nova_jedna_ponuda_fixture(db,
 # region JEDNA PONUDA BEZ UGOVORA FIXTURES
 @pytest.fixture()
 def nova_jedna_ponuda_bez_ugovora_fixture(db,
-                              novi_kupac_fixture_ponude,
-                              novi_jedan_stan_fixture_ponude,
-                              novi_jedan_auth_korisnik_fixture_ponude) -> Ponude:
+                                          novi_kupac_fixture_ponude,
+                                          novi_jedan_stan_fixture_ponude,
+                                          novi_jedan_auth_korisnik_fixture_ponude) -> Ponude:
     nova_jedna_ponuda_fixture = Ponude.objects.create(
         id_ponude=1,
         kupac=novi_kupac_fixture_ponude,
@@ -248,6 +248,7 @@ def nova_jedna_ponuda_fixture_401(db,
                                   novi_kupac_fixture_ponude,
                                   novi_jedan_stan_fixture_ponude,
                                   novi_korisnik_ne_autorizovan_fixture_ponude) -> Ponude:
+
     nova_jedna_ponuda_fixture_401 = Ponude.objects.create(
         id_ponude=1,
         kupac=novi_kupac_fixture_ponude,
@@ -323,7 +324,10 @@ def nove_tri_ponude_fixture(db,
 
 # region JEDNA PONUDA JSON DUMP FIXTURES
 @pytest.fixture()
-def nova_jedna_ponuda_json_fixture(novi_kupac_fixture_ponude, novi_jedan_stan_fixture_ponude):
+def nova_jedna_ponuda_json_fixture(novi_kupac_fixture_ponude,
+                                   novi_jedan_stan_fixture_ponude,
+                                   novi_jedan_auth_korisnik_fixture_ponude
+                                   ):
     return json.dumps(
         {
             "id_ponude": 1,
@@ -340,7 +344,7 @@ def nova_jedna_ponuda_json_fixture(novi_kupac_fixture_ponude, novi_jedan_stan_fi
             "status_ponude": Ponude.StatusPonude.POTENCIJALAN,
             "nacin_placanja": "kredit",
             "odobrenje": True,
-            "klijent_prodaje": 1,
+            "klijent_prodaje": novi_jedan_auth_korisnik_fixture_ponude.id,
             "detalji_ponude_url": "/ponude/detalji-ponude/1/",
             "izmeni_ponudu_url": "/ponude/izmeni-ponudu/1/",
             "obrisi_ponudu_url": "/ponude/obrisi-ponudu/1/",

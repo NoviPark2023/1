@@ -49,7 +49,7 @@ def novi_autorizovan_korisnik_fixture_garaze(db, client, django_user_model) -> K
 
 # region NOVI JEDAN KUPAC FIXTURE
 @pytest.fixture(autouse=False)
-def novi_kupac_fixture(db) -> Kupci:
+def novi_kupac_fixture_garaze(db) -> Kupci:
     """
     Kreiranje novog Kupca.
 
@@ -57,7 +57,7 @@ def novi_kupac_fixture(db) -> Kupci:
     @return: Entitet Kupci.
     """
     kupac = Kupci.objects.create(
-        id_kupca=7,
+        id_kupca=1,
         lice='Fizicko',
         ime_prezime='Mihajlo Pupin',
         email='miha@gmail.com',
@@ -73,22 +73,33 @@ def novi_kupac_fixture(db) -> Kupci:
 
 # region NOVA JEDNA GARAZA FIXTURE
 @pytest.fixture(autouse=False)
-def nova_jedna_garaza_fixture(db, novi_kupac_fixture) -> Garaze:
+def nova_jedna_garaza_fixture(db) -> Garaze:
     """
     Kreiranje nove Garaze.
 
     @param db: Testna DB.
+    @param novi_kupac_fixture: Kupac Fixture
+
     @return: Entitet 'Garaze'.
     """
 
+    kupac_fix = Kupci.objects.create(
+        id_kupca=1,
+        lice='Fizicko',
+        ime_prezime='Mihajlo Pupin',
+        email='miha@gmail.com',
+        broj_telefona='+381631369098',
+        Jmbg_Pib=str(random.randrange(1000000000000, 9999999999999)),
+        adresa='Milentija Popovica 32',
+    )
+
     garaza = Garaze.objects.create(
         id_garaze=1,
-        jedinstveni_broj_garaze=1,
-        # ime_kupca=novi_kupac_fixture.ime_prezime,
+        jedinstveni_broj_garaze=234,
         cena_garaze=8000.0,
         napomena_garaze='Nema napomene',
         status_prodaje_garaze='dostupna',
-        kupac=novi_kupac_fixture,
+        kupac=kupac_fix,
 
     )
 
@@ -99,7 +110,7 @@ def nova_jedna_garaza_fixture(db, novi_kupac_fixture) -> Garaze:
 
 # region NOVE DVE GARAZE FIXTURE
 @pytest.fixture(autouse=False)
-def nove_dve_garaze_fixture(db, novi_kupac_fixture) -> Garaze:
+def nove_dve_garaze_fixture(db, novi_kupac_fixture_garaze) -> Garaze:
     """
     Kreiranje dve nove Garaze.
 
@@ -112,7 +123,7 @@ def nove_dve_garaze_fixture(db, novi_kupac_fixture) -> Garaze:
             Garaze(
                 id_garaze=1,
                 jedinstveni_broj_garaze=1,
-                kupac=novi_kupac_fixture,
+                kupac=novi_kupac_fixture_garaze,
                 # ime_kupca=novi_kupac_fixture.ime_prezime,
                 cena_garaze=8000.0,
                 napomena_garaze='Nema napomene',
@@ -121,7 +132,7 @@ def nove_dve_garaze_fixture(db, novi_kupac_fixture) -> Garaze:
             Garaze(
                 id_garaze=2,
                 jedinstveni_broj_garaze=2,
-                kupac=novi_kupac_fixture,
+                kupac=novi_kupac_fixture_garaze,
                 # ime_kupca=novi_kupac_fixture.ime_prezime,
                 cena_garaze=7000.0,
                 napomena_garaze='Nema napomene',
@@ -137,13 +148,13 @@ def nove_dve_garaze_fixture(db, novi_kupac_fixture) -> Garaze:
 
 # region FIXTURE JSON DUMP JEDNA GARAZA
 @pytest.fixture(autouse=False)
-def nova_jedna_garaza_json_fixture(novi_kupac_fixture):
+def nova_jedna_garaza_json_fixture(novi_kupac_fixture_garaze):
     return json.dumps(
         {
             "id_garaze": 1,
             "jedinstveni_broj_garaze": 1,
-            "kupac": 1,
-            "ime_kupca": 'Mihajlo Pupin',
+            "kupac": novi_kupac_fixture_garaze.id_kupca,
+            "ime_kupca": novi_kupac_fixture_garaze.ime_prezime,
             "cena_garaze": 5000.0,
             "napomena_garaze": 'Najbolja garaza',
             "status_prodaje_garaze": 'dostupna'
@@ -155,7 +166,7 @@ def nova_jedna_garaza_json_fixture(novi_kupac_fixture):
 
 # region FIXTURE JSON DUMP JEDNA NEVALIDNA GARAZA
 @pytest.fixture(autouse=False)
-def nova_jedna_nevalidna_garaza_json_fixture(novi_kupac_fixture):
+def nova_jedna_nevalidna_garaza_json_fixture(novi_kupac_fixture_garaze):
     return json.dumps(
         {
             "id_garaze": 1,
@@ -173,7 +184,7 @@ def nova_jedna_nevalidna_garaza_json_fixture(novi_kupac_fixture):
 
 # region FIXTURE JSON DUMP DVE GARAZE UNIQUIE JEDINSTVENI BROJ GARAZE ERROR
 @pytest.fixture(autouse=False)
-def nove_dve_garaze_sa_istim_jedinstvenim_brojem_garaze_json_fixture(novi_kupac_fixture):
+def nove_dve_garaze_sa_istim_jedinstvenim_brojem_garaze_json_fixture(novi_kupac_fixture_garaze):
     return json.dumps(
         [
             {

@@ -8,6 +8,7 @@ from real_estate_api.garaze.serializers import GarazeSerializer
 
 
 lookup_field = 'id_garaze'
+lookup_field_kupac = 'id_kupca'
 
 
 class ListaGarazaAPIView(generics.ListAPIView):
@@ -44,6 +45,7 @@ class DetaljiGarazeAPIView(generics.RetrieveAPIView):
 class KreirajGarazuAPIView(generics.CreateAPIView):
     """Kreiranje nove Garaze"""
     permission_classes = [IsAuthenticated, ]
+    lookup_field = lookup_field_kupac
     queryset = Garaze.objects.all().order_by('id_garaze')
     serializer_class = GarazeSerializer
 

@@ -1,10 +1,10 @@
-from real_estate_api.garaze.test_garaze.confest import *
+from real_estate_api.garaze.models import Garaze
 
 
 class TestEntitetaGaraze:
     """Testiranje entiteta Garaze"""
 
-    def test_kreiraj_novu_garazu(self, nova_jedna_garaza_fixture):
+    def test_kreiraj_novu_garazu(self, nova_jedna_garaza_fixture, novi_kupac_fixture_garaze):
         """
         testiranje kreiranje nove Garaze u bazi podataka i provera "id_garaze".
 

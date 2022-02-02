@@ -149,8 +149,8 @@ class TestRestApiUrlsStanovi:
             "broj_soba": novi_jedan_stan_fixture_stanovi.broj_soba,
             "orijentisanost": novi_jedan_stan_fixture_stanovi.orijentisanost,
             "broj_terasa": novi_jedan_stan_fixture_stanovi.broj_terasa,
-            "cena_stana": str(round(Decimal(novi_jedan_stan_fixture_stanovi.cena_stana) ,2)),
-            "cena_kvadrata": str(round(Decimal(novi_jedan_stan_fixture_stanovi.cena_kvadrata) ,2)),
+            "cena_stana": str(round(Decimal(novi_jedan_stan_fixture_stanovi.cena_stana), 2)),
+            "cena_kvadrata": str(round(Decimal(novi_jedan_stan_fixture_stanovi.cena_kvadrata), 2)),
             "napomena": novi_jedan_stan_fixture_stanovi.napomena,
             "status_prodaje": novi_jedan_stan_fixture_stanovi.status_prodaje,
             "lista_ponuda_stana": [],
@@ -185,7 +185,6 @@ class TestRestApiUrlsStanovi:
 
         response = client.put(url_izmeni_stan, data=novi_jedan_stan_json_fixture, content_type='application/json')
 
-
         assert response.status_code == 200
 
         assert response.json()["lamela"] != novi_jedan_stan_fixture_stanovi.lamela
@@ -201,8 +200,8 @@ class TestRestApiUrlsStanovi:
         assert response.json()["broj_soba"] == novi_jedan_stan_fixture_stanovi.broj_soba
         assert response.json()["orijentisanost"] == novi_jedan_stan_fixture_stanovi.orijentisanost
         assert response.json()["broj_terasa"] != novi_jedan_stan_fixture_stanovi.broj_terasa
-        assert response.json()["cena_stana"] == str(round(Decimal(novi_jedan_stan_fixture_stanovi.cena_stana) ,2))
-        assert response.json()["cena_kvadrata"] == str(round(Decimal(novi_jedan_stan_fixture_stanovi.cena_kvadrata) ,2))
+        assert response.json()["cena_stana"] == str(round(Decimal(novi_jedan_stan_fixture_stanovi.cena_stana), 2))
+        assert response.json()["cena_kvadrata"] == str(round(Decimal(novi_jedan_stan_fixture_stanovi.cena_kvadrata), 2))
         assert response.json()["napomena"] == novi_jedan_stan_fixture_stanovi.napomena
         assert response.json()["status_prodaje"] == novi_jedan_stan_fixture_stanovi.status_prodaje
 
@@ -222,7 +221,6 @@ class TestRestApiUrlsStanovi:
         @param novi_jedan_stan_fixture: Stanovi (Stan).
         @return status code 204: HTTP No Content
         """
-
 
         url_obrisi_stan = reverse('stanovi:obrisi_stan', args=[novi_jedan_stan_fixture_stanovi.id_stana])
 
@@ -249,7 +247,7 @@ class TestRestApiUrlsStanovi:
         """
 
         broj_azuriranja_cena = AzuriranjeCena.objects.all().count()
-        assert  broj_azuriranja_cena == 3
+        assert broj_azuriranja_cena == 3
 
         url_sve_mesecne_cene_kvadrata = reverse('stanovi:lista-cena-kvadrata')
 

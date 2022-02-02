@@ -1,5 +1,5 @@
 from rest_framework.reverse import reverse
-from real_estate_api.garaze.test_garaze.confest import *
+from real_estate_api.garaze.test_garaze.conftest import *
 
 
 class TestGarazeSerijalizers:

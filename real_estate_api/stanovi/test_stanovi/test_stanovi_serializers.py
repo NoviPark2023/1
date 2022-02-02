@@ -5,7 +5,7 @@ from rest_framework.reverse import reverse
 from real_estate_api.stanovi.models import Stanovi
 
 
-class TestStanovicSerijalizers:
+class TestStanoviSerijalizers:
     """Testiranje Serijalizers STANOVI"""
 
     def test_serializers_svi_stanovi(self,
@@ -81,8 +81,11 @@ class TestStanovicSerijalizers:
 
         url_kreiraj_nevalidan_stan = reverse('stanovi:kreiraj_stan')
 
-        response = client.post(url_kreiraj_nevalidan_stan, data=novi_jedan_nevalidan_stan_json_fixture,
-                               content_type='application/json')
+        response = client.post(
+            url_kreiraj_nevalidan_stan,
+            data=novi_jedan_nevalidan_stan_json_fixture,
+            content_type='application/json'
+        )
 
         assert response.status_code == 400
 
@@ -104,8 +107,11 @@ class TestStanovicSerijalizers:
 
         url_kreiraj_stan_na_istoj_lameli = reverse('stanovi:kreiraj_stan')
 
-        response = client.post(url_kreiraj_stan_na_istoj_lameli, data=nova_dva_stana_sa_istom_lamelom_json_fixture,
-                               content_type='application/json')
+        response = client.post(
+            url_kreiraj_stan_na_istoj_lameli,
+            data=nova_dva_stana_sa_istom_lamelom_json_fixture,
+            content_type='application/json'
+        )
 
         assert response.status_code == 400
 
@@ -129,8 +135,9 @@ class TestStanovicSerijalizers:
         """
 
         # Get invalid one Kupaca from Response
-        url_detalji_stana_jedan = reverse('stanovi:detalji_stana',
-                                          args=[novi_jedan_stan_fixture_stanovi.id_stana + 1000]
-                                          )
+        url_detalji_stana_jedan = reverse(
+            'stanovi:detalji_stana',
+            args=[novi_jedan_stan_fixture_stanovi.id_stana + 1000]
+        )
         response = client.get(url_detalji_stana_jedan)
         assert response.status_code == 404

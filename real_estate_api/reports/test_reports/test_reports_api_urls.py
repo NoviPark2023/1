@@ -1,6 +1,7 @@
 from rest_framework.reverse import reverse
 
-from real_estate_api.reports.test_reports.confest import *
+from real_estate_api.korisnici.models import Korisnici
+from real_estate_api.ponude.models import Ponude
 
 
 class TestRestApiUrlsReports:
