@@ -3,7 +3,6 @@ from django.db import models
 from real_estate_api.korisnici.models import Korisnici
 from real_estate_api.kupci.models import Kupci
 from real_estate_api.lokali.lokali_api.models import Lokali
-from real_estate_api.stanovi.models import Stanovi
 
 
 class PonudeLokala(models.Model):
