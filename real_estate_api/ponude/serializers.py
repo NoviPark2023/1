@@ -1,9 +1,9 @@
 from decimal import Decimal
 
-from rest_framework import serializers
+from rest_framework import serializers, generics
 from rest_framework.reverse import reverse
 
-from .views import *
+from real_estate_api.ponude.models import Ponude
 
 
 class PonudeSerializer(serializers.ModelSerializer):

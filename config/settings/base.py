@@ -49,6 +49,7 @@ LOCAL_APPS = [
     'real_estate_api.ponude.apps.PonudeConfig',
     'real_estate_api.garaze.apps.GarazeConfig',
     'real_estate_api.lokali.lokali_api.apps.LokaliApiConfig',
+    'real_estate_api.lokali.ponude_lokala.apps.PonudeLokalaApiConfig',
     'real_estate_api.reports.apps.ReportsConfig',
 ]
 

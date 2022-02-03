@@ -58,6 +58,9 @@ urlpatterns = [
     # Root Putanja do Lokala
     path('lokali/', include('real_estate_api.lokali.lokali_api.urls', namespace='lokali')),
 
+    # Root Putanja do Ponuda Lokala
+    path('ponude-lokali/', include('real_estate_api.lokali.ponude_lokala.urls', namespace='ponude-lokali')),
+
     # Root Putanja do Dokumentacije
     url(r'^docs/$', schema_view.with_ui('swagger', cache_timeout=0), name='docs'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='docs-redoc'),

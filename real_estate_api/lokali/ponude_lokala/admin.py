@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import PonudeLokala
+
+
+@admin.register(PonudeLokala)
+class PonudeLokaliAdmin(admin.ModelAdmin):
+    """Registruj Admin modul u backendu za Ponude Lokala"""
+    inlines = []
