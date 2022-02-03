@@ -18,7 +18,7 @@ class PonudeLokalaSerializer(serializers.ModelSerializer):
             'lokali',
             'adresa_lokala',
             'lamela_lokala',
-            'cena_lokala',
+            'cena_lokala_za_kupca',
             'napomena_ponude_lokala',
             'broj_ugovora_lokala',
             'datum_ugovora_lokala',

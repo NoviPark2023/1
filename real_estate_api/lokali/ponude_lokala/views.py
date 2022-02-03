@@ -7,6 +7,7 @@ from real_estate_api.lokali.ponude_lokala.models import PonudeLokala
 from real_estate_api.lokali.ponude_lokala.serializers import PonudeLokalaSerializer
 
 lookup_field = 'id_ponude_lokala'
+lookup_field_lokal = 'id_lokala'
 
 
 class ListaPonudaLokalaAPIView(generics.ListAPIView):
@@ -30,3 +31,14 @@ class ListaPonudaLokalaAPIView(generics.ListAPIView):
     }
 
     search_fields = ['id_ponude_lokala']
+
+
+class DetaljiPonudeLokalaAPIView(generics.RetrieveAPIView):
+    """Get Ponude Lokala po ID-ju  || Detalji Ponude Lokala"""
+    permission_classes = [IsAuthenticated, ]
+    lookup_field = lookup_field
+    queryset = PonudeLokala.objects.all()
+    serializer_class = PonudeLokalaSerializer
+
+
+

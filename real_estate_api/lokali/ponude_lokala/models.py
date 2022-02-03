@@ -44,8 +44,8 @@ class PonudeLokala(models.Model):
 
     '''
         * null=True || zato sto kada se kreira Lokal ne znamo kom klijentu ce se dodeliti.
-        * models.SET_NULL || Jer kada se obrise iz sistema Klijent svi stanovi ostaju.
-       '''
+        * models.SET_NULL || Jer kada se obrise iz sistema Klijent svi lokali ostaju.
+    '''
     klijent_prodaje_lokala = models.ForeignKey(Korisnici,
                                                null=True,
                                                blank=True,
