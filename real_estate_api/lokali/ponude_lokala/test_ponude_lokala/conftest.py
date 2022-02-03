@@ -18,6 +18,7 @@ def novi_neautorizovan_korisnik_fixture_lokali_ponude(db) -> Korisnici:
         prezime='Nikola',
     )
 
+
 # endregion
 
 # region FIXTURE REGISTROVAN KORISNIK LOKALI PONUDE
@@ -43,6 +44,7 @@ def novi_autorizovan_korisnik_fixture_lokali_ponude(db, client, django_user_mode
 
     return korisnik
 
+
 # endregion
 
 # region NOVI JEDAN KUPAC LOKALA FIXTURE
@@ -65,6 +67,7 @@ def novi_kupac_lokala_fixture_ponude(db) -> Kupci:
     )
 
     return kupac_lokala
+
 
 # endregion
 
@@ -91,6 +94,7 @@ def novi_jedan_lokal_ponude_fixture(db) -> Lokali:
 
     return lokal_ponude
 
+
 # endregion
 
 # region JEDNA PONUDA LOKALA FIXTURES
@@ -115,6 +119,7 @@ def nova_jedna_ponuda_lokala_fixture(db,
 
     return nova_jedna_ponuda_lokala_fixture
 
+
 # endregion
 
 # region JEDNA PONUDA LOKALA BEZ UGOVORA FIXTURES
@@ -138,6 +143,7 @@ def nova_jedna_ponuda_lokala_bez_ugovora_fixture(db,
     )
 
     return nova_jedna_ponuda_lokala_fixture
+
 
 # endregion
 
@@ -192,6 +198,7 @@ def nove_tri_ponude_lokala_fixture(db,
     )
     return nove_tri_ponude_lokala_fixture
 
+
 # endregion
 
 # region JEDNA PONUDA LOKALA FIXTURES (401)
@@ -200,7 +207,6 @@ def nova_jedna_ponuda_lokala_fixture_401(db,
                                          novi_kupac_lokala_fixture_ponude,
                                          novi_jedan_lokal_ponude_fixture,
                                          novi_neautorizovan_korisnik_fixture_lokali_ponude) -> PonudeLokala:
-
     nova_jedna_ponuda_lokala_fixture_401 = PonudeLokala.objects.create(
         id_ponude_lokala=3,
         kupac_lokala=novi_kupac_lokala_fixture_ponude,
