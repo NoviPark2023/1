@@ -45,7 +45,10 @@ class KreirajPonuduLokalaAPIView(generics.CreateAPIView):
     """Kreiranje nove Ponude Lokala"""
     permission_classes = [IsAuthenticated, ]
     lookup_field_lokal = lookup_field_lokal
-    queryset = PonudeLokala.objects.all().order_by('-id_ponude_lokala')
+    queryset = PonudeLokala.objects.all().order_by('id_ponude_lokala')
     serializer_class = PonudeLokalaSerializer
+
+    def perform_create(self, serializer):
+        ponuda_lokala = serializer.save()
 
 

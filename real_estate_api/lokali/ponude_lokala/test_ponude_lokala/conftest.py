@@ -123,6 +123,30 @@ def nova_jedna_ponuda_lokala_fixture(db,
 
 # endregion
 
+# region JEDNA PONUDA LOKALA FIXTURES 401
+@pytest.fixture()
+def nova_jedna_ponuda_lokala_fixture_401(db,
+                                         novi_kupac_lokala_fixture_ponude,
+                                         novi_jedan_lokal_ponude_fixture,
+                                         novi_neautorizovan_korisnik_fixture_lokali_ponude) -> PonudeLokala:
+    nova_jedna_ponuda_lokala_fixture_401 = PonudeLokala.objects.create(
+        id_ponude_lokala=1,
+        kupac_lokala=novi_kupac_lokala_fixture_ponude,
+        lokali=novi_jedan_lokal_ponude_fixture,
+        cena_lokala_za_kupca=0,
+        napomena_ponude_lokala="nema napomene",
+        broj_ugovora_lokala="No1",
+        datum_ugovora_lokala=datetime.date(2022, 2, 1),
+        status_ponude_lokala=PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
+        nacin_placanja_lokala=PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
+        odobrenje_kupovine_lokala=False,
+        klijent_prodaje_lokala=novi_neautorizovan_korisnik_fixture_lokali_ponude
+    )
+
+    return nova_jedna_ponuda_lokala_fixture_401
+
+# endregion
+
 # region JEDNA PONUDA LOKALA BEZ UGOVORA FIXTURES
 @pytest.fixture()
 def nova_jedna_ponuda_lokala_bez_ugovora_fixture(db,
@@ -262,6 +286,48 @@ def nove_dve_ponude_lokala_istih_unique_vrednosti_json_fixture(
                 'klijent_prodaje_lokala': novi_autorizovan_korisnik_fixture_lokali_ponude.username,
             },
         ]
+    )
+
+# endregion
+
+# region JEDNA PONUDA LOKALA JSON FIXTURES
+@pytest.fixture()
+def nova_jedna_ponuda_lokala_json_fixture(
+                                          # novi_kupac_lokala_fixture_ponude,
+                                          # novi_jedan_lokal_ponude_fixture,
+                                          # novi_autorizovan_korisnik_fixture_lokali_ponude
+                                          ):
+    return json.dumps(
+        {
+            # "id_ponude_lokala": 1,
+            # "kupac_lokala": novi_kupac_lokala_fixture_ponude.id_kupca,
+            # "ime_kupca_lokala": novi_kupac_lokala_fixture_ponude.ime_prezime,
+            # "lokali": novi_jedan_lokal_ponude_fixture.id_lokala,
+            # "adresa_lokala": novi_jedan_lokal_ponude_fixture.adresa_lokala,
+            # "lamela_lokala": novi_jedan_lokal_ponude_fixture.lamela_lokala,
+            # "cena_lokala_za_kupca": 10000,
+            # "napomena_ponude_lokala": 'nema napomene',
+            # "broj_ugovora_lokala": '123',
+            # "datum_ugovora_lokala": '2.2.2022',
+            # "status_ponude_lokala": PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
+            # "nacin_placanja_lokala": 'kredit',
+            # "odobrenje_kupovine_lokala": False,
+            # "klijent_prodaje_lokala": novi_autorizovan_korisnik_fixture_lokali_ponude.id
+            "id_ponude_lokala": 6,
+            "kupac_lokala": 1,
+            "ime_kupca_lokala": "Slobodan Tomic",
+            "lokali": 2,
+            "adresa_lokala": "Ulica 2",
+            "lamela_lokala": "L1.0.P1",
+            "cena_lokala_za_kupca": 100,
+            "napomena_ponude_lokala": "nema",
+            "broj_ugovora_lokala": "No6",
+            "datum_ugovora_lokala": "2022-02-04",
+            "status_ponude_lokala": "potencijalan",
+            "nacin_placanja_lokala": "ceo_iznos",
+            "odobrenje_kupovine_lokala": False,
+            "klijent_prodaje_lokala": 1
+        }
     )
 
 # endregion
