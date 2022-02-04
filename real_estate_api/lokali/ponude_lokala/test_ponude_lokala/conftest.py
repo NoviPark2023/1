@@ -1,6 +1,7 @@
 import pytest
 import random
 import datetime
+import json
 from real_estate_api.lokali.ponude_lokala.models import PonudeLokala
 from real_estate_api.korisnici.models import Korisnici
 from real_estate_api.lokali.lokali_api.models import Lokali
@@ -227,41 +228,40 @@ def nova_jedna_ponuda_lokala_fixture_401(db,
 
 # region DVE PONUDE LOKALA SA ISTIM UNIQUE VREDNOSTIMA FIXTURES
 @pytest.fixture()
-def nove_dve_ponude_lokala_istih_unique_vrednosti_fixture(db,
-                                                          novi_kupac_lokala_fixture_ponude,
-                                                          novi_jedan_lokal_ponude_fixture,
-                                                          novi_autorizovan_korisnik_fixture_lokali_ponude) -> PonudeLokala:
-    nove_dve_ponude_lokala_istih_unique_vrednosti_fixture = PonudeLokala.objects.bulk_create(
+def nove_dve_ponude_lokala_istih_unique_vrednosti_json_fixture(
+    db,
+    novi_kupac_lokala_fixture_ponude,
+    novi_jedan_lokal_ponude_fixture,
+    novi_autorizovan_korisnik_fixture_lokali_ponude):
+    return json.dumps(
         [
-            PonudeLokala(
-                id_ponude_lokala=1,
-                kupac_lokala=novi_kupac_lokala_fixture_ponude,
-                lokali=novi_jedan_lokal_ponude_fixture,
-                cena_lokala_za_kupca=10000,
-                napomena_ponude_lokala="nema napomene",
-                broj_ugovora_lokala="No1",
-                datum_ugovora_lokala=datetime.date(2022, 2, 1),
-                status_ponude_lokala=PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
-                nacin_placanja_lokala=PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
-                odobrenje_kupovine_lokala=False,
-                klijent_prodaje_lokala=novi_autorizovan_korisnik_fixture_lokali_ponude
-            ),
-            PonudeLokala(
-                id_ponude_lokala=2,
-                kupac_lokala=novi_kupac_lokala_fixture_ponude,
-                lokali=novi_jedan_lokal_ponude_fixture,
-                cena_lokala_za_kupca=11000,
-                napomena_ponude_lokala="nema napomene",
-                broj_ugovora_lokala="No1",
-                datum_ugovora_lokala=datetime.date(2022, 2, 2),
-                status_ponude_lokala=PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
-                nacin_placanja_lokala=PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
-                odobrenje_kupovine_lokala=False,
-                klijent_prodaje_lokala=novi_autorizovan_korisnik_fixture_lokali_ponude
-            ),
+            {
+                'id_ponude_lokala': 1,
+                'kupac_lokala': novi_kupac_lokala_fixture_ponude.id_kupca,
+                'lokali': novi_jedan_lokal_ponude_fixture.id_lokala,
+                'cena_lokala_za_kupca': 10000,
+                'napomena_ponude_lokala': "nema napomene",
+                'broj_ugovora_lokala': "No1",
+                'datum_ugovora_lokala': "2.2.2022",
+                'status_ponude_lokala': PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
+                'nacin_placanja_lokala': PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
+                'odobrenje_kupovine_lokala': False,
+                'klijent_prodaje_lokala': novi_autorizovan_korisnik_fixture_lokali_ponude.username,
+            },
+            {
+                'id_ponude_lokala': 2,
+                'kupac_lokala': novi_kupac_lokala_fixture_ponude.id_kupca,
+                'lokali': novi_jedan_lokal_ponude_fixture.id_lokala,
+                'cena_lokala_za_kupca': 11000,
+                'napomena_ponude_lokala': "nema napomene",
+                'broj_ugovora_lokala': "No1",
+                'datum_ugovora_lokala': "3.2.2022",
+                'status_ponude_lokala': PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
+                'nacin_placanja_lokala': PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
+                'odobrenje_kupovine_lokala': False,
+                'klijent_prodaje_lokala': novi_autorizovan_korisnik_fixture_lokali_ponude.username,
+            },
         ]
     )
-    return nove_dve_ponude_lokala_istih_unique_vrednosti_fixture
-
 
 # endregion

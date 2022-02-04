@@ -88,4 +88,27 @@ class TestPonudeLokalaSerijalizers:
 
         assert response.status_code == 404
 
+    def test_serializers_kreiraj_dve_ponude_lokala_sa_istim_unique_vrednostima(
+        self,
+        client,
+        novi_autorizovan_korisnik_fixture_lokali_ponude,
+        nove_dve_ponude_lokala_istih_unique_vrednosti_json_fixture
+    ):
+        """
+        Testiranje serijalizera za kreiranje dve Ponude Lokala sa istim vrednostima polja 'broj_ugovora_lokala'.
+        (Cime se krsi unique vrednost za to polje)
+        Testiranje se vrsi sa autorizovanim Korisnikom sistema.
 
+        * @see conftest.py (novi_autorizovan_korisnik_fixture_lokali_ponude)
+        * @see conftest.py (nove_dve_ponude_lokala_istih_unique_vrednosti_json_fixture)
+        """
+
+        url_kreiraj_ponude_sa_istim_brojem_ugovora = reverse('ponude-lokali:kreiraj_ponudu_lokala')
+
+        response = client.post(
+            url_kreiraj_ponude_sa_istim_brojem_ugovora,
+            data=nove_dve_ponude_lokala_istih_unique_vrednosti_json_fixture,
+            content_type='application/json'
+        )
+
+        assert response.status_code == 400
