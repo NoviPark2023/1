@@ -12,5 +12,6 @@ urlpatterns = [
     # Detalji Ponude Lokala
     path('detalji-ponude-lokala/<int:id_ponude_lokala>/',
          DetaljiPonudeLokalaAPIView.as_view(), name='detalji_ponude_lokala'),
-
+    # Kreiraj Ponudu Lokala
+    path('kreiraj-ponudu-lokala/', KreirajPonuduLokalaAPIView.as_view(), name='kreiraj_ponudu_lokala'),
 ]

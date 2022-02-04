@@ -224,3 +224,44 @@ def nova_jedna_ponuda_lokala_fixture_401(db,
     return nova_jedna_ponuda_lokala_fixture_401
 
 # endregion
+
+# region DVE PONUDE LOKALA SA ISTIM UNIQUE VREDNOSTIMA FIXTURES
+@pytest.fixture()
+def nove_dve_ponude_lokala_istih_unique_vrednosti_fixture(db,
+                                                          novi_kupac_lokala_fixture_ponude,
+                                                          novi_jedan_lokal_ponude_fixture,
+                                                          novi_autorizovan_korisnik_fixture_lokali_ponude) -> PonudeLokala:
+    nove_dve_ponude_lokala_istih_unique_vrednosti_fixture = PonudeLokala.objects.bulk_create(
+        [
+            PonudeLokala(
+                id_ponude_lokala=1,
+                kupac_lokala=novi_kupac_lokala_fixture_ponude,
+                lokali=novi_jedan_lokal_ponude_fixture,
+                cena_lokala_za_kupca=10000,
+                napomena_ponude_lokala="nema napomene",
+                broj_ugovora_lokala="No1",
+                datum_ugovora_lokala=datetime.date(2022, 2, 1),
+                status_ponude_lokala=PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
+                nacin_placanja_lokala=PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
+                odobrenje_kupovine_lokala=False,
+                klijent_prodaje_lokala=novi_autorizovan_korisnik_fixture_lokali_ponude
+            ),
+            PonudeLokala(
+                id_ponude_lokala=2,
+                kupac_lokala=novi_kupac_lokala_fixture_ponude,
+                lokali=novi_jedan_lokal_ponude_fixture,
+                cena_lokala_za_kupca=11000,
+                napomena_ponude_lokala="nema napomene",
+                broj_ugovora_lokala="No1",
+                datum_ugovora_lokala=datetime.date(2022, 2, 2),
+                status_ponude_lokala=PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
+                nacin_placanja_lokala=PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
+                odobrenje_kupovine_lokala=False,
+                klijent_prodaje_lokala=novi_autorizovan_korisnik_fixture_lokali_ponude
+            ),
+        ]
+    )
+    return nove_dve_ponude_lokala_istih_unique_vrednosti_fixture
+
+
+# endregion

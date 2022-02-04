@@ -87,3 +87,5 @@ class TestPonudeLokalaSerijalizers:
         response = client.get(url_detalji_ponude_lokala)
 
         assert response.status_code == 404
+
+
