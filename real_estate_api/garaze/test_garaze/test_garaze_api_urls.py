@@ -136,6 +136,8 @@ class TestRestApiUrlsGaraze:
             "jedinstveni_broj_garaze": nova_jedna_garaza_fixture.jedinstveni_broj_garaze,
             "kupac": nova_jedna_garaza_fixture.kupac.id_kupca,
             "cena_garaze": nova_jedna_garaza_fixture.cena_garaze,
+            "datum_ugovora_garaze": nova_jedna_garaza_fixture.datum_ugovora_garaze,
+            "broj_ugovora_garaze": "123",
             "napomena_garaze": nova_jedna_garaza_fixture.napomena_garaze,
             "status_prodaje_garaze": nova_jedna_garaza_fixture.status_prodaje_garaze,
         }

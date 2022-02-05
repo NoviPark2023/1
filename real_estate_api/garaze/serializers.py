@@ -15,6 +15,8 @@ class GarazeSerializer(serializers.ModelSerializer):
             "id_garaze",
             "jedinstveni_broj_garaze",
             "cena_garaze",
+            "datum_ugovora_garaze",
+            "broj_ugovora_garaze",
             "napomena_garaze",
             "status_prodaje_garaze",
             "kupac",

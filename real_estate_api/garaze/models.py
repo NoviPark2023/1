@@ -26,6 +26,15 @@ class Garaze(models.Model):
                                     default=0.0
                                     )
 
+    datum_ugovora_garaze = models.DateField("Datum Ugovora Garaze", null=True, blank=True)
+
+    broj_ugovora_garaze = models.CharField("Broj Ugovora Garaze",
+                                           max_length=252,
+                                           blank=True,
+                                           null=True,
+                                           unique=True
+                                           )
+
     napomena_garaze = models.CharField('Napomena',
                                        null=True,
                                        blank=True,

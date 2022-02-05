@@ -5,7 +5,7 @@ from rest_framework.settings import api_settings
 
 from real_estate_api.garaze.models import Garaze
 from real_estate_api.garaze.serializers import GarazeSerializer
-
+from real_estate_api.garaze.ugovori_garaze.ugovor_garaze import ContractGaraze
 
 lookup_field = 'id_garaze'
 lookup_field_kupac = 'id_kupca'
@@ -49,6 +49,28 @@ class KreirajGarazuAPIView(generics.CreateAPIView):
     queryset = Garaze.objects.all().order_by('id_garaze')
     serializer_class = GarazeSerializer
 
+    def perform_create(self, serializer):
+        """
+        Prilikom kreiranja Garaye potrebno je  generisati ili obrisati ugovor.
+        Takođe je potrebno postaviti odobrenje(True)  Stana ukoliko je stan
+        rezervisan ili prodat.
+
+        :param serializer: GarazeSerializer
+        """
+        garaza = serializer.save()
+
+        if garaza.status_prodaje_garaze == Garaze.StatusProdajeGaraze.REZERVISANA:
+
+            ContractGaraze.create_contract(garaza, garaza.kupac)  # Kreiraj Ugovor Garaže.
+
+        elif garaza.status_prodaje_garaze == Garaze.StatusProdajeGaraze.PRODATA:
+
+            ContractGaraze.create_contract(garaza, garaza.kupac)  # Kreiraj Ugovor Garaže.
+
+        elif garaza.status_prodaje_garaze == Garaze.StatusProdajeGaraze.DOSTUPNA:
+
+            ContractGaraze.delete_contract(garaza)  # Obrisi Ugovor Garaze.
+
 
 class UrediGarazuAPIView(generics.RetrieveUpdateAPIView):
     """Uredjivanje Garaze po pk-id"""
@@ -56,6 +78,26 @@ class UrediGarazuAPIView(generics.RetrieveUpdateAPIView):
     lookup_field = lookup_field
     queryset = Garaze.objects.all().order_by('id_garaze')
     serializer_class = GarazeSerializer
+
+    def perform_update(self, serializer):
+        """
+        Prilikom uređivanja statusa Garaže potrebno je  generisati ili obrisati ugovor.
+
+        :param serializer: GarazeSerializer
+        """
+        garaza = serializer.save()
+
+        if garaza.status_prodaje_garaze == Garaze.StatusProdajeGaraze.REZERVISANA:
+
+            ContractGaraze.create_contract(garaza, garaza.kupac)  # Kreiraj Ugovor Garaže.
+
+        elif garaza.status_prodaje_garaze == Garaze.StatusProdajeGaraze.PRODATA:
+
+            ContractGaraze.create_contract(garaza, garaza.kupac)  # Kreiraj Ugovor Garaže.
+
+        elif garaza.status_prodaje_garaze == Garaze.StatusProdajeGaraze.DOSTUPNA:
+
+            ContractGaraze.delete_contract(garaza)  # Obrisi Ugovor Garaze.
 
 
 class ObrisiGarazuAPIView(generics.RetrieveDestroyAPIView):

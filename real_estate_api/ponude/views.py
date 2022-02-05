@@ -54,7 +54,13 @@ class KreirajPonuduAPIView(generics.CreateAPIView):
     serializer_class = PonudeSerializer
 
     def perform_create(self, serializer):
-        """Some doc here!"""
+        """
+        Prilikom kreiranja Ponude  Stana potrebno je  generisati
+        ili obrisati ugovor. Takođe je potrebno postaviti odobrenje(True)
+        Stana ukoliko je stan rezervisan ili prodat.
+
+        :param serializer: PonudeSerializer
+        """
         ponuda = serializer.save()
 
         if ponuda.status_ponude == Ponude.StatusPonude.REZERVISAN:
