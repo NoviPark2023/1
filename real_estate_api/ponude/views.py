@@ -9,6 +9,7 @@ from django.conf import settings
 from .models import Ponude
 from .serializers import PonudeSerializer
 from .ugovor.ugovori import Contract
+from ..stanovi.models import Stanovi
 
 lookup_field = 'id_ponude'
 lookup_field_stan = 'id_stana'
@@ -56,19 +57,33 @@ class KreirajPonuduAPIView(generics.CreateAPIView):
         """Some doc here!"""
         ponuda = serializer.save()
 
-        if ponuda.status_ponude == 'rezervisan':
-            Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)
-            ponuda.stan.status_prodaje = 'rezervisan'
-            ponuda.stan.save()
+        if ponuda.status_ponude == Ponude.StatusPonude.REZERVISAN:
 
-        elif ponuda.status_ponude == 'kupljen':
+            # Kreiranje Ugovora
             Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)
-            ponuda.stan.status_prodaje = 'prodat'
-            ponuda.stan.save()
 
-        elif ponuda.status_ponude == 'potencijalan':
-            ponuda.stan.status_prodaje = 'dostupan'
+            ponuda.stan.status_prodaje = Stanovi.StatusProdaje.REZERVISAN
             ponuda.stan.save()
+            ponuda.odobrenje = True
+            ponuda.klijent_prodaje = self.request.user  # Set klijenta prodaje Stana
+            ponuda.save()
+
+        elif ponuda.status_ponude == Ponude.StatusPonude.KUPLJEN:
+
+            # Kreiranje Ugovora
+            Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)
+
+            ponuda.stan.status_prodaje = Stanovi.StatusProdaje.PRODAT
+            ponuda.stan.save()
+            ponuda.odobrenje = True
+            ponuda.klijent_prodaje = self.request.user  # Set klijenta prodaje Stana
+            ponuda.save()
+
+        elif ponuda.status_ponude == Ponude.StatusPonude.POTENCIJALAN:
+            ponuda.stan.status_prodaje = Stanovi.StatusProdaje.DOSTUPAN
+            ponuda.stan.save()
+            ponuda.odobrenje = False
+            ponuda.save()
 
     def get_queryset(self):
         # Potrebno za prikaz svih Ponuda samo za odredjeni Stan
@@ -98,24 +113,24 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
         """
         ponuda = serializer.save()
 
-        if ponuda.status_ponude == 'rezervisan':
-            ponuda.stan.status_prodaje = 'rezervisan'
+        if ponuda.status_ponude == Ponude.StatusPonude.REZERVISAN:
+            ponuda.stan.status_prodaje = Stanovi.StatusProdaje.REZERVISAN
             ponuda.stan.save()
             ponuda.odobrenje = True  # Potrebno odobrenje jer je stan kaparisan (Rezervisan)
             ponuda.save()
 
-            Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac) # Kreiraj Ugovor.
+            Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)  # Kreiraj Ugovor.
 
-        elif ponuda.status_ponude == 'kupljen':
-            ponuda.stan.status_prodaje = 'prodat'
+        elif ponuda.status_ponude == Ponude.StatusPonude.KUPLJEN:
+            ponuda.stan.status_prodaje = Stanovi.StatusProdaje.PRODAT
             ponuda.stan.save()
             ponuda.odobrenje = True
             ponuda.save()
 
             Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)  # Kreiraj Ugovor.
 
-        elif ponuda.status_ponude == 'potencijalan':
-            ponuda.stan.status_prodaje = 'dostupan'
+        elif ponuda.status_ponude == Ponude.StatusPonude.POTENCIJALAN:
+            ponuda.stan.status_prodaje = Stanovi.StatusProdaje.DOSTUPAN
             ponuda.stan.save()
             ponuda.odobrenje = False
             ponuda.save()
