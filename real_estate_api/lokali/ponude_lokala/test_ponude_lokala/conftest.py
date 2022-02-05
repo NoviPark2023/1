@@ -89,11 +89,36 @@ def novi_jedan_lokal_ponude_fixture(db) -> Lokali:
         broj_prostorija=1.0,
         napomena_lokala='nema napomene',
         orijentisanost_lokala='Jug',
-        status_prodaje_lokala='dostupan',
+        status_prodaje_lokala='potencijalan',
         cena_lokala=50000.0,
     )
 
     return lokal_ponude
+
+
+# endregion
+
+# region JEDNA PONUDA LOKALA JSON FIXTURES
+
+@pytest.fixture()
+def nova_jedna_ponuda_lokala_json_fixture(novi_kupac_lokala_fixture_ponude,
+                                          novi_jedan_lokal_ponude_fixture,
+                                          novi_autorizovan_korisnik_fixture_lokali_ponude
+                                          ):
+    return json.dumps(
+        {
+            "kupac_lokala": novi_kupac_lokala_fixture_ponude.id_kupca,
+            "lokali": novi_jedan_lokal_ponude_fixture.id_lokala,
+            "cena_lokala_za_kupca": 54000,
+            "napomena_ponude_lokala": "string",
+            "broj_ugovora_lokala": "string",
+            "datum_ugovora_lokala": "2022-02-05",
+            "status_ponude_lokala": novi_jedan_lokal_ponude_fixture.status_prodaje_lokala,
+            "nacin_placanja_lokala": "ceo_iznos",
+            "odobrenje_kupovine_lokala": True,
+            "klijent_prodaje_lokala": novi_autorizovan_korisnik_fixture_lokali_ponude.id
+        }
+    )
 
 
 # endregion
@@ -144,6 +169,7 @@ def nova_jedna_ponuda_lokala_fixture_401(db,
     )
 
     return nova_jedna_ponuda_lokala_fixture_401
+
 
 # endregion
 
@@ -248,21 +274,21 @@ def nova_jedna_ponuda_lokala_fixture_401(db,
 
     return nova_jedna_ponuda_lokala_fixture_401
 
+
 # endregion
 
 # region DVE PONUDE LOKALA SA ISTIM UNIQUE VREDNOSTIMA FIXTURES
 @pytest.fixture()
-def nove_dve_ponude_lokala_istih_unique_vrednosti_json_fixture(
-    db,
-    novi_kupac_lokala_fixture_ponude,
-    novi_jedan_lokal_ponude_fixture,
-    novi_autorizovan_korisnik_fixture_lokali_ponude):
+def nove_dve_ponude_lokala_istih_unique_vrednosti_json_fixture(db,
+                                                               novi_kupac_lokala_fixture_ponude,
+                                                               novi_autorizovan_korisnik_fixture_lokali_ponude
+                                                               ):
     return json.dumps(
         [
             {
                 'id_ponude_lokala': 1,
                 'kupac_lokala': novi_kupac_lokala_fixture_ponude.id_kupca,
-                'lokali': novi_jedan_lokal_ponude_fixture.id_lokala,
+                'lokali': 1,
                 'cena_lokala_za_kupca': 10000,
                 'napomena_ponude_lokala': "nema napomene",
                 'broj_ugovora_lokala': "No1",
@@ -270,12 +296,12 @@ def nove_dve_ponude_lokala_istih_unique_vrednosti_json_fixture(
                 'status_ponude_lokala': PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
                 'nacin_placanja_lokala': PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
                 'odobrenje_kupovine_lokala': False,
-                'klijent_prodaje_lokala': novi_autorizovan_korisnik_fixture_lokali_ponude.username,
+                'klijent_prodaje_lokala': novi_autorizovan_korisnik_fixture_lokali_ponude.id,
             },
             {
                 'id_ponude_lokala': 2,
                 'kupac_lokala': novi_kupac_lokala_fixture_ponude.id_kupca,
-                'lokali': novi_jedan_lokal_ponude_fixture.id_lokala,
+                'lokali': 2,
                 'cena_lokala_za_kupca': 11000,
                 'napomena_ponude_lokala': "nema napomene",
                 'broj_ugovora_lokala': "No1",
@@ -283,51 +309,9 @@ def nove_dve_ponude_lokala_istih_unique_vrednosti_json_fixture(
                 'status_ponude_lokala': PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
                 'nacin_placanja_lokala': PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
                 'odobrenje_kupovine_lokala': False,
-                'klijent_prodaje_lokala': novi_autorizovan_korisnik_fixture_lokali_ponude.username,
+                'klijent_prodaje_lokala': novi_autorizovan_korisnik_fixture_lokali_ponude.id,
             },
         ]
-    )
-
-# endregion
-
-# region JEDNA PONUDA LOKALA JSON FIXTURES
-@pytest.fixture()
-def nova_jedna_ponuda_lokala_json_fixture(
-                                          # novi_kupac_lokala_fixture_ponude,
-                                          # novi_jedan_lokal_ponude_fixture,
-                                          # novi_autorizovan_korisnik_fixture_lokali_ponude
-                                          ):
-    return json.dumps(
-        {
-            # "id_ponude_lokala": 1,
-            # "kupac_lokala": novi_kupac_lokala_fixture_ponude.id_kupca,
-            # "ime_kupca_lokala": novi_kupac_lokala_fixture_ponude.ime_prezime,
-            # "lokali": novi_jedan_lokal_ponude_fixture.id_lokala,
-            # "adresa_lokala": novi_jedan_lokal_ponude_fixture.adresa_lokala,
-            # "lamela_lokala": novi_jedan_lokal_ponude_fixture.lamela_lokala,
-            # "cena_lokala_za_kupca": 10000,
-            # "napomena_ponude_lokala": 'nema napomene',
-            # "broj_ugovora_lokala": '123',
-            # "datum_ugovora_lokala": '2.2.2022',
-            # "status_ponude_lokala": PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
-            # "nacin_placanja_lokala": 'kredit',
-            # "odobrenje_kupovine_lokala": False,
-            # "klijent_prodaje_lokala": novi_autorizovan_korisnik_fixture_lokali_ponude.id
-            "id_ponude_lokala": 6,
-            "kupac_lokala": 1,
-            "ime_kupca_lokala": "Slobodan Tomic",
-            "lokali": 2,
-            "adresa_lokala": "Ulica 2",
-            "lamela_lokala": "L1.0.P1",
-            "cena_lokala_za_kupca": 100,
-            "napomena_ponude_lokala": "nema",
-            "broj_ugovora_lokala": "No6",
-            "datum_ugovora_lokala": "2022-02-04",
-            "status_ponude_lokala": "potencijalan",
-            "nacin_placanja_lokala": "ceo_iznos",
-            "odobrenje_kupovine_lokala": False,
-            "klijent_prodaje_lokala": 1
-        }
     )
 
 # endregion

@@ -3,7 +3,7 @@ import json
 from django.core.serializers.json import DjangoJSONEncoder
 from rest_framework.reverse import reverse
 
-from real_estate_api.lokali.ponude_lokala.test_ponude_lokala.conftest import *
+from real_estate_api.lokali.ponude_lokala.models import PonudeLokala
 
 
 class TestPonudeLokalaSerijalizers:
@@ -80,6 +80,7 @@ class TestPonudeLokalaSerijalizers:
         @param nova_jedna_ponuda_lokala_fixture: Ponuda Lokala
         @return status code 404: HTTP 404 Not Found
         """
+
         # Get invalid one Ponuda Lokala ID from Response.
         url_detalji_ponude_lokala = reverse('ponude-lokali:detalji_ponude_lokala',
                                             args=[nova_jedna_ponuda_lokala_fixture.id_ponude_lokala + 1000])

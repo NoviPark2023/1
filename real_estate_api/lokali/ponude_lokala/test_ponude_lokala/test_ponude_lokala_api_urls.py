@@ -1,5 +1,6 @@
 from rest_framework.reverse import reverse
-from real_estate_api.lokali.ponude_lokala.test_ponude_lokala.conftest import *
+
+from real_estate_api.lokali.ponude_lokala.models import PonudeLokala
 
 
 class TestRestApiUrlsPonudeLokala:
@@ -50,11 +51,11 @@ class TestRestApiUrlsPonudeLokala:
 
         assert response_sve_ponude_lokala.status_code == 200
 
-    def test_detalji_ponude_lokala_api_url(
-        self,
-        client,
-        novi_autorizovan_korisnik_fixture_lokali_ponude,
-        nova_jedna_ponuda_lokala_fixture):
+    def test_detalji_ponude_lokala_api_url(self,
+                                           client,
+                                           novi_autorizovan_korisnik_fixture_lokali_ponude,
+                                           nova_jedna_ponuda_lokala_fixture
+                                           ):
         """
         Test poziv 'ponude_lokala:detalji_ponude_lokala' za API poziv detalja Ponude Lokala.
         U samoj inicijalizaciji imamo samo jednou Ponudu.
@@ -109,8 +110,8 @@ class TestRestApiUrlsPonudeLokala:
 
     def test_kreiraj_ponudu_lokala_status_potencijalan_201(self,
                                                            client,
-                                                           nova_jedna_ponuda_lokala_json_fixture,
-                                                           novi_autorizovan_korisnik_fixture_lokali_ponude
+                                                           nova_jedna_ponuda_lokala_json_fixture
+
                                                            ):
         """
         Test poziv 'ponude-lokali:kreiraj_ponudu_lokala' za API poziv kreiranja Ponude Lokala sa Korisnikom
@@ -122,6 +123,7 @@ class TestRestApiUrlsPonudeLokala:
 
         @param client: A Django test client instance.
         @param nova_jedna_ponuda_lokala_json_fixture: Nova Ponuda Lokala Fixture.
+
         @return status code 201:  HTTP 201 CREATED
         """
 
@@ -137,10 +139,35 @@ class TestRestApiUrlsPonudeLokala:
             content_type='application/json'
         )
 
-        print(response_kreiraj_ponudu_lokala)
-
         assert response_kreiraj_ponudu_lokala.status_code == 201
 
         # # Nakon kreiranja Ponude Lokala, proveriti koliko ih ima u db, treba da bude 1.
-        # broj_ponuda_lokala_from_db = PonudeLokala.objects.all().count()
-        # assert broj_ponuda_lokala_from_db == 1
+        broj_ponuda_lokala_from_db = PonudeLokala.objects.all().count()
+        assert broj_ponuda_lokala_from_db == 1
+
+    def test_obrisi_ponudu_lokala(self, client, nova_jedna_ponuda_lokala_fixture):
+        """
+        Test poziv 'ponude:obrisi_ponudu' za API poziv Obrisi Ponudu.
+
+            * @see /test_ponude/conftest.py (nova_jedna_ponuda_fixture)
+            * @see path('obrisi-ponudu/<int:id_ponude>/', ObrisiPonuduAPIView.as_view(), name='obrisi_ponudu')
+
+        @param client: A Django test client instance.
+        @return status code 204: HTTP No Content
+        """
+
+        broj_ponuda_lokala_from_db = PonudeLokala.objects.all().count()
+        assert broj_ponuda_lokala_from_db == 1
+
+        url_obrisi_ponudu = reverse(
+            'ponude-lokali:obrisi_ponudu_lokala',
+            args=[nova_jedna_ponuda_lokala_fixture.id_ponude_lokala]
+        )
+
+        response = client.delete(url_obrisi_ponudu)
+
+        assert response.status_code == 204
+
+        # Prvo proveri koliko je Ponuda Lokala u bazi (treba da ima 0 Ponuda)
+        broj_ponuda_u_bazi = PonudeLokala.objects.all().count()
+        assert broj_ponuda_u_bazi == 0

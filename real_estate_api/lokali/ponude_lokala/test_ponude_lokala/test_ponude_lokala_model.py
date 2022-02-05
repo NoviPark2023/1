@@ -1,4 +1,6 @@
-from real_estate_api.lokali.ponude_lokala.test_ponude_lokala.conftest import *
+from real_estate_api.kupci.models import Kupci
+from real_estate_api.lokali.lokali_api.models import Lokali
+from real_estate_api.lokali.ponude_lokala.models import PonudeLokala
 
 
 class TestModelaEntitetaPonudeLokala:

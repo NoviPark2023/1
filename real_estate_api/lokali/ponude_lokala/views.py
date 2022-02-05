@@ -48,7 +48,10 @@ class KreirajPonuduLokalaAPIView(generics.CreateAPIView):
     queryset = PonudeLokala.objects.all().order_by('id_ponude_lokala')
     serializer_class = PonudeLokalaSerializer
 
-    def perform_create(self, serializer):
-        ponuda_lokala = serializer.save()
 
-
+class ObrisiPonuduLokalaAPIView(generics.RetrieveDestroyAPIView):
+    """Brisanje Ponude Lokala po ID-ju"""
+    permission_classes = [IsAuthenticated, ]
+    lookup_field = lookup_field
+    queryset = PonudeLokala.objects.all().order_by('-id_ponude_lokala')
+    serializer_class = PonudeLokalaSerializer
