@@ -210,7 +210,7 @@ class UgovorPonudeDownloadListAPIView(generics.ListAPIView):
             url = client.generate_presigned_url(ClientMethod='get_object',
                                                 Params={
                                                     'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                                                    'Key': 'ugovor-br-' + str(queryset.broj_ugovora) + '.docx'
+                                                    'Key': 'ugovor-br-' + str(queryset.stan.lamela) + '.docx'
                                                 }, ExpiresIn=70000)
 
         except (FileNotFoundError, Ponude.DoesNotExist):

@@ -49,12 +49,12 @@ class Contract:
             document.render(context)
 
             # Sacuvaj generisani Ugovor.
-            document.save('real_estate_api/static/ugovor/' + 'ugovor-br-' + str(ponuda.broj_ugovora) + '.docx')
+            document.save('real_estate_api/static/ugovor/' + 'ugovor-br-' + str(stan.lamela) + '.docx')
 
             # Ucitaj na Digital Ocean Space
-            client.upload_file('real_estate_api/static/ugovor' + '/ugovor-br-' + str(ponuda.broj_ugovora) + '.docx',
+            client.upload_file('real_estate_api/static/ugovor' + '/ugovor-br-' + str(stan.lamela) + '.docx',
                                'ugovori',
-                               'ugovor-br-' + str(ponuda.broj_ugovora) + '.docx')
+                               'ugovor-br-' + str(stan.lamela) + '.docx')
 
             # Posalji svim preplatnicima EMAIL da je Stan REZERVISAN.
             SendEmailThreadRezervisanStan(ponuda).start()
@@ -74,12 +74,12 @@ class Contract:
             document.render(context)
 
             # Sacuvaj generisani Ugovor.
-            document.save('real_estate_api/static/ugovor/' + 'ugovor-br-' + str(ponuda.broj_ugovora) + '.docx')
+            document.save('real_estate_api/static/ugovor/' + 'ugovor-br-' + str(stan.lamela) + '.docx')
 
             # Ucitaj na Digital Ocean Space
-            client.upload_file('real_estate_api/static/ugovor' + '/ugovor-br-' + str(ponuda.broj_ugovora) + '.docx',
+            client.upload_file('real_estate_api/static/ugovor' + '/ugovor-br-' + str(stan.lamela) + '.docx',
                                'ugovori',
-                               'ugovor-br-' + str(ponuda.broj_ugovora) + '.docx')
+                               'ugovor-br-' + str(stan.lamela) + '.docx')
 
             # Posalji Email da je Stan kupljen.
             SendEmailThreadKupljenStan(ponuda).start()
@@ -96,8 +96,7 @@ class Contract:
 
         # Obrisi ugovor jer je Stan presao u status dostupan.
         client.delete_object(Bucket='ugovori',
-                             Key='ugovor-br-' + str(ponuda.broj_ugovora) + '.docx')
-
+                             Key='ugovor-br-' + str(ponuda.stan.lamela) + '.docx')
 
 
 class SendEmailThreadKupljenStan(threading.Thread):
@@ -115,6 +114,7 @@ class SendEmailThreadKupljenStan(threading.Thread):
                           settings.EMAIL_HOST_USER, [korisnici_email])
         except SMTPException as e:
             print(f"failed to send mail: {e}")
+
 
 class SendEmailThreadRezervisanStan(threading.Thread):
     def __init__(self, ponuda):
