@@ -140,7 +140,7 @@ def nove_dve_garaze_fixture(db, novi_kupac_fixture_garaze) -> Garaze:
                 # ime_kupca=novi_kupac_fixture.ime_prezime,
                 cena_garaze=7000.0,
                 datum_ugovora_garaze='2022-02-05',
-                broj_ugovora_garaze='123',
+                broj_ugovora_garaze='1234',
                 napomena_garaze='Nema napomene',
                 status_prodaje_garaze='dostupna'
             )
