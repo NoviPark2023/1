@@ -1,13 +1,15 @@
-from rest_framework import serializers, generics
-from rest_framework.reverse import reverse
+from rest_framework import serializers
 
 from real_estate_api.lokali.ponude_lokala.models import PonudeLokala
 
 
 class PonudeLokalaSerializer(serializers.ModelSerializer):
     """
-    Ponude sa redukovanim poljima koje poseduje za prikaz u tabeli i u slucaju responiva u frontendu.
+    Sva polja iz modela Ponude Lokala i dodatna:
+        * cena_lokala : Cena lokala koju je vlasnik odredio.
     """
+
+    cena_lokala = serializers.ReadOnlyField()  # Get field 'Adresa Stana' from 'Ponuda' model
 
     class Meta:
         model = PonudeLokala
@@ -18,6 +20,7 @@ class PonudeLokalaSerializer(serializers.ModelSerializer):
             'lokali',
             'adresa_lokala',
             'lamela_lokala',
+            'cena_lokala',
             'cena_lokala_za_kupca',
             'napomena_ponude_lokala',
             'broj_ugovora_lokala',
