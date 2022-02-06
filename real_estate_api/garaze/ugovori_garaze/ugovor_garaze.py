@@ -53,8 +53,8 @@ class ContractGaraze:
                 'ugovor-garaze-br-' + str(garaza.id_garaze) + '.docx'
             )
 
-            # Posalji svim preplatnicima EMAIL da je Stan REZERVISAN.
-            # SendEmailThreadRezervisanStan(ponuda).start()
+            # Posalji svim preplatnicima EMAIL da je Garaza REZERVISAN.
+            SendEmailThreadRezervisanaGaraza(garaza).start()
 
         elif garaza.status_prodaje_garaze == Garaze.StatusProdajeGaraze.PRODATA:
             # Kada je status Ponude Garaze kupjena, generisi ugovor.
@@ -81,8 +81,8 @@ class ContractGaraze:
                 'ugovor-garaze-br-' + str(garaza.id_garaze) + '.docx'
             )
 
-            # Posalji Email da je Stan kupljen.
-            # SendEmailThreadKupljenStan(ponuda).start()
+            # Posalji Email da je Garaza kupljena.
+            SendEmailThreadKupljenaGaraza(garaza).start()
 
     @staticmethod
     def delete_contract(garaza):
@@ -97,3 +97,39 @@ class ContractGaraze:
         # Obrisi ugovor jer je Stan presao u status dostupan.
         client.delete_object(Bucket='ugovori-garaze',
                              Key='ugovor-garaze-br-' + str(garaza.id_garaze) + '.docx')
+
+
+class SendEmailThreadKupljenaGaraza(threading.Thread):
+    """Posalji Email pretplacenim Korisnicima kada je garaza KUPLJENA"""
+
+    def __init__(self, garaza):
+        self.garaza = garaza
+        threading.Thread.__init__(self)
+
+    def run(self):
+        try:
+            for korisnici_email in settings.RECIPIENT_ADDRESS:
+                send_mail(f'Garaža ID: {str(self.garaza.jedinstveni_broj_garaze)} je KUPLJENA.',
+                          f'Garaža ID: {str(self.garaza.jedinstveni_broj_garaze)} je kupljena.\n'
+                          f'Cena Garaže: {round(self.garaza.cena_garaze, 2)}',
+                          settings.EMAIL_HOST_USER, [korisnici_email])
+        except SMTPException as e:
+            print(f"failed to send mail: {e}")
+
+
+class SendEmailThreadRezervisanaGaraza(threading.Thread):
+    """Posalji Email pretplacenim Korisnicima kada je garaza REZERVISANA"""
+
+    def __init__(self, garaza):
+        self.garaza = garaza
+        threading.Thread.__init__(self)
+
+    def run(self):
+        try:
+            for korisnici_email in settings.RECIPIENT_ADDRESS:
+                send_mail(f'Garaža ID: {str(self.garaza.jedinstveni_broj_garaze)} je REZERVISANA.',
+                          f'Garaža ID: {str(self.garaza.jedinstveni_broj_garaze)} je REZERVISANA.\n'
+                          f'Cena Garaže: {round(self.garaza.cena_garaze, 2)}',
+                          settings.EMAIL_HOST_USER, [korisnici_email])
+        except SMTPException as e:
+            print(f"failed to send mail: {e}")

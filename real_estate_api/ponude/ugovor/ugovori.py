@@ -100,6 +100,8 @@ class Contract:
 
 
 class SendEmailThreadKupljenStan(threading.Thread):
+    """Posalji Email pretplacenim Korisnicima kada je Stan KUPLJEN"""
+
     def __init__(self, ponuda):
         self.ponuda = ponuda
         threading.Thread.__init__(self)
@@ -117,6 +119,8 @@ class SendEmailThreadKupljenStan(threading.Thread):
 
 
 class SendEmailThreadRezervisanStan(threading.Thread):
+    """Posalji Email pretplacenim Korisnicima kada je Stan REZERVISAN"""
+
     def __init__(self, ponuda):
         self.ponuda = ponuda
         threading.Thread.__init__(self)
