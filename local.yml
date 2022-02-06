@@ -1,16 +1,16 @@
 version: '3'
 
 volumes:
-  local_postgres_data: {}
-  local_postgres_data_backups: {}
+  local_postgres_data: { }
+  local_postgres_data_backups: { }
 
 services:
-  django:
+  django-stanovi-api:
     build:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
-    image: local_django
-    container_name: django_local
+    image: django-stanovi-api
+    container_name: django-stanovi-api
     depends_on:
       - postgres
     volumes:
@@ -26,8 +26,8 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
-    image: production_postgres
-    container_name: local_postgres
+    image: postgres-stanovi-api
+    container_name: postgres-stanovi-api
     ports:
       - "5432:5432"
     volumes:
@@ -36,8 +36,9 @@ services:
     env_file:
       - ./.envs/.local/.postgres
 
-  pgadmin:
-    container_name: pgadmin4_container
+
+  pgadmin-stanovi-api:
+    container_name: pgadmin4-stanovi-api
     image: dpage/pgadmin4
     restart: always
     environment:
