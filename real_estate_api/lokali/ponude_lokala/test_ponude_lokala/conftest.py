@@ -129,6 +129,7 @@ def nova_jedna_ponuda_lokala_fixture(db,
                                      novi_kupac_lokala_fixture_ponude,
                                      novi_jedan_lokal_ponude_fixture,
                                      novi_autorizovan_korisnik_fixture_lokali_ponude) -> PonudeLokala:
+
     nova_jedna_ponuda_lokala_fixture = PonudeLokala.objects.create(
         id_ponude_lokala=1,
         kupac_lokala=novi_kupac_lokala_fixture_ponude,

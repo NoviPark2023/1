@@ -5,6 +5,7 @@ from rest_framework.settings import api_settings
 
 from real_estate_api.lokali.lokali_api.models import Lokali
 from real_estate_api.lokali.lokali_api.serializers import LokaliSerializer
+from real_estate_api.lokali.ponude_lokala.serializers import PonudeLokalaSerializer
 
 lookup_field = 'id_lokala'
 
@@ -62,3 +63,15 @@ class ObrisiLokalViewAPI(generics.RetrieveDestroyAPIView):
     lookup_field = lookup_field
     queryset = Lokali.objects.all().order_by('id_lokala')
     serializer_class = LokaliSerializer
+
+
+class ListaPonudaLokalaAPIView(generics.RetrieveAPIView):
+    """Lista svih Ponuda Stana"""
+    permission_classes = [IsAuthenticated, ]
+    lookup_field = lookup_field
+    queryset = Lokali.objects.all().order_by(lookup_field)
+    serializer_class = PonudeLokalaSerializer
+
+    def get_queryset(self):
+        id_lokala = self.kwargs['id_lokala']
+        return Lokali.objects.all().filter(id_lokala=id_lokala)

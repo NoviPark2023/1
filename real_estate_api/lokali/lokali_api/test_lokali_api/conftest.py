@@ -1,10 +1,16 @@
+import datetime
+import random
+
 import pytest
 import json
 from real_estate_api.korisnici.models import Korisnici
+from real_estate_api.kupci.models import Kupci
 from real_estate_api.lokali.lokali_api.models import Lokali
 
-
 # region FIXTURE NEREGISTROVAN KORISNIK LOKALI
+from real_estate_api.lokali.ponude_lokala.models import PonudeLokala
+
+
 @pytest.fixture()
 def novi_neautorizovan_korisnik_fixture_lokali(db) -> Korisnici:
     return Korisnici.objects.create(
@@ -45,6 +51,31 @@ def novi_autorizovan_korisnik_fixture_lokali(db, client, django_user_model) -> K
 
 # endregion
 
+# region NOVI JEDAN KUPAC LOKALA FIXTURE
+@pytest.fixture(autouse=False)
+def novi_kupac_lokala_fixture_ponude_u_lokalima(db) -> Kupci:
+    """
+    Kreiranje novog Kupca Lokala.
+
+    @param db: Testna DB.
+    @return: Entitet Kupci.
+    """
+    kupac_lokala = Kupci.objects.create(
+        id_kupca=1,
+        lice='Fizicko',
+        ime_prezime='Petar Kralj',
+        email='pera@gmail.com',
+        broj_telefona='+381631369098',
+        Jmbg_Pib=str(random.randrange(1000000000000, 9999999999999)),
+        adresa='Milentija Popovica 30',
+    )
+
+    return kupac_lokala
+
+
+# endregion
+
+
 # region NOVI JEDAN LOKAL FIXTURE
 @pytest.fixture(autouse=False)
 def novi_jedan_lokal_fixture(db) -> Lokali:
@@ -71,6 +102,7 @@ def novi_jedan_lokal_fixture(db) -> Lokali:
 
 
 # endregion
+
 
 # region NOVA DVA LOKALA FIXTURE
 @pytest.fixture(autouse=False)

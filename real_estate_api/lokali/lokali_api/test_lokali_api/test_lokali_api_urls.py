@@ -84,25 +84,31 @@ class TestRestApiUrlsLokali:
         url_kreiraj_lokal = reverse('lokali:kreiraj_lokal')
 
         novi_lokal = json.dumps(
-            {'id_lokala': 3,
-             'lamela_lokala': "L2.0.P1",
-             'adresa_lokala': "Adresa Lokala L2.0.P1",
-             'kvadratura_lokala': "40.0",
-             'kvadratura_korekcija': "0.0",
-             'iznos_za_korekciju_kvadrature': "0.0",
-             'broj_prostorija': "1.0",
-             'napomena_lokala': "nema",
-             'orijentisanost_lokala': "Jug",
-             'status_prodaje_lokala': "dostupan",
-             'cena_lokala': "40000",
-             'cena_kvadrata_lokala': "1000.0"}
+            {
+                'id_lokala': 3,
+                'lamela_lokala': "L2.0.P1",
+                'adresa_lokala': "Adresa Lokala L2.0.P1",
+                'kvadratura_lokala': "40.0",
+                'kvadratura_korekcija': "0.0",
+                'iznos_za_korekciju_kvadrature': "0.0",
+                'broj_prostorija': "1.0",
+                'napomena_lokala': "nema",
+                'orijentisanost_lokala': "Jug",
+                'status_prodaje_lokala': "dostupan",
+                'cena_lokala': "40000",
+                'cena_kvadrata_lokala': "1000.0"
+            }
         )
 
         response = client.post(url_kreiraj_lokal, data=novi_lokal, content_type='application/json')
 
         assert response.status_code == 201
 
-    def test_detalji_lokala(self, client, novi_autorizovan_korisnik_fixture_lokali, novi_jedan_lokal_fixture):
+    def test_detalji_lokala(self,
+                            client,
+                            novi_autorizovan_korisnik_fixture_lokali,
+                            novi_jedan_lokal_fixture,
+                            ):
         """
         Test poziv 'lokali:detalji_lokala' za API poziv Detalja Lokala sa autorizovanim Korisnikom.
         Takodje se proverava i Response sadrzaj.
@@ -132,6 +138,7 @@ class TestRestApiUrlsLokali:
             "orijentisanost_lokala": novi_jedan_lokal_fixture.orijentisanost_lokala,
             "status_prodaje_lokala": novi_jedan_lokal_fixture.status_prodaje_lokala,
             "cena_lokala": novi_jedan_lokal_fixture.cena_lokala,
+            "lista_ponuda_lokala": [],
         }
 
     def test_izmeni_lokal(self,
