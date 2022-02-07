@@ -1,3 +1,5 @@
+import json
+
 from rest_framework.reverse import reverse
 
 from real_estate_api.lokali.ponude_lokala.models import PonudeLokala
@@ -111,7 +113,6 @@ class TestRestApiUrlsPonudeLokala:
     def test_kreiraj_ponudu_lokala_status_potencijalan_201(self,
                                                            client,
                                                            nova_jedna_ponuda_lokala_json_fixture
-
                                                            ):
         """
         Test poziv 'ponude-lokali:kreiraj_ponudu_lokala' za API poziv kreiranja Ponude Lokala sa Korisnikom
@@ -119,7 +120,7 @@ class TestRestApiUrlsPonudeLokala:
 
             * @see /test_ponude_lokala/conftest.py (nova_jedna_ponuda_lokala_json_fixture)
             * @see /test_ponude_lokala/conftest.py (novi_autorizovan_korisnik_fixture_lokali_ponude)
-             * @see path('kreiraj-ponudu-lokala/', KreirajPonuduLokalaAPIView.as_view(), name='kreiraj_ponudu_lokala'),
+            * @see path('kreiraj-ponudu-lokala/', KreirajPonuduLokalaAPIView.as_view(), name='kreiraj_ponudu_lokala'),
 
         @param client: A Django test client instance.
         @param nova_jedna_ponuda_lokala_json_fixture: Nova Ponuda Lokala Fixture.
@@ -145,12 +146,39 @@ class TestRestApiUrlsPonudeLokala:
         broj_ponuda_lokala_from_db = PonudeLokala.objects.all().count()
         assert broj_ponuda_lokala_from_db == 1
 
+    def test_izmeni_ponudu_lokala(self, client, nova_jedna_ponuda_lokala_fixture,
+                                  nova_jedna_ponuda_lokala_json_fixture):
+        """
+        Test poziv 'ponude_lokala:izmeni_ponudu_lokala' za API poziv Izmeni Ponudu Lokala sa autorizovanim Korisnikom.
+        U samoj inicijalizaciji imamo samo jednou Ponudu Lokala.
+
+            * @see /test_ponude_lokala/conftest.py (nova_jedna_ponuda_lokala_fixture)
+            * @see /test_ponude_lokala/conftest.py (nova_jedna_ponuda_lokala_json_fixture)
+            * @see path('izmeni-ponudu-lokala/', IzmeniPonuduLokalaAPIView.as_view(), name='izmeni_ponudu_lokala'),
+
+        @param client: A Django test client instance.
+        @param nova_jedna_ponuda_lokala_fixture: Jedna Ponuda Lokala Fixture.
+        @return status code 200: HTTP OK
+        """
+
+        broj_ponuda_lokala_from_db = PonudeLokala.objects.all().count()
+        assert broj_ponuda_lokala_from_db == 1
+
+        url_izmeni_ponudu_lokala = reverse('ponude-lokali:izmeni_ponudu_lokala',
+                                           args=[nova_jedna_ponuda_lokala_fixture.id_ponude_lokala])
+
+        response = client.put(url_izmeni_ponudu_lokala,
+                              data=nova_jedna_ponuda_lokala_json_fixture, content_type='application/json')
+
+        assert response.status_code == 200
+
     def test_obrisi_ponudu_lokala(self, client, nova_jedna_ponuda_lokala_fixture):
         """
-        Test poziv 'ponude:obrisi_ponudu' za API poziv Obrisi Ponudu.
+        Test poziv 'ponude_lokala:obrisi_ponudu_lokala' za API poziv Obrisi Ponudu Lokala.
 
-            * @see /test_ponude/conftest.py (nova_jedna_ponuda_fixture)
-            * @see path('obrisi-ponudu/<int:id_ponude>/', ObrisiPonuduAPIView.as_view(), name='obrisi_ponudu')
+            * @see /test_ponude_lokala/conftest.py (nova_jedna_ponuda_lokala_fixture)
+            * @see path('obrisi-ponudu-lokala/<int:id_ponude_lokala>/', ObrisiPonuduLokalaAPIView.as_view(),
+            name='obrisi_ponudu_lokala')
 
         @param client: A Django test client instance.
         @return status code 204: HTTP No Content

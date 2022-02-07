@@ -18,6 +18,10 @@ urlpatterns = [
     # Kreiraj Ponudu Lokala
     path('kreiraj-ponudu-lokala/', KreirajPonuduLokalaAPIView.as_view(), name='kreiraj_ponudu_lokala'),
 
-    # Obrisi Ponudu
+    # Izmeni Ponudu Lokala
+    path('izmeni-ponudu-lokala/<int:id_ponude_lokala>/', IzmeniPonuduLokalaAPIView.as_view(),
+         name='izmeni_ponudu_lokala'),
+
+    # Obrisi Ponudu Lokala
     path('obrisi-ponudu-lokala/<int:id_ponude_lokala>/', ObrisiPonuduLokalaAPIView.as_view(), name='obrisi_ponudu_lokala'),
 ]

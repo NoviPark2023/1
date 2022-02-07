@@ -49,6 +49,14 @@ class KreirajPonuduLokalaAPIView(generics.CreateAPIView):
     serializer_class = PonudeLokalaSerializer
 
 
+class IzmeniPonuduLokalaAPIView(generics.RetrieveUpdateAPIView):
+    """Izmena Ponude Lokala po ID-ju"""
+    permission_classes = [IsAuthenticated, ]
+    lookup_field = lookup_field
+    queryset = PonudeLokala.objects.all().order_by('id_ponude_lokala')
+    serializer_class = PonudeLokalaSerializer
+
+
 class ObrisiPonuduLokalaAPIView(generics.RetrieveDestroyAPIView):
     """Brisanje Ponude Lokala po ID-ju"""
     permission_classes = [IsAuthenticated, ]
