@@ -9,7 +9,8 @@ class PonudeLokalaSerializer(serializers.ModelSerializer):
         * cena_lokala : Cena lokala koju je vlasnik odredio.
     """
 
-    cena_lokala = serializers.ReadOnlyField()  # Get field 'Adresa Stana' from 'Ponuda' model
+    cena_lokala = serializers.ReadOnlyField()
+    datum_ugovora_lokala = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y', ])
 
     class Meta:
         model = PonudeLokala
