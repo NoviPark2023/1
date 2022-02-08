@@ -146,8 +146,11 @@ class TestRestApiUrlsPonudeLokala:
         broj_ponuda_lokala_from_db = PonudeLokala.objects.all().count()
         assert broj_ponuda_lokala_from_db == 1
 
-    def test_izmeni_ponudu_lokala(self, client, nova_jedna_ponuda_lokala_fixture,
-                                  nova_jedna_ponuda_lokala_json_fixture):
+    def test_izmeni_ponudu_lokala(self,
+                                  client,
+                                  nova_jedna_ponuda_lokala_fixture,
+                                  nova_jedna_ponuda_lokala_json_fixture,
+                                  ):
         """
         Test poziv 'ponude_lokala:izmeni_ponudu_lokala' za API poziv Izmeni Ponudu Lokala sa autorizovanim Korisnikom.
         U samoj inicijalizaciji imamo samo jednou Ponudu Lokala.
@@ -171,6 +174,31 @@ class TestRestApiUrlsPonudeLokala:
                               data=nova_jedna_ponuda_lokala_json_fixture, content_type='application/json')
 
         assert response.status_code == 200
+
+        assert response.json()["kupac_lokala"] == nova_jedna_ponuda_lokala_fixture.kupac_lokala.id_kupca
+
+        assert response.json()["lokali"] == nova_jedna_ponuda_lokala_fixture.lokali.id_lokala
+
+        # Razlicita je cena jer je izmenjena.
+        assert response.json()["cena_lokala_za_kupca"] != nova_jedna_ponuda_lokala_fixture.cena_lokala_za_kupca
+
+        # Razlicita je napomena jer je izmenjena.
+        assert response.json()["napomena_ponude_lokala"] != nova_jedna_ponuda_lokala_fixture.napomena_ponude_lokala
+
+        # Razlicit je broj ugovora jer je izmenjen.
+        assert response.json()["broj_ugovora_lokala"] != nova_jedna_ponuda_lokala_fixture.broj_ugovora_lokala
+
+        # Razlicit je datum ugovora jer je izmenjen.
+        assert response.json()["datum_ugovora_lokala"] != nova_jedna_ponuda_lokala_fixture.datum_ugovora_lokala
+
+        assert response.json()["status_ponude_lokala"] == nova_jedna_ponuda_lokala_fixture.status_ponude_lokala
+
+        assert response.json()["nacin_placanja_lokala"] == nova_jedna_ponuda_lokala_fixture.nacin_placanja_lokala
+
+        # Razlicito je odobrenje jer je izmenjeno.
+        assert response.json()["odobrenje_kupovine_lokala"] != nova_jedna_ponuda_lokala_fixture.odobrenje_kupovine_lokala
+
+        assert response.json()["klijent_prodaje_lokala"] == nova_jedna_ponuda_lokala_fixture.klijent_prodaje_lokala.id
 
     def test_obrisi_ponudu_lokala(self, client, nova_jedna_ponuda_lokala_fixture):
         """

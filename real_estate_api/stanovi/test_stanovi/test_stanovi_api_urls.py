@@ -208,7 +208,8 @@ class TestRestApiUrlsStanovi:
     def test_obrisi_stan(self,
                          client,
                          novi_jedan_stan_fixture_stanovi,
-                         novi_autorizovan_korisnik_fixture_stanovi):
+                         novi_autorizovan_korisnik_fixture_stanovi
+                         ):
         """
         Test poziv 'stanovi:obrisi_stan' za API poziv Obrisi Stan sa autorizovanim Korisnikom.
         Takodje se proverava i Response sadrzaj.
@@ -218,7 +219,7 @@ class TestRestApiUrlsStanovi:
 
         @param client: A Django test client instance.
         @param novi_autorizovan_korisnik_fixture_stanovi: Korisnik.
-        @param novi_jedan_stan_fixture: Stanovi (Stan).
+        @param novi_jedan_stan_fixture_stanovi: Stanovi (Stan).
         @return status code 204: HTTP No Content
         """
 
