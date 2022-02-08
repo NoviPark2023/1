@@ -27,7 +27,10 @@ class TestRestApiUrlsStanovi:
 
         assert response.status_code == 401
 
-    def test_sa_autorizovanim_korisnikom(self, client, novi_autorizovan_korisnik_fixture_stanovi):
+    def test_sa_autorizovanim_korisnikom(self,
+                                         client,
+                                         novi_autorizovan_korisnik_fixture_stanovi
+                                         ):
         """
         Test poziv 'endpoint_svi_kupci' sa autorizovanim Korisnikom.
 
@@ -44,7 +47,10 @@ class TestRestApiUrlsStanovi:
 
         assert response.status_code == 200
 
-    def test_lista_svih_stanova_url_autorizovan_korisnik(self, client, novi_autorizovan_korisnik_fixture_stanovi):
+    def test_lista_svih_stanova_url_autorizovan_korisnik(self,
+                                                         client,
+                                                         novi_autorizovan_korisnik_fixture_stanovi
+                                                         ):
         """
         Test poziv 'lista_stanova' sa autorizovanim Korisnikom.
 
@@ -61,7 +67,10 @@ class TestRestApiUrlsStanovi:
 
         assert response.status_code == 200  # (HTTP) 200 Authorized.
 
-    def test_lista_svih_stanova_url_neautorizovan_korisnik(self, client, novi_korisnik_neautorizovan_fixture_stanovi):
+    def test_lista_svih_stanova_url_neautorizovan_korisnik(self,
+                                                           client,
+                                                           novi_korisnik_neautorizovan_fixture_stanovi
+                                                           ):
         """
         Test poziv 'lista_stanova' sa neautorizovanim Korisnikom ((HTTP) 401 Unauthorized).
 
@@ -78,7 +87,11 @@ class TestRestApiUrlsStanovi:
 
         assert response.status_code == 401  # (HTTP) 401 Unauthorized.
 
-    def test_kreiraj_stan(self, client, novi_autorizovan_korisnik_fixture_stanovi, kreiraj_tri_auriranja_cena_stanovi):
+    def test_kreiraj_stan(self,
+                          client,
+                          novi_autorizovan_korisnik_fixture_stanovi,
+                          kreiraj_tri_auriranja_cena_stanovi
+                          ):
         """
         Test poziv 'stanovi:kreiraj_stan' za API poziv Kreiranje Stanova sa autorizovanim Korisnikom.
 
@@ -113,8 +126,11 @@ class TestRestApiUrlsStanovi:
 
         assert response.status_code == 201
 
-    def test_detalji_stana(self, client, novi_autorizovan_korisnik_fixture_stanovi,
-                           novi_jedan_stan_fixture_stanovi):
+    def test_detalji_stana(self,
+                           client,
+                           novi_autorizovan_korisnik_fixture_stanovi,
+                           novi_jedan_stan_fixture_stanovi
+                           ):
         """
         Test poziv 'stanovi:detalji_stana' za API poziv Detalja Stana sa autorizovanim Korisnikom.
         Takodje se proverava i Response sadrzaj.
@@ -149,6 +165,7 @@ class TestRestApiUrlsStanovi:
             "broj_soba": novi_jedan_stan_fixture_stanovi.broj_soba,
             "orijentisanost": novi_jedan_stan_fixture_stanovi.orijentisanost,
             "broj_terasa": novi_jedan_stan_fixture_stanovi.broj_terasa,
+            "unesena_mauelna_cena_stana": novi_jedan_stan_fixture_stanovi.unesena_mauelna_cena_stana,
             "cena_stana": str(round(Decimal(novi_jedan_stan_fixture_stanovi.cena_stana), 2)),
             "cena_kvadrata": str(round(Decimal(novi_jedan_stan_fixture_stanovi.cena_kvadrata), 2)),
             "napomena": novi_jedan_stan_fixture_stanovi.napomena,
@@ -165,7 +182,8 @@ class TestRestApiUrlsStanovi:
                          client,
                          novi_autorizovan_korisnik_fixture_stanovi,
                          novi_jedan_stan_fixture_stanovi,
-                         novi_jedan_stan_json_fixture):
+                         novi_jedan_stan_json_fixture
+                         ):
         """
         Test poziv 'stanovi:izmeni_stan' za API poziv Izmeni Stan sa autorizovanim Korisnikom.
         Takodje se proverava i Response sadrzaj.
@@ -236,7 +254,8 @@ class TestRestApiUrlsStanovi:
     def test_lista_svih_mesecnih_cena_kvadrata(self,
                                                client,
                                                novi_autorizovan_korisnik_fixture_stanovi,
-                                               kreiraj_tri_auriranja_cena_stanovi):
+                                               kreiraj_tri_auriranja_cena_stanovi
+                                               ):
         """
         Test poziv 'stanovi:kreiraj-cenu-kvadrata' sa autorizovanim Korisnikom.
 
@@ -257,7 +276,10 @@ class TestRestApiUrlsStanovi:
 
         assert response.status_code == 200  # (HTTP) 200 Authorized.
 
-    def test_kreiranje_mesecne_cene_kvadrata(self, client, novi_autorizovan_korisnik_fixture_stanovi):
+    def test_kreiranje_mesecne_cene_kvadrata(self,
+                                             client,
+                                             novi_autorizovan_korisnik_fixture_stanovi
+                                             ):
         """
         Test poziv 'stanovi:kreiraj-cenu-kvadrata' za API poziv Kreiranje mesecne cene kvadrata sa autorizovanim Korisnikom.
 
@@ -282,10 +304,12 @@ class TestRestApiUrlsStanovi:
 
         assert response.status_code == 201
 
-    def test_promena_mesecne_cene_kvadrata(self, client,
+    def test_promena_mesecne_cene_kvadrata(self,
+                                           client,
                                            novi_autorizovan_korisnik_fixture_stanovi,
                                            novo_azuriranje_cena_fixture,
-                                           novo_azuriranje_cena_json_fixture):
+                                           novo_azuriranje_cena_json_fixture
+                                           ):
         """
         Test poziv 'stanovi:promeni-cenu-kvadrata' za API poziv Mesecna izmena
         cene kvadrata po id-ju sa autorizovanim Korisnikom.
@@ -315,9 +339,11 @@ class TestRestApiUrlsStanovi:
         assert response.json()["orijentisanost"] == novo_azuriranje_cena_fixture.orijentisanost
         assert response.json()["cena_kvadrata"] != novo_azuriranje_cena_fixture.cena_kvadrata
 
-    def test_brisanje_mesecne_cene_kvadrata(self, client,
+    def test_brisanje_mesecne_cene_kvadrata(self,
+                                            client,
                                             novi_autorizovan_korisnik_fixture_stanovi,
-                                            novo_azuriranje_cena_fixture):
+                                            novo_azuriranje_cena_fixture
+                                            ):
         """
         Test poziv 'stanovi:izbrisi-cenu-kvadrata' za API poziv Brisanje cena kvadrata po id-ju sa autorizovanim Korisnikom.
         Takodje se proverava i Response sadrzaj.
@@ -341,9 +367,11 @@ class TestRestApiUrlsStanovi:
         broj_azuriranja_cena_u_bazi = AzuriranjeCena.objects.all().count()
         assert broj_azuriranja_cena_u_bazi == 0
 
-    def test_broj_ponuda_za_stan_po_mesecima(self, client,
+    def test_broj_ponuda_za_stan_po_mesecima(self,
+                                             client,
                                              novi_autorizovan_korisnik_fixture_stanovi,
-                                             novi_jedan_stan_fixture_stanovi):
+                                             novi_jedan_stan_fixture_stanovi
+                                             ):
         """
         Test poziv 'ponude-stana-meseci' sa autorizovanim Korisnikom. Provera broja
         ponuda koji ima jedan Stan po mesecima.
