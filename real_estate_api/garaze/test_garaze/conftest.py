@@ -1,6 +1,7 @@
 import pytest
 import json
 import random
+import datetime
 from real_estate_api.korisnici.models import Korisnici
 from real_estate_api.garaze.models import Garaze
 from real_estate_api.kupci.models import Kupci
@@ -97,7 +98,7 @@ def nova_jedna_garaza_fixture(db) -> Garaze:
         id_garaze=1,
         jedinstveni_broj_garaze=234,
         cena_garaze=8000.0,
-        datum_ugovora_garaze='2.5.2022',
+        datum_ugovora_garaze=datetime.date(2022, 2, 5),
         broj_ugovora_garaze='123',
         napomena_garaze='Nema napomene',
         status_prodaje_garaze='dostupna',
@@ -128,7 +129,7 @@ def nove_dve_garaze_fixture(db, novi_kupac_fixture_garaze) -> Garaze:
                 kupac=novi_kupac_fixture_garaze,
                 # ime_kupca=novi_kupac_fixture.ime_prezime,
                 cena_garaze=8000.0,
-                datum_ugovora_garaze='2.5.2022',
+                datum_ugovora_garaze=datetime.date(2022, 2, 5),
                 broj_ugovora_garaze='123',
                 napomena_garaze='Nema napomene',
                 status_prodaje_garaze='dostupna',
@@ -139,7 +140,7 @@ def nove_dve_garaze_fixture(db, novi_kupac_fixture_garaze) -> Garaze:
                 kupac=novi_kupac_fixture_garaze,
                 # ime_kupca=novi_kupac_fixture.ime_prezime,
                 cena_garaze=7000.0,
-                datum_ugovora_garaze='2.5.2022',
+                datum_ugovora_garaze=datetime.date(2022, 2, 5),
                 broj_ugovora_garaze='1234',
                 napomena_garaze='Nema napomene',
                 status_prodaje_garaze='dostupna'
@@ -160,9 +161,12 @@ def nova_jedna_garaza_json_fixture(novi_kupac_fixture_garaze):
             "id_garaze": 1,
             "jedinstveni_broj_garaze": 1,
             "cena_garaze": 5000.0,
+            "datum_ugovora_garaze": '5.2.2022',
+            "broj_ugovora_garaze": 'No5',
             "napomena_garaze": 'Najbolja garaza',
             "status_prodaje_garaze": 'dostupna',
-            "kupac": novi_kupac_fixture_garaze.id_kupca,
+            "kupac": 1,
+            "ime_kupca": 'Mihajlo Pupin'
         }
     )
 

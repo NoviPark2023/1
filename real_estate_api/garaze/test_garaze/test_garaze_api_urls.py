@@ -82,32 +82,34 @@ class TestRestApiUrlsGaraze:
 
     def test_kreiraj_garazu(self,
                             client,
-                            novi_autorizovan_korisnik_fixture_garaze
+                            novi_autorizovan_korisnik_fixture_garaze,
+                            nova_jedna_garaza_json_fixture
                             ):
         """
         Test poziv 'garaze:kreiraj_garazu' za API poziv Kreiranje Garaza sa autorizovanim Korisnikom.
 
             * @see conftest.py (novi_autorizovan_korisnik_fixture_garaze)
+            * @see conftest.py (nova_jedna_garaza_json_fixture)
 
         @param client: A Django test client instance.
         @param novi_autorizovan_korisnik_fixture_garaze: Autorizovan Korisnik.
+        @param nova_jedna_garaza_json_fixture: Garaze.
         @return status code 201:  HTTP 201 CREATED
         """
+
+        # Proveriti da li je DB prazna, tj. nema ni jedne Garaze.
+        broj_ponuda_garaza_from_db = Garaze.objects.all().count()
+        assert broj_ponuda_garaza_from_db == 0
+
         url_kreiraj_garazu = reverse('garaze:kreiraj_garazu')
 
-        nova_garaza = json.dumps(
-            {
-                "id_garaze": 1,
-                "jedinstveni_broj_garaze": 1,
-                "cena_garaze": 450,
-                "napomena_garaze": "string",
-                "status_prodaje_garaze": "dostupna",
-            }
-        )
-
-        response = client.post(url_kreiraj_garazu, data=nova_garaza, content_type='application/json')
+        response = client.post(url_kreiraj_garazu, data=nova_jedna_garaza_json_fixture, content_type='application/json')
 
         assert response.status_code == 201
+
+        # Nakon kreiranja Garaze, proveriti koliko ih ima u db, treba da bude 1.
+        broj_ponuda_garaza_from_db = Garaze.objects.all().count()
+        assert broj_ponuda_garaza_from_db == 1
 
     def test_detalji_garaze(self, client,
                             novi_autorizovan_korisnik_fixture_garaze,
@@ -136,7 +138,7 @@ class TestRestApiUrlsGaraze:
             "jedinstveni_broj_garaze": nova_jedna_garaza_fixture.jedinstveni_broj_garaze,
             "kupac": nova_jedna_garaza_fixture.kupac.id_kupca,
             "cena_garaze": nova_jedna_garaza_fixture.cena_garaze,
-            "datum_ugovora_garaze": nova_jedna_garaza_fixture.datum_ugovora_garaze,
+            "datum_ugovora_garaze": '05.02.2022',
             "broj_ugovora_garaze": "123",
             "napomena_garaze": nova_jedna_garaza_fixture.napomena_garaze,
             "status_prodaje_garaze": nova_jedna_garaza_fixture.status_prodaje_garaze,
@@ -164,10 +166,14 @@ class TestRestApiUrlsGaraze:
         nova_garaza_izmenjena = json.dumps(
             {
                 "id_garaze": 1,
-                "jedinstveni_broj_garaze": 234,
-                "cena_garaze": 8000.0,
+                "jedinstveni_broj_garaze": 1,
+                "cena_garaze": 6000.0,
+                "datum_ugovora_garaze": '8.2.2022',
+                "broj_ugovora_garaze": 'No5',
                 "napomena_garaze": 'Nema napomene',
                 "status_prodaje_garaze": "dostupna",
+                "kupac": 1,
+                "ime_kupca": 'Mihajlo Pupin'
             }
         )
 
@@ -178,8 +184,10 @@ class TestRestApiUrlsGaraze:
         assert response.status_code == 200
 
         assert response.json()["id_garaze"] == nova_jedna_garaza_fixture.id_garaze
-        assert response.json()["jedinstveni_broj_garaze"] == nova_jedna_garaza_fixture.jedinstveni_broj_garaze
-        assert response.json()["cena_garaze"] == nova_jedna_garaza_fixture.cena_garaze
+        assert response.json()["jedinstveni_broj_garaze"] != nova_jedna_garaza_fixture.jedinstveni_broj_garaze
+        assert response.json()["cena_garaze"] != nova_jedna_garaza_fixture.cena_garaze
+        assert response.json()["datum_ugovora_garaze"] != nova_jedna_garaza_fixture.datum_ugovora_garaze
+        assert response.json()["broj_ugovora_garaze"] != nova_jedna_garaza_fixture.broj_ugovora_garaze
         assert response.json()["napomena_garaze"] == nova_jedna_garaza_fixture.napomena_garaze
         assert response.json()["status_prodaje_garaze"] == nova_jedna_garaza_fixture.status_prodaje_garaze
         assert response.json()["kupac"] == nova_jedna_garaza_fixture.kupac.id_kupca
