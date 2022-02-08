@@ -79,6 +79,7 @@ class StanoviSerializer(serializers.ModelSerializer):
             "broj_soba",
             "orijentisanost",
             "broj_terasa",
+            "unesena_mauelna_cena_stana",
             "cena_stana",
             "cena_kvadrata",
             "napomena",

@@ -53,8 +53,16 @@ class Stanovi(models.Model):
                                       choices=OrijentacijaStana.choices,
                                       default=OrijentacijaStana.JUG,
                                       blank=True,
-                                      null=True)
+                                      null=True
+                                      )
+
     broj_terasa = models.PositiveIntegerField('Broj terasa stana', default=0)
+
+    unesena_mauelna_cena_stana = models.BooleanField("Manuelan Unos Cene Stana",
+                                                     default=False,
+                                                     blank=True,
+                                                     null=True
+                                                     )
 
     cena_stana = models.DecimalField('Cena stana', max_digits=8, decimal_places=2, default=0)
 
@@ -120,8 +128,11 @@ class AzuriranjeCena(models.Model):
         ZAPAD = 'Zapad', "Zapad"
 
     id_azur_cene = models.BigAutoField(primary_key=True)
+
     sprat = models.CharField('Sprat stana', max_length=10, default='1')
+
     broj_soba = models.FloatField('Broj soba stana', default=1)
+
     orijentisanost = models.CharField(max_length=20,
                                       choices=OrijentacijaStana.choices,
                                       default=OrijentacijaStana.JUG,
