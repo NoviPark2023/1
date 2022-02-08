@@ -43,14 +43,16 @@ class ContractGaraze:
 
             # Sacuvaj generisani Ugovor.
             document_garaze.save(
-                'real_estate_api/static/ugovori-garaze/' + 'ugovor-garaze-br-' + str(garaza.id_garaze) + '.docx'
+                'real_estate_api/static/ugovori-garaze/' + 'ugovor-garaze-br-' + str(
+                    garaza.jedinstveni_broj_garaze) + '.docx'
             )
 
             # Ucitaj na Digital Ocean Space
             client_garaze.upload_file(
-                'real_estate_api/static/ugovori-garaze' + '/ugovor-garaze-br-' + str(garaza.id_garaze) + '.docx',
+                'real_estate_api/static/ugovori-garaze' + '/ugovor-garaze-br-' + str(
+                    garaza.jedinstveni_broj_garaze) + '.docx',
                 'ugovori-garaze',
-                'ugovor-garaze-br-' + str(garaza.id_garaze) + '.docx'
+                'ugovor-garaze-br-' + str(garaza.jedinstveni_broj_garaze) + '.docx'
             )
 
             # Posalji svim preplatnicima EMAIL da je Garaza REZERVISAN.
@@ -71,14 +73,16 @@ class ContractGaraze:
 
             # Sacuvaj generisani Ugovor.
             document_garaze.save(
-                'real_estate_api/static/ugovori-garaze/' + 'ugovor-garaze-br-' + str(garaza.id_garaze) + '.docx'
+                'real_estate_api/static/ugovori-garaze/' + 'ugovor-garaze-br-' + str(
+                    garaza.jedinstveni_broj_garaze) + '.docx'
             )
 
             # Ucitaj na Digital Ocean Space
             client_garaze.upload_file(
-                'real_estate_api/static/ugovori-garaze' + '/ugovor-garaze-br-' + str(garaza.id_garaze) + '.docx',
+                'real_estate_api/static/ugovori-garaze' + '/ugovor-garaze-br-' + str(
+                    garaza.jedinstveni_broj_garaze) + '.docx',
                 'ugovori-garaze',
-                'ugovor-garaze-br-' + str(garaza.id_garaze) + '.docx'
+                'ugovor-garaze-br-' + str(garaza.jedinstveni_broj_garaze) + '.docx'
             )
 
             # Posalji Email da je Garaza kupljena.
