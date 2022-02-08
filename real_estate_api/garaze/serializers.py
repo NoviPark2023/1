@@ -8,6 +8,7 @@ class GarazeSerializer(serializers.ModelSerializer):
     """
 
     ime_kupca = serializers.ReadOnlyField()  # Get field 'ime_kupca Garaza' from 'Ponuda' model
+    datum_ugovora_garaze = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y', ])
 
     class Meta:
         model = Garaze
