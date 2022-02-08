@@ -4,7 +4,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.settings import api_settings
 
 from real_estate_api.lokali.ponude_lokala.models import PonudeLokala
-from real_estate_api.lokali.lokali_api.models import Lokali
 from real_estate_api.lokali.ponude_lokala.serializers import PonudeLokalaSerializer
 
 lookup_field = 'id_ponude_lokala'
