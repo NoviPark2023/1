@@ -308,9 +308,8 @@ REST_FRAMEWORK = {
 }
 # endregion
 
-# EMAIL
+# region EMAIL
 # -------------------------------------------------
-# Previous settings ...
 ADMINS = [('Me', 'dejan.cugalj@factoryww.com'), ]
 MANAGERS = ADMINS
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -323,11 +322,14 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 # Custom setting. To email
 RECIPIENT_ADDRESS = os.getenv('RECIPIENT_ADDRESS').split(",")
 
+# endregion
+
 # region SWAGGER DOCS
 # ------------------------------------------------------------------------------
 # @see https://drf-yasg.readthedocs.io/en/stable/index.html
 SWAGGER_SETTINGS = {
-    "USE_SESSION_AUTH": True,  # add Django Login and Django Logout buttons, CSRF token to swagger UI page
+    "USE_SESSION_AUTH": True,
+    # add Django Login and Django Logout buttons, CSRF token to swagger UI page
     'LOGIN_URL': getattr(settings, 'LOGIN_URL', None),  # URL for the login button
     'LOGOUT_URL': getattr(settings, 'LOGOUT_URL', None),  # URL for the logout button
 
