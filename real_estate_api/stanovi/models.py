@@ -92,6 +92,8 @@ class Stanovi(models.Model):
 
         self.kvadratura_korekcija = Decimal(self.kvadratura) * Decimal(self.iznos_za_korekciju_kvadrature)
 
+        # TODO: Izostavi sve Stanove koji imaju polje "unesena_mauelna_cena_stana" TRUE !
+        # TODO: Takodje implementirati Exeption ako nema postavke za stan u Azuriranju cena (Orijent-Sprat-Sobe).
         pronadji_cenu_stana = AzuriranjeCena.objects.get(
             sprat=self.sprat,
             broj_soba=float(self.broj_soba),
@@ -137,7 +139,8 @@ class AzuriranjeCena(models.Model):
                                       choices=OrijentacijaStana.choices,
                                       default=OrijentacijaStana.JUG,
                                       blank=True,
-                                      null=True)
+                                      null=True
+                                      )
 
     cena_kvadrata = models.DecimalField('Cena kvadrata', max_digits=8, decimal_places=2, default=0)
 
