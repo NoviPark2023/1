@@ -20,6 +20,7 @@ class GarazeSerializer(serializers.ModelSerializer):
             "broj_ugovora_garaze",
             "napomena_garaze",
             "status_prodaje_garaze",
+            "nacin_placanja_garaze",
             "kupac",
             "ime_kupca",
         )

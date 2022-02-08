@@ -142,6 +142,7 @@ class TestRestApiUrlsGaraze:
             "broj_ugovora_garaze": "123",
             "napomena_garaze": nova_jedna_garaza_fixture.napomena_garaze,
             "status_prodaje_garaze": nova_jedna_garaza_fixture.status_prodaje_garaze,
+            "nacin_placanja_garaze": nova_jedna_garaza_fixture.nacin_placanja_garaze
         }
 
     def test_izmeni_garazu(self,
@@ -172,6 +173,7 @@ class TestRestApiUrlsGaraze:
                 "broj_ugovora_garaze": 'No5',
                 "napomena_garaze": 'Nema napomene',
                 "status_prodaje_garaze": "dostupna",
+                "nacin_placanja_garaze": 'Kredit',
                 "kupac": 1,
                 "ime_kupca": 'Mihajlo Pupin'
             }
@@ -190,6 +192,7 @@ class TestRestApiUrlsGaraze:
         assert response.json()["broj_ugovora_garaze"] != nova_jedna_garaza_fixture.broj_ugovora_garaze
         assert response.json()["napomena_garaze"] == nova_jedna_garaza_fixture.napomena_garaze
         assert response.json()["status_prodaje_garaze"] == nova_jedna_garaza_fixture.status_prodaje_garaze
+        assert response.json()["nacin_placanja_garaze"] == nova_jedna_garaza_fixture.nacin_placanja_garaze
         assert response.json()["kupac"] == nova_jedna_garaza_fixture.kupac.id_kupca
         assert response.json()["ime_kupca"] == nova_jedna_garaza_fixture.kupac.ime_prezime
 

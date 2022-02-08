@@ -12,6 +12,15 @@ class Garaze(models.Model):
         REZERVISANA = 'rezervisana', "Rezervisana"
         PRODATA = 'prodata', "Prodata"
 
+    class NacinPlacanjaGaraze(models.TextChoices):
+        """
+        Nacin placanja Garaze po PDDu u kontekstu prodaje Garaze (Kredit, U celosti, Na rate, Ucesce).
+        """
+        U_CELOSTI = 'Ceo iznos', "Placanje u celosti"
+        KREDIT = 'Kredit', "Kreditom"
+        RATE = 'Na rate', "Na rate"
+        UCESCE = 'Ucesce', "Učešće"
+
     id_garaze = models.BigAutoField(primary_key=True)
 
     jedinstveni_broj_garaze = models.PositiveIntegerField('Broj Garaze',
@@ -45,6 +54,14 @@ class Garaze(models.Model):
     status_prodaje_garaze = models.CharField(max_length=20,
                                              choices=StatusProdajeGaraze.choices,
                                              default=StatusProdajeGaraze.DOSTUPNA
+                                             )
+
+    nacin_placanja_garaze = models.CharField("Nacin Placanja Garaze",
+                                             max_length=30,
+                                             choices=NacinPlacanjaGaraze.choices,
+                                             null=False,
+                                             blank=False,
+                                             default=NacinPlacanjaGaraze.U_CELOSTI
                                              )
 
     kupac = models.ForeignKey(Kupci,

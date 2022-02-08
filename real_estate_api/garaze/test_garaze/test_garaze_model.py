@@ -31,6 +31,7 @@ class TestEntitetaGaraze:
         assert nova_jedna_garaza_fixture.cena_garaze == garaze_from_db[0].cena_garaze
         assert nova_jedna_garaza_fixture.napomena_garaze == garaze_from_db[0].napomena_garaze
         assert nova_jedna_garaza_fixture.status_prodaje_garaze == garaze_from_db[0].status_prodaje_garaze
+        assert nova_jedna_garaza_fixture.nacin_placanja_garaze == garaze_from_db[0].nacin_placanja_garaze
 
     def test_broj_novih_garaza_u_bazi(self, nova_jedna_garaza_fixture):
         """

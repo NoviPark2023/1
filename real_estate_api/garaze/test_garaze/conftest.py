@@ -102,6 +102,7 @@ def nova_jedna_garaza_fixture(db) -> Garaze:
         broj_ugovora_garaze='123',
         napomena_garaze='Nema napomene',
         status_prodaje_garaze='dostupna',
+        nacin_placanja_garaze='Kredit',
         kupac=kupac_fix,
 
     )
@@ -133,6 +134,7 @@ def nove_dve_garaze_fixture(db, novi_kupac_fixture_garaze) -> Garaze:
                 broj_ugovora_garaze='123',
                 napomena_garaze='Nema napomene',
                 status_prodaje_garaze='dostupna',
+                nacin_placanja_garaze='Kredit',
             ),
             Garaze(
                 id_garaze=2,
@@ -143,7 +145,8 @@ def nove_dve_garaze_fixture(db, novi_kupac_fixture_garaze) -> Garaze:
                 datum_ugovora_garaze=datetime.date(2022, 2, 5),
                 broj_ugovora_garaze='1234',
                 napomena_garaze='Nema napomene',
-                status_prodaje_garaze='dostupna'
+                status_prodaje_garaze='dostupna',
+                nacin_placanja_garaze = 'Kredit',
             )
         ]
     )
@@ -165,6 +168,7 @@ def nova_jedna_garaza_json_fixture(novi_kupac_fixture_garaze):
             "broj_ugovora_garaze": 'No5',
             "napomena_garaze": 'Najbolja garaza',
             "status_prodaje_garaze": 'dostupna',
+            "nacin_placanja_garaze":'Kredit',
             "kupac": 1,
             "ime_kupca": 'Mihajlo Pupin'
         }
@@ -184,7 +188,8 @@ def nova_jedna_nevalidna_garaza_json_fixture(novi_kupac_fixture_garaze):
             "ime_kupca": 'Mihajlo Pupin',
             "cena_garaze": 8000.0,
             "napomena_garaze": 'Nema napomene',
-            "status_prodaje_garaze": 'dostupna'
+            "status_prodaje_garaze": 'dostupna',
+            "nacin_placanja_garaze": 'Kredit',
         }
     )
 
@@ -204,6 +209,7 @@ def nove_dve_garaze_sa_istim_jedinstvenim_brojem_garaze_json_fixture(novi_kupac_
                 "cena_garaze": 8000.0,
                 "napomena_garaze": 'Nema napomene',
                 "status_prodaje_garaze": 'dostupna',
+                "nacin_placanja_garaze": 'Kredit',
             },
             {
                 "id_garaze": 2,
@@ -212,7 +218,8 @@ def nove_dve_garaze_sa_istim_jedinstvenim_brojem_garaze_json_fixture(novi_kupac_
                 "ime_kupca": 'Mihajlo Pupin',
                 "cena_garaze": 8000.0,
                 "napomena_garaze": 'Nema napomene',
-                "status_prodaje_garaze": 'dostupna'
+                "status_prodaje_garaze": 'dostupna',
+                "nacin_placanja_garaze": 'Kredit',
             }
         ]
     )

@@ -22,10 +22,10 @@ class Ponude(models.Model):
         """
         Nacin placanja Stana po PDDu u kontekstu prodaje Stana (Kredit, U celosti, Na rate, Ucesce).
         """
-        U_CELOSTI = 'ceo_iznos', "Placanje u celosti"
-        KREDIT = 'kredit', "Kreditom"
-        RATE = 'na_rate', "Na rate"
-        UCESCE = 'ucesce', "Učešće"
+        U_CELOSTI = 'Ceo iznos', "Placanje u celosti"
+        KREDIT = 'Kredit', "Kreditom"
+        RATE = 'Na rate', "Na rate"
+        UCESCE = 'Ucesce', "Učešće"
 
     id_ponude = models.BigAutoField(primary_key=True)
 
