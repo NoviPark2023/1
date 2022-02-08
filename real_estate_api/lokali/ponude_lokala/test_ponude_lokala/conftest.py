@@ -113,7 +113,7 @@ def nova_jedna_ponuda_lokala_json_fixture(novi_kupac_lokala_fixture_ponude,
             "napomena_ponude_lokala": 'string',
             "broj_ugovora_lokala": 'string',
             "datum_ugovora_lokala": '5.2.2022',
-            "status_ponude_lokala": novi_jedan_lokal_ponude_fixture.status_prodaje_lokala,
+            "status_prodaje_lokala": novi_jedan_lokal_ponude_fixture.status_prodaje_lokala,
             "nacin_placanja_lokala": 'ceo_iznos',
             "odobrenje_kupovine_lokala": True,
             "klijent_prodaje_lokala": novi_autorizovan_korisnik_fixture_lokali_ponude.id

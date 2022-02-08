@@ -49,37 +49,37 @@ class KreirajPonuduLokalaAPIView(generics.CreateAPIView):
     queryset = PonudeLokala.objects.all().order_by('id_ponude_lokala')
     serializer_class = PonudeLokalaSerializer
 
-    def perform_create(self, serializer):
-        """
-        Prilikom kreiranja Ponude Lokala potrebno je  generisati
-        ili obrisati ugovor. Takođe je potrebno postaviti odobrenje(True)
-        Lokala ukoliko je lokal rezervisan ili prodat.
-
-        :param serializer: PonudeLokalaSerializer
-        """
-        ponuda_lokala = serializer.save()
-
-        if ponuda_lokala.status_ponude == PonudeLokala.StatusPonudeLokala.REZERVISAN:
-
-            # Kreiranje Ugovora
-            Contract.create_contract(ponuda_lokala, ponuda_lokala.lokal, ponuda_lokala.kupac)
-
-            ponuda_lokala.lokal.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
-            ponuda_lokala.lokal.save()
-            ponuda_lokala.odobrenje = True
-            ponuda_lokala.klijent_prodaje_lokala = self.request.user  # Set klijenta prodaje Lokala
-            ponuda_lokala.save()
-
-        elif ponuda_lokala.status_prodaje_lokala == Lokali.StatusPonude.KUPLJEN:
-
-            # Kreiranje Ugovora
-            Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)
-
-            ponuda.stan.status_prodaje = Stanovi.StatusProdaje.PRODAT
-            ponuda.stan.save()
-            ponuda.odobrenje = True
-            ponuda.klijent_prodaje = self.request.user  # Set klijenta prodaje Stana
-            ponuda.save()
+    # def perform_create(self, serializer):
+    #     """
+    #     Prilikom kreiranja Ponude Lokala potrebno je  generisati
+    #     ili obrisati ugovor. Takođe je potrebno postaviti odobrenje(True)
+    #     Lokala ukoliko je lokal rezervisan ili prodat.
+    #
+    #     :param serializer: PonudeLokalaSerializer
+    #     """
+    #     ponuda_lokala = serializer.save()
+    #
+    #     if ponuda_lokala.status_ponude == PonudeLokala.StatusPonudeLokala.REZERVISAN:
+    #
+    #         # Kreiranje Ugovora
+    #         Contract.create_contract(ponuda_lokala, ponuda_lokala.lokal, ponuda_lokala.kupac)
+    #
+    #         ponuda_lokala.lokal.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
+    #         ponuda_lokala.lokal.save()
+    #         ponuda_lokala.odobrenje = True
+    #         ponuda_lokala.klijent_prodaje_lokala = self.request.user  # Set klijenta prodaje Lokala
+    #         ponuda_lokala.save()
+    #
+    #     elif ponuda_lokala.status_prodaje_lokala == Lokali.StatusPonude.KUPLJEN:
+    #
+    #         # Kreiranje Ugovora
+    #         Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)
+    #
+    #         ponuda.stan.status_prodaje = Stanovi.StatusProdaje.PRODAT
+    #         ponuda.stan.save()
+    #         ponuda.odobrenje = True
+    #         ponuda.klijent_prodaje = self.request.user  # Set klijenta prodaje Stana
+    #         ponuda.save()
 
     #     elif ponuda.status_ponude == Ponude.StatusPonude.POTENCIJALAN:
     #         ponuda.stan.status_prodaje = Stanovi.StatusProdaje.DOSTUPAN
