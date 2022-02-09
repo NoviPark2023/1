@@ -1,5 +1,6 @@
 import json
-
+import ast
+from collections import Counter
 from rest_framework.reverse import reverse
 
 from real_estate_api.lokali.lokali_api.models import Lokali
@@ -139,6 +140,8 @@ class TestRestApiUrlsLokali:
             "status_prodaje_lokala": novi_jedan_lokal_fixture.status_prodaje_lokala,
             "cena_lokala": novi_jedan_lokal_fixture.cena_lokala,
             "lista_ponuda_lokala": [],
+            "broj_ponuda_za_lokal": 0,
+            "detalji_lokala_url": '/lokali/detalji-lokala/1/'
         }
 
     def test_izmeni_lokal(self,
@@ -200,3 +203,38 @@ class TestRestApiUrlsLokali:
         # Provera koliko je lokala u bazi (treba da ih ima 0)
         broj_lokala_u_bazi = Lokali.objects.all().count()
         assert broj_lokala_u_bazi == 0
+
+    def test_broj_ponuda_za_lokal_po_mesecima(self,
+                                              client,
+                                              novi_autorizovan_korisnik_fixture_lokali,
+                                              novi_jedan_lokal_fixture
+                                              ):
+        """
+        Test poziv 'ponude-lokala-meseci' sa autorizovanim Korisnikom. Provera broja
+        ponuda koje ima jedan Lokal po mesecima.
+        - ast.literal_eval(built-in) to convert a String representation of a Dictionary to a dictionary.
+
+        * @see conftest.py (novi_autorizovan_korisnik_fixture_lokali)
+        * @see conftest.py (novi_jedan_lokal_fixture)
+
+        @param client: A Django test client instance.
+        @param novi_autorizovan_korisnik_fixture_lokali: Autorizovan Korisnik.
+        @param novi_jedan_lokal_fixture: Lokali (Lokal).
+        @return status code 200: OK
+        """
+        url_sve_mesecne_ponude_za_lokal = reverse('lokali:ponude-lokala-meseci',
+                                                 args=[novi_jedan_lokal_fixture.id_lokala])
+
+        response = client.get(url_sve_mesecne_ponude_za_lokal)
+
+        ponude_str = json.dumps(response.data["broj_ponuda_po_mesecima"])
+        ponude = ast.literal_eval(ponude_str)
+        dct = Counter()
+        for d in ponude:
+            for k, v in d.items():
+                dct[k] += v
+
+        print(dct)
+        print(sum(dct.values()))
+
+        assert response.status_code == 200  # (HTTP) 200 OK.

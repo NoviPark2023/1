@@ -15,4 +15,7 @@ urlpatterns = [
     path('izmeni-lokal/<int:id_lokala>/', UrediLokalViewAPI.as_view(), name='izmeni_lokal'),
     # Brisanje Lokala
     path('obrisi-lokal/<int:id_lokala>/', ObrisiLokalViewAPI.as_view(), name='obrisi_lokal'),
+    # Broj Ponuda za Lokal po mesecima
+    path('ponude-lokala-meseci/<int:id_lokala>', BrojPonudaLokalaPoMesecimaAPIView.as_view(),
+         name='ponude-lokala-meseci'),
 ]

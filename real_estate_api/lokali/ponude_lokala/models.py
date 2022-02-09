@@ -87,6 +87,11 @@ class PonudeLokala(models.Model):
     odobrenje_kupovine_lokala = models.BooleanField("Odobrenje Kupovine Lokala", default=False)
 
     @property
+    def id_lokala(self):
+        """KOMENTAR OVDE"""
+        return self.lokali.id_lokala
+
+    @property
     def ime_kupca_lokala(self):
         """Return field 'ime_kupca' for Ponuda Lokala serializers and in front form table"""
         return self.kupac_lokala.ime_prezime
