@@ -236,5 +236,5 @@ class TestRestApiUrlsLokali:
 
         print(dct)
         print(sum(dct.values()))
-
+        # TODO: PROVERITI SADRZAJ RESPONS-A
         assert response.status_code == 200  # (HTTP) 200 OK.
