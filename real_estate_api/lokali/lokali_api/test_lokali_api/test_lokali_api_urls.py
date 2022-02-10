@@ -206,24 +206,21 @@ class TestRestApiUrlsLokali:
 
     def test_broj_ponuda_za_lokal_po_mesecima(self,
                                               client,
-                                              novi_autorizovan_korisnik_fixture_lokali,
-                                              novi_jedan_lokal_fixture
+                                              nova_jedna_ponuda_lokala_fixture
                                               ):
         """
-        Test poziv 'ponude-lokala-meseci' sa autorizovanim Korisnikom. Provera broja
-        ponuda koje ima jedan Lokal po mesecima.
+        Test poziv 'ponude-lokala-meseci' sa autorizovanim Korisnikom (u fiksturi nova_jedna_ponuda_lokala_fixture).
+        Provera Response sadrzaja: id_lokala i broj ponuda koje ima jedan Lokal po mesecima.
         - ast.literal_eval(built-in) to convert a String representation of a Dictionary to a dictionary.
 
-        * @see conftest.py (novi_autorizovan_korisnik_fixture_lokali)
-        * @see conftest.py (novi_jedan_lokal_fixture)
+        * @see conftest.py (nova_jedna_ponuda_lokala_fixture)
 
         @param client: A Django test client instance.
-        @param novi_autorizovan_korisnik_fixture_lokali: Autorizovan Korisnik.
-        @param novi_jedan_lokal_fixture: Lokali (Lokal).
+        @param nova_jedna_ponuda_lokala_fixture: PonudeLokala.
         @return status code 200: OK
         """
         url_sve_mesecne_ponude_za_lokal = reverse('lokali:ponude-lokala-meseci',
-                                                 args=[novi_jedan_lokal_fixture.id_lokala])
+                                                  args=[nova_jedna_ponuda_lokala_fixture.id_ponude_lokala])
 
         response = client.get(url_sve_mesecne_ponude_za_lokal)
 
@@ -236,5 +233,23 @@ class TestRestApiUrlsLokali:
 
         print(dct)
         print(sum(dct.values()))
-        # TODO: PROVERITI SADRZAJ RESPONS-A
+
         assert response.status_code == 200  # (HTTP) 200 OK.
+
+        assert response.json()["id_lokala"] == 1
+        assert response.json()["broj_ponuda_po_mesecima"] == \
+               [
+                   {'apr': 0,
+                    'avg': 0,
+                    'dec': 0,
+                    'feb': 1,
+                    'jan': 0,
+                    'jul': 0,
+                    'jun': 0,
+                    'maj': 0,
+                    'mart': 0,
+                    'nov': 0,
+                    'okt': 0,
+                    'sep': 0
+                    }
+               ]
