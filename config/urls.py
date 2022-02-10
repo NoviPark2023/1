@@ -54,6 +54,8 @@ urlpatterns = [
 
     # Root Putanja do Garaza
     path('garaze/', include('real_estate_api.garaze.urls', namespace='garaze')),
+    # Root Putanja do Reports Garaze
+    path('reports-garaze/', include('real_estate_api.garaze.reports_garaze.urls', namespace='reports_garaze')),
 
     # Root Putanja do Lokala
     path('lokali/', include('real_estate_api.lokali.lokali_api.urls', namespace='lokali')),
