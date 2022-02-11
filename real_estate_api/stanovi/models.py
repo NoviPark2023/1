@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.db import models
+from django.http import Http404
 
 
 class Stanovi(models.Model):
@@ -64,15 +65,21 @@ class Stanovi(models.Model):
                                                      null=True
                                                      )
 
-    cena_stana = models.DecimalField('Cena stana', max_digits=8, decimal_places=2, default=0)
+    cena_stana = models.DecimalField('Cena stana', max_digits=8, decimal_places=2,
+                                     default=0)
 
-    cena_kvadrata = models.DecimalField('Cena kvadrata', max_digits=8, decimal_places=2, default=0)
+    cena_kvadrata = models.DecimalField('Cena kvadrata', max_digits=8, decimal_places=2,
+                                        default=0)
 
-    napomena = models.CharField('Napomena', null=True, blank=True, max_length=250, default='')
+    napomena = models.CharField('Napomena', null=True, blank=True, max_length=250,
+                                default='')
 
     status_prodaje = models.CharField(max_length=20,
                                       choices=StatusProdaje.choices,
                                       default=StatusProdaje.DOSTUPAN)
+
+    def __str__(self):
+        return f"{self.id_stana}, {self.lamela}, {self.kvadratura}"
 
     def save(self, *args, **kwargs):
         """
@@ -84,32 +91,37 @@ class Stanovi(models.Model):
             koje deklarise sam korisnik sistema.
           * Cena Stana se odredjuje po 3 parametra (sprat, broj soba, orijentacija)
           * Pronalazimo cenu tako sto filtriramo tabelu 'azuriranje_cena' po ova 3 parametra.
+
+        Ukoliko je polje "unesena_mauelna_cena_stana" TRUE, tada je markiran Stan za
+        manuelni unos cene i nije potrebno za isti da se radi Automatsko izracunavanje
+        cene.
         ---
         @param args: none
         @param kwargs: none
         @save: Korigovanu cenu Stana
         """
+        self.kvadratura_korekcija = Decimal(self.kvadratura) * Decimal(
+            self.iznos_za_korekciju_kvadrature)
 
-        self.kvadratura_korekcija = Decimal(self.kvadratura) * Decimal(self.iznos_za_korekciju_kvadrature)
+        if self.unesena_mauelna_cena_stana:
+            return super(Stanovi, self).save(*args, **kwargs)
+        else:
+            try:
+                pronadji_cenu_stana = AzuriranjeCena.objects.get(
+                    sprat=self.sprat,
+                    broj_soba=float(self.broj_soba),
+                    orijentisanost=self.orijentisanost
+                )
 
-        # TODO: Izostavi sve Stanove koji imaju polje "unesena_mauelna_cena_stana" TRUE !
-        # TODO: Takodje implementirati Exeption ako nema postavke za stan u Azuriranju cena (Orijent-Sprat-Sobe).
-        pronadji_cenu_stana = AzuriranjeCena.objects.get(
-            sprat=self.sprat,
-            broj_soba=float(self.broj_soba),
-            orijentisanost=self.orijentisanost
-        )
+                # Izracunaj Cenu Stana
+                self.cena_stana = self.kvadratura_korekcija * pronadji_cenu_stana.cena_kvadrata
 
-        # Izracunaj Cenu Stana
-        self.cena_stana = self.kvadratura_korekcija * pronadji_cenu_stana.cena_kvadrata
+                self.cena_kvadrata = pronadji_cenu_stana.cena_kvadrata
 
-        # Moze .first() jer samo jedna cena moze da se pronadje
-        self.cena_kvadrata = pronadji_cenu_stana.cena_kvadrata
+            except AzuriranjeCena.DoesNotExist:
+                raise Http404("Konfiguracija Auzriranja cena ne postoji u sistemu.")
 
-        return super(Stanovi, self).save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.id_stana}, {self.lamela}, {self.kvadratura}"
+            return super(Stanovi, self).save(*args, **kwargs)
 
     class Meta:
         db_table = 'stanovi'
@@ -142,7 +154,8 @@ class AzuriranjeCena(models.Model):
                                       null=True
                                       )
 
-    cena_kvadrata = models.DecimalField('Cena kvadrata', max_digits=8, decimal_places=2, default=0)
+    cena_kvadrata = models.DecimalField('Cena kvadrata', max_digits=8, decimal_places=2,
+                                        default=0)
 
     class Meta:
         db_table = 'azuriranje_cena'
