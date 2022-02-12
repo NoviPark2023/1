@@ -1,7 +1,8 @@
 from decimal import Decimal
 
-from django.db import models
+from django.db import models, IntegrityError
 from django.http import Http404
+from rest_framework.exceptions import APIException
 
 
 class Stanovi(models.Model):
@@ -100,13 +101,15 @@ class Stanovi(models.Model):
         @param kwargs: none
         @save: Korigovanu cenu Stana
         """
-        self.kvadratura_korekcija = Decimal(self.kvadratura) * Decimal(
-            self.iznos_za_korekciju_kvadrature)
 
         if self.unesena_mauelna_cena_stana:
             return super(Stanovi, self).save(*args, **kwargs)
         else:
             try:
+
+                self.kvadratura_korekcija = Decimal(self.kvadratura) * Decimal(
+                    self.iznos_za_korekciju_kvadrature)
+
                 pronadji_cenu_stana = AzuriranjeCena.objects.get(
                     sprat=self.sprat,
                     broj_soba=float(self.broj_soba),
@@ -156,6 +159,37 @@ class AzuriranjeCena(models.Model):
 
     cena_kvadrata = models.DecimalField('Cena kvadrata', max_digits=8, decimal_places=2,
                                         default=0)
+
+    def save(self, *args, **kwargs):
+
+        try:
+            stanovi = Stanovi.objects.all().filter(unesena_mauelna_cena_stana=False)
+
+            for stan in stanovi:
+                pronadji_cenu_stana = AzuriranjeCena.objects.get(
+                    sprat=stan.sprat,
+                    broj_soba=float(stan.broj_soba),
+                    orijentisanost=stan.orijentisanost
+                )
+                if (
+                    self.sprat == stan.sprat and
+                    self.broj_soba == stan.broj_soba and
+                    self.orijentisanost == stan.orijentisanost
+                ):
+                    # Sacuvaj prvo azuriranu cenu
+                    super(AzuriranjeCena, self).save(*args, **kwargs)
+
+                    # Izracunaj Cenu Stana
+                    stan.cena_stana = stan.kvadratura_korekcija * pronadji_cenu_stana.cena_kvadrata
+
+                    stan.cena_kvadrata = pronadji_cenu_stana.cena_kvadrata
+
+                    Stanovi.save(stan)
+
+            return super(AzuriranjeCena, self).save(*args, **kwargs)
+
+        except Exception:
+            raise APIException(f"Ne moze da se unese Azuriranje Cene.")
 
     class Meta:
         db_table = 'azuriranje_cena'
