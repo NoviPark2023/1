@@ -196,7 +196,7 @@ class TestRestApiUrlsPonudeLokala:
         assert response.json()["nacin_placanja_lokala"] == nova_jedna_ponuda_lokala_fixture.nacin_placanja_lokala
 
         # Razlicito je odobrenje jer je izmenjeno.
-        assert response.json()["odobrenje_kupovine_lokala"] != nova_jedna_ponuda_lokala_fixture.odobrenje_kupovine_lokala
+        assert response.json()["odobrenje_kupovine_lokala"] == nova_jedna_ponuda_lokala_fixture.odobrenje_kupovine_lokala
 
         assert response.json()["klijent_prodaje_lokala"] == nova_jedna_ponuda_lokala_fixture.klijent_prodaje_lokala.id
 

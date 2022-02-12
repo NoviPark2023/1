@@ -146,7 +146,7 @@ def nova_jedna_ponuda_lokala_fixture(db,
         datum_ugovora_lokala=datetime.date(2022, 2, 1),
         status_ponude_lokala=PonudeLokala.StatusPonudeLokala.REZERVISAN,
         nacin_placanja_lokala=PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
-        odobrenje_kupovine_lokala=False,
+        odobrenje_kupovine_lokala=True,
         klijent_prodaje_lokala=novi_autorizovan_korisnik_fixture_lokali
     )
 

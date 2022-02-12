@@ -177,6 +177,7 @@ class ObrisiPonuduAPIView(generics.RetrieveDestroyAPIView):
         id_stana = ponude_stana.stan.id_stana
 
         instance.delete()
+
         Contract.delete_contract(instance)
 
         # Set Status Stana

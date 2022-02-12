@@ -1,6 +1,13 @@
 from django.urls import path
 
-from real_estate_api.lokali.ponude_lokala.views import *
+from real_estate_api.lokali.ponude_lokala.views import (
+    ListaPonudaLokalaAPIView,
+    ListaPonudaZaLokalAPIView,
+    DetaljiPonudeLokalaAPIView,
+    KreirajPonuduLokalaAPIView,
+    IzmeniPonuduLokalaAPIView,
+    ObrisiPonuduLokalaAPIView
+)
 
 app_name = "lokali"
 
@@ -9,7 +16,7 @@ urlpatterns = [
     path('', ListaPonudaLokalaAPIView.as_view(), name='lista_ponuda_lokala'),
 
     # Lista Ponuda Lokala filtriranih po 'ID LOKALA'
-    path('lista-ponuda-lokala/<int:id_lokala>/', ListaPonudaLokalaAPIView.as_view(), name='lista_ponuda_za_lokal'),
+    path('lista-ponuda-lokala/<int:id_lokala>/', ListaPonudaZaLokalAPIView.as_view(), name='lista_ponuda_za_lokal'),
 
     # Detalji Ponude Lokala
     path('detalji-ponude-lokala/<int:id_ponude_lokala>/',
@@ -23,5 +30,6 @@ urlpatterns = [
          name='izmeni_ponudu_lokala'),
 
     # Obrisi Ponudu Lokala
-    path('obrisi-ponudu-lokala/<int:id_ponude_lokala>/', ObrisiPonuduLokalaAPIView.as_view(), name='obrisi_ponudu_lokala'),
+    path('obrisi-ponudu-lokala/<int:id_ponude_lokala>/', ObrisiPonuduLokalaAPIView.as_view(),
+         name='obrisi_ponudu_lokala'),
 ]

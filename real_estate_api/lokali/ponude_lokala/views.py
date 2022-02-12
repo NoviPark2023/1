@@ -3,6 +3,7 @@ from rest_framework import generics, filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.settings import api_settings
 
+from real_estate_api.lokali.lokali_api.models import Lokali
 from real_estate_api.lokali.ponude_lokala.models import PonudeLokala
 from real_estate_api.lokali.ponude_lokala.serializers import PonudeLokalaSerializer
 
@@ -33,6 +34,22 @@ class ListaPonudaLokalaAPIView(generics.ListAPIView):
     search_fields = ['id_ponude_lokala']
 
 
+class ListaPonudaZaLokalAPIView(generics.ListAPIView):
+    """Lista svih Ponuda"""
+    permission_classes = [IsAuthenticated, ]
+    lookup_field_stan = lookup_field
+    queryset = PonudeLokala.objects.all()
+    serializer_class = PonudeLokalaSerializer
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the Ponuda Lokala for
+        the Lokal as determined by the Lokal ID portion of the URL.
+        """
+        id_lokala = self.kwargs['id_lokala']
+        return PonudeLokala.objects.all().filter(lokali__id_lokala=id_lokala)
+
+
 class DetaljiPonudeLokalaAPIView(generics.RetrieveAPIView):
     """Get Ponude Lokala po ID-ju  || Detalji Ponude Lokala"""
     permission_classes = [IsAuthenticated, ]
@@ -48,6 +65,39 @@ class KreirajPonuduLokalaAPIView(generics.CreateAPIView):
     queryset = PonudeLokala.objects.all().order_by('id_ponude_lokala')
     serializer_class = PonudeLokalaSerializer
 
+    def perform_create(self, serializer):
+        """
+        Svaki Lokal ima svoje statuse prodaje (Dostupan, Rezervisan, Kupljen).
+        Prilikom svake promene statusa Ponude potrebno je azurirati i status prodaje Lokala.
+        Ukoliko je status ponude setovan na jedna od dva stanja (Rezervisan, Kupljen),
+        potrebno j egenerisati ugovor.
+        Ukoliko je status ponude promenjen na potencijalan, potrebno je obrisati ugovor.
+
+            @see Generisanje Ugovora: /ugovori_lokali/ugovori_lokali.py
+        ---
+        :param serializer: PonudeLokalaSerializer
+        """
+        ponude_lokali = serializer.save()
+
+        if ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.REZERVISAN:
+            ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
+            ponude_lokali.odobrenje_kupovine_lokala = True
+
+            # TODO: Implement Create Contract for Lokal if status is REZERVISAN.
+
+        elif ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.KUPLJEN:
+            ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
+            ponude_lokali.odobrenje_kupovine_lokala = True
+
+            # TODO: Implement Create Contract for Lokal if status is PRODAT.
+
+        elif ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.POTENCIJALAN:
+            ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.DOSTUPAN
+            ponude_lokali.odobrenje_kupovine_lokala = False
+
+        ponude_lokali.lokali.save()
+        ponude_lokali.save()
+
 
 class IzmeniPonuduLokalaAPIView(generics.RetrieveUpdateAPIView):
     """Izmena Ponude Lokala po ID-ju"""
@@ -56,6 +106,52 @@ class IzmeniPonuduLokalaAPIView(generics.RetrieveUpdateAPIView):
     queryset = PonudeLokala.objects.all().order_by('id_ponude_lokala')
     serializer_class = PonudeLokalaSerializer
 
+    def perform_update(self, serializer):
+        """
+        Svaki Lokal ima svoje statuse prodaje (Dostupan, Rezervisan, Kupljen).
+        Prilikom svake promene statusa Ponude potrebno je azurirati i status prodaje Lokala.
+        Ukoliko je status ponude setovan na jedna od dva stanja (Rezervisan, Kupljen),
+        potrebno j egenerisati ugovor.
+        Ukoliko je status ponude promenjen na potencijalan, potrebno je obrisati ugovor.
+
+            @see Generisanje Ugovora: /ugovori_lokali/ugovori_lokali.py
+        ---
+        :param serializer: PonudeLokalaSerializer
+        """
+        ponude_lokali = serializer.save()
+
+        if ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.REZERVISAN:
+            ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
+
+            ponude_lokali.lokali.save()
+            ponude_lokali.odobrenje_kupovine_lokala = True
+            ponude_lokali.save()
+
+            # TODO: Implement CREATE Contract for Lokal if status is REZERVISAN.
+
+        elif ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.KUPLJEN:
+            ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
+
+            ponude_lokali.lokali.save()
+            ponude_lokali.odobrenje_kupovine_lokala = True
+            ponude_lokali.save()
+
+            # TODO: Implement CREATE Contract for Lokal if status is PRODAT.
+
+        elif ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.POTENCIJALAN:
+            ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.DOSTUPAN
+
+            ponude_lokali.lokali.save()
+            ponude_lokali.odobrenje_kupovine_lokala = False
+            ponude_lokali.save()
+
+            # TODO: Implement DELETE Contract for Lokal if status is DOSTUPAN.
+
+    def put(self, request, *args, **kwargs):
+        # Set Klijenta prodaje Lokala u ponudu, potrebno kasnije za izvestaje.
+        request.data['klijent_prodaje_lokala'] = request.user.id
+        return self.partial_update(request, *args, **kwargs)
+
 
 class ObrisiPonuduLokalaAPIView(generics.RetrieveDestroyAPIView):
     """Brisanje Ponude Lokala po ID-ju"""
@@ -63,3 +159,19 @@ class ObrisiPonuduLokalaAPIView(generics.RetrieveDestroyAPIView):
     lookup_field = lookup_field
     queryset = PonudeLokala.objects.all().order_by('-id_ponude_lokala')
     serializer_class = PonudeLokalaSerializer
+
+    def perform_destroy(self, instance):
+        # TODO: Setovanje statusa Lokala na osnovu prioriteta ponuda koje ima  (MOZE BOLJE)
+        # Kada se obrise jedna ponuda lokala, a postoji jos ostalih ponuda setovati status lokala
+        # na onu ponudu koja ima najvisi status.
+        # Ukoliko nema ponuda nakon brisanja te jedine, setovati status na DOSTUPAN
+
+        ponude_lokala = self.get_object()
+        id_lokala = ponude_lokala.lokali.id_lokala
+
+        instance.delete()
+
+        # TODO: Implement DELETE Contract for Lokal
+
+        # TODO(Ivana): Implement rest of function.
+
