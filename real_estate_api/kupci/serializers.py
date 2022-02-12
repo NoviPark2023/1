@@ -10,8 +10,9 @@ class ListaPonudaKupcaSerializer(serializers.ModelSerializer):
     Listing 'Ponuda' for every 'Kupac'
     """
     datum_ugovora = serializers.DateField(format="%d.%m.%Y", input_formats=['%d.%m.%Y', ])
-    adresa_stana = serializers.ReadOnlyField()  # Get field 'Adresa Stana' from 'Ponuda' model
-    cena_stana = serializers.ReadOnlyField()  # Get field 'Cena Stana' from 'Ponuda' model
+    adresa_stana = serializers.ReadOnlyField()
+    lamela_stana = serializers.ReadOnlyField()
+    cena_stana = serializers.ReadOnlyField()
 
     class Meta:
         model = Ponude
@@ -22,6 +23,7 @@ class ListaPonudaKupcaSerializer(serializers.ModelSerializer):
             "cena_stana_za_kupca",
             "cena_stana",
             "adresa_stana",
+            "lamela_stana",
             "napomena",
             "broj_ugovora",
             "datum_ugovora",
