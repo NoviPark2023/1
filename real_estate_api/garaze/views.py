@@ -118,6 +118,7 @@ class UgovorPonudeGarazeDownloadAPIView(generics.ListAPIView):
     """
     permission_classes = [IsAuthenticated, ]
     serializer_class = GarazeSerializer
+    pagination_class = None
 
     def get(self, request, *args, **kwargs):
         """

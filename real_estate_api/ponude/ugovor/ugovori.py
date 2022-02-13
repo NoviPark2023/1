@@ -40,7 +40,6 @@ class Contract:
             or
             ponuda.status_ponude == ponuda.StatusPonude.KUPLJEN
         ):
-
             context = {
                 'id_stana': stan.id_stana,
                 'datum_ugovora': ponuda.datum_ugovora.strftime("%d.%m.%Y."),
@@ -55,12 +54,18 @@ class Contract:
             document.render(context)
 
             # Sacuvaj generisani Ugovor.
-            document.save('real_estate_api/static/ugovor/' + 'ugovor-br-' + str(stan.lamela) + '.docx')
+            document.save(
+                'real_estate_api/static/ugovor/' +
+                'ugovor-br-' + str(ponuda.id_ponude) + '-' + str(stan.lamela) + '.docx'
+            )
 
             # Ucitaj na Digital Ocean Space
-            client.upload_file('real_estate_api/static/ugovor' + '/ugovor-br-' + str(stan.lamela) + '.docx',
-                               'ugovori',
-                               'ugovor-br-' + str(stan.lamela) + '.docx')
+            client.upload_file(
+                'real_estate_api/static/ugovor/' +
+                'ugovor-br-' + str(ponuda.id_ponude) + '-' + str(stan.lamela) + '.docx',
+                'ugovori',
+                'ugovor-br-' + str(ponuda.id_ponude) + '-' + str(stan.lamela) + '.docx'
+            )
 
         if ponuda.status_ponude == ponuda.StatusPonude.REZERVISAN:
             # Posalji svim preplatnicima EMAIL da je Stan REZERVISAN.
@@ -80,8 +85,10 @@ class Contract:
                                 )
 
         # Obrisi ugovor jer je Stan presao u status dostupan.
-        client.delete_object(Bucket='ugovori',
-                             Key='ugovor-br-' + str(ponuda.stan.lamela) + '.docx')
+        client.delete_object(
+            Bucket='ugovori',
+            Key='ugovor-br-' + str(ponuda.id_ponude) + '-' + str(ponuda.stan.lamela) + '.docx'
+        )
 
 
 class SendEmailThreadKupljenStan(threading.Thread):

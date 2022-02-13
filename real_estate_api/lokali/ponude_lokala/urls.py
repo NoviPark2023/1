@@ -6,7 +6,8 @@ from real_estate_api.lokali.ponude_lokala.views import (
     DetaljiPonudeLokalaAPIView,
     KreirajPonuduLokalaAPIView,
     IzmeniPonuduLokalaAPIView,
-    ObrisiPonuduLokalaAPIView
+    ObrisiPonuduLokalaAPIView,
+    UgovorPonudeLokalaDownloadListAPIView
 )
 
 app_name = "lokali"
@@ -32,4 +33,7 @@ urlpatterns = [
     # Obrisi Ponudu Lokala
     path('obrisi-ponudu-lokala/<int:id_ponude_lokala>/', ObrisiPonuduLokalaAPIView.as_view(),
          name='obrisi_ponudu_lokala'),
+
+    # Preuzimanje generisanog ugovora Lokala
+    path('preuzmi-ugovor-lokala/<int:id_ponude_lokala>/', UgovorPonudeLokalaDownloadListAPIView.as_view()),
 ]

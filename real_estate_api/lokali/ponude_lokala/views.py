@@ -1,5 +1,9 @@
+import boto3
+from django.conf import settings
+from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
+from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.settings import api_settings
 
@@ -166,7 +170,7 @@ class IzmeniPonuduLokalaAPIView(generics.RetrieveUpdateAPIView):
             ponude_lokali.save()
 
             # Obrisi ugovor jer je Lokal dobio status "Dostupan".
-            ContractLokali.delete_contract(ponude_lokali.lokali)
+            ContractLokali.delete_contract(ponude_lokali)
 
     def put(self, request, *args, **kwargs):
         # Set Klijenta prodaje Lokala u ponudu, potrebno kasnije za izvestaje.
@@ -188,13 +192,65 @@ class ObrisiPonuduLokalaAPIView(generics.RetrieveDestroyAPIView):
         # Ukoliko nema ponuda nakon brisanja te jedine, setovati status na DOSTUPAN
 
         ponude_lokala = self.get_object()
+
         id_lokala = ponude_lokala.lokali.id_lokala
 
         instance.delete()
 
         # Obrisi ugovor jer je Lokal dobio status "Dostupan".
-        ContractLokali.delete_contract(instance)
+        ContractLokali.delete_contract(ponude_lokala)
 
         # TODO(Ivana): Implement rest of function.
-         # @see "ObrisiPonuduAPIView" in Ponude View.
+        # Procitaj komentar u ovoj funkciji.
 
+        # @see "ObrisiPonuduAPIView" in Ponude View.
+
+
+class UgovorPonudeLokalaDownloadListAPIView(generics.ListAPIView):
+    """
+    API View za preuzimanje generisanog ugovora Lokala.
+    """
+    permission_classes = [IsAuthenticated, ]
+    serializer_class = PonudeLokalaSerializer
+    pagination_class = None
+
+    def get(self, request, *args, **kwargs):
+        """
+        Generisanje jedinstvenog URL za svaki ugovor Lokala koji je ucitan na Digital Ocean Space.
+        Url se generisa sa sigurnosnim parametrima AWSa.
+
+            @see Generisanje Ugovora Lokala: ContractLokali
+        ---
+        @param request: None
+        @param args: None
+        @param kwargs: ID Ponude Stana
+        @return: Respons sa jedinstvenim URL za preuzimanje ugovora
+        """
+
+        queryset = PonudeLokala.objects.get(id_ponude_lokala__exact=kwargs['id_ponude_lokala'])
+
+        try:
+            session = boto3.session.Session()
+            client = session.client('s3',
+                                    region_name='fra1',
+                                    endpoint_url=settings.AWS_S3_ENDPOINT_URL,
+                                    aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                                    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+
+            # Generisi sigurnosni URL za preuzimanje ugovora
+            url = client.generate_presigned_url(
+                ClientMethod='get_object',
+                Params={
+                    'Bucket': 'ugovori-lokali',
+                    'Key': 'ugovor-lokala-br-' +
+                           str(queryset.id_ponude_lokala) +
+                           '-' +
+                           str(queryset.lokali.lamela_lokala) +
+                           '.docx'
+                }, ExpiresIn=70000
+            )
+
+        except (FileNotFoundError, PonudeLokala.DoesNotExist):
+            raise NotFound('Željeni ugovor nije nađen !', code=404)
+
+        return HttpResponse(url)

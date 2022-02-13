@@ -42,30 +42,37 @@ class ContractLokali:
 
             # Sacuvaj generisani Ugovor.
             document_lokali.save(
-                'real_estate_api/static/ugovori-lokali/' + 'ugovor-lokala-br-' + str(
-                    lokal.lamela_lokala) + '.docx'
+                'real_estate_api/static/ugovori-lokali/' +
+                'ugovor-lokala-br-' + str(ponude_lokala.id_ponude_lokala) + '-' + str(lokal.lamela_lokala) + '.docx'
             )
 
             # Ucitaj na Digital Ocean Space
             client_lokali.upload_file(
-                'real_estate_api/static/ugovori-lokali' + '/ugovor-lokala-br-' + str(
-                    lokal.lamela_lokala) + '.docx',
+                'real_estate_api/static/ugovori-lokali/' +
+                'ugovor-lokala-br-' + str(ponude_lokala.id_ponude_lokala) + '-' + str(lokal.lamela_lokala) + '.docx',
                 'ugovori-lokali',
-                'ugovor-lokala-br-' + str(lokal.lamela_lokala) + '.docx'
+                'ugovor-lokala-br-' + str(ponude_lokala.id_ponude_lokala) + '-' + str(lokal.lamela_lokala) + '.docx'
             )
 
     @staticmethod
-    def delete_contract(lokal):
+    def delete_contract(ponude_lokala):
         session_boto_lokali = boto3.session.Session()
 
-        client_lokali = session_boto_lokali.client('s3',
-                                                   region_name='fra1',
-                                                   endpoint_url=settings.AWS_S3_ENDPOINT_URL,
-                                                   aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                                                   aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
-                                                   )
+        client_lokali = session_boto_lokali.client(
+            's3',
+            region_name='fra1',
+            endpoint_url=settings.AWS_S3_ENDPOINT_URL,
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+        )
 
         # Obrisi ugovor jer je Lokal presao u status "DOSTUPAN".
-        client_lokali.delete_object(Bucket='ugovori-lokali',
-                                     Key='ugovor-lokala-br-' + str(lokal.lamela_lokala) + '.docx')
-            # TODO(Ivana): SEND EMAIL da je Lokal kupljen ili rezervisan.
+        client_lokali.delete_object(
+            Bucket='ugovori-lokali',
+            Key='ugovor-lokala-br-' +
+                str(ponude_lokala.id_ponude_lokala) +
+                '-' +
+                str(ponude_lokala.lokali.lamela_lokala) +
+                '.docx'
+        )
+        # TODO(Ivana): SEND EMAIL da je Lokal kupljen ili rezervisan.

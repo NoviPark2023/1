@@ -178,7 +178,7 @@ class ObrisiPonuduAPIView(generics.RetrieveDestroyAPIView):
 
         instance.delete()
 
-        Contract.delete_contract(instance)
+        Contract.delete_contract(ponude_stana)
 
         # Set Status Stana
         for status_ponude in self.queryset.filter(stan__id_stana=id_stana).values("status_ponude").iterator():
@@ -204,6 +204,7 @@ class UgovorPonudeDownloadListAPIView(generics.ListAPIView):
     """
     permission_classes = [IsAuthenticated, ]
     serializer_class = PonudeSerializer
+    pagination_class = None
 
     def get(self, request, *args, **kwargs):
         """
@@ -229,11 +230,13 @@ class UgovorPonudeDownloadListAPIView(generics.ListAPIView):
                                     aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
 
             # Generisi sigurnosni URL za preuzimanje ugovora
-            url = client.generate_presigned_url(ClientMethod='get_object',
-                                                Params={
-                                                    'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                                                    'Key': 'ugovor-br-' + str(queryset.stan.lamela) + '.docx'
-                                                }, ExpiresIn=70000)
+            url = client.generate_presigned_url(
+                ClientMethod='get_object',
+                Params={
+                    'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
+                    'Key': 'ugovor-br-' + str(queryset.id_ponude) + '-' + str(queryset.stan.lamela) + '.docx'
+                }, ExpiresIn=70000
+            )
 
         except (FileNotFoundError, Ponude.DoesNotExist):
             raise NotFound('Željeni ugovor nije nađen !', code=404)
