@@ -10,7 +10,7 @@ from rest_framework.settings import api_settings
 from real_estate_api.lokali.lokali_api.models import Lokali
 from real_estate_api.lokali.ponude_lokala.models import PonudeLokala
 from real_estate_api.lokali.ponude_lokala.serializers import PonudeLokalaSerializer
-from real_estate_api.lokali.ponude_lokala.ugovori_lokali.ugovori_lokali import ContractLokali
+from real_estate_api.lokali.ugovori_lokali.ugovori_lokali import ContractLokali
 
 lookup_field = 'id_ponude_lokala'
 lookup_field_lokal = 'id_lokala'
