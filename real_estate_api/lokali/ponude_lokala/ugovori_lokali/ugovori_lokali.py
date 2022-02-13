@@ -34,7 +34,7 @@ class ContractLokali:
                 'kupac_lokala': kupac_lokala.ime_prezime,
                 'adresa_kupaca_lokala': kupac_lokala.adresa,
                 'kvadratura_lokala': lokal.kvadratura_lokala,
-                'cena_lokala': lokal.cena_lokala,
+                'cena_lokala': ponude_lokala.cena_lokala_za_kupca,
                 'nacin_placanja_lokala': ponude_lokala.nacin_placanja_lokala
             }
 
