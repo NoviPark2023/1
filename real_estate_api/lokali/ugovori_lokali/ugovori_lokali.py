@@ -25,7 +25,7 @@ class ContractLokali:
 
         document_lokali = DocxTemplate(template_ugovora_lokala)
 
-        # Ako je status Ponude "REZERVISAN" ili "KUPLJEN", generisi ugovor.
+        # Ako je status Ponude Lokala "REZERVISAN" ili "KUPLJEN", generisi ugovor.
         if (
             ponude_lokala.status_ponude_lokala == ponude_lokala.StatusPonudeLokala.REZERVISAN
             or
@@ -86,7 +86,6 @@ class ContractLokali:
                 str(ponude_lokala.lokali.lamela_lokala) +
                 '.docx'
         )
-        # TODO(Ivana): SEND EMAIL da je Lokal kupljen ili rezervisan.
 
 
 class SendEmailThreadKupljenLokal(threading.Thread):
