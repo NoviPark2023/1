@@ -101,11 +101,13 @@ class SendEmailThreadKupljenStan(threading.Thread):
     def run(self):
         try:
             for korisnici_email in settings.RECIPIENT_ADDRESS:
-                send_mail(f'Stan ID: {str(self.ponuda.stan.id_stana)} je KUPLJEN.',
-                          f'Stan ID: {str(self.ponuda.stan.id_stana)}, Adresa: {str(self.ponuda.stan.adresa_stana)} je kupljen.\n'
-                          f'Cena stana: {round(self.ponuda.stan.cena_stana, 2)}\n'
-                          f'Cena Ponude je: {round(self.ponuda.cena_stana_za_kupca, 2)}.',
-                          settings.EMAIL_HOST_USER, [korisnici_email])
+                send_mail(
+                    f'Stan ID: {str(self.ponuda.stan.id_stana)} je KUPLJEN.',
+                    f'Stan ID: {str(self.ponuda.stan.id_stana)}, Adresa: {str(self.ponuda.stan.adresa_stana)} je kupljen.\n'
+                    f'Cena stana: {round(self.ponuda.stan.cena_stana, 2)}\n'
+                    f'Cena Ponude je: {round(self.ponuda.cena_stana_za_kupca, 2)}.',
+                    settings.EMAIL_HOST_USER, [korisnici_email]
+                )
         except SMTPException as e:
             print(f"failed to send mail: {e}")
 
@@ -120,10 +122,12 @@ class SendEmailThreadRezervisanStan(threading.Thread):
     def run(self):
         try:
             for korisnici_email in settings.RECIPIENT_ADDRESS:
-                send_mail(f'Potrebno ODOBRENJE za Stan ID: {str(self.ponuda.stan.id_stana)}.',
-                          f'Stan ID: {str(self.ponuda.stan.id_stana)}, Adresa: {str(self.ponuda.stan.adresa_stana)} je rezervisan.\n'
-                          f'Cena stana: {round(self.ponuda.stan.cena_stana, 2)}\n'
-                          f'Cena Ponude je: {round(self.ponuda.cena_stana_za_kupca, 2)}.',
-                          settings.EMAIL_HOST_USER, [korisnici_email])
+                send_mail(
+                    f'Potrebno ODOBRENJE za Stan ID: {str(self.ponuda.stan.id_stana)}.',
+                    f'Stan ID: {str(self.ponuda.stan.id_stana)}, Adresa: {str(self.ponuda.stan.adresa_stana)} je rezervisan.\n'
+                    f'Cena stana: {round(self.ponuda.stan.cena_stana, 2)}\n'
+                    f'Cena Ponude je: {round(self.ponuda.cena_stana_za_kupca, 2)}.',
+                    settings.EMAIL_HOST_USER, [korisnici_email]
+                )
         except SMTPException as e:
             print(f"failed to send mail: {e}")

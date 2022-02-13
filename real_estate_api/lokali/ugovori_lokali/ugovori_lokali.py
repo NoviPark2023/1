@@ -1,5 +1,9 @@
+import threading
+from smtplib import SMTPException
+
 import boto3
 from django.conf import settings
+from django.core.mail import send_mail
 from docxtpl import DocxTemplate
 
 
@@ -54,6 +58,13 @@ class ContractLokali:
                 'ugovor-lokala-br-' + str(ponude_lokala.id_ponude_lokala) + '-' + str(lokal.lamela_lokala) + '.docx'
             )
 
+            if ponude_lokala.status_ponude_lokala == ponude_lokala.StatusPonudeLokala.REZERVISAN:
+                # Posalji Email-s da je LOKAL REZERVISAN.
+                SendEmailThreadRezervisanLokal(ponude_lokala).start()
+            else:
+                # Posalji Email-s da je LOKAL KUPLJEN.
+                SendEmailThreadKupljenLokal(ponude_lokala).start()
+
     @staticmethod
     def delete_contract(ponude_lokala):
         session_boto_lokali = boto3.session.Session()
@@ -76,3 +87,43 @@ class ContractLokali:
                 '.docx'
         )
         # TODO(Ivana): SEND EMAIL da je Lokal kupljen ili rezervisan.
+
+
+class SendEmailThreadKupljenLokal(threading.Thread):
+    """Posalji Email pretplacenim Korisnicima kada je LOKAL KUPLJEN"""
+
+    def __init__(self, ponuda_lokala):
+        self.ponuda_lokala = ponuda_lokala
+        threading.Thread.__init__(self)
+
+    def run(self):
+        try:
+            for korisnici_email in settings.RECIPIENT_ADDRESS:
+                send_mail(
+                    f'Lokal ID: {str(self.ponuda_lokala.lokali.id_lokala)} je KUPLJEN.',
+                    f'Lokal ID: {str(self.ponuda_lokala.lokali.id_lokala)} je kupljen.\n'
+                    f'Cena Lokala: {round(self.ponuda_lokala.cena_lokala_za_kupca, 2)}',
+                    settings.EMAIL_HOST_USER, [korisnici_email]
+                )
+        except SMTPException as e:
+            print(f"failed to send mail: {e}")
+
+
+class SendEmailThreadRezervisanLokal(threading.Thread):
+    """Posalji Email pretplacenim Korisnicima kada je LOKAL REZERVISAN"""
+
+    def __init__(self, ponuda_lokala):
+        self.ponuda_lokala = ponuda_lokala
+        threading.Thread.__init__(self)
+
+    def run(self):
+        try:
+            for korisnici_email in settings.RECIPIENT_ADDRESS:
+                send_mail(
+                    f'Potrebno ODOBRENJE za LOKAL ID: {str(self.ponuda_lokala.lokali.id_lokala)} jer je REZERVISAN.',
+                    f'Lokal ID: {str(self.ponuda_lokala.lokali.id_lokala)} je REZERVISAN.\n'
+                    f'Cena Lokala: {round(self.ponuda_lokala.cena_lokala_za_kupca, 2)}',
+                    settings.EMAIL_HOST_USER, [korisnici_email]
+                )
+        except SMTPException as e:
+            print(f"failed to send mail: {e}")
