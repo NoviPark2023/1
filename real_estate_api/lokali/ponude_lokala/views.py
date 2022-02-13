@@ -84,13 +84,23 @@ class KreirajPonuduLokalaAPIView(generics.CreateAPIView):
             ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
             ponude_lokali.odobrenje_kupovine_lokala = True
 
-            # TODO: Implement Create Contract for Lokal if status is REZERVISAN.
+            # Kreiranje Ugovora
+            ContractLokali.create_contract(
+                ponude_lokali,
+                ponude_lokali.lokali,
+                ponude_lokali.kupac_lokala
+            )
 
         elif ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.KUPLJEN:
             ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
             ponude_lokali.odobrenje_kupovine_lokala = True
 
-            # TODO: Implement Create Contract for Lokal if status is PRODAT.
+            # Kreiranje Ugovora
+            ContractLokali.create_contract(
+                ponude_lokali,
+                ponude_lokali.lokali,
+                ponude_lokali.kupac_lokala
+            )
 
         elif ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.POTENCIJALAN:
             ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.DOSTUPAN
@@ -155,7 +165,8 @@ class IzmeniPonuduLokalaAPIView(generics.RetrieveUpdateAPIView):
             ponude_lokali.odobrenje_kupovine_lokala = False
             ponude_lokali.save()
 
-            # TODO: Implement DELETE Contract for Lokal if status is DOSTUPAN.
+            # Obrisi ugovor jer je Lokal dobio status "Dostupan".
+            ContractLokali.delete_contract(ponude_lokali.lokali)
 
     def put(self, request, *args, **kwargs):
         # Set Klijenta prodaje Lokala u ponudu, potrebno kasnije za izvestaje.
@@ -181,7 +192,9 @@ class ObrisiPonuduLokalaAPIView(generics.RetrieveDestroyAPIView):
 
         instance.delete()
 
-        # TODO: Implement DELETE Contract for Lokal
+        # Obrisi ugovor jer je Lokal dobio status "Dostupan".
+        ContractLokali.delete_contract(instance)
 
         # TODO(Ivana): Implement rest of function.
+         # @see "ObrisiPonuduAPIView" in Ponude View.
 
