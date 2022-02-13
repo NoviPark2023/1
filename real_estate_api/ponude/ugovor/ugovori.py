@@ -34,8 +34,13 @@ class Contract:
         template = 'real_estate_api/static/ugovor/ugovor_tmpl.docx'
         document = DocxTemplate(template)
 
-        if ponuda.status_ponude == 'rezervisan':
-            # Kada je status Ponude rezervisan generisi ugovor.
+        # Ako je status Ponude "REZERVISAN" ili "KUPLJEN", generisi ugovor.
+        if (
+            ponuda.status_ponude == ponuda.StatusPonude.REZERVISAN
+            or
+            ponuda.status_ponude == ponuda.StatusPonude.KUPLJEN
+        ):
+
             context = {
                 'id_stana': stan.id_stana,
                 'datum_ugovora': ponuda.datum_ugovora.strftime("%d.%m.%Y."),
@@ -46,6 +51,7 @@ class Contract:
                 'cena_stana': ponuda.cena_stana_za_kupca,
                 # 'nacin_placanja': nacin_placanja
             }
+
             document.render(context)
 
             # Sacuvaj generisani Ugovor.
@@ -56,32 +62,11 @@ class Contract:
                                'ugovori',
                                'ugovor-br-' + str(stan.lamela) + '.docx')
 
+        if ponuda.status_ponude == ponuda.StatusPonude.REZERVISAN:
             # Posalji svim preplatnicima EMAIL da je Stan REZERVISAN.
             SendEmailThreadRezervisanStan(ponuda).start()
-
-        elif ponuda.status_ponude == 'kupljen':
-            # Kada je status Ponude kupjen, generisi ugovor.
-            context = {
-                'id_stana': stan.id_stana,
-                'datum_ugovora': ponuda.datum_ugovora.strftime("%d.%m.%Y."),
-                'broj_ugovora': ponuda.broj_ugovora,
-                'kupac': kupac.ime_prezime,
-                'adresa_kupaca': kupac.adresa,
-                'kvadratura': stan.kvadratura,
-                'cena_stana': ponuda.cena_stana_za_kupca,
-                # 'nacin_placanja': nacin_placanja
-            }
-            document.render(context)
-
-            # Sacuvaj generisani Ugovor.
-            document.save('real_estate_api/static/ugovor/' + 'ugovor-br-' + str(stan.lamela) + '.docx')
-
-            # Ucitaj na Digital Ocean Space
-            client.upload_file('real_estate_api/static/ugovor' + '/ugovor-br-' + str(stan.lamela) + '.docx',
-                               'ugovori',
-                               'ugovor-br-' + str(stan.lamela) + '.docx')
-
-            # Posalji Email da je Stan kupljen.
+        else:
+            # Posalji Email da je Stan KUPLJEN.
             SendEmailThreadKupljenStan(ponuda).start()
 
     @staticmethod

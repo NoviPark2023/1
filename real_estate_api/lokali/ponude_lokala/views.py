@@ -6,6 +6,7 @@ from rest_framework.settings import api_settings
 from real_estate_api.lokali.lokali_api.models import Lokali
 from real_estate_api.lokali.ponude_lokala.models import PonudeLokala
 from real_estate_api.lokali.ponude_lokala.serializers import PonudeLokalaSerializer
+from real_estate_api.lokali.ponude_lokala.ugovori_lokali.ugovori_lokali import ContractLokali
 
 lookup_field = 'id_ponude_lokala'
 lookup_field_lokal = 'id_lokala'
@@ -127,7 +128,12 @@ class IzmeniPonuduLokalaAPIView(generics.RetrieveUpdateAPIView):
             ponude_lokali.odobrenje_kupovine_lokala = True
             ponude_lokali.save()
 
-            # TODO: Implement CREATE Contract for Lokal if status is REZERVISAN.
+            # Kreiranje Ugovora
+            ContractLokali.create_contract(
+                ponude_lokali,
+                ponude_lokali.lokali,
+                ponude_lokali.kupac_lokala
+            )
 
         elif ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.KUPLJEN:
             ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
@@ -136,7 +142,11 @@ class IzmeniPonuduLokalaAPIView(generics.RetrieveUpdateAPIView):
             ponude_lokali.odobrenje_kupovine_lokala = True
             ponude_lokali.save()
 
-            # TODO: Implement CREATE Contract for Lokal if status is PRODAT.
+            ContractLokali.create_contract(
+                ponude_lokali,
+                ponude_lokali.lokali,
+                ponude_lokali.kupac_lokala
+            )
 
         elif ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.POTENCIJALAN:
             ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.DOSTUPAN

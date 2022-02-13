@@ -28,8 +28,12 @@ class ContractGaraze:
 
         document_garaze = DocxTemplate(template_ugovora_garaze)
 
-        if garaza.status_prodaje_garaze == Garaze.StatusProdajeGaraze.REZERVISANA:
-            # Kada je status Ponude Garaze 'rezervisan' generisi ugovor.
+        # Ako je status Ponude Garaze 'REZERVISAN' ili 'PRODATA', generisi ugovor.
+        if (
+            garaza.status_prodaje_garaze == Garaze.StatusProdajeGaraze.REZERVISANA
+            or
+            garaza.status_prodaje_garaze == Garaze.StatusProdajeGaraze.PRODATA
+        ):
             context = {
                 'id_garaze': garaza.id_garaze,
                 'datum_ugovora_garaze': garaza.datum_ugovora_garaze,
@@ -39,6 +43,7 @@ class ContractGaraze:
                 'cena_garaze': garaza.cena_garaze,
                 # 'nacin_placanja': nacin_placanja
             }
+
             document_garaze.render(context)
 
             # Sacuvaj generisani Ugovor.
@@ -55,36 +60,10 @@ class ContractGaraze:
                 'ugovor-garaze-br-' + str(garaza.jedinstveni_broj_garaze) + '.docx'
             )
 
+        if garaza.status_prodaje_garaze == Garaze.StatusProdajeGaraze.REZERVISANA:
             # Posalji svim preplatnicima EMAIL da je Garaza REZERVISAN.
             SendEmailThreadRezervisanaGaraza(garaza).start()
-
-        elif garaza.status_prodaje_garaze == Garaze.StatusProdajeGaraze.PRODATA:
-            # Kada je status Ponude Garaze kupjena, generisi ugovor.
-            context = {
-                'id_garaze': garaza.id_garaze,
-                'datum_ugovora_garaze': garaza.datum_ugovora_garaze,
-                'broj_ugovora_garaze': garaza.broj_ugovora_garaze,
-                'kupac': kupac.ime_prezime,
-                'adresa_kupaca': kupac.adresa,
-                'cena_garaze': garaza.cena_garaze,
-                # 'nacin_placanja': nacin_placanja
-            }
-            document_garaze.render(context)
-
-            # Sacuvaj generisani Ugovor.
-            document_garaze.save(
-                'real_estate_api/static/ugovori-garaze/' + 'ugovor-garaze-br-' + str(
-                    garaza.jedinstveni_broj_garaze) + '.docx'
-            )
-
-            # Ucitaj na Digital Ocean Space
-            client_garaze.upload_file(
-                'real_estate_api/static/ugovori-garaze' + '/ugovor-garaze-br-' + str(
-                    garaza.jedinstveni_broj_garaze) + '.docx',
-                'ugovori-garaze',
-                'ugovor-garaze-br-' + str(garaza.jedinstveni_broj_garaze) + '.docx'
-            )
-
+        else:
             # Posalji Email da je Garaza kupljena.
             SendEmailThreadKupljenaGaraza(garaza).start()
 
