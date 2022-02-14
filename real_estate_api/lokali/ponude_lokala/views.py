@@ -2,6 +2,7 @@ import boto3
 from django.conf import settings
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
+from docx.opc.exceptions import PackageNotFoundError
 from rest_framework import generics, filters
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
@@ -84,31 +85,48 @@ class KreirajPonuduLokalaAPIView(generics.CreateAPIView):
         """
         ponude_lokali = serializer.save()
 
-        if ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.REZERVISAN:
+
+        if ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.POTENCIJALAN and \
+            ponude_lokali.status_ponude_lokala != PonudeLokala.StatusPonudeLokala.REZERVISAN and \
+            ponude_lokali.status_ponude_lokala != PonudeLokala.StatusPonudeLokala.KUPLJEN:
+
+            ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.DOSTUPAN
+            ponude_lokali.odobrenje_kupovine_lokala = False
+
+
+        elif ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.REZERVISAN and \
+            ponude_lokali.status_ponude_lokala != PonudeLokala.StatusPonudeLokala.KUPLJEN:
+
             ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
             ponude_lokali.odobrenje_kupovine_lokala = True
 
             # Kreiranje Ugovora
-            ContractLokali.create_contract(
-                ponude_lokali,
-                ponude_lokali.lokali,
-                ponude_lokali.kupac_lokala
-            )
+            try:
+                ContractLokali.create_contract(
+                    ponude_lokali,
+                    ponude_lokali.lokali,
+                    ponude_lokali.kupac_lokala
+                )
+            except PackageNotFoundError:
+                # TODO: Implementirati ovaj exception.
+                print("Greska u kreiranju ugovora !")
+
 
         elif ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.KUPLJEN:
             ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
             ponude_lokali.odobrenje_kupovine_lokala = True
 
             # Kreiranje Ugovora
-            ContractLokali.create_contract(
-                ponude_lokali,
-                ponude_lokali.lokali,
-                ponude_lokali.kupac_lokala
+            try:
+                ContractLokali.create_contract(
+                    ponude_lokali,
+                    ponude_lokali.lokali,
+                    ponude_lokali.kupac_lokala
             )
+            except PackageNotFoundError:
+                # TODO: Implementirati ovaj exception.
+                print("Greska u kreiranju ugovora !")
 
-        elif ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.POTENCIJALAN:
-            ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.DOSTUPAN
-            ponude_lokali.odobrenje_kupovine_lokala = False
 
         ponude_lokali.lokali.save()
         ponude_lokali.save()
@@ -136,6 +154,7 @@ class IzmeniPonuduLokalaAPIView(generics.RetrieveUpdateAPIView):
         ponude_lokali = serializer.save()
 
         if ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.REZERVISAN:
+
             ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
 
             ponude_lokali.lokali.save()
