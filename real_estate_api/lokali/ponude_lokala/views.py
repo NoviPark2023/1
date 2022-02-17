@@ -229,32 +229,29 @@ class ObrisiPonuduLokalaAPIView(generics.RetrieveDestroyAPIView):
 
         instance.delete()
 
-        # Provera da li u bazi ima jos ponuda za Lokal sa tim id-jem
-        broj_ponuda_lokala_from_db = PonudeLokala.objects.all().filter(id_lokala)
+        # Obrisi ugovor jer je Lokal dobio status "Dostupan".
+        ContractLokali.delete_contract(ponude_lokala)
 
-        if broj_ponuda_lokala_from_db == 0:
-            ponude_lokala.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.DOSTUPAN
-            ponude_lokala.odobrenje_kupovine_lokala = False
+        # Provera da li u bazi ima jos ponuda
+        broj_ponuda_lokala_from_db = PonudeLokala.objects.all()
 
-            # Obrisi ugovor jer je Lokal dobio status "Dostupan".
-            ContractLokali.delete_contract(ponude_lokala)
+        # Status Ponude
+        for ponuda in broj_ponuda_lokala_from_db.filter(lokali_id=id_lokala):
+            if ponuda == 0:
+                ponuda.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.DOSTUPAN
 
-        elif broj_ponuda_lokala_from_db != 0 and \
-            ponude_lokala.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.REZERVISAN and \
-            ponude_lokala.status_ponude_lokala != PonudeLokala.StatusPonudeLokala.KUPLJEN:
+            elif ponuda != 0 and\
+                ponuda.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.REZERVISAN and\
+                ponuda.status_ponude_lokala != PonudeLokala.StatusPonudeLokala.KUPLJEN:
 
-            ponude_lokala.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
-            ponude_lokala.odobrenje_kupovine_lokala = True
+                ponuda.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
+                ponuda.odobrenje_kupovine_lokala = True
 
-        elif broj_ponuda_lokala_from_db != 0 and \
-            ponude_lokala.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.KUPLJEN:
-            ponude_lokala.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
-            ponude_lokala.odobrenje_kupovine_lokala = True
+            elif ponuda != 0 and \
+                ponuda.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.KUPLJEN:
 
-        # TODO(Ivana): Implement rest of function.
-        # Procitaj komentar u ovoj funkciji.
-
-        # @see "ObrisiPonuduAPIView" in Ponude View.
+                ponuda.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
+                ponuda.odobrenje_kupovine_lokala = True
 
 
 class UgovorPonudeLokalaDownloadListAPIView(generics.ListAPIView):

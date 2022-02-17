@@ -89,7 +89,7 @@ def novi_jedan_lokal_ponude_fixture(db) -> Lokali:
         broj_prostorija=1.0,
         napomena_lokala='nema napomene',
         orijentisanost_lokala='Jug',
-        status_prodaje_lokala='potencijalan',
+        status_prodaje_lokala='dostupan',
         cena_lokala=50000.0,
     )
 
@@ -97,58 +97,6 @@ def novi_jedan_lokal_ponude_fixture(db) -> Lokali:
 
 
 # endregion
-
-# # region NOVI LOKAL STATUS PRODAJE REZERVISAN FIXTURE
-# @pytest.fixture(autouse=False)
-# def novi_lokal_status_prodaje_rezervisan_fixture(db) -> Lokali:
-#     """
-#     Kreiranje novog Lokala za Ponudu.
-#
-#     @param db: Testna DB.
-#     @return: Entitet 'Lokali'.
-#     """
-#     lokal_ponude = Lokali.objects.create(
-#         id_lokala=1,
-#         lamela_lokala='L3.0.P1',
-#         adresa_lokala='Adresa Lokala L3.0.P1',
-#         kvadratura_lokala=48.02,
-#         broj_prostorija=1.0,
-#         napomena_lokala='nema napomene',
-#         orijentisanost_lokala='Jug',
-#         status_prodaje_lokala='rezervisan',
-#         cena_lokala=50000.0,
-#     )
-#
-#     return lokal_ponude
-#
-#
-# # endregion
-#
-# # region NOVI LOKAL STATUS PRODAJE PRODAT FIXTURE
-# @pytest.fixture(autouse=False)
-# def novi_lokal_status_prodaje_prodat_fixture(db) -> Lokali:
-#     """
-#     Kreiranje novog Lokala za Ponudu.
-#
-#     @param db: Testna DB.
-#     @return: Entitet 'Lokali'.
-#     """
-#     lokal_ponude = Lokali.objects.create(
-#         id_lokala=1,
-#         lamela_lokala='L3.0.P1',
-#         adresa_lokala='Adresa Lokala L3.0.P1',
-#         kvadratura_lokala=48.02,
-#         broj_prostorija=1.0,
-#         napomena_lokala='nema napomene',
-#         orijentisanost_lokala='Jug',
-#         status_prodaje_lokala='prodat',
-#         cena_lokala=50000.0,
-#     )
-#
-#     return lokal_ponude
-#
-#
-# # endregion
 
 # region JEDNA PONUDA LOKALA JSON FIXTURES
 
@@ -276,32 +224,32 @@ def nova_jedna_ponuda_lokala_fixture(db,
 #
 #
 # # endregion
-#
-# # region PONUDA LOKALA STATUS KUPLJEN FIXTURES
-# @pytest.fixture()
-# def nova_ponuda_lokala_status_kupljen_fixture(db,
-#                                               novi_kupac_lokala_fixture_ponude,
-#                                               novi_jedan_lokal_ponude_fixture,
-#                                               novi_autorizovan_korisnik_fixture_lokali_ponude) -> PonudeLokala:
-#
-#     nova_ponuda_lokala_status_kupljen_fixture = PonudeLokala.objects.create(
-#         id_ponude_lokala=1,
-#         kupac_lokala=novi_kupac_lokala_fixture_ponude,
-#         lokali=novi_jedan_lokal_ponude_fixture,
-#         cena_lokala_za_kupca=0,
-#         napomena_ponude_lokala="nema napomene",
-#         broj_ugovora_lokala="No1",
-#         datum_ugovora_lokala=datetime.date(2022, 2, 1),
-#         status_ponude_lokala=PonudeLokala.StatusPonudeLokala.KUPLJEN,
-#         nacin_placanja_lokala=PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
-#         odobrenje_kupovine_lokala=False,
-#         klijent_prodaje_lokala=novi_autorizovan_korisnik_fixture_lokali_ponude
-#     )
-#
-#     return nova_ponuda_lokala_status_kupljen_fixture
-#
-#
-# # endregion
+
+# region PONUDA LOKALA STATUS KUPLJEN FIXTURES
+@pytest.fixture()
+def nova_ponuda_lokala_status_kupljen_fixture(db,
+                                              novi_kupac_lokala_fixture_ponude,
+                                              novi_jedan_lokal_ponude_fixture,
+                                              novi_autorizovan_korisnik_fixture_lokali_ponude) -> PonudeLokala:
+
+    nova_ponuda_lokala_status_kupljen_fixture = PonudeLokala.objects.create(
+        id_ponude_lokala=1,
+        kupac_lokala=novi_kupac_lokala_fixture_ponude,
+        lokali=novi_jedan_lokal_ponude_fixture,
+        cena_lokala_za_kupca=0,
+        napomena_ponude_lokala="nema napomene",
+        broj_ugovora_lokala="No1",
+        datum_ugovora_lokala=datetime.date(2022, 2, 1),
+        status_ponude_lokala=PonudeLokala.StatusPonudeLokala.KUPLJEN,
+        nacin_placanja_lokala=PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
+        odobrenje_kupovine_lokala=True,
+        klijent_prodaje_lokala=novi_autorizovan_korisnik_fixture_lokali_ponude
+    )
+
+    return nova_ponuda_lokala_status_kupljen_fixture
+
+
+# endregion
 
 # region JEDNA PONUDA LOKALA FIXTURES 401
 @pytest.fixture()
