@@ -1,7 +1,10 @@
 from django.db import models
+from django.db.models import Q
+from docx.opc.exceptions import PackageNotFoundError
 
 from real_estate_api.korisnici.models import Korisnici
 from real_estate_api.kupci.models import Kupci
+from real_estate_api.ponude.ugovor.ugovori import Contract
 from real_estate_api.stanovi.models import Stanovi
 
 
@@ -108,6 +111,83 @@ class Ponude(models.Model):
     def __str__(self):
         return f"{self.klijent_prodaje.ime} {self.kupac.id_kupca} {self.cena_stana_za_kupca} \
                   {self.broj_ugovora} {self.kupac.ime_prezime} {self.stan.adresa_stana} {self.stan.adresa_stana}"
+
+    def save(self, *args, **kwargs):
+        """
+        Prilikom cuvanja Ponude potrebno je setovati status Stana korespondno statusu
+        Ponude.
+        Statusi imaju svoju hijerahiju po kojoj je Ponuda sa statusom "KUPLJEN" na najvisem
+        nivou i ukoliko postoji u ponudama, status Stana se setuje na "KUPLJEN".
+        Sledece u hijerahiji je status "REZERVISAN", po istom principu kao i gorespomenuto.
+        Na kraju je status "DOSTUPAN".
+
+        :param args: None
+        :param kwargs: 'force_insert': True, 'using': 'default'
+        """
+        super(Ponude, self).save(*args, **kwargs)
+
+        status_rezervisan = Ponude.StatusPonude.REZERVISAN
+        status_kupljen = Ponude.StatusPonude.KUPLJEN
+
+        status_rezervisan = Ponude.objects.filter(Q(status_ponude=status_rezervisan)).filter(
+            stan__id_stana=self.stan.id_stana).exists()
+
+        status_kupljen = Ponude.objects.filter(Q(status_ponude=status_kupljen)).filter(
+            stan__id_stana=self.stan.id_stana).exists()
+
+        if status_kupljen:
+            self.stan.status_prodaje = Stanovi.StatusProdaje.PRODAT
+            self.odobrenje = True
+
+            try:
+                Contract.create_contract(self, self.stan, self.kupac)  # Kreiraj Ugovor.
+            except PackageNotFoundError:
+                print("Paket za kreiranje Ugovora nije nadjen.")
+
+        elif status_rezervisan and not status_kupljen:
+            self.stan.status_prodaje = Stanovi.StatusProdaje.REZERVISAN
+            self.odobrenje = True
+
+            try:
+                Contract.create_contract(self, self.stan, self.kupac)  # Kreiraj Ugovor.
+            except PackageNotFoundError:
+                print("Paket za kreiranje Ugovora nije nadjen.")
+
+        elif not status_kupljen or not status_rezervisan:
+            self.stan.status_prodaje = Stanovi.StatusProdaje.DOSTUPAN
+            self.odobrenje = False
+        self.stan.save()
+
+    def delete(self, *args, **kwargs):
+        """
+        Prilikom cuvanja Ponude potrebno je setovati status Stana korespondno statusu
+        Ponude.
+        Statusi imaju svoju hijerahiju po kojoj je Ponuda sa statusom "KUPLJEN" na najvisem
+        nivou i ukoliko postoji u ponudama, status Stana se setuje na "KUPLJEN".
+        Sledece u hijerahiji je status "REZERVISAN", po istom principu kao i gorespomenuto.
+        Na kraju je status "DOSTUPAN".
+
+        :param args: None
+        :param kwargs: 'force_insert': True, 'using': 'default'
+        """
+        super(Ponude, self).delete(*args, **kwargs)
+
+        status_rezervisan = Ponude.StatusPonude.REZERVISAN
+        status_kupljen = Ponude.StatusPonude.KUPLJEN
+
+        status_rezervisan = Ponude.objects.filter(Q(status_ponude=status_rezervisan)).filter(
+            stan__id_stana=self.stan.id_stana).exists()
+
+        status_kupljen = Ponude.objects.filter(Q(status_ponude=status_kupljen)).filter(
+            stan__id_stana=self.stan.id_stana).exists()
+
+        if status_kupljen:
+            self.stan.status_prodaje = Stanovi.StatusProdaje.PRODAT
+        elif status_rezervisan and not status_kupljen:
+            self.stan.status_prodaje = Stanovi.StatusProdaje.REZERVISAN
+        elif not status_kupljen or not status_rezervisan:
+            self.stan.status_prodaje = Stanovi.StatusProdaje.DOSTUPAN
+        self.stan.save()
 
     class Meta:
         """
