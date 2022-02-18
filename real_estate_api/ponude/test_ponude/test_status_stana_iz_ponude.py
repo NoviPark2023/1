@@ -44,7 +44,7 @@ class TestRestApiUrlsPonude:
         url_izmeni_ponudu = reverse('ponude:izmeni_ponudu', args=[int(id_ponude)])
         izmenjena_ponuda = json.dumps(
             {
-                "id_ponude": 2,
+                "id_ponude": 1,
                 "kupac": 1,
                 "stan": 1,
                 "cena_stana_za_kupca": 1000,
