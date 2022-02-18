@@ -1,10 +1,9 @@
 import boto3
+from django.conf import settings
 from django.http import HttpResponse
 from rest_framework import generics
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
-
-from django.conf import settings
 
 from .models import Ponude
 from .serializers import PonudeSerializer
@@ -62,6 +61,8 @@ class KreirajPonuduAPIView(generics.CreateAPIView):
         :param serializer: PonudeSerializer
         """
         ponuda = serializer.save()
+
+        # TODO: Implementirati logiku setovanja Stana.
 
         if ponuda.status_ponude == Ponude.StatusPonude.REZERVISAN:
 
@@ -153,6 +154,7 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
         :param request: Ponude
         :return: partial_update
         """
+        # TODO: Implementirati logiku setovanja Stana.
 
         # Set Klijenta prodaje stana u ponudu, potrebno kasnije za izvestaje.
         request.data['klijent_prodaje'] = request.user.id
@@ -168,18 +170,23 @@ class ObrisiPonuduAPIView(generics.RetrieveDestroyAPIView):
     serializer_class = PonudeSerializer
 
     def perform_destroy(self, instance):
-        # TODO: Setovanje stana na osnovu prioriteta ponuda koje ima  (MOZE BOLJE)
-        # Kada se obrise jedna ponuda, a postoji jos ostalih ponuda setovati status stana
-        # na onu ponudu koja ima najvisi status.
-        # Ukoliko nema ponuda nakon brisanja te jedine, setovati status na DOSTUPAN
+        """
+        Logicko setovanje status Stana na osnovu statusa svih ponuda za taj Stan.
+        Hijerahija koja se postuje je:
+        1. KUPLJEN
+        2. REZERVISAN
+        3. DOSTUPAN
+        Ukoliko postoji u ponudama 1. onda treba da Stan uvek ima status 1. etc...
 
+        :param instance: Ponuda
+        """
         ponude_stana = self.get_object()
-        print(f' PONUDE STANA: {ponude_stana}')
+
         id_stana = ponude_stana.stan.id_stana
 
         instance.delete()
 
-        Contract.delete_contract(ponude_stana)
+        Contract.delete_contract(ponude_stana)  # Obrisi Ugovor.
 
         # Set Status Stana
         for status_ponude in self.queryset.filter(stan__id_stana=id_stana).values("status_ponude"):
