@@ -71,66 +71,58 @@ class KreirajPonuduLokalaAPIView(generics.CreateAPIView):
     queryset = PonudeLokala.objects.all().order_by('id_ponude_lokala')
     serializer_class = PonudeLokalaSerializer
 
+
     def perform_create(self, serializer):
-        """
-        Svaki Lokal ima svoje statuse prodaje (Dostupan, Rezervisan, Kupljen).
-        Prilikom svake promene statusa Ponude potrebno je azurirati i status prodaje Lokala.
-        Ukoliko je status ponude setovan na jedna od dva stanja (Rezervisan, Kupljen),
-        potrebno j egenerisati ugovor.
-        Ukoliko je status ponude promenjen na potencijalan, potrebno je obrisati ugovor.
+        ponuda_ser = serializer.save()                                                                                   # kreirana ponuda
 
-            @see Generisanje Ugovora: /ugovori_lokali/ugovori_lokali.py
-        ---
-        :param serializer: PonudeLokalaSerializer
-        """
-        ponude_lokali = serializer.save()
+        id_lokala = ponuda_ser.lokali.id_lokala                                                                          # id lokala iz kreir.ponude
+        lokal = Lokali.objects.filter(id_lokala__exact=id_lokala)                                                        # lokal iz lokala sa tim id-jem
+        status_prodaje_lokala = lokal.values("status_prodaje_lokala")                                                    # njegov prethodni status prodaje
 
+        status_ponude_lokala = ponuda_ser.status_ponude_lokala                                                           # status ponude iz kreir.ponude
 
-        if ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.POTENCIJALAN and \
-            ponude_lokali.status_ponude_lokala != PonudeLokala.StatusPonudeLokala.REZERVISAN and \
-            ponude_lokali.status_ponude_lokala != PonudeLokala.StatusPonudeLokala.KUPLJEN:
-
-            ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.DOSTUPAN
-            ponude_lokali.odobrenje_kupovine_lokala = False
+        id_ponude_lokala = ponuda_ser.id_ponude_lokala
+        odobrenje = PonudeLokala.objects.filter(id_ponude_lokala__exact=id_ponude_lokala)
+        odobrenje_kupovine_lokala = odobrenje.values("odobrenje_kupovine_lokala")
 
 
-        elif ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.REZERVISAN and \
-            ponude_lokali.status_ponude_lokala != PonudeLokala.StatusPonudeLokala.KUPLJEN:
+        if status_prodaje_lokala == Lokali.StatusProdajeLokala.DOSTUPAN:                                                 # ako je status prodaje koji je lokal imao 'dostupan'
+            if status_ponude_lokala == PonudeLokala.StatusPonudeLokala.POTENCIJALAN:
+                status_prodaje_lokala = Lokali.StatusProdajeLokala.DOSTUPAN
+            elif status_ponude_lokala == PonudeLokala.StatusPonudeLokala.REZERVISAN:
+                status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
+                odobrenje_kupovine_lokala = True
+            elif status_ponude_lokala == PonudeLokala.StatusPonudeLokala.KUPLJEN:
+                status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
+                odobrenje_kupovine_lokala = True
 
-            ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
-            ponude_lokali.odobrenje_kupovine_lokala = True
+            ponuda_ser.lokali.save()
 
-            # Kreiranje Ugovora
-            try:
-                ContractLokali.create_contract(
-                    ponude_lokali,
-                    ponude_lokali.lokali,
-                    ponude_lokali.kupac_lokala
-                )
-            except PackageNotFoundError:
-                # TODO: Implementirati ovaj exception.
-                print("Greska u kreiranju ugovora !")
-
-
-        elif ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.KUPLJEN:
-            ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
-            ponude_lokali.odobrenje_kupovine_lokala = True
-
-            # Kreiranje Ugovora
-            try:
-                ContractLokali.create_contract(
-                    ponude_lokali,
-                    ponude_lokali.lokali,
-                    ponude_lokali.kupac_lokala
-            )
-            except PackageNotFoundError:
-                # TODO: Implementirati ovaj exception.
-                print("Greska u kreiranju ugovora !")
-
-
-        ponude_lokali.lokali.save()
-        ponude_lokali.save()
-
+        # elif status_prodaje_lokala == Lokali.StatusProdajeLokala.REZERVISAN:
+        #     if status_ponude_lokala == PonudeLokala.StatusPonudeLokala.POTENCIJALAN:
+        #         ponuda_ser.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
+        #         ponuda_ser.odobrenje_kupovine_lokala = True
+        #     elif status_ponude_lokala == PonudeLokala.StatusPonudeLokala.REZERVISAN:
+        #         ponuda_ser.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
+        #         ponuda_ser.odobrenje_kupovine_lokala = True
+        #     elif status_ponude_lokala == PonudeLokala.StatusPonudeLokala.KUPLJEN:
+        #         ponuda_ser.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
+        #         ponuda_ser.odobrenje_kupovine_lokala = True
+        #
+        #     ponuda_ser.lokali.save()
+        #
+        # elif status_prodaje_lokala == Lokali.StatusProdajeLokala.PRODAT:
+        #     if status_ponude_lokala == PonudeLokala.StatusPonudeLokala.POTENCIJALAN:
+        #         ponuda_ser.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
+        #         ponuda_ser.odobrenje_kupovine_lokala = True
+        #     elif status_ponude_lokala == PonudeLokala.StatusPonudeLokala.REZERVISAN:
+        #         ponuda_ser.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
+        #         ponuda_ser.odobrenje_kupovine_lokala = True
+        #     elif status_ponude_lokala == PonudeLokala.StatusPonudeLokala.KUPLJEN:
+        #         ponuda_ser.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
+        #         ponuda_ser.odobrenje_kupovine_lokala = True
+        #
+        #     ponuda_ser.lokali.save()
 
 class IzmeniPonuduLokalaAPIView(generics.RetrieveUpdateAPIView):
     """Izmena Ponude Lokala po ID-ju"""
@@ -152,57 +144,56 @@ class IzmeniPonuduLokalaAPIView(generics.RetrieveUpdateAPIView):
         :param serializer: PonudeLokalaSerializer
         """
         ponude_lokali = serializer.save()
-
-        if ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.POTENCIJALAN and \
-            ponude_lokali.status_ponude_lokala != PonudeLokala.StatusPonudeLokala.REZERVISAN and \
-            ponude_lokali.status_ponude_lokala != PonudeLokala.StatusPonudeLokala.KUPLJEN:
-
-            ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.DOSTUPAN
-
-            ponude_lokali.lokali.save()
-            ponude_lokali.odobrenje_kupovine_lokala = False
-            ponude_lokali.save()
-
-            # Obrisi ugovor jer je Lokal dobio status "Dostupan".
-            ContractLokali.delete_contract(ponude_lokali)
-
-        elif ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.REZERVISAN and \
-            ponude_lokali.status_ponude_lokala != PonudeLokala.StatusPonudeLokala.KUPLJEN:
-
-            ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
-
-            ponude_lokali.lokali.save()
-            ponude_lokali.odobrenje_kupovine_lokala = True
-            ponude_lokali.save()
-
-            # Kreiranje Ugovora
-            try:
-                ContractLokali.create_contract(
-                    ponude_lokali,
-                    ponude_lokali.lokali,
-                    ponude_lokali.kupac_lokala
-                )
-            except PackageNotFoundError:
-                # TODO: Implementirati ovaj exception.
-                print("Greska u kreiranju ugovora !")
-
-        elif ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.KUPLJEN:
-            ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
-
-            ponude_lokali.lokali.save()
-            ponude_lokali.odobrenje_kupovine_lokala = True
-            ponude_lokali.save()
-
-            try:
-                ContractLokali.create_contract(
-                    ponude_lokali,
-                    ponude_lokali.lokali,
-                    ponude_lokali.kupac_lokala
-                )
-            except PackageNotFoundError:
-                # TODO: Implementirati ovaj exception.
-                print("Greska u kreiranju ugovora !")
-
+        #
+        # if ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.POTENCIJALAN and \
+        #     ponude_lokali.status_ponude_lokala != PonudeLokala.StatusPonudeLokala.REZERVISAN and \
+        #     ponude_lokali.status_ponude_lokala != PonudeLokala.StatusPonudeLokala.KUPLJEN:
+        #
+        #     ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.DOSTUPAN
+        #
+        #     ponude_lokali.lokali.save()
+        #     ponude_lokali.odobrenje_kupovine_lokala = False
+        #     ponude_lokali.save()
+        #
+        #     # Obrisi ugovor jer je Lokal dobio status "Dostupan".
+        #     ContractLokali.delete_contract(ponude_lokali)
+        #
+        # elif ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.REZERVISAN and \
+        #     ponude_lokali.status_ponude_lokala != PonudeLokala.StatusPonudeLokala.KUPLJEN:
+        #
+        #     ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
+        #
+        #     ponude_lokali.lokali.save()
+        #     ponude_lokali.odobrenje_kupovine_lokala = True
+        #     ponude_lokali.save()
+        #
+        #     # Kreiranje Ugovora
+        #     try:
+        #         ContractLokali.create_contract(
+        #             ponude_lokali,
+        #             ponude_lokali.lokali,
+        #             ponude_lokali.kupac_lokala
+        #         )
+        #     except PackageNotFoundError:
+        #         # TODO: Implementirati ovaj exception.
+        #         print("Greska u kreiranju ugovora !")
+        #
+        # elif ponude_lokali.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.KUPLJEN:
+        #     ponude_lokali.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
+        #
+        #     ponude_lokali.lokali.save()
+        #     ponude_lokali.odobrenje_kupovine_lokala = True
+        #     ponude_lokali.save()
+        #
+        #     try:
+        #         ContractLokali.create_contract(
+        #             ponude_lokali,
+        #             ponude_lokali.lokali,
+        #             ponude_lokali.kupac_lokala
+        #         )
+        #     except PackageNotFoundError:
+        #         # TODO: Implementirati ovaj exception.
+        #         print("Greska u kreiranju ugovora !")
 
     def put(self, request, *args, **kwargs):
         # Set Klijenta prodaje Lokala u ponudu, potrebno kasnije za izvestaje.
@@ -232,26 +223,26 @@ class ObrisiPonuduLokalaAPIView(generics.RetrieveDestroyAPIView):
         # Obrisi ugovor jer je Lokal dobio status "Dostupan".
         ContractLokali.delete_contract(ponude_lokala)
 
-        # Provera da li u bazi ima jos ponuda
-        broj_ponuda_lokala_from_db = PonudeLokala.objects.all()
-
-        # Status Ponude
-        for ponuda in broj_ponuda_lokala_from_db.filter(lokali_id=id_lokala):
-            if ponuda == 0:
-                ponuda.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.DOSTUPAN
-
-            elif ponuda != 0 and\
-                ponuda.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.REZERVISAN and\
-                ponuda.status_ponude_lokala != PonudeLokala.StatusPonudeLokala.KUPLJEN:
-
-                ponuda.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
-                ponuda.odobrenje_kupovine_lokala = True
-
-            elif ponuda != 0 and \
-                ponuda.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.KUPLJEN:
-
-                ponuda.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
-                ponuda.odobrenje_kupovine_lokala = True
+        # # Provera da li u bazi ima jos ponuda
+        # broj_ponuda_lokala_from_db = PonudeLokala.objects.all()
+        #
+        # # Status Ponude
+        # for ponuda in broj_ponuda_lokala_from_db.filter(lokali_id=id_lokala):
+        #     if ponuda == 0:
+        #         ponuda.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.DOSTUPAN
+        #
+        #     elif ponuda != 0 and\
+        #         ponuda.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.REZERVISAN and\
+        #         ponuda.status_ponude_lokala != PonudeLokala.StatusPonudeLokala.KUPLJEN:
+        #
+        #         ponuda.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
+        #         ponuda.odobrenje_kupovine_lokala = True
+        #
+        #     elif ponuda != 0 and \
+        #         ponuda.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.KUPLJEN:
+        #
+        #         ponuda.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
+        #         ponuda.odobrenje_kupovine_lokala = True
 
 
 class UgovorPonudeLokalaDownloadListAPIView(generics.ListAPIView):

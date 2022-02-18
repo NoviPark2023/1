@@ -1,5 +1,6 @@
 from rest_framework.reverse import reverse
 from real_estate_api.lokali.ponude_lokala.models import PonudeLokala
+from real_estate_api.lokali.lokali_api.models import Lokali
 
 
 class TestPonudeLokalaStatusPonudeLokala:
@@ -19,11 +20,11 @@ class TestPonudeLokalaStatusPonudeLokala:
         assert response.json()["status_ponude_lokala"] == 'potencijalan'
 
         # provera Statusa Prodaje Lokala (Lokali), treba da je Dostupan.
-
-        ponude_lokala  = PonudeLokala.objects.first()
-        lokal_status = ponude_lokala.lokali.status_prodaje_lokala
-        assert lokal_status == 'dostupan'
-
+        id_lokala = response.data.get("lokali")
+        lokal = Lokali.objects.filter(id_lokala__exact=id_lokala)
+        status = lokal.values("status_prodaje_lokala")
+        lokal_status = status[0]["status_prodaje_lokala"]
+        assert lokal_status == Lokali.StatusProdajeLokala.DOSTUPAN
 
     def test_status_ponude_lokala_rezervisan(self, client, nova_jedna_ponuda_lokala_status_rezervisan_json_fixture):
 
