@@ -1,6 +1,7 @@
 import boto3
 from django.conf import settings
 from django.http import HttpResponse
+from docx.opc.exceptions import PackageNotFoundError
 from rest_framework import generics
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
@@ -137,8 +138,10 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
 
             if Ponude.StatusPonude.REZERVISAN in status_ponude.values():
                 ponuda.stan.status_prodaje = Stanovi.StatusProdaje.REZERVISAN
-
-                Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)  # Kreiraj Ugovor.
+                try:
+                    Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)  # Kreiraj Ugovor.
+                except PackageNotFoundError:
+                    print("Paket za kreiranje Ugovora nije nadjen.")
 
                 ponuda.odobrenje = True
                 ponuda.stan.save()
@@ -147,7 +150,10 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
             if Ponude.StatusPonude.KUPLJEN in status_ponude.values():
                 ponuda.stan.status_prodaje = Stanovi.StatusProdaje.PRODAT
 
-                Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)  # Kreiraj Ugovor.
+                try:
+                    Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)  # Kreiraj Ugovor.
+                except PackageNotFoundError:
+                    print("Paket za kreiranje Ugovora nije nadjen.")
 
                 ponuda.odobrenje = True
                 ponuda.stan.save()

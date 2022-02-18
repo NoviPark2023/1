@@ -368,7 +368,7 @@ def nova_jedna_ponuda_json_fixture_status_potencijalan(novi_kupac_fixture_ponude
                                                        ):
     return json.dumps(
         {
-            #"id_ponude": 2,
+            "id_ponude": 2,
             "kupac": novi_kupac_fixture_ponude.id_kupca,
             "stan": novi_jedan_stan_fixture_ponude_status_dostupan.id_stana,
             "cena_stana_za_kupca": 1000,
@@ -393,7 +393,7 @@ def nova_jedna_ponuda_json_fixture_status_rezervisan(novi_kupac_fixture_ponude,
                                                      ):
     return json.dumps(
         {
-            #"id_ponude": 3,
+            "id_ponude": 3,
             "kupac": novi_kupac_fixture_ponude.id_kupca + 1,
             "stan": novi_jedan_stan_fixture_ponude_status_rezervisan.id_stana,
             "cena_stana_za_kupca": 1000,
@@ -418,7 +418,7 @@ def nova_jedna_ponuda_json_fixture_status_prodat(novi_kupac_fixture_ponude,
                                                      ):
     return json.dumps(
         {
-            #"id_ponude": 3,
+            "id_ponude": 3,
             "kupac": novi_kupac_fixture_ponude.id_kupca + 2,
             "stan": novi_jedan_stan_fixture_ponude_status_prodat.id_stana,
             "cena_stana_za_kupca": 1000,
