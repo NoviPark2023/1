@@ -120,29 +120,61 @@ class UrediPonuduViewAPI(generics.RetrieveUpdateAPIView):
         """
         ponuda = serializer.save()
 
-        if ponuda.status_ponude == Ponude.StatusPonude.REZERVISAN:
-            ponuda.stan.status_prodaje = Stanovi.StatusProdaje.REZERVISAN
-            ponuda.stan.save()
-            ponuda.odobrenje = True  # Potrebno odobrenje jer je stan kaparisan (Rezervisan)
-            ponuda.save()
+        # Get ID STANA for query.
+        id_stana = ponuda.stan.id_stana
 
-            Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)  # Kreiraj Ugovor.
+        # TODO: FIX THIS NOT WORKING...
+        for status_ponude in self.queryset.filter(stan__id_stana=id_stana).values("status_ponude"):
+            print(f' PONUDA: {status_ponude["status_ponude"]}')
 
-        elif ponuda.status_ponude == Ponude.StatusPonude.KUPLJEN:
-            ponuda.stan.status_prodaje = Stanovi.StatusProdaje.PRODAT
-            ponuda.stan.save()
-            ponuda.odobrenje = True
-            ponuda.save()
+            if Ponude.StatusPonude.POTENCIJALAN in status_ponude.values():
+                ponuda.stan.status_prodaje = Stanovi.StatusProdaje.DOSTUPAN
+                ponuda.odobrenje = False
+                ponuda.stan.save()
+                ponuda.save()
 
-            Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)  # Kreiraj Ugovor.
+                #Contract.delete_contract(ponuda)  # Obrisi Ugovor.
 
-        elif ponuda.status_ponude == Ponude.StatusPonude.POTENCIJALAN:
-            ponuda.stan.status_prodaje = Stanovi.StatusProdaje.DOSTUPAN
-            ponuda.stan.save()
-            ponuda.odobrenje = False
-            ponuda.save()
+            if Ponude.StatusPonude.REZERVISAN in status_ponude.values():
+                ponuda.stan.status_prodaje = Stanovi.StatusProdaje.REZERVISAN
 
-            Contract.delete_contract(ponuda)  # Obrisi Ugovor.
+                Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)  # Kreiraj Ugovor.
+
+                ponuda.odobrenje = True
+                ponuda.stan.save()
+                ponuda.save()
+                return
+            if Ponude.StatusPonude.KUPLJEN in status_ponude.values():
+                ponuda.stan.status_prodaje = Stanovi.StatusProdaje.PRODAT
+
+                Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)  # Kreiraj Ugovor.
+
+                ponuda.odobrenje = True
+                ponuda.stan.save()
+                ponuda.save()
+                break
+
+        # if ponuda.status_ponude == Ponude.StatusPonude.REZERVISAN:
+        #     ponuda.stan.status_prodaje = Stanovi.StatusProdaje.REZERVISAN
+        #     ponuda.stan.save()
+        #     ponuda.odobrenje = True  # Potrebno odobrenje jer je stan kaparisan (Rezervisan)
+        #     ponuda.save()
+        #
+        #     Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)  # Kreiraj Ugovor.
+        #
+        # elif ponuda.status_ponude == Ponude.StatusPonude.KUPLJEN:
+        #     ponuda.stan.status_prodaje = Stanovi.StatusProdaje.PRODAT
+        #     ponuda.stan.save()
+        #     ponuda.odobrenje = True
+        #     ponuda.save()
+        #
+        #     Contract.create_contract(ponuda, ponuda.stan, ponuda.kupac)  # Kreiraj Ugovor.
+        #
+        # elif ponuda.status_ponude == Ponude.StatusPonude.POTENCIJALAN:
+        #     ponuda.stan.status_prodaje = Stanovi.StatusProdaje.DOSTUPAN
+        #     ponuda.stan.save()
+        #     ponuda.odobrenje = False
+        #     ponuda.save()
 
     def put(self, request, *args, **kwargs):
         """
