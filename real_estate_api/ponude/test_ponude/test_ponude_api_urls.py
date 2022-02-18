@@ -60,7 +60,7 @@ class TestRestApiUrlsPonude:
         Test poziv 'ponude:kreiraj_ponudu' za API poziv kreiranja Ponude sa Korisnikom
         koji NIJE AUTORIZOVAN.
 
-            * @see /test_ponude/conftest.py (nova_jedna_ponuda_json_fixture)
+            * @see /test_ponude/conftest.py (nova_jedna_ponuda_json_fixture_status_potencijalan)
             * @see path('kreiraj-ponudu/', KreirajPonuduAPIView.as_view(), name='kreiraj_ponudu'),
 
         @param client: A Django test client instance.
@@ -85,14 +85,14 @@ class TestRestApiUrlsPonude:
 
     def test_kreiraj_ponudu_status_potencijalan_201(self,
                                                     client,
-                                                    nova_jedna_ponuda_json_fixture,
+                                                    nova_jedna_ponuda_json_fixture_status_potencijalan,
                                                     novi_jedan_auth_korisnik_fixture_ponude
                                                     ):
         """
         Test poziv 'ponude:kreiraj_ponudu' za API poziv kreiranja Ponude sa Korisnikom
         koji JE AUTORIZOVAN.
 
-            * @see /test_ponude/conftest.py (nova_jedna_ponuda_json_fixture)
+            * @see /test_ponude/conftest.py (nova_jedna_ponuda_json_fixture_status_potencijalan)
             * @see /test_ponude/conftest.py (novi_jedan_auth_korisnik_fixture_ponude)
             * @see path('kreiraj-ponudu/', KreirajPonuduAPIView.as_view(), name='kreiraj_ponudu'),
 
@@ -109,7 +109,7 @@ class TestRestApiUrlsPonude:
 
         response_kreiraj_ponudu = client.post(
             url_kreiraj_ponudu,
-            data=nova_jedna_ponuda_json_fixture,
+            data=nova_jedna_ponuda_json_fixture_status_potencijalan,
             content_type='application/json'
         )
 
@@ -119,7 +119,10 @@ class TestRestApiUrlsPonude:
         broj_ponuda_from_db = Ponude.objects.all().count()
         assert broj_ponuda_from_db == 1
 
-    def test_detalji_ponude(self, client, novi_jedan_auth_korisnik_fixture_ponude, nova_jedna_ponuda_fixture):
+    def test_detalji_ponude(self,
+                            client, novi_jedan_auth_korisnik_fixture_ponude,
+                            nova_jedna_ponuda_fixture
+                            ):
         """
         Test poziv 'ponude:detalji_ponude' za API poziv detalja Ponude.
         U samoj inicijalizaciji imamo samo jednou Ponudu.
@@ -136,18 +139,25 @@ class TestRestApiUrlsPonude:
         broj_ponuda_from_db = Ponude.objects.all().count()
         assert broj_ponuda_from_db == 1
 
-        url_detalji_ponude = reverse('ponude:detalji_ponude', args=[nova_jedna_ponuda_fixture.id_ponude])
+        url_detalji_ponude = reverse(
+            'ponude:detalji_ponude',
+            args=[nova_jedna_ponuda_fixture.id_ponude]
+        )
 
         response = client.get(url_detalji_ponude)
         assert response.status_code == 200
 
-    def test_izmeni_ponudu(self, client, nova_jedna_ponuda_fixture, nova_jedna_ponuda_json_fixture):
+    def test_izmeni_ponudu(self,
+                           client,
+                           nova_jedna_ponuda_fixture,
+                           nova_jedna_ponuda_json_fixture_status_potencijalan
+                           ):
         """
         Test poziv 'ponude:izmeni_ponudu' za API poziv izmene Ponude.
         U samoj inicijalizaciji imamo samo jednou Ponudu.
 
             * @see /test_ponude/conftest.py (nova_jedna_ponuda_fixture)
-            * @see /test_ponude/conftest.py (nova_jedna_ponuda_json_fixture)
+            * @see /test_ponude/conftest.py (nova_jedna_ponuda_json_fixture_status_potencijalan)
             * @see path('izmeni-ponudu/<int:id_ponude>/', UrediPonuduViewAPI.as_view(), name='izmeni_ponudu')
         ---
         @param client: A Django test client instance.
@@ -160,7 +170,7 @@ class TestRestApiUrlsPonude:
         url_izmeni_ponudu = reverse('ponude:izmeni_ponudu', args=[nova_jedna_ponuda_fixture.id_ponude])
 
         response = client.put(url_izmeni_ponudu,
-                              data=nova_jedna_ponuda_json_fixture,
+                              data=nova_jedna_ponuda_json_fixture_status_potencijalan,
                               content_type='application/json'
                               )
 
