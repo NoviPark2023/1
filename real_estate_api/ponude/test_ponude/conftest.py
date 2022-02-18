@@ -2,7 +2,6 @@ import datetime
 import json
 import random
 
-import null
 import pytest
 from faker import Faker
 
@@ -115,19 +114,34 @@ def kreiraj_auriranje_cena_ponude(db) -> list[AzuriranjeCena]:
 
 # endregion
 
-# region NOVI JEDAN STAN FIXTURE
+# region NOVI JEDAN STAN FIXTURE (status: "DOSTUPAN")
 @pytest.fixture(autouse=False)
-def novi_jedan_stan_fixture_ponude(db, kreiraj_auriranje_cena_ponude) -> Stanovi:
-    """
-    Kreiranje novog Stana.
+def novi_jedan_stan_fixture_ponude_status_dostupan(db, kreiraj_auriranje_cena_ponude) -> Stanovi:
+    stan_dostupan = Stanovi.objects.create(
+        # id_stana=1,
+        lamela="L3.1.S1",
+        adresa_stana="Adresa Stana L3.1.S2",
+        kvadratura=48.02,
+        kvadratura_korekcija=46.58,
+        iznos_za_korekciju_kvadrature=0.97,
+        sprat="1.0",
+        broj_soba=2,
+        orijentisanost="Jug",
+        broj_terasa="0",
+        cena_stana="73.036,499",
+        cena_kvadrata="1568.00",
+        napomena='Nema napomene',
+        status_prodaje=Stanovi.StatusProdaje.DOSTUPAN,
+    )
 
-    @param kreiraj_auriranje_cena_ponude:  pytest.fixture (kreiraj_auriranje_cena_ponude)
-    @param db: Testna DB.
-    @return: Entitet 'Stanovi'.
-    """
-    print("\n")
-    stan = Stanovi.objects.create(
-        id_stana=1,
+    return stan_dostupan
+
+
+# region NOVI JEDAN STAN FIXTURE (status: "REZERVISAN")
+@pytest.fixture(autouse=False)
+def novi_jedan_stan_fixture_ponude_status_rezervisan(db, kreiraj_auriranje_cena_ponude) -> Stanovi:
+    stan_rezervisan = Stanovi.objects.create(
+        # id_stana=1,
         lamela="L3.1.S2",
         adresa_stana="Adresa Stana L3.1.S2",
         kvadratura=48.02,
@@ -140,12 +154,36 @@ def novi_jedan_stan_fixture_ponude(db, kreiraj_auriranje_cena_ponude) -> Stanovi
         cena_stana="73.036,499",
         cena_kvadrata="1568.00",
         napomena='Nema napomene',
-        status_prodaje="dostupan",
+        status_prodaje=Stanovi.StatusProdaje.REZERVISAN,
     )
 
-    return stan
+    return stan_rezervisan
 
 
+# region NOVI JEDAN STAN FIXTURE (status: "PRODAT")
+@pytest.fixture(autouse=False)
+def novi_jedan_stan_fixture_ponude_status_prodat(db, kreiraj_auriranje_cena_ponude) -> Stanovi:
+    stan_rezervisan = Stanovi.objects.create(
+        # id_stana=1,
+        lamela="L3.1.S3",
+        adresa_stana="Adresa Stana L3.1.S2",
+        kvadratura=48.02,
+        kvadratura_korekcija=46.58,
+        iznos_za_korekciju_kvadrature=0.97,
+        sprat="1.0",
+        broj_soba=2,
+        orijentisanost="Jug",
+        broj_terasa="0",
+        cena_stana="73.036,499",
+        cena_kvadrata="1568.00",
+        napomena='Nema napomene',
+        status_prodaje=Stanovi.StatusProdaje.PRODAT,
+    )
+
+    return stan_rezervisan
+
+
+# endregion
 # endregion
 
 # ##################################
@@ -196,12 +234,12 @@ def novi_kupac_fixture_ponude(db) -> Kupci:
 @pytest.fixture()
 def nova_jedna_ponuda_fixture(db,
                               novi_kupac_fixture_ponude,
-                              novi_jedan_stan_fixture_ponude,
+                              novi_jedan_stan_fixture_ponude_status_dostupan,
                               novi_jedan_auth_korisnik_fixture_ponude) -> Ponude:
     nova_jedna_ponuda_fixture = Ponude.objects.create(
-        id_ponude=1,
+        # id_ponude=1,
         kupac=novi_kupac_fixture_ponude,
-        stan=novi_jedan_stan_fixture_ponude,
+        stan=novi_jedan_stan_fixture_ponude_status_dostupan,
         klijent_prodaje=novi_jedan_auth_korisnik_fixture_ponude,
         cena_stana_za_kupca=0,
         napomena=fake.text(max_nb_chars=25),
@@ -221,12 +259,12 @@ def nova_jedna_ponuda_fixture(db,
 @pytest.fixture()
 def nova_jedna_ponuda_bez_ugovora_fixture(db,
                                           novi_kupac_fixture_ponude,
-                                          novi_jedan_stan_fixture_ponude,
+                                          novi_jedan_stan_fixture_ponude_status_dostupan,
                                           novi_jedan_auth_korisnik_fixture_ponude) -> Ponude:
     nova_jedna_ponuda_fixture = Ponude.objects.create(
-        id_ponude=1,
+        # id_ponude=1,
         kupac=novi_kupac_fixture_ponude,
-        stan=novi_jedan_stan_fixture_ponude,
+        stan=novi_jedan_stan_fixture_ponude_status_dostupan,
         klijent_prodaje=novi_jedan_auth_korisnik_fixture_ponude,
         cena_stana_za_kupca=0,
         napomena=fake.text(max_nb_chars=25),
@@ -246,13 +284,12 @@ def nova_jedna_ponuda_bez_ugovora_fixture(db,
 @pytest.fixture()
 def nova_jedna_ponuda_fixture_401(db,
                                   novi_kupac_fixture_ponude,
-                                  novi_jedan_stan_fixture_ponude,
+                                  novi_jedan_stan_fixture_ponude_status_dostupan,
                                   novi_korisnik_ne_autorizovan_fixture_ponude) -> Ponude:
-
     nova_jedna_ponuda_fixture_401 = Ponude.objects.create(
-        id_ponude=1,
+        # id_ponude=1,
         kupac=novi_kupac_fixture_ponude,
-        stan=novi_jedan_stan_fixture_ponude,
+        stan=novi_jedan_stan_fixture_ponude_status_dostupan,
         klijent_prodaje=novi_korisnik_ne_autorizovan_fixture_ponude,
         cena_stana_za_kupca=70000,
         napomena=fake.text(max_nb_chars=25),
@@ -272,14 +309,14 @@ def nova_jedna_ponuda_fixture_401(db,
 @pytest.fixture()
 def nove_tri_ponude_fixture(db,
                             novi_kupac_fixture_ponude,
-                            novi_jedan_stan_fixture_ponude,
+                            novi_jedan_stan_fixture_ponude_status_dostupan,
                             novi_jedan_auth_korisnik_fixture_ponude) -> Ponude:
     nova_jedna_ponuda_fixture = Ponude.objects.bulk_create(
         [
             Ponude(
-                id_ponude=1,
+                # id_ponude=1,
                 kupac=novi_kupac_fixture_ponude,
-                stan=novi_jedan_stan_fixture_ponude,
+                stan=novi_jedan_stan_fixture_ponude_status_dostupan,
                 klijent_prodaje=novi_jedan_auth_korisnik_fixture_ponude,
                 cena_stana_za_kupca=70000,
                 napomena=fake.text(max_nb_chars=25),
@@ -290,28 +327,28 @@ def nove_tri_ponude_fixture(db,
                 odobrenje=False
             ),
             Ponude(
-                id_ponude=2,
+                # id_ponude=2,
                 kupac=novi_kupac_fixture_ponude,
-                stan=novi_jedan_stan_fixture_ponude,
+                stan=novi_jedan_stan_fixture_ponude_status_dostupan,
                 klijent_prodaje=novi_jedan_auth_korisnik_fixture_ponude,
                 cena_stana_za_kupca=55000,
                 napomena=fake.text(max_nb_chars=25),
                 broj_ugovora="broj_ugovora-2",
                 datum_ugovora=datetime.date(2021, 10, 11),
-                status_ponude=Ponude.StatusPonude.POTENCIJALAN,
+                status_ponude=Ponude.StatusPonude.REZERVISAN,
                 nacin_placanja=Ponude.NacinPlacanja.U_CELOSTI,
                 odobrenje=False
             ),
             Ponude(
-                id_ponude=3,
+                # id_ponude=3,
                 kupac=novi_kupac_fixture_ponude,
-                stan=novi_jedan_stan_fixture_ponude,
+                stan=novi_jedan_stan_fixture_ponude_status_dostupan,
                 klijent_prodaje=novi_jedan_auth_korisnik_fixture_ponude,
                 cena_stana_za_kupca=65000,
                 napomena=fake.text(max_nb_chars=25),
                 broj_ugovora="broj_ugovora-3",
                 datum_ugovora=datetime.date(2022, 1, 10),
-                status_ponude=Ponude.StatusPonude.POTENCIJALAN,
+                status_ponude=Ponude.StatusPonude.KUPLJEN,
                 nacin_placanja=Ponude.NacinPlacanja.U_CELOSTI,
                 odobrenje=False
             )
@@ -322,39 +359,79 @@ def nove_tri_ponude_fixture(db,
 
 # endregion
 
-# region JEDNA PONUDA JSON DUMP FIXTURES
+
+# region JEDNA PONUDA JSON DUMP FIXTURES(STATUS POTENCIJALAN)
 @pytest.fixture()
-def nova_jedna_ponuda_json_fixture(novi_kupac_fixture_ponude,
-                                   novi_jedan_stan_fixture_ponude,
-                                   novi_jedan_auth_korisnik_fixture_ponude
-                                   ):
+def nova_jedna_ponuda_json_fixture_status_potencijalan(novi_kupac_fixture_ponude,
+                                                       novi_jedan_stan_fixture_ponude_status_dostupan,
+                                                       novi_jedan_auth_korisnik_fixture_ponude
+                                                       ):
     return json.dumps(
         {
-            "id_ponude": 1,
+            #"id_ponude": 2,
             "kupac": novi_kupac_fixture_ponude.id_kupca,
-            "ime_kupca": novi_kupac_fixture_ponude.ime_prezime,
-            "stan": novi_jedan_stan_fixture_ponude.id_stana,
-            "adresa_stana": novi_jedan_stan_fixture_ponude.adresa_stana,
-            "lamela_stana": novi_jedan_stan_fixture_ponude.lamela,
-            "cena_stana": 77320.28,
-            "cena_stana_za_kupca": 70000,
-            "napomena": "nema napomene",
-            "broj_ugovora": "123",
-            "datum_ugovora": "21.12.2021",
+            "stan": novi_jedan_stan_fixture_ponude_status_dostupan.id_stana,
+            "cena_stana_za_kupca": 1000,
+            "napomena": "Nema Napomene",
+            "broj_ugovora": "BR.1",
+            "datum_ugovora": "17.11.2022",
             "status_ponude": Ponude.StatusPonude.POTENCIJALAN,
-            "nacin_placanja": "kredit",
-            "odobrenje": True,
-            "klijent_prodaje": novi_jedan_auth_korisnik_fixture_ponude.id,
-            "detalji_ponude_url": "/ponude/detalji-ponude/1/",
-            "izmeni_ponudu_url": "/ponude/izmeni-ponudu/1/",
-            "obrisi_ponudu_url": "/ponude/obrisi-ponudu/1/",
-            "kreiraj_ponudu_url": "/ponude/kreiraj-ponudu/",
-            "lista_ponuda_url": "/ponude/"
+            "nacin_placanja": Ponude.NacinPlacanja.U_CELOSTI,
+            "odobrenje": False,
+            "klijent_prodaje": novi_jedan_auth_korisnik_fixture_ponude.id
         }
     )
 
+
 # endregion
 
+# region JEDNA PONUDA JSON DUMP FIXTURES STATUS(REZERVEISAN)
+@pytest.fixture()
+def nova_jedna_ponuda_json_fixture_status_rezervisan(novi_kupac_fixture_ponude,
+                                                     novi_jedan_stan_fixture_ponude_status_rezervisan,
+                                                     novi_jedan_auth_korisnik_fixture_ponude
+                                                     ):
+    return json.dumps(
+        {
+            #"id_ponude": 3,
+            "kupac": novi_kupac_fixture_ponude.id_kupca + 1,
+            "stan": novi_jedan_stan_fixture_ponude_status_rezervisan.id_stana,
+            "cena_stana_za_kupca": 1000,
+            "napomena": "Nema Napomene",
+            "broj_ugovora": "BR.1",
+            "datum_ugovora": "17.11.2022",
+            "status_ponude": Ponude.StatusPonude.REZERVISAN,
+            "nacin_placanja": Ponude.NacinPlacanja.U_CELOSTI,
+            "odobrenje": False,
+            "klijent_prodaje": novi_jedan_auth_korisnik_fixture_ponude.id
+        }
+    )
+
+
+# endregion
+
+# region JEDNA PONUDA JSON DUMP FIXTURES STATUS(KUPLJEN)
+@pytest.fixture()
+def nova_jedna_ponuda_json_fixture_status_prodat(novi_kupac_fixture_ponude,
+                                                     novi_jedan_stan_fixture_ponude_status_prodat,
+                                                     novi_jedan_auth_korisnik_fixture_ponude
+                                                     ):
+    return json.dumps(
+        {
+            #"id_ponude": 3,
+            "kupac": novi_kupac_fixture_ponude.id_kupca + 2,
+            "stan": novi_jedan_stan_fixture_ponude_status_prodat.id_stana,
+            "cena_stana_za_kupca": 1000,
+            "napomena": "Nema Napomene",
+            "broj_ugovora": "BR.1",
+            "datum_ugovora": "17.11.2022",
+            "status_ponude": Ponude.StatusPonude.KUPLJEN,
+            "nacin_placanja": Ponude.NacinPlacanja.U_CELOSTI,
+            "odobrenje": False,
+            "klijent_prodaje": novi_jedan_auth_korisnik_fixture_ponude.id
+        }
+    )
+# endregion
 
 # ##################################
 # #### END PONUDE FIXTURE #########

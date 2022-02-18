@@ -174,6 +174,7 @@ class ObrisiPonuduAPIView(generics.RetrieveDestroyAPIView):
         # Ukoliko nema ponuda nakon brisanja te jedine, setovati status na DOSTUPAN
 
         ponude_stana = self.get_object()
+        print(f' PONUDE STANA: {ponude_stana}')
         id_stana = ponude_stana.stan.id_stana
 
         instance.delete()
@@ -181,20 +182,26 @@ class ObrisiPonuduAPIView(generics.RetrieveDestroyAPIView):
         Contract.delete_contract(ponude_stana)
 
         # Set Status Stana
-        for status_ponude in self.queryset.filter(stan__id_stana=id_stana).values("status_ponude").iterator():
-            if status_ponude["status_ponude"] == "potencijalan":
-                instance.stan.status_prodaje = 'dostupan'
+        for status_ponude in self.queryset.filter(stan__id_stana=id_stana).values("status_ponude"):
+            if Ponude.StatusPonude.POTENCIJALAN in status_ponude.values():
+                instance.stan.status_prodaje = Stanovi.StatusProdaje.DOSTUPAN
+                instance.odobrenje = False
                 instance.stan.save()
-            elif status_ponude["status_ponude"] == "rezervisan":
-                instance.stan.status_prodaje = 'rezervisan'
+            if Ponude.StatusPonude.REZERVISAN in status_ponude.values():
+                instance.stan.status_prodaje = Stanovi.StatusProdaje.REZERVISAN
+                instance.odobrenje = True
                 instance.stan.save()
-            elif status_ponude["status_ponude"] == "kupljen":
-                instance.stan.status_prodaje = 'prodat'
+                return
+            if Ponude.StatusPonude.KUPLJEN in status_ponude.values():
+                instance.stan.status_prodaje = Stanovi.StatusProdaje.PRODAT
+                instance.odobrenje = True
                 instance.stan.save()
+                break
 
-        # Nema vise Ponuda, mozemo da setujemo status prodaje Stana na "Dostupan".
         if self.queryset.filter(stan__id_stana=id_stana).count() == 0:
-            instance.stan.status_prodaje = 'dostupan'
+            # Nema vise Ponuda, mozemo da setujemo status prodaje Stana na "Dostupan".
+            instance.stan.status_prodaje = Stanovi.StatusProdaje.DOSTUPAN
+            instance.odobrenje = False
             instance.stan.save()
 
 
