@@ -6,10 +6,10 @@ from real_estate_api.ponude.models import Ponude
 from real_estate_api.stanovi.models import Stanovi
 
 
-class TestRestApiUrlsPonude:
+class TestPromenaStatusStanaIzPonudeStana:
     """Testitanje statusa Stana ukoliko dodje do promene-brisanja u ponudama Stana"""
 
-    def test_da_li_je_jedna_ponuda_kreirana(self, nove_tri_ponude_fixture):
+    def test_da_li_su_tri_ponuda_stana_kreirane(self, nove_tri_ponude_fixture):
         """ Test da li je samo jedana Ponuda kreirana u bazi. """
 
         broj_ponuda_from_db = Ponude.objects.all().count()

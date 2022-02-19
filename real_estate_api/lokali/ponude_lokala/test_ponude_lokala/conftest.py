@@ -199,32 +199,6 @@ def nova_jedna_ponuda_lokala_fixture(db,
 
 # endregion
 
-# # region PONUDA LOKALA STATUS REZERVISAN FIXTURES
-# @pytest.fixture()
-# def nova_ponuda_lokala_status_rezervisan_fixture(db,
-#                                                  novi_kupac_lokala_fixture_ponude,
-#                                                  novi_jedan_lokal_ponude_fixture,
-#                                                  novi_autorizovan_korisnik_fixture_lokali_ponude) -> PonudeLokala:
-#
-#     nova_ponuda_lokala_status_rezervisan_fixture = PonudeLokala.objects.create(
-#         id_ponude_lokala=1,
-#         kupac_lokala=novi_kupac_lokala_fixture_ponude,
-#         lokali=novi_jedan_lokal_ponude_fixture,
-#         cena_lokala_za_kupca=0,
-#         napomena_ponude_lokala="nema napomene",
-#         broj_ugovora_lokala="No1",
-#         datum_ugovora_lokala=datetime.date(2022, 2, 1),
-#         status_ponude_lokala=PonudeLokala.StatusPonudeLokala.REZERVISAN,
-#         nacin_placanja_lokala=PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
-#         odobrenje_kupovine_lokala=False,
-#         klijent_prodaje_lokala=novi_autorizovan_korisnik_fixture_lokali_ponude
-#     )
-#
-#     return nova_ponuda_lokala_status_rezervisan_fixture
-#
-#
-# # endregion
-
 # region PONUDA LOKALA STATUS KUPLJEN FIXTURES
 @pytest.fixture()
 def nova_ponuda_lokala_status_kupljen_fixture(db,
