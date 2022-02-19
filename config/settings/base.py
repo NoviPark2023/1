@@ -46,6 +46,7 @@ LOCAL_APPS = [
     'real_estate_api.kupci.apps.KupciConfig',
     'real_estate_api.korisnici.apps.KorisniciConfig',
     'real_estate_api.stanovi.apps.StanoviConfig',
+    'real_estate_api.stanovi.stanovi_dms.apps.StanoviDmsConfig',
     'real_estate_api.ponude.apps.PonudeConfig',
     'real_estate_api.garaze.apps.GarazeConfig',
     'real_estate_api.lokali.lokali_api.apps.LokaliApiConfig',
@@ -260,6 +261,9 @@ STATIC_ROOT = str(BASE_DIR / "static")  # In production we want to use CDN
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [str(APPS_DIR / "static")]
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# If we want DO SPACE for serving static files...decoment below and comment above.
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
@@ -270,13 +274,14 @@ STATICFILES_FINDERS = [
 # ------------------------------------------------------------------------------
 MEDIA_ROOT = str(BASE_DIR / "media")
 MEDIA_URL = "/media/"
+MEDIAFILES_DIRS = [str(APPS_DIR / "media")]
 # endregion
 
 # region STORAGES
 # ------------------------------------------------------------------------------
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = 'ugovori'
+AWS_STORAGE_BUCKET_NAME = 'stanovi-crm-static'
 AWS_S3_ENDPOINT_URL = os.getenv('AWS_S3_ENDPOINT_URL')
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',

@@ -109,8 +109,12 @@ class Ponude(models.Model):
         return self.stan.lamela
 
     def __str__(self):
-        return f"{self.klijent_prodaje.ime} {self.kupac.id_kupca} {self.cena_stana_za_kupca} \
-                  {self.broj_ugovora} {self.kupac.ime_prezime} {self.stan.adresa_stana} {self.stan.adresa_stana}"
+        return f" {self.kupac.id_kupca}" \
+               f" {self.cena_stana_za_kupca} \
+                  {self.broj_ugovora}" \
+               f" {self.kupac.ime_prezime}" \
+               f" {self.stan.adresa_stana}" \
+               f" {self.stan.adresa_stana}"
 
     def save(self, *args, **kwargs):
         """

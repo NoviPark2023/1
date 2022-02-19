@@ -46,6 +46,9 @@ urlpatterns = [
     # Root Putanja do Stanova
     path('stanovi/', include('real_estate_api.stanovi.urls', namespace='stanovi')),
 
+    # Root Putanja do Stanovi DMS
+    path('stanovi-dms/', include('real_estate_api.stanovi.stanovi_dms.urls', namespace='stanovi-dms')),
+
     # Root Putanja do Ponuda
     path('ponude/', include('real_estate_api.ponude.urls', namespace='ponude')),
 

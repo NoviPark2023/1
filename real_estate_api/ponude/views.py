@@ -114,7 +114,7 @@ class UgovorPonudeDownloadListAPIView(generics.ListAPIView):
             url = client.generate_presigned_url(
                 ClientMethod='get_object',
                 Params={
-                    'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
+                    'Bucket': "ugovori",
                     'Key': 'ugovor-br-' + str(queryset.id_ponude) + '-' + str(queryset.stan.lamela) + '.docx'
                 }, ExpiresIn=70000
             )
