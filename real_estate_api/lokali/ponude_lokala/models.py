@@ -1,8 +1,11 @@
 from django.db import models
+from django.db.models import Q
+from docx.opc.exceptions import PackageNotFoundError
 
 from real_estate_api.korisnici.models import Korisnici
 from real_estate_api.kupci.models import Kupci
 from real_estate_api.lokali.lokali_api.models import Lokali
+from real_estate_api.lokali.ugovori_lokali.ugovori_lokali import ContractLokali
 
 
 class PonudeLokala(models.Model):
@@ -114,6 +117,89 @@ class PonudeLokala(models.Model):
 
     def __str__(self):
         return f"{self.lokali.id_lokala} {self.lokali.lamela_lokala}"
+
+    def save(self, *args, **kwargs):
+        """
+        Prilikom cuvanja Ponude Lokala potrebno je setovati status Lokala korespondno statusu
+        Ponude Lokala.
+        Statusi imaju svoju hijerahiju po kojoj je Ponuda sa statusom "KUPLJEN" na najvisem
+        nivou i ukoliko postoji u ponudama, status Stana se setuje na "KUPLJEN".
+        Sledece u hijerahiji je status "REZERVISAN", po istom principu kao i gorespomenuto.
+        Na kraju je status "DOSTUPAN".
+
+        :param args: None
+        :param kwargs: 'force_insert': True, 'using': 'default'
+        """
+        super(PonudeLokala, self).save(*args, **kwargs)
+
+        status_ponude_lokala_rezervisan = PonudeLokala.StatusPonudeLokala.REZERVISAN
+        status_ponude_lokala_klupljen = PonudeLokala.StatusPonudeLokala.KUPLJEN
+
+        status_ponude_rezervisan = PonudeLokala.objects.filter(
+            Q(status_ponude_lokala=status_ponude_lokala_rezervisan)).filter(
+            lokali__id_lokala=self.lokali.id_lokala).exists()
+
+        status_ponude_kupljen = PonudeLokala.objects.filter(
+            Q(status_ponude_lokala=status_ponude_lokala_klupljen)).filter(
+            lokali__id_lokala=self.lokali.id_lokala).exists()
+
+        if status_ponude_kupljen:
+            self.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
+            self.odobrenje = True
+
+            try:
+                ContractLokali.create_contract(self, self.lokali, self.kupac_lokala)  # Kreiraj Ugovor.
+            except PackageNotFoundError:
+                print("Paket za kreiranje Ugovora nije nadjen.")
+
+        elif status_ponude_rezervisan and not status_ponude_kupljen:
+            self.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
+            self.odobrenje = True
+
+            try:
+                ContractLokali.create_contract(self, self.lokali, self.kupac_lokala)  # Kreiraj Ugovor.
+            except PackageNotFoundError:
+                print("Paket za kreiranje Ugovora nije nadjen.")
+
+        elif not status_ponude_kupljen or not status_ponude_rezervisan:
+            self.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.DOSTUPAN
+            self.odobrenje = False
+
+        self.lokali.save()
+
+    def delete(self, *args, **kwargs):
+        """
+        Prilikom brisanja Ponude Lokala potrebno je setovati status Lokala korespondno statusu
+        Ponude Lokala.
+        Statusi imaju svoju hijerahiju po kojoj je Ponuda sa statusom "KUPLJEN" na najvisem
+        nivou i ukoliko postoji u ponudama, status Stana se setuje na "KUPLJEN".
+        Sledece u hijerahiji je status "REZERVISAN", po istom principu kao i gorespomenuto.
+        Na kraju je status "DOSTUPAN".
+
+        :param args: None
+        :param kwargs: 'force_insert': True, 'using': 'default'
+        """
+        super(PonudeLokala, self).delete(*args, **kwargs)
+
+        status_ponude_lokala_rezervisan = PonudeLokala.StatusPonudeLokala.REZERVISAN
+        status_ponude_lokala_klupljen = PonudeLokala.StatusPonudeLokala.KUPLJEN
+
+        status_ponude_rezervisan = PonudeLokala.objects.filter(
+            Q(status_ponude_lokala=status_ponude_lokala_rezervisan)).filter(
+            lokali__id_lokala=self.lokali.id_lokala).exists()
+
+        status_ponude_kupljen = PonudeLokala.objects.filter(
+            Q(status_ponude_lokala=status_ponude_lokala_klupljen)).filter(
+            lokali__id_lokala=self.lokali.id_lokala).exists()
+
+        if status_ponude_kupljen:
+            self.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
+        elif status_ponude_rezervisan and not status_ponude_kupljen:
+            self.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
+        elif not status_ponude_kupljen or not status_ponude_rezervisan:
+            self.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.DOSTUPAN
+
+        self.lokali.save()
 
     class Meta:
         """

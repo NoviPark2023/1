@@ -161,7 +161,7 @@ class Ponude(models.Model):
 
     def delete(self, *args, **kwargs):
         """
-        Prilikom cuvanja Ponude potrebno je setovati status Stana korespondno statusu
+        Prilikom brisanja Ponude potrebno je setovati status Stana korespondno statusu
         Ponude.
         Statusi imaju svoju hijerahiju po kojoj je Ponuda sa statusom "KUPLJEN" na najvisem
         nivou i ukoliko postoji u ponudama, status Stana se setuje na "KUPLJEN".
