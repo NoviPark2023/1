@@ -71,10 +71,6 @@ class KreirajGarazuAPIView(generics.CreateAPIView):
 
             ContractGaraze.create_contract(garaza, garaza.kupac)  # Kreiraj Ugovor Garaže.
 
-        elif garaza.status_prodaje_garaze == Garaze.StatusProdajeGaraze.DOSTUPNA:
-
-            ContractGaraze.delete_contract(garaza)  # Obrisi Ugovor Garaze.
-
 
 class UrediGarazuAPIView(generics.RetrieveUpdateAPIView):
     """Uredjivanje Garaze po pk-id"""
@@ -98,10 +94,6 @@ class UrediGarazuAPIView(generics.RetrieveUpdateAPIView):
         elif garaza.status_prodaje_garaze == Garaze.StatusProdajeGaraze.PRODATA:
 
             ContractGaraze.create_contract(garaza, garaza.kupac)  # Kreiraj Ugovor Garaže.
-
-        elif garaza.status_prodaje_garaze == Garaze.StatusProdajeGaraze.DOSTUPNA:
-
-            ContractGaraze.delete_contract(garaza)  # Obrisi Ugovor Garaze.
 
 
 class ObrisiGarazuAPIView(generics.RetrieveDestroyAPIView):
