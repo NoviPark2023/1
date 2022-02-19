@@ -7,7 +7,7 @@ from real_estate_api.stanovi.models import Stanovi
 
 
 class TestPromenaStatusStanaIzPonudeStana:
-    """Testitanje statusa Stana ukoliko dodje do promene-brisanja u ponudama Stana"""
+    """Testitanje statusa Stana ukoliko dodje do promene-brisanja u Ponudama Stana"""
 
     def test_da_li_su_tri_ponuda_stana_kreirane(self, nove_tri_ponude_fixture):
         """ Test da li je samo jedana Ponuda kreirana u bazi. """
@@ -15,10 +15,10 @@ class TestPromenaStatusStanaIzPonudeStana:
         broj_ponuda_from_db = Ponude.objects.all().count()
         assert broj_ponuda_from_db == 3
 
-    def test_kreiraj_ponudu_potencijalna_status_stana_dostupan(self,
-                                                               client,
-                                                               nova_jedna_ponuda_fixture,
-                                                               ):
+    def test_izmeni_ponudu_potencijalna_status_stana_dostupan(self,
+                                                              client,
+                                                              nova_jedna_ponuda_fixture,
+                                                              ):
         """
         Kada se Ponuda kreira i postavi na status: "POTENCIJALAN", tada i Stan
         treba da ostane u statusu: "DOSTUPAN".
@@ -163,10 +163,10 @@ class TestPromenaStatusStanaIzPonudeStana:
         status_stana_nakon_zmene_ponude = Stanovi.objects.filter(id_stana__exact=id_stana)[0].status_prodaje
         assert status_stana_rezervisan == status_stana_nakon_zmene_ponude
 
-    def test_dodaj_ponudu_potencijalan_status_stana_rezervisan(self,
-                                                               client,
-                                                               nove_tri_ponude_fixture,
-                                                               ):
+    def test_kreiraj_ponudu_potencijalan_status_stana_rezervisan(self,
+                                                                 client,
+                                                                 nove_tri_ponude_fixture,
+                                                                 ):
         # TODO(Ivana): Implementirati situaciju kada se obrise POTENCIJALNA ponuda:
         # TODO(Ivana): PONUDA -> POTENCIJALNA  ||  STAN -> REZERVISAN
 
@@ -186,36 +186,41 @@ class TestPromenaStatusStanaIzPonudeStana:
 
         print(f' PONUDA: {ponuda}')
 
-
-        # TODO(Ivana): 1. Kreirati Ponudu koja je rezervisana da bi status Stana bio "REZERVISAN".
-        # TODO(Ivana): 2. Kreirati Ponudu status "POTENCIJALAN", i proveriti da li je Stan ostao REZERVISAN.
+        # TODO(Ivana): 1. Kreirati Ponudu Stana koja je rezervisana da bi status Stana bio "REZERVISAN".
+        # TODO(Ivana): 2. Kreirati Ponudu Stana status "POTENCIJALAN", i proveriti da li je Stan ostao REZERVISAN.
         # TODO(Ivana): 3. Takodje proveriti "ODOBRENJE PONUDE".
-
         assert True
 
-    def test_dodaj_ponudu_potencijalan_status_stana_prodat(self,
-                                                           client,
-                                                           nove_tri_ponude_fixture,
-                                                           ):
-        # TODO(Ivana): 1. Kreirati Ponudu koja je u statusu: "KUPLJEN" da bi status Stana bio "PRODAT".
-        # TODO(Ivana): 2. Kreirati Ponudu status "POTENCIJALAN", i proveriti da li je Stan ostao "PRODAT".
+    def test_kreiraj_ponudu_potencijalan_status_stana_prodat(self,
+                                                             client,
+                                                             nove_tri_ponude_fixture,
+                                                             ):
+        # TODO(Ivana): 1. Kreirati Ponudu Stana koja je u statusu: "KUPLJEN" da bi status Stana bio "PRODAT".
+        # TODO(Ivana): 2. Obrisati Ponudu Stana status "POTENCIJALAN", i proveriti da li je Stan ostao "PRODAT".
         # TODO(Ivana): 3. Takodje proveriti "ODOBRENJE PONUDE".
-
         assert True
 
     def test_obrisi_ponudu_rezervisan_status_stana_prodat(self,
                                                           client,
                                                           nove_tri_ponude_fixture,
                                                           ):
-        # TODO(Ivana): 1. Kreirati Ponudu koja je u statusu: "KUPLJEN" da bi status Stana bio "PRODAT".
-        # TODO(Ivana): 2. Obrisati Ponudu status "POTENCIJALAN", i proveriti da li je Stan ostao "PRODAT".
-
+        # TODO(Ivana): 1. Kreirati Ponudu Stana koja je u statusu: "KUPLJEN" da bi status Stana bio "PRODAT".
+        # TODO(Ivana): 1. Kreirati Ponudu Stana koja je u statusu: "REZERVISAN".
+        # TODO(Ivana): 2. Obrisati Ponudu Stana status "REZERVISAN", i proveriti da li je Stan ostao "PRODAT".
         assert True
 
     def test_obrisi_ponudu_kupljen_status_stana_rezervisan(self,
                                                            client,
                                                            nove_tri_ponude_fixture,
                                                            ):
-        # TODO(Ivana): 1. Kreirati Ponudu koja je u statusu: "REZERVISAN" da bi status Stana bio "REZERVISAN".
-        # TODO(Ivana): 2. Obrisati Ponudu status "POTENCIJALAN", i proveriti da li je Stan ostao "REZERVISAN".
+        # TODO(Ivana): 1. Kreirati Ponudu Stana koja je u statusu: "KUPLJEN" da bi status Stana bio "KUPLJEN".
+        # TODO(Ivana): 1. Kreirati Ponudu Stana koja je u statusu: "REZERVISAN" da bi status Stana bio "KUPLJEN".
+        # TODO(Ivana): 2. Obrisati Ponudu Stana status "KUPLJEN", i proveriti da li je Stana ostao "REZERVISAN".
+        assert True
+
+    def test_obrisi_sve_ponude_stana_status_stana_dostupan(self,
+                                                           client,
+                                                           nova_jedna_ponuda_fixture,
+                                                           ):
+        # TODO(Ivana): 1. Obrisati sve Ponude Stana i Proveriti status Stana (Treba da je dostupan).
         assert True

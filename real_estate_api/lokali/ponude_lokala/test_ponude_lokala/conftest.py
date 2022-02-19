@@ -58,7 +58,6 @@ def novi_kupac_lokala_fixture_ponude(db) -> Kupci:
     @return: Entitet Kupci.
     """
     kupac_lokala = Kupci.objects.create(
-        id_kupca=1,
         lice='Fizicko',
         ime_prezime='Petar Kralj',
         email='pera@gmail.com',
@@ -82,14 +81,13 @@ def novi_jedan_lokal_ponude_fixture(db) -> Lokali:
     @return: Entitet 'Lokali'.
     """
     lokal_ponude = Lokali.objects.create(
-        id_lokala=1,
         lamela_lokala='L3.0.P1',
         adresa_lokala='Adresa Lokala L3.0.P1',
         kvadratura_lokala=48.02,
         broj_prostorija=1.0,
         napomena_lokala='nema napomene',
-        orijentisanost_lokala='Jug',
-        status_prodaje_lokala='dostupan',
+        orijentisanost_lokala=Lokali.OrijentacijaLokala.JUG,
+        status_prodaje_lokala=Lokali.StatusProdajeLokala.DOSTUPAN,
         cena_lokala=50000.0,
     )
 
@@ -181,7 +179,6 @@ def nova_jedna_ponuda_lokala_fixture(db,
                                      novi_autorizovan_korisnik_fixture_lokali_ponude) -> PonudeLokala:
 
     nova_jedna_ponuda_lokala_fixture = PonudeLokala.objects.create(
-        id_ponude_lokala=1,
         kupac_lokala=novi_kupac_lokala_fixture_ponude,
         lokali=novi_jedan_lokal_ponude_fixture,
         cena_lokala_za_kupca=0,
@@ -190,8 +187,6 @@ def nova_jedna_ponuda_lokala_fixture(db,
         datum_ugovora_lokala=datetime.date(2022, 2, 1),
         status_ponude_lokala=PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
         nacin_placanja_lokala=PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
-        odobrenje_kupovine_lokala=False,
-        klijent_prodaje_lokala=novi_autorizovan_korisnik_fixture_lokali_ponude
     )
 
     return nova_jedna_ponuda_lokala_fixture
@@ -207,7 +202,6 @@ def nova_ponuda_lokala_status_kupljen_fixture(db,
                                               novi_autorizovan_korisnik_fixture_lokali_ponude) -> PonudeLokala:
 
     nova_ponuda_lokala_status_kupljen_fixture = PonudeLokala.objects.create(
-        id_ponude_lokala=1,
         kupac_lokala=novi_kupac_lokala_fixture_ponude,
         lokali=novi_jedan_lokal_ponude_fixture,
         cena_lokala_za_kupca=0,
@@ -216,8 +210,6 @@ def nova_ponuda_lokala_status_kupljen_fixture(db,
         datum_ugovora_lokala=datetime.date(2022, 2, 1),
         status_ponude_lokala=PonudeLokala.StatusPonudeLokala.KUPLJEN,
         nacin_placanja_lokala=PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
-        odobrenje_kupovine_lokala=True,
-        klijent_prodaje_lokala=novi_autorizovan_korisnik_fixture_lokali_ponude
     )
 
     return nova_ponuda_lokala_status_kupljen_fixture
@@ -232,7 +224,6 @@ def nova_jedna_ponuda_lokala_fixture_401(db,
                                          novi_jedan_lokal_ponude_fixture,
                                          novi_neautorizovan_korisnik_fixture_lokali_ponude) -> PonudeLokala:
     nova_jedna_ponuda_lokala_fixture_401 = PonudeLokala.objects.create(
-        id_ponude_lokala=1,
         kupac_lokala=novi_kupac_lokala_fixture_ponude,
         lokali=novi_jedan_lokal_ponude_fixture,
         cena_lokala_za_kupca=0,
@@ -241,8 +232,6 @@ def nova_jedna_ponuda_lokala_fixture_401(db,
         datum_ugovora_lokala=datetime.date(2022, 2, 1),
         status_ponude_lokala=PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
         nacin_placanja_lokala=PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
-        odobrenje_kupovine_lokala=False,
-        klijent_prodaje_lokala=novi_neautorizovan_korisnik_fixture_lokali_ponude
     )
 
     return nova_jedna_ponuda_lokala_fixture_401
@@ -257,7 +246,6 @@ def nova_jedna_ponuda_lokala_bez_ugovora_fixture(db,
                                                  novi_jedan_lokal_ponude_fixture,
                                                  novi_autorizovan_korisnik_fixture_lokali_ponude) -> PonudeLokala:
     nova_jedna_ponuda_lokala_fixture = PonudeLokala.objects.create(
-        id_ponude_lokala=1,
         kupac_lokala=novi_kupac_lokala_fixture_ponude,
         lokali=novi_jedan_lokal_ponude_fixture,
         cena_lokala_za_kupca=0,
@@ -266,8 +254,6 @@ def nova_jedna_ponuda_lokala_bez_ugovora_fixture(db,
         datum_ugovora_lokala=datetime.date(2022, 2, 1),
         status_ponude_lokala=PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
         nacin_placanja_lokala=PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
-        odobrenje_kupovine_lokala=False,
-        klijent_prodaje_lokala=novi_autorizovan_korisnik_fixture_lokali_ponude
     )
 
     return nova_jedna_ponuda_lokala_fixture
@@ -284,7 +270,6 @@ def nove_tri_ponude_lokala_fixture(db,
     nove_tri_ponude_lokala_fixture = PonudeLokala.objects.bulk_create(
         [
             PonudeLokala(
-                id_ponude_lokala=1,
                 kupac_lokala=novi_kupac_lokala_fixture_ponude,
                 lokali=novi_jedan_lokal_ponude_fixture,
                 cena_lokala_za_kupca=10000,
@@ -293,34 +278,26 @@ def nove_tri_ponude_lokala_fixture(db,
                 datum_ugovora_lokala=datetime.date(2022, 2, 1),
                 status_ponude_lokala=PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
                 nacin_placanja_lokala=PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
-                odobrenje_kupovine_lokala=False,
-                klijent_prodaje_lokala=novi_autorizovan_korisnik_fixture_lokali_ponude
             ),
             PonudeLokala(
-                id_ponude_lokala=2,
                 kupac_lokala=novi_kupac_lokala_fixture_ponude,
                 lokali=novi_jedan_lokal_ponude_fixture,
                 cena_lokala_za_kupca=11000,
                 napomena_ponude_lokala="nema napomene",
                 broj_ugovora_lokala="No2",
                 datum_ugovora_lokala=datetime.date(2022, 2, 2),
-                status_ponude_lokala=PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
+                status_ponude_lokala=PonudeLokala.StatusPonudeLokala.REZERVISAN,
                 nacin_placanja_lokala=PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
-                odobrenje_kupovine_lokala=False,
-                klijent_prodaje_lokala=novi_autorizovan_korisnik_fixture_lokali_ponude
             ),
             PonudeLokala(
-                id_ponude_lokala=3,
                 kupac_lokala=novi_kupac_lokala_fixture_ponude,
                 lokali=novi_jedan_lokal_ponude_fixture,
                 cena_lokala_za_kupca=12000,
                 napomena_ponude_lokala="nema napomene",
                 broj_ugovora_lokala="No3",
                 datum_ugovora_lokala=datetime.date(2022, 2, 3),
-                status_ponude_lokala=PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
+                status_ponude_lokala=PonudeLokala.StatusPonudeLokala.KUPLJEN,
                 nacin_placanja_lokala=PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
-                odobrenje_kupovine_lokala=False,
-                klijent_prodaje_lokala=novi_autorizovan_korisnik_fixture_lokali_ponude
             )
         ]
     )
@@ -336,7 +313,6 @@ def nova_jedna_ponuda_lokala_fixture_401(db,
                                          novi_jedan_lokal_ponude_fixture,
                                          novi_neautorizovan_korisnik_fixture_lokali_ponude) -> PonudeLokala:
     nova_jedna_ponuda_lokala_fixture_401 = PonudeLokala.objects.create(
-        id_ponude_lokala=3,
         kupac_lokala=novi_kupac_lokala_fixture_ponude,
         lokali=novi_jedan_lokal_ponude_fixture,
         cena_lokala_za_kupca=12000,
@@ -345,8 +321,6 @@ def nova_jedna_ponuda_lokala_fixture_401(db,
         datum_ugovora_lokala=datetime.date(2022, 2, 3),
         status_ponude_lokala=PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
         nacin_placanja_lokala=PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
-        odobrenje_kupovine_lokala=False,
-        klijent_prodaje_lokala=novi_neautorizovan_korisnik_fixture_lokali_ponude
     )
 
     return nova_jedna_ponuda_lokala_fixture_401
@@ -363,7 +337,6 @@ def nove_dve_ponude_lokala_istih_unique_vrednosti_json_fixture(db,
     return json.dumps(
         [
             {
-                'id_ponude_lokala': 1,
                 'kupac_lokala': novi_kupac_lokala_fixture_ponude.id_kupca,
                 'lokali': 1,
                 'cena_lokala_za_kupca': 10000,
@@ -372,11 +345,8 @@ def nove_dve_ponude_lokala_istih_unique_vrednosti_json_fixture(db,
                 'datum_ugovora_lokala': "2.2.2022",
                 'status_ponude_lokala': PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
                 'nacin_placanja_lokala': PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
-                'odobrenje_kupovine_lokala': False,
-                'klijent_prodaje_lokala': novi_autorizovan_korisnik_fixture_lokali_ponude.id,
             },
             {
-                'id_ponude_lokala': 2,
                 'kupac_lokala': novi_kupac_lokala_fixture_ponude.id_kupca,
                 'lokali': 2,
                 'cena_lokala_za_kupca': 11000,
@@ -385,8 +355,6 @@ def nove_dve_ponude_lokala_istih_unique_vrednosti_json_fixture(db,
                 'datum_ugovora_lokala': "3.2.2022",
                 'status_ponude_lokala': PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
                 'nacin_placanja_lokala': PonudeLokala.NacinPlacanjaLokala.U_CELOSTI,
-                'odobrenje_kupovine_lokala': False,
-                'klijent_prodaje_lokala': novi_autorizovan_korisnik_fixture_lokali_ponude.id,
             },
         ]
     )
