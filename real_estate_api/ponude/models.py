@@ -156,6 +156,7 @@ class Ponude(models.Model):
         elif not status_kupljen or not status_rezervisan:
             self.stan.status_prodaje = Stanovi.StatusProdaje.DOSTUPAN
             self.odobrenje = False
+
         self.stan.save()
 
     def delete(self, *args, **kwargs):
@@ -187,6 +188,7 @@ class Ponude(models.Model):
             self.stan.status_prodaje = Stanovi.StatusProdaje.REZERVISAN
         elif not status_kupljen or not status_rezervisan:
             self.stan.status_prodaje = Stanovi.StatusProdaje.DOSTUPAN
+
         self.stan.save()
 
     class Meta:
