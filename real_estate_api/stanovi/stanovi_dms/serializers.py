@@ -3,15 +3,26 @@ from .models import StanoviDms
 
 
 class StanoviDmsSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = StanoviDms
         fields = (
             "id_fajla",
+            "opis_dokumenta",
             "naziv_fajla",
             "datum_ucitavanja",
+            "stan",
         )
 
+
 class StanoviUploadDmsSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = StanoviDms
-        fields = "__all__"
+        fields = (
+            "id_fajla",
+            "opis_dokumenta",
+            "naziv_fajla",
+            "datum_ucitavanja",
+            "stan",
+        )

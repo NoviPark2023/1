@@ -4,16 +4,28 @@ import boto3
 from django.conf import settings
 from django.db import models
 
+from real_estate_api.stanovi.models import Stanovi
+
 
 class StanoviDms(models.Model):
     """ Document Managment System za entitet Stanova """
     id_fajla = models.BigAutoField(primary_key=True)
-    naziv_fajla = models.CharField(max_length=150)
+    opis_dokumenta = models.CharField(max_length=150)
     datum_ucitavanja = models.DateTimeField(auto_now_add=True)
     file = models.FileField(storage=None)
 
+    stan = models.ForeignKey(Stanovi,
+                             on_delete=models.DO_NOTHING,
+                             db_column='id_stana',
+                             related_name='lista_dokumenata_stana'
+                             )
+
     def __str__(self):
         return f"{self.file}"
+
+    @property
+    def naziv_fajla(self):
+        return str(self.file)
 
     def save(self, *args, **kwargs):
         super(StanoviDms, self).save(*args, **kwargs)

@@ -29,10 +29,11 @@ class ListaDokumenaStanoviAPIView(generics.ListAPIView):
     ]
 
     filterset_fields = {
-        "naziv_fajla": ["contains"],
+        "opis_dokumenta": ["contains"],
+        "stan": ["exact"],
     }
 
-    search_fields = ['naziv_fajla']
+    search_fields = ['opis_dokumenta', 'stan']
 
 
 class DetaljiDokumentaStanaPIView(generics.RetrieveAPIView):
