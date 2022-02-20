@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import StanoviDms
+from ..serializers import StanoviSerializer
 
 
 class StanoviDmsSerializer(serializers.ModelSerializer):
@@ -12,6 +13,7 @@ class StanoviDmsSerializer(serializers.ModelSerializer):
             "naziv_fajla",
             "datum_ucitavanja",
             "stan",
+            "lamela_stana_dokumenti",
         )
 
 
@@ -25,4 +27,6 @@ class StanoviUploadDmsSerializer(serializers.ModelSerializer):
             "naziv_fajla",
             "datum_ucitavanja",
             "stan",
+            "lamela_stana_dokumenti",
+            "file",
         )

@@ -27,6 +27,10 @@ class StanoviDms(models.Model):
     def naziv_fajla(self):
         return str(self.file)
 
+    @property
+    def lamela_stana_dokumenti(self):
+        return str(self.stan.lamela)
+
     def save(self, *args, **kwargs):
         super(StanoviDms, self).save(*args, **kwargs)
 
