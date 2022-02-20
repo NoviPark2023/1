@@ -53,6 +53,7 @@ LOCAL_APPS = [
     'real_estate_api.lokali.ponude_lokala.apps.PonudeLokalaApiConfig',
     'real_estate_api.reports.apps.ReportsConfig',
     'real_estate_api.garaze.reports_garaze.apps.ReportsGarazeConfig',
+    'real_estate_api.lokali.reports_lokali.apps.ReportsLokaliConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
