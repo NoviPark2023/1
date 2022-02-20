@@ -88,24 +88,27 @@ def kreiraj_auriranje_cena_ponude(db) -> list[AzuriranjeCena]:
     """
     azuriranje_cena = AzuriranjeCena.objects.bulk_create(
         [
-            AzuriranjeCena(id_azur_cene=1,
-                           sprat="1.0",
-                           broj_soba=2,
-                           orijentisanost="Jug",
-                           cena_kvadrata=1568.00
-                           ),
-            AzuriranjeCena(id_azur_cene=2,
-                           sprat="1.0",
-                           broj_soba=3,
-                           orijentisanost="Jug",
-                           cena_kvadrata=1574.66
-                           ),
-            AzuriranjeCena(id_azur_cene=3,
-                           sprat="1.0",
-                           broj_soba=3,
-                           orijentisanost="Jug",
-                           cena_kvadrata=1568.00
-                           ),
+            AzuriranjeCena(
+                id_azur_cene=1,
+                sprat="1.0",
+                broj_soba=2,
+                orijentisanost="Jug",
+                cena_kvadrata=1568.00
+            ),
+            AzuriranjeCena(
+                id_azur_cene=2,
+                sprat="1.0",
+                broj_soba=3,
+                orijentisanost="Jug",
+                cena_kvadrata=1574.66
+            ),
+            AzuriranjeCena(
+                id_azur_cene=3,
+                sprat="1.0",
+                broj_soba=3,
+                orijentisanost="Jug",
+                cena_kvadrata=1568.00
+            ),
         ]
     )
 
@@ -119,7 +122,7 @@ def kreiraj_auriranje_cena_ponude(db) -> list[AzuriranjeCena]:
 def novi_jedan_stan_fixture_ponude_status_dostupan(db, kreiraj_auriranje_cena_ponude) -> Stanovi:
     stan_dostupan = Stanovi.objects.create(
         # id_stana=1,
-        lamela="L3.1.S1",
+        lamela="FROM-TEST-L3.1.S1",
         adresa_stana="Adresa Stana L3.1.S2",
         kvadratura=48.02,
         kvadratura_korekcija=46.58,
@@ -142,7 +145,7 @@ def novi_jedan_stan_fixture_ponude_status_dostupan(db, kreiraj_auriranje_cena_po
 def novi_jedan_stan_fixture_ponude_status_rezervisan(db, kreiraj_auriranje_cena_ponude) -> Stanovi:
     stan_rezervisan = Stanovi.objects.create(
         # id_stana=1,
-        lamela="L3.1.S2",
+        lamela="FROM-TEST-L3.1.S2",
         adresa_stana="Adresa Stana L3.1.S2",
         kvadratura=48.02,
         kvadratura_korekcija=46.58,
@@ -165,7 +168,7 @@ def novi_jedan_stan_fixture_ponude_status_rezervisan(db, kreiraj_auriranje_cena_
 def novi_jedan_stan_fixture_ponude_status_prodat(db, kreiraj_auriranje_cena_ponude) -> Stanovi:
     stan_rezervisan = Stanovi.objects.create(
         # id_stana=1,
-        lamela="L3.1.S3",
+        lamela="FROM-TEST-L3.1.S3",
         adresa_stana="Adresa Stana L3.1.S2",
         kvadratura=48.02,
         kvadratura_korekcija=46.58,

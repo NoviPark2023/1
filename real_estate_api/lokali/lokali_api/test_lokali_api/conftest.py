@@ -88,7 +88,7 @@ def novi_jedan_lokal_fixture(db) -> Lokali:
 
     lokal = Lokali.objects.create(
         id_lokala=1,
-        lamela_lokala='L3.0.P1',  # lamela 3, sprat 0, broj prostorija 1, dok ne stigne excel
+        lamela_lokala='FROM-TEST-L3.0.P1',  # lamela 3, sprat 0, broj prostorija 1, dok ne stigne excel
         adresa_lokala='Adresa Lokala L3.0.P1',
         kvadratura_lokala=48.02,
         broj_prostorija=1.0,
@@ -115,7 +115,7 @@ def novi_jedan_lokal_sa_ponudom_fixture(db) -> Lokali:
 
     lokal = Lokali.objects.create(
         id_lokala=1,
-        lamela_lokala='L3.0.P1',
+        lamela_lokala='FROM-TEST-L3.0.P1',
         adresa_lokala='Adresa Lokala L3.0.P1',
         kvadratura_lokala=48.02,
         broj_prostorija=1.0,
@@ -167,7 +167,7 @@ def nova_dva_lokala_fixture(db) -> Lokali:
         [
             Lokali(
                 id_lokala=1,
-                lamela_lokala='L3.0.P1',
+                lamela_lokala='FROM-TEST-L3.0.P1',
                 adresa_lokala='Adresa Lokala L3.0.P1',
                 kvadratura_lokala=48.02,
                 broj_prostorija=1.0,
@@ -178,7 +178,7 @@ def nova_dva_lokala_fixture(db) -> Lokali:
             ),
             Lokali(
                 id_lokala=2,
-                lamela_lokala='L2.0.P1',
+                lamela_lokala='FROM-TEST-L2.0.P1',
                 adresa_lokala='Adresa Lokala L2.0.P1',
                 kvadratura_lokala=40.0,
                 broj_prostorija=1.0,
@@ -203,7 +203,7 @@ def dva_lokala_sa_istom_lamelom_json_fixture():
         [
             {
                 'id_lokala': 3,
-                'lamela_lokala': "L2.0.P1",
+                'lamela_lokala': "FROM-TEST-L2.0.P1",
                 'adresa_lokala': "Adresa Lokala L2.0.P1",
                 'kvadratura_lokala': 40.0,
                 'broj_prostorija': 1.0,
@@ -214,7 +214,7 @@ def dva_lokala_sa_istom_lamelom_json_fixture():
             },
             {
                 'id_lokala': 4,
-                'lamela_lokala': "L2.0.P1",
+                'lamela_lokala': "FROM-TEST-L2.0.P1",
                 'adresa_lokala': "Adresa Lokala L2.0.P1",
                 'kvadratura_lokala': 30.0,
                 'broj_prostorija': 1.0,
@@ -235,7 +235,7 @@ def novi_jedan_lokal_json_fixture():
     return json.dumps(
         {
             'id_lokala': 4,
-            'lamela_lokala': "L2.0.P1",
+            'lamela_lokala': "FROM-TEST-L2.0.P1",
             'adresa_lokala': "Adresa Lokala L2.0.P1",
             'kvadratura_lokala': 30.0,
             'broj_prostorija': 1.0,

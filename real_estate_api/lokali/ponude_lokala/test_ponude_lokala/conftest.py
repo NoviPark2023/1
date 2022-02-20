@@ -81,7 +81,7 @@ def novi_jedan_lokal_ponude_fixture(db) -> Lokali:
     @return: Entitet 'Lokali'.
     """
     lokal_ponude = Lokali.objects.create(
-        lamela_lokala='L3.0.P1',
+        lamela_lokala='FROM-TEST-1',
         adresa_lokala='Adresa Lokala L3.0.P1',
         kvadratura_lokala=48.02,
         broj_prostorija=1.0,

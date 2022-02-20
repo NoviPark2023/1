@@ -23,6 +23,12 @@ class StanoviDms(models.Model):
     def __str__(self):
         return f"{self.file}"
 
+    class Meta:
+        db_table = 'stanovi_dms'
+        verbose_name = "Stanovi Dms"
+        verbose_name_plural = "Stanovi Dms"
+        ordering = ['-datum_ucitavanja']
+
     @property
     def naziv_fajla(self):
         return str(self.file)
@@ -32,18 +38,30 @@ class StanoviDms(models.Model):
         return str(self.stan.lamela)
 
     def save(self, *args, **kwargs):
+        """ Ucitavanje Dokumenta Stana na DO SPACE """
+
         super(StanoviDms, self).save(*args, **kwargs)
 
         UcitajDokumentNaDoSpace(str(self.file)).start()
 
-    class Meta:
-        """
-        Prilagodjeni ndaziv tabele 'StanoviDms 'u Bazi Podataka.
-        """
-        db_table = 'stanovi_dms'
-        verbose_name = "Stanovi Dms"
-        verbose_name_plural = "Stanovi Dms"
-        ordering = ['-datum_ucitavanja']
+    def delete(self, *args, **kwargs):
+        """ Brisanje Dokumenta Stana sa DO SPACE-a """
+
+        super(StanoviDms, self).delete(*args, **kwargs)
+
+        session = boto3.session.Session()
+        client = session.client('s3',
+                                region_name='fra1',
+                                endpoint_url=settings.AWS_S3_ENDPOINT_URL,
+                                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+                                )
+
+        # Obrisi Dokument Stana.
+        client.delete_object(
+            Bucket='stanovi-dms',
+            Key=str(self.file)
+        )
 
 
 class UcitajDokumentNaDoSpace(threading.Thread):

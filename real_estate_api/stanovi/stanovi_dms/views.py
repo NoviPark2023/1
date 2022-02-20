@@ -37,14 +37,6 @@ class ListaDokumenaStanoviAPIView(generics.ListAPIView):
     search_fields = ['opis_dokumenta', 'stan__lamela']
 
 
-class DetaljiDokumentaStanaPIView(generics.RetrieveAPIView):
-    """Lista Garaze po ID-ju, || Detalji Garaze"""
-    permission_classes = [IsAuthenticated, ]
-    lookup_field = lookup_field
-    queryset = StanoviDms.objects.all().order_by('-datum_ucitavanja')
-    serializer_class = StanoviDmsSerializer
-
-
 class StanoviDmsUploadAPIView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = StanoviDms.objects.all()
@@ -53,10 +45,16 @@ class StanoviDmsUploadAPIView(generics.CreateAPIView):
     http_method_names = ['get', 'post', 'patch', 'delete']
 
 
+class ObrisiDokumentStanaAPIView(generics.DestroyAPIView):
+    """ Brisanje Dokumenta Stana po 'pk-id_fajla' """
+    permission_classes = [IsAuthenticated, ]
+    lookup_field = lookup_field
+    queryset = StanoviDms.objects.all().order_by('-datum_ucitavanja')
+    serializer_class = StanoviDmsSerializer
+
+
 class DokumentiStanovaDownloadAPIView(generics.ListAPIView):
-    """
-    API View za preuzimanje dokumenata Stanova.
-    """
+    """ API View za preuzimanje dokumenata Stanova. """
     permission_classes = [IsAuthenticated, ]
     serializer_class = StanoviDmsSerializer
     pagination_class = None
