@@ -1,5 +1,3 @@
-import json
-
 from rest_framework.reverse import reverse
 
 from real_estate_api.lokali.ponude_lokala.models import PonudeLokala
@@ -56,7 +54,7 @@ class TestRestApiUrlsPonudeLokala:
     def test_detalji_ponude_lokala_api_url(self,
                                            client,
                                            novi_autorizovan_korisnik_fixture_lokali_ponude,
-                                           nova_jedna_ponuda_lokala_fixture
+                                           nova_ponuda_lokala_fixture
                                            ):
         """
         Test poziv 'ponude_lokala:detalji_ponude_lokala' za API poziv detalja Ponude Lokala.
@@ -76,7 +74,7 @@ class TestRestApiUrlsPonudeLokala:
         assert broj_ponuda_lokala_from_db == 1
 
         url_detalji_ponude_lokala = reverse('ponude-lokali:detalji_ponude_lokala',
-                                            args=[nova_jedna_ponuda_lokala_fixture.id_ponude_lokala])
+                                            args=[nova_ponuda_lokala_fixture.id_ponude_lokala])
 
         response = client.get(url_detalji_ponude_lokala)
 
@@ -148,7 +146,7 @@ class TestRestApiUrlsPonudeLokala:
 
     def test_izmeni_ponudu_lokala(self,
                                   client,
-                                  nova_jedna_ponuda_lokala_fixture,
+                                  nova_ponuda_lokala_fixture,
                                   nova_jedna_ponuda_lokala_json_fixture,
                                   ):
         """
@@ -168,38 +166,37 @@ class TestRestApiUrlsPonudeLokala:
         assert broj_ponuda_lokala_from_db == 1
 
         url_izmeni_ponudu_lokala = reverse('ponude-lokali:izmeni_ponudu_lokala',
-                                           args=[nova_jedna_ponuda_lokala_fixture.id_ponude_lokala])
+                                           args=[nova_ponuda_lokala_fixture.id_ponude_lokala])
 
         response = client.put(url_izmeni_ponudu_lokala,
                               data=nova_jedna_ponuda_lokala_json_fixture, content_type='application/json')
 
         assert response.status_code == 200
 
-        assert response.json()["kupac_lokala"] == nova_jedna_ponuda_lokala_fixture.kupac_lokala.id_kupca
+        assert response.json()["kupac_lokala"] == nova_ponuda_lokala_fixture.kupac_lokala.id_kupca
 
-        assert response.json()["lokali"] == nova_jedna_ponuda_lokala_fixture.lokali.id_lokala
+        assert response.json()["lokali"] == nova_ponuda_lokala_fixture.lokali.id_lokala
 
         # Razlicita je cena jer je izmenjena.
-        assert response.json()["cena_lokala_za_kupca"] != nova_jedna_ponuda_lokala_fixture.cena_lokala_za_kupca
+        assert response.json()["cena_lokala_za_kupca"] != nova_ponuda_lokala_fixture.cena_lokala_za_kupca
 
         # Razlicita je napomena jer je izmenjena.
-        assert response.json()["napomena_ponude_lokala"] != nova_jedna_ponuda_lokala_fixture.napomena_ponude_lokala
+        assert response.json()["napomena_ponude_lokala"] != nova_ponuda_lokala_fixture.napomena_ponude_lokala
 
         # Razlicit je broj ugovora jer je izmenjen.
-        assert response.json()["broj_ugovora_lokala"] != nova_jedna_ponuda_lokala_fixture.broj_ugovora_lokala
+        assert response.json()["broj_ugovora_lokala"] != nova_ponuda_lokala_fixture.broj_ugovora_lokala
 
         # Razlicit je datum ugovora jer je izmenjen.
-        assert response.json()["datum_ugovora_lokala"] != nova_jedna_ponuda_lokala_fixture.datum_ugovora_lokala
+        assert response.json()["datum_ugovora_lokala"] != nova_ponuda_lokala_fixture.datum_ugovora_lokala
 
-        assert response.json()["status_ponude_lokala"] == nova_jedna_ponuda_lokala_fixture.status_ponude_lokala
+        assert response.json()["status_ponude_lokala"] == nova_ponuda_lokala_fixture.status_ponude_lokala
 
-        assert response.json()["nacin_placanja_lokala"] == nova_jedna_ponuda_lokala_fixture.nacin_placanja_lokala
+        assert response.json()["nacin_placanja_lokala"] == nova_ponuda_lokala_fixture.nacin_placanja_lokala
 
-        # Razlicito je odobrenje jer je izmenjeno.
         assert response.json()[
-                   "odobrenje_kupovine_lokala"] != nova_jedna_ponuda_lokala_fixture.odobrenje_kupovine_lokala
+                   "odobrenje_kupovine_lokala"] == nova_ponuda_lokala_fixture.odobrenje_kupovine_lokala
 
-    def test_obrisi_ponudu_lokala(self, client, nova_jedna_ponuda_lokala_fixture):
+    def test_obrisi_ponudu_lokala(self, client, nova_ponuda_lokala_fixture):
         """
         Test poziv 'ponude_lokala:obrisi_ponudu_lokala' za API poziv Obrisi Ponudu Lokala.
 
@@ -216,7 +213,7 @@ class TestRestApiUrlsPonudeLokala:
 
         url_obrisi_ponudu = reverse(
             'ponude-lokali:obrisi_ponudu_lokala',
-            args=[nova_jedna_ponuda_lokala_fixture.id_ponude_lokala]
+            args=[nova_ponuda_lokala_fixture.id_ponude_lokala]
         )
 
         response = client.delete(url_obrisi_ponudu)

@@ -65,7 +65,7 @@ class TestPonudeLokalaSerijalizers:
 
         assert broj_ponuda_lokala == 1
 
-    def test_invalid_serializers_detalji_jedne_ponude_lokala(self, client, nova_jedna_ponuda_lokala_fixture):
+    def test_invalid_serializers_detalji_jedne_ponude_lokala(self, client, nova_ponuda_lokala_fixture):
         """
         Testiranje serijalizera za pregled deatalja Ponude Lokala koji ne postoji,
         sa fixturom od:
@@ -83,7 +83,7 @@ class TestPonudeLokalaSerijalizers:
 
         # Get invalid one Ponuda Lokala ID from Response.
         url_detalji_ponude_lokala = reverse('ponude-lokali:detalji_ponude_lokala',
-                                            args=[nova_jedna_ponuda_lokala_fixture.id_ponude_lokala + 1000])
+                                            args=[nova_ponuda_lokala_fixture.id_ponude_lokala + 1000])
 
         response = client.get(url_detalji_ponude_lokala)
 

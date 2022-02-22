@@ -23,7 +23,7 @@ class TestPromenaStatusLokalaIzPonudeLokala:
 
     def test_izmeni_ponudu_lokala_potencijalna_status_lokala_dostupan(self,
                                                                       client,
-                                                                      nova_jedna_ponuda_lokala_fixture,
+                                                                      nova_ponuda_lokala_fixture
                                                                       ):
         ponuda_lokala = PonudeLokala.objects.all().first()
         lokal = Lokali.objects.filter(id_lokala__exact=ponuda_lokala.lokali.id_lokala).first()
@@ -47,7 +47,7 @@ class TestPromenaStatusLokalaIzPonudeLokala:
 
     def test_izmeni_ponudu_lokala_rezervisan_status_lokala_rezervisan(self,
                                                                       client,
-                                                                      nova_jedna_ponuda_lokala_fixture,
+                                                                      nova_ponuda_lokala_fixture
                                                                       ):
         ponuda_lokala = PonudeLokala.objects.all().first()
         lokal = Lokali.objects.filter(id_lokala__exact=ponuda_lokala.lokali.id_lokala).first()
@@ -71,7 +71,7 @@ class TestPromenaStatusLokalaIzPonudeLokala:
 
     def test_izmeni_ponudu_lokala_kupljen_status_lokala_prodat(self,
                                                                client,
-                                                               nova_jedna_ponuda_lokala_fixture,
+                                                               nova_ponuda_lokala_fixture
                                                                ):
         ponuda_lokala = PonudeLokala.objects.all().first()
         lokal = Lokali.objects.filter(id_lokala__exact=ponuda_lokala.lokali.id_lokala).first()
@@ -93,35 +93,11 @@ class TestPromenaStatusLokalaIzPonudeLokala:
         izmenjen_lokal = Lokali.objects.all().first()
         assert izmenjen_lokal.status_prodaje_lokala == Lokali.StatusProdajeLokala.PRODAT
 
-    # def test_kreiraj_ponudu_lokala_potencijalan_status_lokala_rezervisan(self,
-    #                                                                     client,
-    #                                                                     nove_dve_ponude_lokala_fixture,
-    #                                                                     ):
-    #     ponuda_lokala = PonudeLokala.objects.all().last()
-    #     lokal = Lokali.objects.filter(id_lokala__exact=ponuda_lokala.lokali.id_lokala).last()
-    #
-    #     # Status Ponude Lokala (Treba da je "REZERVISAN") i odobrenje (True)
-    #     assert ponuda_lokala.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.REZERVISAN
-    #     assert ponuda_lokala.odobrenje_kupovine_lokala == True
-    #
-    #     # Status Lokala (Treba da je: "REZERVISAN")
-    #     assert lokal.status_prodaje_lokala == Lokali.StatusProdajeLokala.REZERVISAN
-    #
-    #     # Nova Ponuda Lokala - POTENCIJALAN
-    #     ponuda_lokala = PonudeLokala.objects.first()
-    #     izmenjen_lokal = Lokali.objects.filter(id_lokala__exact=ponuda_lokala.lokali.id_lokala).first()
-    #
-    #     # Provera statusa Ponude Lokala (Treba da je: "POTENCIJALAN"),
-    #     # odobrenja (False)
-    #     # i statusa Prodaje Lokala (Treba da ostane: "REZERVISAN")
-    #     assert ponuda_lokala.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.POTENCIJALAN
-    #     assert ponuda_lokala.odobrenje_kupovine_lokala == False
-    #     assert izmenjen_lokal.status_prodaje_lokala == Lokali.StatusProdajeLokala.REZERVISAN
-
     def test_kreiraj_ponudu_lokala_potencijalan_status_lokala_rezervisan(self,
-                                                                        client,
-                                                                        nova_ponuda_lokala_status_rezervisan_fixture,
-                                                                        ):
+                                                                         client,
+                                                                         nova_ponuda_lokala_status_rezervisan_fixture,
+                                                                         novi_kupac_lokala_fixture_ponude
+                                                                         ):
         """
         Kreiranje nove Ponude Lokala statusa 'POTENCIJALAN', da bi se proverilo da li ce se promeniti
         prvobitni Status Prodaje Lokala iz 'REZERVISAN' u 'DOSTUPAN', sto ne sme da se desi
@@ -130,7 +106,7 @@ class TestPromenaStatusLokalaIzPonudeLokala:
 
         nova_ponuda_lokala_potencijalan = json.dumps(
             {
-                "kupac_lokala": 1,
+                "kupac_lokala": novi_kupac_lokala_fixture_ponude.id_kupca,
                 "lokali": id_lokala,
                 "cena_lokala_za_kupca": 54000,
                 "napomena_ponude_lokala": 'string',
@@ -139,7 +115,6 @@ class TestPromenaStatusLokalaIzPonudeLokala:
                 "status_ponude_lokala": PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
                 "nacin_placanja_lokala": 'Ceo iznos',
                 "odobrenje_kupovine_lokala": False,
-                "klijent_prodaje_lokala": 1
             }
         )
 
@@ -176,6 +151,7 @@ class TestPromenaStatusLokalaIzPonudeLokala:
     def test_obrisi_ponudu_lokala_potencijalan_status_lokala_prodat(self,
                                                                     client,
                                                                     nova_ponuda_lokala_status_kupljen_fixture,
+                                                                    novi_kupac_lokala_fixture_ponude
                                                                     ):
         """
         Kreiranje Ponude Lokala statusa 'KUPLJEN', da bi Status Prodaje Lokala bio PRODAT.
@@ -186,7 +162,7 @@ class TestPromenaStatusLokalaIzPonudeLokala:
 
         nova_ponuda_lokala_potencijalan = json.dumps(
             {
-                "kupac_lokala": 1,
+                "kupac_lokala": novi_kupac_lokala_fixture_ponude.id_kupca,
                 "lokali": id_lokala,
                 "cena_lokala_za_kupca": 54000,
                 "napomena_ponude_lokala": 'string',
@@ -195,7 +171,6 @@ class TestPromenaStatusLokalaIzPonudeLokala:
                 "status_ponude_lokala": PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
                 "nacin_placanja_lokala": 'Ceo iznos',
                 "odobrenje_kupovine_lokala": False,
-                "klijent_prodaje_lokala": 1
             }
         )
 
@@ -248,6 +223,7 @@ class TestPromenaStatusLokalaIzPonudeLokala:
     def test_obrisi_ponudu_lokala_potencijalan_status_lokala_rezervisan(self,
                                                                         client,
                                                                         nova_ponuda_lokala_status_rezervisan_fixture,
+                                                                        novi_kupac_lokala_fixture_ponude
                                                                         ):
         """
         Kreiranje Ponude Lokala statusa 'REZERVISAN', da bi Status Prodaje Lokala bio REZERVISAN.
@@ -258,7 +234,7 @@ class TestPromenaStatusLokalaIzPonudeLokala:
 
         nova_ponuda_lokala_potencijalan = json.dumps(
             {
-                "kupac_lokala": 1,
+                "kupac_lokala": novi_kupac_lokala_fixture_ponude.id_kupca,
                 "lokali": id_lokala,
                 "cena_lokala_za_kupca": 54000,
                 "napomena_ponude_lokala": 'string',
@@ -267,7 +243,6 @@ class TestPromenaStatusLokalaIzPonudeLokala:
                 "status_ponude_lokala": PonudeLokala.StatusPonudeLokala.POTENCIJALAN,
                 "nacin_placanja_lokala": 'Ceo iznos',
                 "odobrenje_kupovine_lokala": False,
-                "klijent_prodaje_lokala": 1
             }
         )
 
@@ -320,10 +295,8 @@ class TestPromenaStatusLokalaIzPonudeLokala:
     def test_obrisi_ponudu_lokala_kupljen_status_lokala_rezervisan(self,
                                                                    client,
                                                                    nova_ponuda_lokala_status_kupljen_fixture,
+                                                                   novi_kupac_lokala_fixture_ponude
                                                                    ):
-        # TODO(Ivana): 1. Kreirati Ponudu Lokala koja je u statusu: "KUPLJEN" da bi status Lokala bio "KUPLJEN".
-        # TODO(Ivana): 1. Kreirati Ponudu Lokala koja je u statusu: "REZERVISAN" da bi status Lokala bio "KUPLJEN".
-        # TODO(Ivana): 2. Obrisati Ponudu Lokala status "KUPLJEN", i proveriti da li je Lokal ostao "REZERVISAN".
         """
         Kreiranje Ponude Lokala statusa 'KUPLJEN', da bi Status Prodaje Lokala bio PRODAT.
         Kreiranje nove Ponude Lokala statusa 'REZERVISAN', Status Prodaje Lokala ostaje PRODAT.
@@ -333,7 +306,7 @@ class TestPromenaStatusLokalaIzPonudeLokala:
 
         nova_ponuda_lokala_rezervisan = json.dumps(
             {
-                "kupac_lokala": 1,
+                "kupac_lokala": novi_kupac_lokala_fixture_ponude.id_kupca,
                 "lokali": id_lokala,
                 "cena_lokala_za_kupca": 54000,
                 "napomena_ponude_lokala": 'string',
@@ -342,7 +315,6 @@ class TestPromenaStatusLokalaIzPonudeLokala:
                 "status_ponude_lokala": PonudeLokala.StatusPonudeLokala.REZERVISAN,
                 "nacin_placanja_lokala": 'Ceo iznos',
                 "odobrenje_kupovine_lokala": True,
-                "klijent_prodaje_lokala": 1
             }
         )
 
@@ -376,27 +348,87 @@ class TestPromenaStatusLokalaIzPonudeLokala:
         assert nova_ponuda_lokala.odobrenje_kupovine_lokala == True
         assert izmenjen_lokal.status_prodaje_lokala == Lokali.StatusProdajeLokala.PRODAT
 
-        # url_obrisi_novu_ponudu_lokala = reverse(
-        #     'ponude-lokali:obrisi_ponudu_lokala',
-        #     args=[nova_ponuda_lokala.id_ponude_lokala]
-        # )
-        #
-        # response = client.delete(url_obrisi_novu_ponudu_lokala)
-        #
-        # assert response.status_code == 204
-        #
-        # # Preostala prvobitna ponuda
-        # ponuda_lokala = PonudeLokala.objects.all().first()
-        # lokal = Lokali.objects.filter(id_lokala__exact=ponuda_lokala.lokali.id_lokala).first()
-        #
-        # # Provera Statusa Prodaje Lokala (Treba da je ostao: "PRODAT")
-        # assert lokal.status_prodaje_lokala == Lokali.StatusProdajeLokala.PRODAT
+        url_obrisi_prvu_ponudu_lokala = reverse(
+            'ponude-lokali:obrisi_ponudu_lokala',
+            args=[ponuda_lokala.id_ponude_lokala]
+        )
+
+        response = client.delete(url_obrisi_prvu_ponudu_lokala)
+
+        assert response.status_code == 204
+
+        # Preostala druga ponuda
+        nova_ponuda_lokala = PonudeLokala.objects.all().first()
+        lokal = Lokali.objects.filter(id_lokala__exact=nova_ponuda_lokala.lokali.id_lokala).first()
+
+        # Provera Statusa Prodaje Lokala (Treba da predje: "REZERVISAN")
+        assert lokal.status_prodaje_lokala == Lokali.StatusProdajeLokala.REZERVISAN
 
     def test_obrisi_sve_ponude_lokala_status_lokala_dostupan(self,
                                                              client,
-                                                             nova_jedna_ponuda_lokala_fixture,
+                                                             nova_ponuda_lokala_fixture,
+                                                             novi_kupac_lokala_fixture_ponude,
+                                                             novi_jedan_lokal_ponude_fixture
                                                              ):
-        # TODO(Ivana): 1. Obrisati sve Ponude Lokala i Proveriti status Lokala (Treba da je dostupan)
-        assert True
+        """
+        Brisanje svih Ponuda Lokala, kako bi se Status Prodaje Lokala vratio na 'DOSTUPAN'.
+        """
+        # id_lokala = nova_ponuda_lokala_fixture.lokali.id_lokala
+
+        nova_ponuda_lokala_rezervisan = json.dumps(
+            {
+                "kupac_lokala": novi_kupac_lokala_fixture_ponude.id_kupca,
+                "lokali": novi_jedan_lokal_ponude_fixture.id_lokala,
+                "cena_lokala_za_kupca": 54000,
+                "napomena_ponude_lokala": 'string',
+                "broj_ugovora_lokala": 'No56',
+                "datum_ugovora_lokala": '5.2.2022',
+                "status_ponude_lokala": PonudeLokala.StatusPonudeLokala.REZERVISAN,
+                "nacin_placanja_lokala": 'Ceo iznos',
+                "odobrenje_kupovine_lokala": True,
+            }
+        )
+
+        url_kreiraj_novu_ponudu_lokala = reverse('ponude-lokali:kreiraj_ponudu_lokala')
+
+        response_kreiraj_novu_ponudu_lokala = client.post(
+            url_kreiraj_novu_ponudu_lokala,
+            data=nova_ponuda_lokala_rezervisan,
+            content_type='application/json'
+        )
+
+        druga_ponuda_lokala = PonudeLokala.objects.all().first()
+        lokal = Lokali.objects.filter(id_lokala__exact=druga_ponuda_lokala.lokali.id_lokala).first()
+
+        prva_ponuda_lokala = PonudeLokala.objects.last()
+        izmenjen_lokal = Lokali.objects.filter(id_lokala__exact=prva_ponuda_lokala.lokali.id_lokala).first()
+
+        # Provera statusa prve i druge ponude
+        assert druga_ponuda_lokala.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.REZERVISAN
+        assert lokal.status_prodaje_lokala == Lokali.StatusProdajeLokala.REZERVISAN
+
+        assert prva_ponuda_lokala.status_ponude_lokala == PonudeLokala.StatusPonudeLokala.POTENCIJALAN
+        assert izmenjen_lokal.status_prodaje_lokala == Lokali.StatusProdajeLokala.REZERVISAN
+
+        url_obrisi_drugu_ponudu_lokala = reverse(
+            'ponude-lokali:obrisi_ponudu_lokala',
+            args=[druga_ponuda_lokala.id_ponude_lokala]
+        )
+
+        response = client.delete(url_obrisi_drugu_ponudu_lokala)
+        assert response.status_code == 204
+
+        url_obrisi_prvu_ponudu_lokala = reverse(
+            'ponude-lokali:obrisi_ponudu_lokala',
+            args=[prva_ponuda_lokala.id_ponude_lokala]
+        )
+
+        response = client.delete(url_obrisi_prvu_ponudu_lokala)
+        assert response.status_code == 204
+
+        # Provera Statusa Prodaje Lokala nakon brisanja svih ponuda (Treba da je: "DOSTUPAN")
+        lokal = Lokali.objects.filter(id_lokala__exact=novi_jedan_lokal_ponude_fixture.id_lokala).first()
+
+        assert lokal.status_prodaje_lokala == Lokali.StatusProdajeLokala.DOSTUPAN
 
 
