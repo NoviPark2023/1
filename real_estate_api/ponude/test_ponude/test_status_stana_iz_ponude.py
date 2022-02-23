@@ -165,62 +165,336 @@ class TestPromenaStatusStanaIzPonudeStana:
 
     def test_kreiraj_ponudu_potencijalan_status_stana_rezervisan(self,
                                                                  client,
-                                                                 nove_tri_ponude_fixture,
+                                                                 nova_jedna_ponuda_fixture_status_rezervisan,
+                                                                 novi_kupac_fixture_ponude
                                                                  ):
-        # TODO(Ivana): Implementirati situaciju kada se obrise POTENCIJALNA ponuda:
-        # TODO(Ivana): PONUDA -> POTENCIJALNA  ||  STAN -> REZERVISAN
+        """
+        Kreiranje nove Ponude za Stan statusa 'POTENCIJALAN', da bi se proverilo da li ce se promeniti
+        prvobitni Status Prodaje Stana iz 'REZERVISAN' u 'DOSTUPAN', sto ne sme da se desi
+        """
+        id_stana = nova_jedna_ponuda_fixture_status_rezervisan.stan.id_stana
 
-        stan = Stanovi.objects.all().values().first()
+        nova_ponuda_stana_potencijalan = json.dumps(
+            {
+                "kupac": novi_kupac_fixture_ponude.id_kupca,
+                "stan": id_stana,
+                "cena_stana_za_kupca": 100000,
+                "napomena": "Nema Napomene",
+                "broj_ugovora": "BR.1",
+                "datum_ugovora": "17.1.2022",
+                "status_ponude": Ponude.StatusPonude.POTENCIJALAN,
+                "nacin_placanja": Ponude.NacinPlacanja.U_CELOSTI,
+                "odobrenje": False,
+            }
+        )
 
-        print("\n")
-        print(f' ID STANA: {stan["id_stana"]}')
-        print(f' STATUS PRODAJE STANA: {stan["status_prodaje"]}')
-        print("\n")
-        print('############################')
-        print('############################')
-        print('############################')
-        print("\n")
+        # Prvobitna ponuda
+        ponuda = Ponude.objects.all().first()
+        stan = Stanovi.objects.filter(id_stana__exact=ponuda.stan.id_stana).first()
 
-        # Pristup pojedinacnoj Ponudi.
-        ponuda = Ponude.objects.all().values()[0]
+        # Status prvobitne Ponude za stan (Treba da je "REZERVISAN") i odobrenje (True)
+        # Status prvobitne Prodaje stana (Treba da je: "REZERVISAN")
+        assert ponuda.status_ponude == Ponude.StatusPonude.REZERVISAN
+        assert ponuda.odobrenje == True
+        assert stan.status_prodaje == Stanovi.StatusProdaje.REZERVISAN
 
-        print(f' PONUDA: {ponuda}')
+        url_kreiraj_novu_ponudu_stana = reverse('ponude:kreiraj_ponudu')
 
-        # TODO(Ivana): 1. Kreirati Ponudu Stana koja je rezervisana da bi status Stana bio "REZERVISAN".
-        # TODO(Ivana): 2. Kreirati Ponudu Stana status "POTENCIJALAN", i proveriti da li je Stan ostao REZERVISAN.
-        # TODO(Ivana): 3. Takodje proveriti "ODOBRENJE PONUDE".
-        assert True
+        response_kreiraj_novu_ponudu_stana = client.post(
+            url_kreiraj_novu_ponudu_stana,
+            data=nova_ponuda_stana_potencijalan,
+            content_type='application/json'
+        )
+        assert response_kreiraj_novu_ponudu_stana.status_code == 201
 
-    def test_kreiraj_ponudu_potencijalan_status_stana_prodat(self,
-                                                             client,
-                                                             nove_tri_ponude_fixture,
-                                                             ):
-        # TODO(Ivana): 1. Kreirati Ponudu Stana koja je u statusu: "KUPLJEN" da bi status Stana bio "PRODAT".
-        # TODO(Ivana): 2. Obrisati Ponudu Stana status "POTENCIJALAN", i proveriti da li je Stan ostao "PRODAT".
-        # TODO(Ivana): 3. Takodje proveriti "ODOBRENJE PONUDE".
-        assert True
+        # Nova Ponuda za stan - POTENCIJALAN
+        nova_ponuda = Ponude.objects.first()
+        izmenjen_stan = Stanovi.objects.filter(id_stana__exact=nova_ponuda.stan.id_stana).first()
+
+        # Provera statusa nove Ponude za stan (Treba da je: "POTENCIJALAN"),
+        # odobrenja (False)
+        # i Statusa Prodaje stana (Treba da ostane: "REZERVISAN")
+        assert nova_ponuda.status_ponude == Ponude.StatusPonude.POTENCIJALAN
+        assert nova_ponuda.odobrenje == False
+        assert izmenjen_stan.status_prodaje == Stanovi.StatusProdaje.REZERVISAN
+
+    def test_obrisi_ponudu_potencijalan_status_stana_prodat(self,
+                                                            client,
+                                                            nova_jedna_ponuda_fixture_status_kupljen,
+                                                            novi_kupac_fixture_ponude
+                                                            ):
+        """
+        Kreiranje Ponude za Stan statusa 'KUPLJEN', da bi Status Prodaje stana bio 'PRODAT'.
+        Kreiranje nove Ponude za Stan statusa 'POTENCIJALAN', a zatim njeno brisanje
+        da bi se proverilo da li Status Prodaje stana ostaje PRODAT.
+        """
+        id_stana = nova_jedna_ponuda_fixture_status_kupljen.stan.id_stana
+
+        nova_ponuda_stana_potencijalan = json.dumps(
+            {
+                "kupac": novi_kupac_fixture_ponude.id_kupca,
+                "stan": id_stana,
+                "cena_stana_za_kupca": 100000,
+                "napomena": "Nema Napomene",
+                "broj_ugovora": "BR.1",
+                "datum_ugovora": "17.1.2022",
+                "status_ponude": Ponude.StatusPonude.POTENCIJALAN,
+                "nacin_placanja": Ponude.NacinPlacanja.U_CELOSTI,
+                "odobrenje": False,
+            }
+        )
+
+        # Prvobitna ponuda
+        ponuda = Ponude.objects.all().first()
+        stan = Stanovi.objects.filter(id_stana__exact=ponuda.stan.id_stana).first()
+
+        # Status prvobitne Ponude za stan (Treba da je "KUPLJEN") i odobrenje (True)
+        # Status prvobitne Prodaje stana (Treba da je: "PRODAT")
+        assert ponuda.status_ponude == Ponude.StatusPonude.KUPLJEN
+        assert ponuda.odobrenje == True
+        assert stan.status_prodaje == Stanovi.StatusProdaje.PRODAT
+
+        url_kreiraj_novu_ponudu_stana = reverse('ponude:kreiraj_ponudu')
+
+        response_kreiraj_novu_ponudu_stana = client.post(
+            url_kreiraj_novu_ponudu_stana,
+            data=nova_ponuda_stana_potencijalan,
+            content_type='application/json'
+        )
+        assert response_kreiraj_novu_ponudu_stana.status_code == 201
+
+        # Nova Ponuda za stan - POTENCIJALAN
+        nova_ponuda = Ponude.objects.first()
+        izmenjen_stan = Stanovi.objects.filter(id_stana__exact=nova_ponuda.stan.id_stana).first()
+
+        # Provera statusa nove Ponude za stan (Treba da je: "POTENCIJALAN"),
+        # odobrenja (False)
+        # i Statusa Prodaje stana (Treba da ostane: "PRODAT")
+        assert nova_ponuda.status_ponude == Ponude.StatusPonude.POTENCIJALAN
+        assert nova_ponuda.odobrenje == False
+        assert izmenjen_stan.status_prodaje == Stanovi.StatusProdaje.PRODAT
+
+        url_obrisi_novu_ponudu = reverse(
+            'ponude:obrisi_ponudu',
+            args=[nova_ponuda.id_ponude]
+        )
+
+        response = client.delete(url_obrisi_novu_ponudu)
+
+        assert response.status_code == 204
+
+        # Preostala prvobitna ponuda
+        ponuda = Ponude.objects.all().first()
+        stan = Stanovi.objects.filter(id_stana__exact=ponuda.stan.id_stana).first()
+
+        # Provera Statusa Prodaje stana (Treba da je ostao: "PRODAT")
+        assert stan.status_prodaje == Stanovi.StatusProdaje.PRODAT
 
     def test_obrisi_ponudu_rezervisan_status_stana_prodat(self,
                                                           client,
-                                                          nove_tri_ponude_fixture,
+                                                          nova_jedna_ponuda_fixture_status_kupljen,
+                                                          novi_kupac_fixture_ponude
                                                           ):
-        # TODO(Ivana): 1. Kreirati Ponudu Stana koja je u statusu: "KUPLJEN" da bi status Stana bio "PRODAT".
-        # TODO(Ivana): 1. Kreirati Ponudu Stana koja je u statusu: "REZERVISAN".
-        # TODO(Ivana): 2. Obrisati Ponudu Stana status "REZERVISAN", i proveriti da li je Stan ostao "PRODAT".
-        assert True
+        """
+        Kreiranje Ponude za Stan statusa 'KUPLJEN', da bi Status Prodaje stana bio 'PRODAT'.
+        Kreiranje nove Ponude za Stan statusa 'REZERVISAN', a zatim njeno brisanje
+        da bi se proverilo da li Status Prodaje stana ostaje PRODAT.
+        """
+        id_stana = nova_jedna_ponuda_fixture_status_kupljen.stan.id_stana
+
+        nova_ponuda_stana_rezervisan = json.dumps(
+            {
+                "kupac": novi_kupac_fixture_ponude.id_kupca,
+                "stan": id_stana,
+                "cena_stana_za_kupca": 100000,
+                "napomena": "Nema Napomene",
+                "broj_ugovora": "BR.2",
+                "datum_ugovora": "17.1.2022",
+                "status_ponude": Ponude.StatusPonude.REZERVISAN,
+                "nacin_placanja": Ponude.NacinPlacanja.U_CELOSTI,
+                "odobrenje": True,
+            }
+        )
+
+        # Prvobitna ponuda
+        ponuda = Ponude.objects.all().first()
+        stan = Stanovi.objects.filter(id_stana__exact=ponuda.stan.id_stana).first()
+
+        # Status prvobitne Ponude za stan (Treba da je "KUPLJEN") i odobrenje (True)
+        # Status prvobitne Prodaje stana (Treba da je: "PRODAT")
+        assert ponuda.status_ponude == Ponude.StatusPonude.KUPLJEN
+        assert ponuda.odobrenje == True
+        assert stan.status_prodaje == Stanovi.StatusProdaje.PRODAT
+
+        url_kreiraj_novu_ponudu_stana = reverse('ponude:kreiraj_ponudu')
+
+        response_kreiraj_novu_ponudu_stana = client.post(
+            url_kreiraj_novu_ponudu_stana,
+            data=nova_ponuda_stana_rezervisan,
+            content_type='application/json'
+        )
+        assert response_kreiraj_novu_ponudu_stana.status_code == 201
+
+        # Nova Ponuda za stan - REZERVISAN
+        nova_ponuda = Ponude.objects.first()
+        izmenjen_stan = Stanovi.objects.filter(id_stana__exact=nova_ponuda.stan.id_stana).first()
+
+        # Provera statusa nove Ponude za stan (Treba da je: "REZERVISAN"),
+        # odobrenja (True)
+        # i Statusa Prodaje stana (Treba da ostane: "PRODAT")
+        assert nova_ponuda.status_ponude == Ponude.StatusPonude.REZERVISAN
+        assert nova_ponuda.odobrenje == True
+        assert izmenjen_stan.status_prodaje == Stanovi.StatusProdaje.PRODAT
+
+        url_obrisi_novu_ponudu = reverse(
+            'ponude:obrisi_ponudu',
+            args=[nova_ponuda.id_ponude]
+        )
+
+        response = client.delete(url_obrisi_novu_ponudu)
+
+        assert response.status_code == 204
+
+        # Preostala prvobitna ponuda
+        ponuda = Ponude.objects.all().first()
+        stan = Stanovi.objects.filter(id_stana__exact=ponuda.stan.id_stana).first()
+
+        # Provera Statusa Prodaje stana (Treba da je ostao: "PRODAT")
+        assert stan.status_prodaje == Stanovi.StatusProdaje.PRODAT
 
     def test_obrisi_ponudu_kupljen_status_stana_rezervisan(self,
                                                            client,
-                                                           nove_tri_ponude_fixture,
+                                                           nova_jedna_ponuda_fixture_status_kupljen,
+                                                           novi_kupac_fixture_ponude
                                                            ):
-        # TODO(Ivana): 1. Kreirati Ponudu Stana koja je u statusu: "KUPLJEN" da bi status Stana bio "KUPLJEN".
-        # TODO(Ivana): 1. Kreirati Ponudu Stana koja je u statusu: "REZERVISAN" da bi status Stana bio "KUPLJEN".
-        # TODO(Ivana): 2. Obrisati Ponudu Stana status "KUPLJEN", i proveriti da li je Stana ostao "REZERVISAN".
-        assert True
+        """
+        Kreiranje Ponude za Stan statusa 'KUPLJEN', da bi Status Prodaje stana bio 'PRODAT'.
+        Kreiranje nove Ponude za Stan statusa 'REZERVISAN', Status Prodaje stana ostaje 'PRODAT'.
+        Brisanje prve Ponude da bi se proverilo da li Status Prodaje stana prelazi u 'REZERVISAN'.
+        """
+        id_stana = nova_jedna_ponuda_fixture_status_kupljen.stan.id_stana
+
+        nova_ponuda_stana_rezervisan = json.dumps(
+            {
+                "kupac": novi_kupac_fixture_ponude.id_kupca,
+                "stan": id_stana,
+                "cena_stana_za_kupca": 100000,
+                "napomena": "Nema Napomene",
+                "broj_ugovora": "BR.3",
+                "datum_ugovora": "17.1.2022",
+                "status_ponude": Ponude.StatusPonude.REZERVISAN,
+                "nacin_placanja": Ponude.NacinPlacanja.U_CELOSTI,
+                "odobrenje": True,
+            }
+        )
+
+        # Prvobitna ponuda
+        ponuda = Ponude.objects.all().first()
+        stan = Stanovi.objects.filter(id_stana__exact=ponuda.stan.id_stana).first()
+
+        # Status prvobitne Ponude za stan (Treba da je "KUPLJEN") i odobrenje (True)
+        # Status prvobitne Prodaje stana (Treba da je: "PRODAT")
+        assert ponuda.status_ponude == Ponude.StatusPonude.KUPLJEN
+        assert ponuda.odobrenje == True
+        assert stan.status_prodaje == Stanovi.StatusProdaje.PRODAT
+
+        url_kreiraj_novu_ponudu_stana = reverse('ponude:kreiraj_ponudu')
+
+        response_kreiraj_novu_ponudu_stana = client.post(
+            url_kreiraj_novu_ponudu_stana,
+            data=nova_ponuda_stana_rezervisan,
+            content_type='application/json'
+        )
+        assert response_kreiraj_novu_ponudu_stana.status_code == 201
+
+        # Nova Ponuda za stan - REZERVISAN
+        nova_ponuda = Ponude.objects.first()
+        izmenjen_stan = Stanovi.objects.filter(id_stana__exact=nova_ponuda.stan.id_stana).first()
+
+        # Provera statusa nove Ponude za stan (Treba da je: "REZERVISAN"),
+        # odobrenja (True)
+        # i Statusa Prodaje stana (Treba da ostane: "PRODAT")
+        assert nova_ponuda.status_ponude == Ponude.StatusPonude.REZERVISAN
+        assert nova_ponuda.odobrenje == True
+        assert izmenjen_stan.status_prodaje == Stanovi.StatusProdaje.PRODAT
+
+        url_obrisi_prvu_ponudu = reverse(
+            'ponude:obrisi_ponudu',
+            args=[ponuda.id_ponude]
+        )
+
+        response = client.delete(url_obrisi_prvu_ponudu)
+
+        assert response.status_code == 204
+
+        # Preostala druga ponuda
+        nova_ponuda = Ponude.objects.all().first()
+        stan = Stanovi.objects.filter(id_stana__exact=nova_ponuda.stan.id_stana).first()
+
+        # Provera Statusa Prodaje stana (Treba da predje u: "REZERVISAN")
+        assert stan.status_prodaje == Stanovi.StatusProdaje.REZERVISAN
 
     def test_obrisi_sve_ponude_stana_status_stana_dostupan(self,
                                                            client,
                                                            nova_jedna_ponuda_fixture,
+                                                           novi_kupac_fixture_ponude,
+                                                           novi_jedan_stan_fixture_ponude_status_dostupan
                                                            ):
-        # TODO(Ivana): 1. Obrisati sve Ponude Stana i Proveriti status Stana (Treba da je dostupan).
-        assert True
+        """
+        Brisanje svih Ponuda za Stan, kako bi se Status Prodaje stana vratio na 'DOSTUPAN'.
+        """
+        nova_ponuda_stana_rezervisan = json.dumps(
+            {
+                "kupac": novi_kupac_fixture_ponude.id_kupca,
+                "stan": novi_jedan_stan_fixture_ponude_status_dostupan.id_stana,
+                "cena_stana_za_kupca": 90000,
+                "napomena": "Nema Napomene",
+                "broj_ugovora": "BR.33",
+                "datum_ugovora": "17.1.2022",
+                "status_ponude": Ponude.StatusPonude.REZERVISAN,
+                "nacin_placanja": Ponude.NacinPlacanja.U_CELOSTI,
+                "odobrenje": True,
+            }
+        )
+
+        url_kreiraj_novu_ponudu_stana = reverse('ponude:kreiraj_ponudu')
+
+        response_kreiraj_novu_ponudu_stana = client.post(
+            url_kreiraj_novu_ponudu_stana,
+            data=nova_ponuda_stana_rezervisan,
+            content_type='application/json'
+        )
+
+        druga_ponuda_stana = Ponude.objects.all().first()
+        stan = Stanovi.objects.filter(id_stana__exact=druga_ponuda_stana.stan.id_stana).first()
+
+        prva_ponuda_stana = Ponude.objects.last()
+        izmenjen_stan = Stanovi.objects.filter(id_stana__exact=prva_ponuda_stana.stan.id_stana).first()
+
+        # Provera statusa prve i druge ponude
+        assert druga_ponuda_stana.status_ponude == Ponude.StatusPonude.REZERVISAN
+        assert stan.status_prodaje == Stanovi.StatusProdaje.REZERVISAN
+
+        assert prva_ponuda_stana.status_ponude == Ponude.StatusPonude.POTENCIJALAN
+        assert izmenjen_stan.status_prodaje == Stanovi.StatusProdaje.REZERVISAN
+
+        url_obrisi_drugu_ponudu_stana = reverse(
+            'ponude:obrisi_ponudu',
+            args=[druga_ponuda_stana.id_ponude]
+        )
+
+        response = client.delete(url_obrisi_drugu_ponudu_stana)
+        assert response.status_code == 204
+
+        url_obrisi_prvu_ponudu_stana = reverse(
+            'ponude:obrisi_ponudu',
+            args=[prva_ponuda_stana.id_ponude]
+        )
+
+        response = client.delete(url_obrisi_prvu_ponudu_stana)
+        assert response.status_code == 204
+
+        # Provera Statusa Prodaje stana nakon brisanja svih ponuda (Treba da je: "DOSTUPAN")
+        stan = Stanovi.objects.filter(id_stana__exact=novi_jedan_stan_fixture_ponude_status_dostupan.id_stana).first()
+
+        assert stan.status_prodaje == Stanovi.StatusProdaje.DOSTUPAN
