@@ -145,7 +145,7 @@ class PonudeLokala(models.Model):
 
         if status_ponude_kupljen:
             self.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.PRODAT
-            self.odobrenje = True
+            self.odobrenje_kupovine_lokala = True
 
             try:
                 ContractLokali.create_contract(self, self.lokali, self.kupac_lokala)  # Kreiraj Ugovor.
@@ -154,7 +154,7 @@ class PonudeLokala(models.Model):
 
         elif status_ponude_rezervisan and not status_ponude_kupljen:
             self.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.REZERVISAN
-            self.odobrenje = True
+            self.odobrenje_kupovine_lokala = True
 
             try:
                 ContractLokali.create_contract(self, self.lokali, self.kupac_lokala)  # Kreiraj Ugovor.
@@ -163,7 +163,7 @@ class PonudeLokala(models.Model):
 
         elif not status_ponude_kupljen or not status_ponude_rezervisan:
             self.lokali.status_prodaje_lokala = Lokali.StatusProdajeLokala.DOSTUPAN
-            self.odobrenje = False
+            self.odobrenje_kupovine_lokala = False
 
         self.lokali.save()
 

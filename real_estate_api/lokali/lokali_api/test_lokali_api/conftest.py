@@ -121,7 +121,7 @@ def novi_jedan_lokal_sa_ponudom_fixture(db) -> Lokali:
         broj_prostorija=1.0,
         napomena_lokala='nema napomene',
         orijentisanost_lokala='Jug',
-        status_prodaje_lokala='rezervisan',
+        status_prodaje_lokala=PonudeLokala.StatusPonudeLokala.REZERVISAN,
         cena_lokala=50000.0,
     )
 
