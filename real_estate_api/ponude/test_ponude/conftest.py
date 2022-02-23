@@ -258,6 +258,30 @@ def nova_jedna_ponuda_fixture(db,
 
 # endregion
 
+# region JEDNA PONUDA FIXTURES (STATUS REZERVISAN)
+@pytest.fixture()
+def nova_jedna_ponuda_fixture_status_rezervisan(db,
+                                                novi_kupac_fixture_ponude,
+                                                novi_jedan_stan_fixture_ponude_status_rezervisan,
+                                                novi_jedan_auth_korisnik_fixture_ponude) -> Ponude:
+    nova_jedna_ponuda_fixture_status_rezervisan = Ponude.objects.create(
+        kupac=novi_kupac_fixture_ponude,
+        stan=novi_jedan_stan_fixture_ponude_status_rezervisan,
+        klijent_prodaje=novi_jedan_auth_korisnik_fixture_ponude,
+        cena_stana_za_kupca=0,
+        napomena="nema napomene",
+        broj_ugovora="broj_ugovora",
+        datum_ugovora=datetime.date(2021, 9, 1),
+        status_ponude=Ponude.StatusPonude.REZERVISAN,
+        nacin_placanja=Ponude.NacinPlacanja.U_CELOSTI,
+        odobrenje=True
+    )
+
+    return nova_jedna_ponuda_fixture_status_rezervisan
+
+
+# endregion
+
 # region JEDNA PONUDA FIXTURES (STATUS POTENCIJALAN)
 @pytest.fixture()
 def nova_jedna_ponuda_fixture_status_kupljen(db,
