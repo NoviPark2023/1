@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 from babel.numbers import format_decimal, parse_decimal
 from django.db.models import Count, Sum
 from rest_framework import generics
