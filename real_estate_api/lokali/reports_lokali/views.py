@@ -12,7 +12,7 @@ from real_estate_api.lokali.reports_lokali.serializers import (
     ReportsLokaliSerializer,
     ProdajaLokalaPoKorisnikuSerializer,
     ProdajaLokalaPoKlijentuSerializer,
-    RoiSerializer,
+    RoiLokaliSerializer,
 )
 
 
@@ -261,7 +261,7 @@ class RoiLokalaAPIView(generics.ListAPIView):
     """ Return on investment za Lokale Report"""
 
     permission_classes = [IsAuthenticated, ]
-    serializer_class = RoiSerializer
+    serializer_class = RoiLokaliSerializer
     pagination_class = None
 
     @staticmethod

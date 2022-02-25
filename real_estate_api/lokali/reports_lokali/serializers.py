@@ -106,7 +106,7 @@ class ProdajaLokalaPoKlijentuSerializer(serializers.ModelSerializer):
         return potencijalni_lokali_klijenti
 
 
-class RoiSerializer(serializers.ModelSerializer):
+class RoiLokaliSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lokali
