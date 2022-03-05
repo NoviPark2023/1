@@ -1,6 +1,8 @@
-from rest_framework import generics
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics, filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.settings import api_settings
 
 from .models import Stanovi, AzuriranjeCena
 from .serializers import (
@@ -20,6 +22,18 @@ class ListaStanovaAPIView(generics.ListAPIView):
     queryset = Stanovi.objects.all().order_by('id_stana')
     serializer_class = StanoviSerializer
 
+    filter_backends = api_settings.DEFAULT_FILTER_BACKENDS + [
+        filters.OrderingFilter,
+        filters.SearchFilter,
+        DjangoFilterBackend,
+    ]
+
+    filterset_fields = {
+        "lamela": ["icontains"],
+        "status_prodaje": ["icontains"],
+    }
+
+    search_fields = ["lamela", "status_prodaje"]
 
 class StanoviDetaljiAPIVIew(generics.RetrieveAPIView):
     """Get Stanovi po ID-ju || DETALJI STANA"""
