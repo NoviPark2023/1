@@ -4,29 +4,29 @@ import boto3
 from django.conf import settings
 from django.db import models
 
-from real_estate_api.stanovi.models import Stanovi
+from real_estate_api.lokali.lokali_api.models import Lokali
 
 
-class StanoviDms(models.Model):
-    """ Document Managment System za entitet Stanova """
+class LokaliDms(models.Model):
+    """ Document Managment System za entitet Lokala """
     id_fajla = models.BigAutoField(primary_key=True)
     opis_dokumenta = models.CharField(max_length=150)
     datum_ucitavanja = models.DateTimeField(auto_now_add=True)
     file = models.FileField(storage=None)
 
-    stan = models.ForeignKey(Stanovi,
-                             on_delete=models.DO_NOTHING,
-                             db_column='id_stana',
-                             related_name='lista_dokumenata_stana'
-                             )
+    lokal = models.ForeignKey(Lokali,
+                              on_delete=models.DO_NOTHING,
+                              db_column='id_lokala',
+                              related_name='lista_dokumenata_lokala'
+                              )
 
     def __str__(self):
         return f"{self.file}"
 
     class Meta:
-        db_table = 'stanovi_dms'
-        verbose_name = "Stanovi Dms"
-        verbose_name_plural = "Stanovi Dms"
+        db_table = 'lokali_dms'
+        verbose_name = "Lokali Dms"
+        verbose_name_plural = "Lokali Dms"
         ordering = ['-datum_ucitavanja']
 
     @property
@@ -34,20 +34,20 @@ class StanoviDms(models.Model):
         return str(self.file)
 
     @property
-    def lamela_stana_dokumenti(self):
-        return str(self.stan.lamela)
+    def lamela_lokala_dokumenti(self):
+        return str(self.lokal.lamela_lokala)
 
     def save(self, *args, **kwargs):
         """ Ucitavanje Dokumenta Stana na DO SPACE """
 
-        super(StanoviDms, self).save(*args, **kwargs)
+        super(LokaliDms, self).save(*args, **kwargs)
 
         UcitajDokumentNaDoSpace(str(self.file)).start()
 
     def delete(self, *args, **kwargs):
         """ Brisanje Dokumenta Stana sa DO SPACE-a """
 
-        super(StanoviDms, self).delete(*args, **kwargs)
+        super(LokaliDms, self).delete(*args, **kwargs)
 
         session = boto3.session.Session()
         client = session.client('s3',
@@ -59,7 +59,7 @@ class StanoviDms(models.Model):
 
         # Obrisi Dokument Stana.
         client.delete_object(
-            Bucket='stanovi-dms',
+            Bucket='lokali-dms',
             Key=str(self.file)
         )
 
@@ -73,8 +73,8 @@ class UcitajDokumentNaDoSpace(threading.Thread):
 
     def run(self):
         try:
-            session_fajla_stana = boto3.session.Session()
-            client_fajla_stana = session_fajla_stana.client(
+            session_fajla_lokala = boto3.session.Session()
+            client_fajla_lokala = session_fajla_lokala.client(
                 's3',
                 region_name='fra1',
                 endpoint_url=settings.AWS_S3_ENDPOINT_URL,
@@ -82,9 +82,9 @@ class UcitajDokumentNaDoSpace(threading.Thread):
                 aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
             )
             # # Ucitaj na Digital Ocean Space
-            client_fajla_stana.upload_file(
+            client_fajla_lokala.upload_file(
                 'media/' + str(self.file),
-                'stanovi-dms',
+                'lokali-dms',
                 self.file
             )
         except FileExistsError as e:

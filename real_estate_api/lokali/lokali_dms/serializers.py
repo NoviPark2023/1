@@ -1,30 +1,30 @@
 from rest_framework import serializers
 
-from .models import StanoviDms
+from .models import LokaliDms
 
 
-class StanoviDmsSerializer(serializers.ModelSerializer):
+class LokaliDmsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = StanoviDms
+        model = LokaliDms
         fields = (
             "id_fajla",
             "opis_dokumenta",
             "naziv_fajla",
             "datum_ucitavanja",
-            "stan",
-            "lamela_stana_dokumenti",
+            "lokal",
+            "lamela_lokala_dokumenti",
         )
 
 
-class StanoviUploadDmsSerializer(serializers.ModelSerializer):
+class LokaliUploadDmsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = StanoviDms
+        model = LokaliDms
         fields = (
             "id_fajla",
             "opis_dokumenta",
             "naziv_fajla",
             "datum_ucitavanja",
-            "stan",
-            "lamela_stana_dokumenti",
+            "lokal",
+            "lamela_lokala_dokumenti",
             "file",
         )

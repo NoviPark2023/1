@@ -69,6 +69,9 @@ urlpatterns = [
     # Root Putanja do Reports Lokali
     path('reports-lokali/', include('real_estate_api.lokali.reports_lokali.urls', namespace='reports-lokali')),
 
+    # Root Putanja do Stanovi DMS
+    path('lokali-dms/', include('real_estate_api.lokali.lokali_dms.urls', namespace='lokali-dms')),
+
     # Root Putanja do Dokumentacije
     url(r'^docs/$', schema_view.with_ui('swagger', cache_timeout=0), name='docs'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='docs-redoc'),

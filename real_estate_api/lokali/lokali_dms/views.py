@@ -8,21 +8,21 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 
-from .models import StanoviDms
+from .models import LokaliDms
 from .serializers import (
-    StanoviDmsSerializer,
-    StanoviUploadDmsSerializer
+    LokaliDmsSerializer,
+    LokaliUploadDmsSerializer
 )
 
 lookup_field = 'id_fajla'
 
 
-class ListaDokumenaStanoviAPIView(generics.ListAPIView):
+class ListaDokumenaLokaliAPIView(generics.ListAPIView):
     """ API poziv za listu svih Dokumenata. """
 
     permission_classes = [IsAuthenticated]
-    queryset = StanoviDms.objects.all().order_by('-datum_ucitavanja')
-    serializer_class = StanoviDmsSerializer
+    queryset = LokaliDms.objects.all().order_by('-datum_ucitavanja')
+    serializer_class = LokaliDmsSerializer
 
     filter_backends = api_settings.DEFAULT_FILTER_BACKENDS + [
         filters.OrderingFilter,
@@ -31,39 +31,39 @@ class ListaDokumenaStanoviAPIView(generics.ListAPIView):
 
     filterset_fields = {
         "opis_dokumenta": ["contains"],
-        "stan": ["exact"],
+        "lokal": ["exact"],
     }
 
-    search_fields = ['opis_dokumenta', 'stan__lamela']
+    search_fields = ['opis_dokumenta', 'lokal__lamela_lokala']
 
 
-class StanoviDmsUploadAPIView(generics.CreateAPIView):
+class LokaliDmsUploadAPIView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
-    queryset = StanoviDms.objects.all()
-    serializer_class = StanoviUploadDmsSerializer
+    queryset = LokaliDms.objects.all()
+    serializer_class = LokaliUploadDmsSerializer
     parser_classes = [parsers.MultiPartParser, parsers.FormParser]
     http_method_names = ['get', 'post', 'patch', 'delete']
 
 
-class ObrisiDokumentStanaAPIView(generics.DestroyAPIView):
-    """ Brisanje Dokumenta Stana po 'pk-id_fajla' """
+class ObrisiDokumentLokalaAPIView(generics.DestroyAPIView):
+    """ Brisanje Dokumenta Lokala po 'pk-id_fajla' """
     permission_classes = [IsAuthenticated, ]
     lookup_field = lookup_field
-    queryset = StanoviDms.objects.all().order_by('-datum_ucitavanja')
-    serializer_class = StanoviDmsSerializer
+    queryset = LokaliDms.objects.all().order_by('-datum_ucitavanja')
+    serializer_class = LokaliDmsSerializer
 
 
-class DokumentiStanovaDownloadAPIView(generics.ListAPIView):
-    """ API View za preuzimanje dokumenata Stanova. """
+class DokumentiLokalaDownloadAPIView(generics.ListAPIView):
+    """ API View za preuzimanje dokumenata Lokala. """
     permission_classes = [IsAuthenticated, ]
-    serializer_class = StanoviDmsSerializer
+    serializer_class = LokaliDmsSerializer
     pagination_class = None
 
     def get(self, request, *args, **kwargs):
 
         try:
-            queryset_dokumenta = StanoviDms.objects.get(id_fajla__exact=kwargs[lookup_field])
-        except StanoviDms.DoesNotExist:
+            queryset_dokumenta = LokaliDms.objects.get(id_fajla__exact=kwargs[lookup_field])
+        except LokaliDms.DoesNotExist:
             return Response({"Error": "Fajl ne postoji u sistemu."})
 
         try:
@@ -78,12 +78,12 @@ class DokumentiStanovaDownloadAPIView(generics.ListAPIView):
             url = client.generate_presigned_url(
                 ClientMethod='get_object',
                 Params={
-                    'Bucket': 'stanovi-dms',
+                    'Bucket': 'lokali-dms',
                     'Key': str(queryset_dokumenta.file)
                 }, ExpiresIn=70000
             )
 
-        except (FileNotFoundError, StanoviDms.DoesNotExist):
-            raise NotFound('Željeni dokument Stana nije nađen !', code=404)
+        except (FileNotFoundError, LokaliDms.DoesNotExist):
+            raise NotFound('Željeni dokument Lokala nije nađen !', code=404)
 
         return HttpResponse(url)
