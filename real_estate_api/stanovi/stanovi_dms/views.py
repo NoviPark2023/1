@@ -24,18 +24,6 @@ class ListaDokumenaStanoviAPIView(generics.ListAPIView):
     queryset = StanoviDms.objects.all().order_by('-datum_ucitavanja')
     serializer_class = StanoviDmsSerializer
 
-    filter_backends = api_settings.DEFAULT_FILTER_BACKENDS + [
-        filters.OrderingFilter,
-        DjangoFilterBackend,
-    ]
-
-    filterset_fields = {
-        "opis_dokumenta": ["contains"],
-        "stan": ["exact"],
-    }
-
-    search_fields = ['opis_dokumenta', 'stan__lamela']
-
 
 class StanoviDmsUploadAPIView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]

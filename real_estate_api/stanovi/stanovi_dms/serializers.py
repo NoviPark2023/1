@@ -8,7 +8,6 @@ class StanoviDmsSerializer(serializers.ModelSerializer):
         model = StanoviDms
         fields = (
             "id_fajla",
-            "opis_dokumenta",
             "naziv_fajla",
             "datum_ucitavanja",
             "stan",
@@ -21,7 +20,6 @@ class StanoviUploadDmsSerializer(serializers.ModelSerializer):
         model = StanoviDms
         fields = (
             "id_fajla",
-            "opis_dokumenta",
             "naziv_fajla",
             "datum_ucitavanja",
             "stan",

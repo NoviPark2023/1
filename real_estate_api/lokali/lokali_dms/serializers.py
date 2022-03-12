@@ -8,7 +8,6 @@ class LokaliDmsSerializer(serializers.ModelSerializer):
         model = LokaliDms
         fields = (
             "id_fajla",
-            "opis_dokumenta",
             "naziv_fajla",
             "datum_ucitavanja",
             "lokal",
@@ -21,7 +20,6 @@ class LokaliUploadDmsSerializer(serializers.ModelSerializer):
         model = LokaliDms
         fields = (
             "id_fajla",
-            "opis_dokumenta",
             "naziv_fajla",
             "datum_ucitavanja",
             "lokal",
