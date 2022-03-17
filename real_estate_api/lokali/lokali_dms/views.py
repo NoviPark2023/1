@@ -24,6 +24,14 @@ class ListaDokumenaLokaliAPIView(generics.ListAPIView):
     queryset = LokaliDms.objects.all().order_by('-datum_ucitavanja')
     serializer_class = LokaliDmsSerializer
 
+    filter_backends = api_settings.DEFAULT_FILTER_BACKENDS + [
+        DjangoFilterBackend,
+    ]
+
+    filterset_fields = {
+        "lokal": ["exact"],
+    }
+
 
 class LokaliDmsUploadAPIView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
