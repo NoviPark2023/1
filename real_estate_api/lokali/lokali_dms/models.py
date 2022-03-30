@@ -15,7 +15,7 @@ class LokaliDms(models.Model):
     file = models.FileField(storage=None)
 
     lokal = models.ForeignKey(Lokali,
-                              on_delete=models.DO_NOTHING,
+                              on_delete=models.CASCADE,
                               db_column='id_lokala',
                               related_name='lista_dokumenata_lokala'
                               )
