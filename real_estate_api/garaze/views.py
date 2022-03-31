@@ -26,13 +26,12 @@ class ListaGarazaAPIView(generics.ListAPIView):
     serializer_class = GarazeSerializer
 
     filter_backends = api_settings.DEFAULT_FILTER_BACKENDS + [
-        filters.OrderingFilter,
-        filters.SearchFilter,
         DjangoFilterBackend,
     ]
 
     filterset_fields = {
         "jedinstveni_broj_garaze": ["exact"],
+        "status_prodaje_garaze": ["exact"],
     }
 
     search_fields = ['jedinstveni_broj_garaze']
