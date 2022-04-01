@@ -1,6 +1,6 @@
 from django.db.models import QuerySet
-from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics, filters
 
 from .models import Kupci
 from real_estate_api.kupci.serializers import (
@@ -14,10 +14,30 @@ lookup_field = 'id_kupca'
 
 
 class ListaKupacaAPIView(generics.ListAPIView):
-    """Lista svih Kupaca"""
+    """
+    Lista svih Kupaca
+    ---
+    Filtriranje po poljima:
+     - lice
+     - ime_prezime
+     - email
+     - broj_telefona
+     - Jmbg_Pib
+     - adresa
+    """
     permission_classes = [IsAuthenticated]
     queryset = Kupci.objects.all().order_by('id_kupca')
     serializer_class = KupciSerializer
+
+    filter_backends = [filters.SearchFilter]
+    search_fields = [
+        'lice',
+        "ime_prezime",
+        'email',
+        'broj_telefona',
+        'Jmbg_Pib',
+        'adresa'
+    ]
 
 
 class ListaKupacaPoImenuAPIView(generics.ListAPIView):
