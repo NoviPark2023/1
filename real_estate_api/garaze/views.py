@@ -18,8 +18,19 @@ lookup_field_kupac = 'id_kupca'
 class ListaGarazaAPIView(generics.ListAPIView):
     """
     API poziv za listu svih Garaza.
-        * Filtriranje se radi po polju 'jedinstveni_broj_garaze'.
-        * Pretraga se radi po polju 'jedinstveni_broj_garaze'.
+    ---
+        * Pretraga po poljima:
+         - jedinstveni_broj_garaze
+         - cena_garaze
+         - broj_ugovora_garaze
+         - napomena_garaze
+         - kupac
+         - ime_kupca
+    ---
+        * Filtriranje po poljima:
+         - jedinstveni_broj_garaze (exact)
+         - status_prodaje_garaze (exact)
+         - nacin_placanja_garaze (exact)
     """
     permission_classes = [IsAuthenticated]
     queryset = Garaze.objects.all()
@@ -27,14 +38,23 @@ class ListaGarazaAPIView(generics.ListAPIView):
 
     filter_backends = api_settings.DEFAULT_FILTER_BACKENDS + [
         DjangoFilterBackend,
+        filters.SearchFilter
     ]
 
     filterset_fields = {
         "jedinstveni_broj_garaze": ["exact"],
         "status_prodaje_garaze": ["exact"],
+        "nacin_placanja_garaze": ["exact"]
     }
 
-    search_fields = ['jedinstveni_broj_garaze']
+    search_fields = [
+        'jedinstveni_broj_garaze',
+        'cena_garaze',
+        'broj_ugovora_garaze',
+        'napomena_garaze',
+        'kupac',
+        'ime_kupca'
+    ]
 
 
 class DetaljiGarazeAPIView(generics.RetrieveAPIView):
