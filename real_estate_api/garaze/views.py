@@ -44,7 +44,7 @@ class ListaGarazaAPIView(generics.ListAPIView):
     filterset_fields = {
         "jedinstveni_broj_garaze": ["exact"],
         "status_prodaje_garaze": ["exact"],
-        "nacin_placanja_garaze": ["exact"]
+        "nacin_placanja_garaze": ["exact"],
     }
 
     search_fields = [
@@ -52,8 +52,6 @@ class ListaGarazaAPIView(generics.ListAPIView):
         'cena_garaze',
         'broj_ugovora_garaze',
         'napomena_garaze',
-        'kupac',
-        'ime_kupca'
     ]
 
 
