@@ -17,23 +17,34 @@ lookup_field = 'id_stana'
 
 
 class ListaStanovaAPIView(generics.ListAPIView):
-    """Lista svih Stanova"""
+    """
+    API poziv liste svih Stanova.
+    ---
+        * Filtriranje po poljima:
+         - lamela (exact)
+         - status_prodaje (exact)
+         - sprat (exact)
+         - broj_soba (exact)
+         - orijentisanost (exact)
+         - broj_terasa (exact)
+    """
     permission_classes = [IsAuthenticated, ]
     queryset = Stanovi.objects.all().order_by('id_stana')
     serializer_class = StanoviSerializer
 
     filter_backends = api_settings.DEFAULT_FILTER_BACKENDS + [
-        filters.OrderingFilter,
-        filters.SearchFilter,
         DjangoFilterBackend,
     ]
 
     filterset_fields = {
         "lamela": ["icontains"],
-        "status_prodaje": ["icontains"],
+        "status_prodaje": ["exact"],
+        "sprat": ["exact"],
+        "broj_soba": ["exact"],
+        "orijentisanost": ["exact"],
+        "broj_terasa": ["exact"],
     }
 
-    search_fields = ["lamela", "status_prodaje"]
 
 class StanoviDetaljiAPIVIew(generics.RetrieveAPIView):
     """Get Stanovi po ID-ju || DETALJI STANA"""
