@@ -1,6 +1,8 @@
 from django.db.models import QuerySet
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics, filters
+from rest_framework.settings import api_settings
 
 from .models import Kupci
 from real_estate_api.kupci.serializers import (
@@ -29,15 +31,18 @@ class ListaKupacaAPIView(generics.ListAPIView):
     queryset = Kupci.objects.all().order_by('id_kupca')
     serializer_class = KupciSerializer
 
-    filter_backends = [filters.SearchFilter]
-    search_fields = [
-        'lice',
-        "ime_prezime",
-        'email',
-        'broj_telefona',
-        'Jmbg_Pib',
-        'adresa'
+    filter_backends = api_settings.DEFAULT_FILTER_BACKENDS + [
+        DjangoFilterBackend,
     ]
+
+    filterset_fields = {
+        "lice": ["exact"],
+        "ime_prezime": ["icontains"],
+        "email": ["icontains"],
+        "broj_telefona": ["icontains"],
+        "Jmbg_Pib": ["icontains"],
+        "adresa": ["icontains"],
+    }
 
 
 class ListaKupacaPoImenuAPIView(generics.ListAPIView):
