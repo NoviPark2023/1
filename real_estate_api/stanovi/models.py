@@ -186,7 +186,7 @@ class AzuriranjeCena(models.Model):
 
                     Stanovi.save(stan)
 
-            return super(AzuriranjeCena, self).save(*args, **kwargs)
+                return super(AzuriranjeCena, self).save(*args, **kwargs)
 
         except Exception:
             raise APIException(f"Ne moze da se unese Azuriranje Cene.")
