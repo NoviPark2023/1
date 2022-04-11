@@ -102,7 +102,7 @@ class Stanovi(models.Model):
         @save: Korigovanu cenu Stana
         """
 
-        if self.unesena_mauelna_cena_stana:
+        if self.unesena_mauelna_cena_stana or self.status_prodaje == Stanovi.StatusProdaje.PRODAT:
             return super(Stanovi, self).save(*args, **kwargs)
         else:
             try:
@@ -162,8 +162,9 @@ class AzuriranjeCena(models.Model):
 
     def save(self, *args, **kwargs):
 
+        # Izmeni cenu svim stanovima ako je status prodaje "dostupan" i "rezervisan", ne menjaj ako je "prodat".
         try:
-            stanovi = Stanovi.objects.all().filter(unesena_mauelna_cena_stana=False)
+            stanovi = Stanovi.objects.all().filter(unesena_mauelna_cena_stana=False).filter(status_prodaje="dostupan")
 
             # Sacuvaj prvo azuriranu cenu
             super(AzuriranjeCena, self).save(*args, **kwargs)
