@@ -4,6 +4,7 @@ from smtplib import SMTPException
 import boto3
 from django.conf import settings
 from django.core.mail import send_mail
+from django.template import loader
 from docxtpl import DocxTemplate
 
 
@@ -99,15 +100,42 @@ class SendEmailThreadKupljenStan(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
+        subject = f'Potrebno odobrenje za kupovinu Stana ID: {str(self.ponuda.stan.id_stana)}.'
+        message = f'Stan ID: {str(self.ponuda.stan.id_stana)}, Adresa: {str(self.ponuda.stan.adresa_stana)} je kupljen.\n' \
+                  f'Cena stana: {round(self.ponuda.stan.cena_stana, 2)}\n' \
+                  f'Cena Ponude je: {round(self.ponuda.cena_stana_za_kupca, 2)}.'
+        from_email = settings.EMAIL_HOST_USER
+        fail_silently = True
+        html_message = loader.render_to_string(
+            'receipt_email.html',
+            {
+                'id_stana': f'ID Stana:  {self.ponuda.stan.id_stana}',
+                'adresa': f'Adresa Stana: {self.ponuda.stan.adresa_stana}',
+                'cena_stana': f'Cena Stana: {round(self.ponuda.stan.cena_stana, 2)}',
+                'cena_ponude': f'Cena Ponude Stana: {round(self.ponuda.cena_stana_za_kupca, 2)}',
+                'url_ponude': f'https://stanovi.biz/ponude?id={self.ponuda.id_ponude}',
+            }
+        )
         try:
             for korisnici_email in settings.RECIPIENT_ADDRESS:
                 send_mail(
-                    f'Stan ID: {str(self.ponuda.stan.id_stana)} je KUPLJEN.',
-                    f'Stan ID: {str(self.ponuda.stan.id_stana)}, Adresa: {str(self.ponuda.stan.adresa_stana)} je kupljen.\n'
-                    f'Cena stana: {round(self.ponuda.stan.cena_stana, 2)}\n'
-                    f'Cena Ponude je: {round(self.ponuda.cena_stana_za_kupca, 2)}.',
-                    settings.EMAIL_HOST_USER, [korisnici_email]
+                    subject,
+                    message,
+                    from_email,
+                    [korisnici_email],
+                    fail_silently=True,
+                    html_message=html_message
                 )
+                send_mail(subject,
+                          f'Stan ID: {str(self.ponuda.stan.id_stana)},'
+                          f' Adresa: {str(self.ponuda.stan.adresa_stana)} je kupljen.\n'
+                          f'Cena stana: {round(self.ponuda.stan.cena_stana, 2)}\n'
+                          f'Cena Ponude je: {round(self.ponuda.cena_stana_za_kupca, 2)}.',
+                          settings.EMAIL_HOST_USER, [korisnici_email]
+                          )
+                #
+                # send_mail(subject,
+                #     message, from_email, to_list, fail_silently=True, html_message=html_message)
         except SMTPException as e:
             print(f"failed to send mail: {e}")
 
