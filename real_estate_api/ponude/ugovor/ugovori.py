@@ -100,19 +100,33 @@ class SendEmailThreadKupljenStan(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
-        subject = f'Potrebno odobrenje za kupovinu Stana ID: {str(self.ponuda.stan.id_stana)}.'
-        message = f'Stan ID: {str(self.ponuda.stan.id_stana)}, Adresa: {str(self.ponuda.stan.adresa_stana)} je kupljen.\n' \
-                  f'Cena stana: {round(self.ponuda.stan.cena_stana, 2)}\n' \
-                  f'Cena Ponude je: {round(self.ponuda.cena_stana_za_kupca, 2)}.'
+        subject = f'Kupovina Stana ID: {str(self.ponuda.stan.id_stana)}.'
+        message = (
+            f'Stan ID: {str(self.ponuda.stan.id_stana)}.\n'
+            f'Adresa stana: {str(self.ponuda.stan.adresa_stana)} je kupljen.\n'
+            f'Lamela stana: {str(self.ponuda.stan.lamela)}.\n'
+            f'Kvadratura stana: {str(self.ponuda.stan.kvadratura)}.\n'
+            f'Kvadratura stana (sa korekcijom): {str(self.ponuda.stan.kvadratura_korekcija)}.\n'
+            f'Cena kvadrata: {str(self.ponuda.stan.cena_kvadrata)}.\n'
+            f'Sprat stana: {str(self.ponuda.stan.sprat)}.\n'
+            f'Kupac stana: {str(self.ponuda.kupac.ime_prezime)}.\n'
+            f'Cena stana: {round(self.ponuda.stan.cena_stana, 2)}\n'
+            f'Cena stana za kupca: {round(self.ponuda.cena_stana_za_kupca, 2)}.'
+        )
         from_email = settings.EMAIL_HOST_USER
-        fail_silently = True
         html_message = loader.render_to_string(
             'receipt_email.html',
             {
-                'id_stana': f'ID Stana:  {self.ponuda.stan.id_stana}',
-                'adresa': f'Adresa Stana: {self.ponuda.stan.adresa_stana}',
-                'cena_stana': f'Cena Stana: {round(self.ponuda.stan.cena_stana, 2)}',
-                'cena_ponude': f'Cena Ponude Stana: {round(self.ponuda.cena_stana_za_kupca, 2)}',
+                'id_stana': self.ponuda.stan.id_stana,
+                'adresa': self.ponuda.stan.adresa_stana,
+                'lamela': self.ponuda.stan.lamela,
+                'kvadratura': self.ponuda.stan.kvadratura,
+                'kvadratura_korekcija': self.ponuda.stan.kvadratura_korekcija,
+                'cena_kvadrata': self.ponuda.stan.cena_kvadrata,
+                'sprat': self.ponuda.stan.sprat,
+                'kupac': self.ponuda.kupac.ime_prezime,
+                'cena_stana': round(self.ponuda.stan.cena_stana, 2),
+                'cena_ponude': round(self.ponuda.cena_stana_za_kupca, 2),
                 'url_ponude': f'https://stanovi.biz/ponude?id={self.ponuda.id_ponude}',
             }
         )
@@ -126,16 +140,6 @@ class SendEmailThreadKupljenStan(threading.Thread):
                     fail_silently=True,
                     html_message=html_message
                 )
-                send_mail(subject,
-                          f'Stan ID: {str(self.ponuda.stan.id_stana)},'
-                          f' Adresa: {str(self.ponuda.stan.adresa_stana)} je kupljen.\n'
-                          f'Cena stana: {round(self.ponuda.stan.cena_stana, 2)}\n'
-                          f'Cena Ponude je: {round(self.ponuda.cena_stana_za_kupca, 2)}.',
-                          settings.EMAIL_HOST_USER, [korisnici_email]
-                          )
-                #
-                # send_mail(subject,
-                #     message, from_email, to_list, fail_silently=True, html_message=html_message)
         except SMTPException as e:
             print(f"failed to send mail: {e}")
 
@@ -148,14 +152,45 @@ class SendEmailThreadRezervisanStan(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
+        subject = f'Rezervacija Stana ID: {str(self.ponuda.stan.id_stana)}.'
+        message = (
+            f'Stan ID: {str(self.ponuda.stan.id_stana)}.\n'
+            f'Adresa stana: {str(self.ponuda.stan.adresa_stana)} je kupljen.\n'
+            f'Lamela stana: {str(self.ponuda.stan.lamela)}.\n'
+            f'Kvadratura stana: {str(self.ponuda.stan.kvadratura)}.\n'
+            f'Kvadratura stana (sa korekcijom): {str(self.ponuda.stan.kvadratura_korekcija)}.\n'
+            f'Cena kvadrata: {str(self.ponuda.stan.cena_kvadrata)}.\n'
+            f'Sprat stana: {str(self.ponuda.stan.sprat)}.\n'
+            f'Kupac stana: {str(self.ponuda.kupac.ime_prezime)}.\n'
+            f'Cena stana: {round(self.ponuda.stan.cena_stana, 2)}\n'
+            f'Cena stana za kupca: {round(self.ponuda.cena_stana_za_kupca, 2)}.'
+        )
+        from_email = settings.EMAIL_HOST_USER
+        html_message = loader.render_to_string(
+            'receipt_email.html',
+            {
+                'id_stana': self.ponuda.stan.id_stana,
+                'adresa': self.ponuda.stan.adresa_stana,
+                'lamela': self.ponuda.stan.lamela,
+                'kvadratura': self.ponuda.stan.kvadratura,
+                'kvadratura_korekcija': self.ponuda.stan.kvadratura_korekcija,
+                'cena_kvadrata': self.ponuda.stan.cena_kvadrata,
+                'sprat': self.ponuda.stan.sprat,
+                'kupac': self.ponuda.kupac.ime_prezime,
+                'cena_stana': round(self.ponuda.stan.cena_stana, 2),
+                'cena_ponude': round(self.ponuda.cena_stana_za_kupca, 2),
+                'url_ponude': f'https://stanovi.biz/ponude?id={self.ponuda.id_ponude}',
+            }
+        )
         try:
             for korisnici_email in settings.RECIPIENT_ADDRESS:
                 send_mail(
-                    f'Potrebno ODOBRENJE za Stan ID: {str(self.ponuda.stan.id_stana)}.',
-                    f'Stan ID: {str(self.ponuda.stan.id_stana)}, Adresa: {str(self.ponuda.stan.adresa_stana)} je rezervisan.\n'
-                    f'Cena stana: {round(self.ponuda.stan.cena_stana, 2)}\n'
-                    f'Cena Ponude je: {round(self.ponuda.cena_stana_za_kupca, 2)}.',
-                    settings.EMAIL_HOST_USER, [korisnici_email]
+                    subject,
+                    message,
+                    from_email,
+                    [korisnici_email],
+                    fail_silently=True,
+                    html_message=html_message
                 )
         except SMTPException as e:
             print(f"failed to send mail: {e}")
