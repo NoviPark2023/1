@@ -4,6 +4,7 @@ from smtplib import SMTPException
 import boto3
 from django.conf import settings
 from django.core.mail import send_mail
+from django.template import loader
 from docxtpl import DocxTemplate
 
 from real_estate_api.garaze.models import Garaze
@@ -90,15 +91,36 @@ class SendEmailThreadKupljenaGaraza(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
+        subject = f'Kupovina Garaže ID: {str(self.garaza.jedinstveni_broj_garaze)}.'
+        message = (
+            f'Garaža ID: {str(self.garaza.id_garaze)}.\n'
+            f'Jedinstveni broj garaže: {str(self.garaza.jedinstveni_broj_garaze)}.\n'
+            f'Cena garaže: {str(self.garaza.cena_garaze)}.\n'
+            f'Kupac garaže: {str(self.garaza.kupac.ime_prezime)}.\n'
+        )
+        from_email = settings.EMAIL_HOST_USER
+        html_message = loader.render_to_string(
+            'receipt_email-garaze.html',
+            {
+                'id_garaze': self.garaza.id_garaze,
+                'jedinstveni_broj_garaze': self.garaza.jedinstveni_broj_garaze,
+                'cena_garaze': self.garaza.cena_garaze,
+                'kupac': self.garaza.kupac.ime_prezime,
+
+            }
+        )
         try:
             for korisnici_email in settings.RECIPIENT_ADDRESS:
-                send_mail(f'Garaža ID: {str(self.garaza.jedinstveni_broj_garaze)} je KUPLJENA.',
-                          f'Garaža ID: {str(self.garaza.jedinstveni_broj_garaze)} je kupljena.\n'
-                          f'Cena Garaže: {round(self.garaza.cena_garaze, 2)}',
-                          settings.EMAIL_HOST_USER, [korisnici_email])
+                send_mail(
+                    subject,
+                    message,
+                    from_email,
+                    [korisnici_email],
+                    fail_silently=True,
+                    html_message=html_message
+                )
         except SMTPException as e:
             print(f"failed to send mail: {e}")
-
 
 class SendEmailThreadRezervisanaGaraza(threading.Thread):
     """Posalji Email pretplacenim Korisnicima kada je garaza REZERVISANA"""
@@ -108,11 +130,33 @@ class SendEmailThreadRezervisanaGaraza(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
+        subject = f'Rezervacija Garaže ID: {str(self.garaza.jedinstveni_broj_garaze)}.'
+        message = (
+            f'Garaža ID: {str(self.garaza.id_garaze)}.\n'
+            f'Jedinstveni broj garaže: {str(self.garaza.jedinstveni_broj_garaze)}.\n'
+            f'Cena garaže: {str(self.garaza.cena_garaze)}.\n'
+            f'Kupac garaže: {str(self.garaza.kupac.ime_prezime)}.\n'
+        )
+        from_email = settings.EMAIL_HOST_USER
+        html_message = loader.render_to_string(
+            'receipt_email-garaze.html',
+            {
+                'id_garaze': self.garaza.id_garaze,
+                'jedinstveni_broj_garaze': self.garaza.jedinstveni_broj_garaze,
+                'cena_garaze': self.garaza.cena_garaze,
+                'kupac': self.garaza.kupac.ime_prezime,
+
+            }
+        )
         try:
             for korisnici_email in settings.RECIPIENT_ADDRESS:
-                send_mail(f'Garaža ID: {str(self.garaza.jedinstveni_broj_garaze)} je REZERVISANA.',
-                          f'Garaža ID: {str(self.garaza.jedinstveni_broj_garaze)} je REZERVISANA.\n'
-                          f'Cena Garaže: {round(self.garaza.cena_garaze, 2)}',
-                          settings.EMAIL_HOST_USER, [korisnici_email])
+                send_mail(
+                    subject,
+                    message,
+                    from_email,
+                    [korisnici_email],
+                    fail_silently=True,
+                    html_message=html_message
+                )
         except SMTPException as e:
             print(f"failed to send mail: {e}")

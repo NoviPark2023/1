@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * {
+      box-sizing: content-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* Float four columns side by side */
+    .column {
+      margin: auto;
+      float: left;
+      width: 70%;
+      padding: 0 10px;
+      position: absolute;
+      left: 50%;
+    }
+
+    /* Responsive columns */
+    @media screen and (max-width: 600px) {
+      .column {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+      }
+    }
+
+    /* Style the counter cards */
+    .card {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      padding: 16px;
+      text-align: center;
+      background-color: #f1f1f1;
+    }
+
+    .button {
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+
+    .button1 {
+      background-color: #4CAF50;
+    }
+
+    /* Green */
+  </style>
+</head>
+<body>
+<div class="column">
+  <div class="card">
+    <hr>
+    <h1>Obaveštenje o kupovini garaže sa ID-om: {{ id_garaze }}</h1>
+    <h3>Jedinstveni broj garaže:: {{ jedinstveni_broj_garaze }}</h3>
+    <hr>
+    <h1>Kupac garaže: {{ kupac }}</h1>
+    <h2>Cena garaže: {{ cena_garaze }} €</h2>
+    <hr>
+    <p>Generisano iz sistema "CRM Prodaja Stanova"</p>
+
+  </div>
+</div>
+</body>
+</html>
