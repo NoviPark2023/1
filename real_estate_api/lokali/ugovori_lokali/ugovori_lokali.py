@@ -4,6 +4,7 @@ from smtplib import SMTPException
 import boto3
 from django.conf import settings
 from django.core.mail import send_mail
+from django.template import loader
 from docxtpl import DocxTemplate
 
 
@@ -96,13 +97,39 @@ class SendEmailThreadKupljenLokal(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
+        subject = f'Kupovina Lokala ID: {str(self.ponuda_lokala.lokali.id_lokala)}.'
+        message = (
+            f'Lokal ID: {str(self.ponuda_lokala.lokali.id_lokala)}.\n'
+            f'Adresa lokala: {str(self.ponuda_lokala.lokali.adresa_lokala)}.\n'
+            f'Lamela lokala: {str(self.ponuda_lokala.lokali.lamela_lokala)}.\n'
+            f'Kvadratura lokala: {str(self.ponuda_lokala.lokali.kvadratura_lokala)}.\n'
+            f'Kupac lokala: {str(self.ponuda_lokala.kupac_lokala.ime_prezime)}.\n'
+            f'Cena lokala: {round(self.ponuda_lokala.lokali.cena_lokala, 2)}\n'
+            f'Cena lokala za kupca: {round(self.ponuda_lokala.cena_lokala_za_kupca, 2)}.'
+        )
+        from_email_lokali = settings.EMAIL_HOST_USER
+        html_message_lokali = loader.render_to_string(
+            'receipt_email-lokali.html',
+            {
+                'id_lokala': self.ponuda_lokala.lokali.id_lokala,
+                'adresa_lokala': self.ponuda_lokala.lokali.adresa_lokala,
+                'lamela_lokala': self.ponuda_lokala.lokali.lamela_lokala,
+                'kvadratura_lokala': self.ponuda_lokala.lokali.kvadratura_lokala,
+                'kupac_lokala': self.ponuda_lokala.kupac_lokala.ime_prezime,
+                'cena_lokala': round(self.ponuda_lokala.lokali.cena_lokala, 2),
+                'cena_lokala_za_kupca': round(self.ponuda_lokala.cena_lokala_za_kupca, 2),
+                'url_ponude_lokala': f'https://stanovi.biz/ponude-lokala?id={self.ponuda_lokala.id_ponude_lokala}',
+            }
+        )
         try:
             for korisnici_email in settings.RECIPIENT_ADDRESS:
                 send_mail(
-                    f'Lokal ID: {str(self.ponuda_lokala.lokali.id_lokala)} je KUPLJEN.',
-                    f'Lokal ID: {str(self.ponuda_lokala.lokali.id_lokala)} je kupljen.\n'
-                    f'Cena Lokala: {round(self.ponuda_lokala.cena_lokala_za_kupca, 2)}',
-                    settings.EMAIL_HOST_USER, [korisnici_email]
+                    subject,
+                    message,
+                    from_email_lokali,
+                    [korisnici_email],
+                    fail_silently=True,
+                    html_message=html_message_lokali
                 )
         except SMTPException as e:
             print(f"failed to send mail: {e}")
@@ -116,13 +143,39 @@ class SendEmailThreadRezervisanLokal(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
+        subject = f'Rezervacija Lokala ID: {str(self.ponuda_lokala.lokali.id_lokala)}.'
+        message = (
+            f'Lokal ID: {str(self.ponuda_lokala.lokali.id_lokala)}.\n'
+            f'Adresa lokala: {str(self.ponuda_lokala.lokali.adresa_lokala)}.\n'
+            f'Lamela lokala: {str(self.ponuda_lokala.lokali.lamela_lokala)}.\n'
+            f'Kvadratura lokala: {str(self.ponuda_lokala.lokali.kvadratura_lokala)}.\n'
+            f'Kupac lokala: {str(self.ponuda_lokala.kupac_lokala.ime_prezime)}.\n'
+            f'Cena lokala: {round(self.ponuda_lokala.lokali.cena_lokala, 2)}\n'
+            f'Cena lokala za kupca: {round(self.ponuda_lokala.cena_lokala_za_kupca, 2)}.'
+        )
+        from_email_lokali = settings.EMAIL_HOST_USER
+        html_message_lokali = loader.render_to_string(
+            'receipt_email-lokali.html',
+            {
+                'id_lokala': self.ponuda_lokala.lokali.id_lokala,
+                'adresa_lokala': self.ponuda_lokala.lokali.adresa_lokala,
+                'lamela_lokala': self.ponuda_lokala.lokali.lamela_lokala,
+                'kvadratura_lokala': self.ponuda_lokala.lokali.kvadratura_lokala,
+                'kupac_lokala': self.ponuda_lokala.kupac_lokala.ime_prezime,
+                'cena_lokala': round(self.ponuda_lokala.lokali.cena_lokala, 2),
+                'cena_lokala_za_kupca': round(self.ponuda_lokala.cena_lokala_za_kupca, 2),
+                'url_ponude_lokala': f'https://stanovi.biz/ponude-lokala?id={self.ponuda_lokala.id_ponude_lokala}',
+            }
+        )
         try:
             for korisnici_email in settings.RECIPIENT_ADDRESS:
                 send_mail(
-                    f'Potrebno ODOBRENJE za LOKAL ID: {str(self.ponuda_lokala.lokali.id_lokala)} jer je REZERVISAN.',
-                    f'Lokal ID: {str(self.ponuda_lokala.lokali.id_lokala)} je REZERVISAN.\n'
-                    f'Cena Lokala: {round(self.ponuda_lokala.cena_lokala_za_kupca, 2)}',
-                    settings.EMAIL_HOST_USER, [korisnici_email]
+                    subject,
+                    message,
+                    from_email_lokali,
+                    [korisnici_email],
+                    fail_silently=True,
+                    html_message=html_message_lokali
                 )
         except SMTPException as e:
             print(f"failed to send mail: {e}")

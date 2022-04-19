@@ -103,7 +103,7 @@ class SendEmailThreadKupljenStan(threading.Thread):
         subject = f'Kupovina Stana ID: {str(self.ponuda.stan.id_stana)}.'
         message = (
             f'Stan ID: {str(self.ponuda.stan.id_stana)}.\n'
-            f'Adresa stana: {str(self.ponuda.stan.adresa_stana)} je kupljen.\n'
+            f'Adresa stana: {str(self.ponuda.stan.adresa_stana)}.\n'
             f'Lamela stana: {str(self.ponuda.stan.lamela)}.\n'
             f'Kvadratura stana: {str(self.ponuda.stan.kvadratura)}.\n'
             f'Kvadratura stana (sa korekcijom): {str(self.ponuda.stan.kvadratura_korekcija)}.\n'
@@ -115,7 +115,7 @@ class SendEmailThreadKupljenStan(threading.Thread):
         )
         from_email = settings.EMAIL_HOST_USER
         html_message = loader.render_to_string(
-            'receipt_email.html',
+            'receipt_email-stanovi.html',
             {
                 'id_stana': self.ponuda.stan.id_stana,
                 'adresa': self.ponuda.stan.adresa_stana,
@@ -167,7 +167,7 @@ class SendEmailThreadRezervisanStan(threading.Thread):
         )
         from_email = settings.EMAIL_HOST_USER
         html_message = loader.render_to_string(
-            'receipt_email.html',
+            'receipt_email-stanovi.html',
             {
                 'id_stana': self.ponuda.stan.id_stana,
                 'adresa': self.ponuda.stan.adresa_stana,
