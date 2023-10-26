@@ -38,4 +38,4 @@ until postgres_ready; do
 done
 >&2 echo 'PostgreSQL is available'
 
-exec "./start"
+exec "./compose/production/django/start"
