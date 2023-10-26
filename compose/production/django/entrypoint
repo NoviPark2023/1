@@ -6,7 +6,7 @@ set -o nounset
 
 export POSTGRES_USER="recrm_api"
 export POSTGRES_PASSWORD="fwwrecrm"
-export POSTGRES_HOST="localhost"
+export POSTGRES_HOST="128.140.73.209"
 export POSTGRES_PORT="5432"
 export POSTGRES_DB="recrm_api"
 
