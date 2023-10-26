@@ -72,7 +72,8 @@ COPY --chown=django:django . ${APP_HOME}
 # make django owner of the WORKDIR directory as well.
 RUN chown django:django ${APP_HOME}
 
-RUN ls -la compose/production/django/
+RUN chmod +x ./compose/production/django/entrypoint
+RUN chmod +x ./compose/production/django/start
 
 USER django
 
