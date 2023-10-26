@@ -1,0 +1,88 @@
+name: Deploy backend develop
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - develop
+
+env:
+  IMAGE_NAME: 'ghcr.io/factory-world-wide/stanovi-back/backend'
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+
+jobs:
+  build:
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Log in to the Container registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: true
+        tags: |
+            ${{ env.IMAGE_NAME }}:${{ env.BRANCH_NAME }}
+
+  deploy:
+    runs-on: self-hosted
+    needs: build
+    permissions:
+      contents: read
+      id-token: write
+        
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    # - name: Fetch secrets using JWT authentication
+    #   id: get_secret_jwt
+    #   uses: hashicorp/vault-action@v2.7.0
+    #   with:
+    #     url: ${{ secrets.VAULT_URL }}
+    #     method: jwt
+    #     role: stanovi-back
+    #     secrets: |
+    #       fww/data/projects/stanovi-back/develop server | DEVELOP_SERVER ;
+    #       fww/data/projects/stanovi-back/develop username | DEVELOP_USERNAME ;
+    #       fww/data/projects/stanovi-back/develop password | DEVELOP_PASSWORD ;
+    #       fww/data/projects/stanovi-back/develop port | DEVELOP_PORT ;
+
+    - name: Copy docker.env to vm
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: 128.140.73.209
+        username: fww-deployer
+        password: 83JvXMlW8Yhqn2ULcvNeFZ7
+        port: 22
+        source: infra/develop/backend_docker.env
+        target: /opt/svc/backend/
+        strip_components: 2
+
+    - name: Deploy to develop
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: 128.140.73.209
+        username: fww-deployer
+        password: 83JvXMlW8Yhqn2ULcvNeFZ7
+        port: 22
+        script: |
+          sudo /usr/bin/systemctl restart backend
+
+    - name: Cleanup workspace
+      run: |
+        rm -rf ./* || true
+        rm -rf ./.??* || true
+        ls -la ./
