@@ -72,6 +72,8 @@ COPY --chown=django:django . ${APP_HOME}
 # make django owner of the WORKDIR directory as well.
 RUN chown django:django ${APP_HOME}
 
+RUN ls -la 
+
 USER django
 
 EXPOSE 8000
